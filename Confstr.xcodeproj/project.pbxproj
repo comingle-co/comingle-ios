@@ -14,6 +14,16 @@
 		3A453DEE2A0B348200897303 /* ConfstrTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DED2A0B348200897303 /* ConfstrTests.swift */; };
 		3A453DF82A0B348200897303 /* ConfstrUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF72A0B348200897303 /* ConfstrUITests.swift */; };
 		3A453DFA2A0B348200897303 /* ConfstrUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF92A0B348200897303 /* ConfstrUITestsLaunchTests.swift */; };
+		3A453E1A2A0C613600897303 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E172A0C613500897303 /* Person.swift */; };
+		3A453E1B2A0C613600897303 /* Conference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E182A0C613600897303 /* Conference.swift */; };
+		3A453E1C2A0C613600897303 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E192A0C613600897303 /* Session.swift */; };
+		3A453E242A0C614900897303 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1D2A0C614800897303 /* SessionView.swift */; };
+		3A453E252A0C614900897303 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1E2A0C614800897303 /* ScheduleView.swift */; };
+		3A453E262A0C614900897303 /* ConferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1F2A0C614800897303 /* ConferencesView.swift */; };
+		3A453E272A0C614900897303 /* SpeakersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E202A0C614900897303 /* SpeakersView.swift */; };
+		3A453E282A0C614900897303 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E212A0C614900897303 /* PersonView.swift */; };
+		3A453E292A0C614900897303 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E222A0C614900897303 /* DayView.swift */; };
+		3A453E2A2A0C614900897303 /* ConferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E232A0C614900897303 /* ConferenceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +55,16 @@
 		3A453DF32A0B348200897303 /* ConfstrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConfstrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A453DF72A0B348200897303 /* ConfstrUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfstrUITests.swift; sourceTree = "<group>"; };
 		3A453DF92A0B348200897303 /* ConfstrUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfstrUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3A453E172A0C613500897303 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		3A453E182A0C613600897303 /* Conference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conference.swift; sourceTree = "<group>"; };
+		3A453E192A0C613600897303 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		3A453E1D2A0C614800897303 /* SessionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
+		3A453E1E2A0C614800897303 /* ScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
+		3A453E1F2A0C614800897303 /* ConferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConferencesView.swift; sourceTree = "<group>"; };
+		3A453E202A0C614900897303 /* SpeakersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakersView.swift; sourceTree = "<group>"; };
+		3A453E212A0C614900897303 /* PersonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
+		3A453E222A0C614900897303 /* DayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
+		3A453E232A0C614900897303 /* ConferenceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConferenceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +115,8 @@
 		3A453DDA2A0B348100897303 /* Confstr */ = {
 			isa = PBXGroup;
 			children = (
+				3A453E152A0C611300897303 /* Models */,
+				3A453E162A0C611800897303 /* Views */,
 				3A453DDB2A0B348100897303 /* ConfstrApp.swift */,
 				3A453DDD2A0B348100897303 /* ContentView.swift */,
 				3A453DDF2A0B348200897303 /* Assets.xcassets */,
@@ -127,6 +149,30 @@
 				3A453DF92A0B348200897303 /* ConfstrUITestsLaunchTests.swift */,
 			);
 			path = ConfstrUITests;
+			sourceTree = "<group>";
+		};
+		3A453E152A0C611300897303 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3A453E182A0C613600897303 /* Conference.swift */,
+				3A453E172A0C613500897303 /* Person.swift */,
+				3A453E192A0C613600897303 /* Session.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3A453E162A0C611800897303 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3A453E1F2A0C614800897303 /* ConferencesView.swift */,
+				3A453E232A0C614900897303 /* ConferenceView.swift */,
+				3A453E222A0C614900897303 /* DayView.swift */,
+				3A453E212A0C614900897303 /* PersonView.swift */,
+				3A453E1E2A0C614800897303 /* ScheduleView.swift */,
+				3A453E1D2A0C614800897303 /* SessionView.swift */,
+				3A453E202A0C614900897303 /* SpeakersView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,8 +328,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A453E272A0C614900897303 /* SpeakersView.swift in Sources */,
+				3A453E292A0C614900897303 /* DayView.swift in Sources */,
+				3A453E1C2A0C613600897303 /* Session.swift in Sources */,
+				3A453E242A0C614900897303 /* SessionView.swift in Sources */,
+				3A453E1A2A0C613600897303 /* Person.swift in Sources */,
+				3A453E252A0C614900897303 /* ScheduleView.swift in Sources */,
+				3A453E2A2A0C614900897303 /* ConferenceView.swift in Sources */,
+				3A453E282A0C614900897303 /* PersonView.swift in Sources */,
 				3A453DDE2A0B348100897303 /* ContentView.swift in Sources */,
 				3A453DDC2A0B348100897303 /* ConfstrApp.swift in Sources */,
+				3A453E262A0C614900897303 /* ConferencesView.swift in Sources */,
+				3A453E1B2A0C613600897303 /* Conference.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +494,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Confstr/Preview Content\"";
+				DEVELOPMENT_TEAM = S99A5B637C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Confstr;
@@ -476,6 +533,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Confstr/Preview Content\"";
+				DEVELOPMENT_TEAM = S99A5B637C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Confstr;
