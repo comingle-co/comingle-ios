@@ -116,14 +116,22 @@ struct ConferencesView_Previews: PreviewProvider {
         nostrPublicKey: "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf",
         name: "Terry Yiu",
         description: "Founder @ Confstr\nContributor @ Damus\nEngineer @ Cash App",
-        picture: "https://nostr.build/i/p/nostr.build_8156bdbedb3d551daaec740eda89e235816bfc20be5514d7781a848f7dcf960c.jpg"
+        picture:
+"""
+https://nostr.build/i/p/nostr.build_\
+8156bdbedb3d551daaec740eda89e235816bfc20be5514d7781a848f7dcf960c.jpg
+"""
     )
 
     static let jack = Person(
         nostrPublicKey: "npub1sg6plzptd64u62a878hep2kev88swjh3tw00gjsfl8f237lmu63q0uf63m",
         name: "Jack Dorsey",
         description: "Block Head",
-        picture: "https://nostr.build/i/p/nostr.build_6b9909bccf0f4fdaf7aacd9bc01e4ce70dab86f7d90395f2ce925e6ea06ed7cd.jpeg"
+        picture:
+"""
+https://nostr.build/i/p/nostr.build_\
+6b9909bccf0f4fdaf7aacd9bc01e4ce70dab86f7d90395f2ce925e6ea06ed7cd.jpeg
+"""
     )
 
     static let jb55 = Person(
@@ -150,7 +158,11 @@ struct ConferencesView_Previews: PreviewProvider {
         startTime: isoDateFormatter.date(from: "2023-03-19T09:00:00-06:00")!,
         endTime: isoDateFormatter.date(from: "2023-03-19T09:30:00-06:00")!,
         stage: "Open Source Stage",
-        description: "This talk will go over who uses Nostr around the world, and what needs to happen to truly be globally accessible."
+        description:
+"""
+This talk will go over who uses Nostr around the world, \
+and what needs to happen to truly be globally accessible.
+"""
     )
 
     static let session2 = Session(

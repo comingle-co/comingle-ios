@@ -38,7 +38,9 @@ struct ScheduleView: View {
             ForEach(0..<days.count, id: \.self) { dayIndex in
                 if selectedDayIndex == dayIndex {
                     DayView(
-                        sessions: conference.sessions.filter { calendar.startOfDay(for: $0.startTime) == days[dayIndex] },
+                        sessions: conference.sessions.filter {
+                            calendar.startOfDay(for: $0.startTime) == days[dayIndex]
+                        },
                         calendar: calendar
                     )
                 }
