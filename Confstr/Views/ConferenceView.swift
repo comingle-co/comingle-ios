@@ -32,10 +32,13 @@ struct ConferenceView: View {
                         Label("Schedule", systemImage: "calendar")
                     }
 
-                SpeakersView(speakers: Array(Set(conference.sessions.flatMap { $0.speakers })))
-                    .tabItem {
-                        Label("Speakers", systemImage: "person")
-                    }
+                PeopleView(
+                    speakers: Array(Set(conference.sessions.flatMap { $0.speakers })),
+                    organizers: conference.organizers
+                )
+                .tabItem {
+                    Label("People", systemImage: "person")
+                }
             }
         }
         .navigationTitle(conference.name)

@@ -14,4 +14,5 @@ struct Conference: Hashable {
     let location: String
     let timeZone: TimeZone
     let sessions: [Session]
+    let organizers: [Person]
 }

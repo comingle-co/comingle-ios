@@ -16,7 +16,7 @@ struct PersonView: View {
                 .font(.headline)
             Text(person.description)
                 .font(.subheadline)
-            Link("Go to Nostr Profile", destination: URL(string: "nostr:\(person.nostrPublicKey)")!)
+            Link("Nostr Profile", destination: URL(string: "nostr:\(person.nostrPublicKey)")!)
             AsyncImage(url: URL(string: person.picture)) { image in
                 image.resizable()
             } placeholder: {

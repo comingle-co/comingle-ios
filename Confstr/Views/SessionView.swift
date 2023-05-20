@@ -50,6 +50,7 @@ struct SessionView: View {
                 .font(.title)
             ForEach(session.speakers, id: \.self) { speaker in
                 PersonView(person: speaker)
+                Link("⚡️ Zap with comment or question", destination: URL(string: "lightning:tyiu@tyiu.xyz")!)
                 Divider()
             }
         }

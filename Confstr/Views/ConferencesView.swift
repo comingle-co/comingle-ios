@@ -95,7 +95,8 @@ struct ConferencesView_Previews: PreviewProvider {
         endDate: isoDateFormatter.date(from: "2023-03-21T17:00:00-06:00")!,
         location: "Uvita, Costa Rica",
         timeZone: TimeZone(identifier: "America/Costa_Rica") ?? TimeZone.current,
-        sessions: sessions
+        sessions: sessions,
+        organizers: organizers
     )
 
     static let nostrasia = Conference(
@@ -104,7 +105,8 @@ struct ConferencesView_Previews: PreviewProvider {
         endDate: isoDateFormatter.date(from: "2023-11-03T17:00:00+09:00")!,
         location: "Tokyo, Japan",
         timeZone: TimeZone(identifier: "Asia/Tokyo") ?? TimeZone.current,
-        sessions: sessions
+        sessions: sessions,
+        organizers: organizers
     )
 
     static let conferences = [
@@ -193,6 +195,12 @@ and what needs to happen to truly be globally accessible.
         session1,
         session2,
         session3
+    ]
+
+    static let organizers = [
+        tyiu,
+        jack,
+        jb55
     ]
 
     static var previews: some View {
