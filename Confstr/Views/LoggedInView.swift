@@ -12,12 +12,12 @@ struct LoggedInView: View {
     @Binding var loginMode: LoginMode
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ConferencesView(loginMode: $loginMode, conferences: ConferencesView_Previews.conferences)
                 .navigationTitle("Conferences")
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: SettingsView()) {
+                    ToolbarItem(placement: .primaryAction) {
+                        NavigationLink(destination: SettingsView(loginMode: $loginMode)) {
                             Image(systemName: "gear")
                         }
                     }

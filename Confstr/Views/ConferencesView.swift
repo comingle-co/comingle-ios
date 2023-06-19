@@ -38,52 +38,50 @@ struct ConferencesView: View {
     }
 
     var body: some View {
-        NavigationView {
-            List {
-                if !currentConferences.isEmpty {
-                    Section(
-                        content: {
-                            ForEach(currentConferences, id: \.self) { conference in
-                                NavigationLink(destination: ConferenceView(conference: conference)) {
-                                    Text(conference.name)
-                                }
+        List {
+            if !currentConferences.isEmpty {
+                Section(
+                    content: {
+                        ForEach(currentConferences, id: \.self) { conference in
+                            NavigationLink(destination: ConferenceView(conference: conference)) {
+                                Text(conference.name)
                             }
-                        },
-                        header: {
-                            Text("Current Conferences", comment: "Section header for list of current conferences.")
                         }
-                    )
-                }
+                    },
+                    header: {
+                        Text("Current Conferences", comment: "Section header for list of current conferences.")
+                    }
+                )
+            }
 
-                if !upcomingConferences.isEmpty {
-                    Section(
-                        content: {
-                            ForEach(upcomingConferences, id: \.self) { conference in
-                                NavigationLink(destination: ConferenceView(conference: conference)) {
-                                    Text(conference.name)
-                                }
+            if !upcomingConferences.isEmpty {
+                Section(
+                    content: {
+                        ForEach(upcomingConferences, id: \.self) { conference in
+                            NavigationLink(destination: ConferenceView(conference: conference)) {
+                                Text(conference.name)
                             }
-                        },
-                        header: {
-                            Text("Upcoming Conferences", comment: "Section header for list of upcoming conferences.")
                         }
-                    )
-                }
+                    },
+                    header: {
+                        Text("Upcoming Conferences", comment: "Section header for list of upcoming conferences.")
+                    }
+                )
+            }
 
-                if !pastConferences.isEmpty {
-                    Section(
-                        content: {
-                            ForEach(pastConferences, id: \.self) { conference in
-                                NavigationLink(destination: ConferenceView(conference: conference)) {
-                                    Text(conference.name)
-                                }
+            if !pastConferences.isEmpty {
+                Section(
+                    content: {
+                        ForEach(pastConferences, id: \.self) { conference in
+                            NavigationLink(destination: ConferenceView(conference: conference)) {
+                                Text(conference.name)
                             }
-                        },
-                        header: {
-                            Text("Past Conferences", comment: "Section header for list of past conferences.")
                         }
-                    )
-                }
+                    },
+                    header: {
+                        Text("Past Conferences", comment: "Section header for list of past conferences.")
+                    }
+                )
             }
         }
     }

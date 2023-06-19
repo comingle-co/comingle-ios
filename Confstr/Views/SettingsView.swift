@@ -8,13 +8,26 @@
 import SwiftUI
 
 struct SettingsView: View {
+
+    @Binding var loginMode: LoginMode
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            Form {
+                Button("Logout") {
+                    loginMode = .none
+                }
+            }
+        }
+        .navigationTitle("Settings")
     }
 }
 
 struct SettingsView_Previews: PreviewProvider {
+
+    @State static var loginMode: LoginMode = .guest(relayAddress: LoginView.defaultRelay)
+
     static var previews: some View {
-        SettingsView()
+        SettingsView(loginMode: $loginMode)
     }
 }

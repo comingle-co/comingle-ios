@@ -43,7 +43,7 @@ struct LoginView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 Text("Welcome to Confstr!")
                 Text("Your go-to conference app powered by Nostr.")
@@ -52,10 +52,9 @@ struct LoginView: View {
                     Section(
                         content: {
                             TextField("wss://relay.example.com", text: $primaryRelay)
-                                .autocapitalization(.none)
                                 .autocorrectionDisabled(false)
-                                .textInputAutocapitalization(.never)
                                 .textContentType(.password)
+                                .textInputAutocapitalization(.never)
                                 .onReceive(Just(primaryRelay)) { newValue in
                                     let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                                     primaryRelay = filtered
@@ -81,10 +80,9 @@ struct LoginView: View {
                     Section(
                         content: {
                             SecureField("nsec1...", text: $privateKey)
-                                .autocapitalization(.none)
                                 .autocorrectionDisabled(false)
-                                .textInputAutocapitalization(.never)
                                 .textContentType(.password)
+                                .textInputAutocapitalization(.never)
                                 .onReceive(Just(privateKey)) { newValue in
                                     let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                                     privateKey = filtered
