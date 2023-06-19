@@ -1,0 +1,22 @@
+{
+  "pins" : [
+    {
+      "identity" : "nostr-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nostr-sdk/nostr-sdk-ios.git",
+      "state" : {
+        "revision" : "24f14431f2a0d0e84f96aab7134812dc65b951dc"
+      }
+    },
+    {
+      "identity" : "secp256k1.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GigaBitcoin/secp256k1.swift",
+      "state" : {
+        "revision" : "1a14e189def5eaa92f839afdd2faad8e43b61a6e",
+        "version" : "0.12.2"
+      }
+    }
+  ],
+  "version" : 2
+}

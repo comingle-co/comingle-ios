@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var loginMode: LoginMode = .none
+
     var body: some View {
-        ConferencesView(conferences: ConferencesView_Previews.conferences)
+        switch loginMode {
+        case .none:
+            LoginView(loginMode: $loginMode)
+        default:
+            LoggedInView(loginMode: $loginMode)
+        }
     }
 }
 

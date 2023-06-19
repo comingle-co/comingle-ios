@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import NostrSDK
 
 struct ConferencesView: View {
+
+    @Binding var loginMode: LoginMode
 
     private let calendar = Calendar.current
 
@@ -15,7 +18,9 @@ struct ConferencesView: View {
     private var upcomingConferences: [Conference] = []
     private var pastConferences: [Conference] = []
 
-    init(conferences: [Conference]) {
+    init(loginMode: Binding<LoginMode>, conferences: [Conference]) {
+        self._loginMode = loginMode
+
         let currentDate = Date.now
 
         conferences.forEach {
@@ -80,7 +85,6 @@ struct ConferencesView: View {
                     )
                 }
             }
-            .navigationTitle("Conferences")
         }
     }
 }
@@ -203,7 +207,9 @@ and what needs to happen to truly be globally accessible.
         jb55
     ]
 
+    @State static var loginMode: LoginMode = .attendee(relayAddress: LoginView.defaultRelay, keypair: Keypair()!)
+
     static var previews: some View {
-        ConferencesView(conferences: conferences)
+        ConferencesView(loginMode: $loginMode, conferences: conferences)
     }
 }

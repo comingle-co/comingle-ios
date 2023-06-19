@@ -25,20 +25,18 @@ struct ConferenceView: View {
     }
 
     var body: some View {
-        VStack {
-            TabView {
-                ScheduleView(conference: conference)
-                    .tabItem {
-                        Label("Schedule", systemImage: "calendar")
-                    }
-
-                PeopleView(
-                    speakers: Array(Set(conference.sessions.flatMap { $0.speakers })),
-                    organizers: conference.organizers
-                )
+        TabView {
+            ScheduleView(conference: conference)
                 .tabItem {
-                    Label("People", systemImage: "person")
+                    Label("Schedule", systemImage: "calendar")
                 }
+
+            PeopleView(
+                speakers: Array(Set(conference.sessions.flatMap { $0.speakers })),
+                organizers: conference.organizers
+            )
+            .tabItem {
+                Label("People", systemImage: "person")
             }
         }
         .navigationTitle(conference.name)
