@@ -5,7 +5,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nostr-sdk/nostr-sdk-ios.git",
       "state" : {
-        "revision" : "24f14431f2a0d0e84f96aab7134812dc65b951dc"
+        "revision" : "a757e92988002d7abad3fd4b9ecb6341ddc42dad"
       }
     },
     {

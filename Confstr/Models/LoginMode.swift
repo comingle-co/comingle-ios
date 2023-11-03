@@ -8,9 +8,24 @@
 import Foundation
 import NostrSDK
 
-enum LoginMode {
+enum LoginMode: CustomStringConvertible, CaseIterable, Identifiable {
     case none
-    case guest(relayAddress: String)
-    case attendee(relayAddress: String, keypair: Keypair)
-    case organizer(relayAddress: String, keypair: Keypair)
+    case guest
+    case attendee
+    case organizer
+
+    var id: Self { self }
+
+    var description: String {
+        switch self {
+        case .none:
+            return NSLocalizedString("None", comment: "")
+        case .guest:
+            return NSLocalizedString("Guest", comment: "")
+        case .attendee:
+            return NSLocalizedString("Attendee", comment: "")
+        case .organizer:
+            return NSLocalizedString("Organizer", comment: "")
+        }
+    }
 }

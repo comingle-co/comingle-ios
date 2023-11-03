@@ -10,7 +10,7 @@ import NostrSDK
 
 struct ConferencesView: View {
 
-    @Binding var loginMode: LoginMode
+    @ObservedObject var appState: AppState
 
     private let calendar = Calendar.current
 
@@ -18,8 +18,8 @@ struct ConferencesView: View {
     private var upcomingConferences: [Conference] = []
     private var pastConferences: [Conference] = []
 
-    init(loginMode: Binding<LoginMode>, conferences: [Conference]) {
-        self._loginMode = loginMode
+    init(appState: AppState, conferences: [Conference]) {
+        self.appState = appState
 
         let currentDate = Date.now
 
@@ -205,9 +205,9 @@ and what needs to happen to truly be globally accessible.
         jb55
     ]
 
-    @State static var loginMode: LoginMode = .attendee(relayAddress: LoginView.defaultRelay, keypair: Keypair()!)
+    @State static var appState = AppState()
 
     static var previews: some View {
-        ConferencesView(loginMode: $loginMode, conferences: conferences)
+        ConferencesView(appState: appState, conferences: conferences)
     }
 }

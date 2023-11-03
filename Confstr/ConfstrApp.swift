@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct ConfstrApp: App {
+    private let appState = AppState()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(appState: appState)
         }
     }
 }

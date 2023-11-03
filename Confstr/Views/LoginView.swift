@@ -10,7 +10,7 @@ import Combine
 import NostrSDK
 
 struct LoginView: View {
-    @Binding var loginMode: LoginMode
+    @ObservedObject var appState: AppState
 
     @State private var privateKey: String = ""
     @State private var primaryRelay: String = ""
@@ -31,7 +31,7 @@ struct LoginView: View {
     }
 
     private func isValidRelay(address: String) -> Bool {
-        guard let url = URL.init(string: address), let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+        guard let url = URL(string: address), let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return false
         }
 
@@ -101,7 +101,9 @@ struct LoginView: View {
                 }
 
                 Button("Guest Login") {
-                    loginMode = .guest(relayAddress: primaryRelay)
+                    appState.keypair = nil
+                    appState.relayUrlString = primaryRelay
+                    appState.loginMode = .guest
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!validRelay)
@@ -111,7 +113,9 @@ struct LoginView: View {
                         validKey = false
                         return
                     }
-                    loginMode = .attendee(relayAddress: primaryRelay, keypair: keypair)
+                    appState.keypair = keypair
+                    appState.relayUrlString = primaryRelay
+                    appState.loginMode = .attendee
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!validKey || !validRelay)
@@ -121,7 +125,9 @@ struct LoginView: View {
                         validKey = false
                         return
                     }
-                    loginMode = .organizer(relayAddress: primaryRelay, keypair: keypair)
+                    appState.keypair = keypair
+                    appState.relayUrlString = primaryRelay
+                    appState.loginMode = .organizer
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!validKey || !validRelay)
@@ -131,9 +137,10 @@ struct LoginView: View {
 }
 
 struct LoginView_Previews: PreviewProvider {
-    @State static var loginMode: LoginMode = .none
+
+    static var appState = AppState()
 
     static var previews: some View {
-        LoginView(loginMode: $loginMode)
+        LoginView(appState: appState)
     }
 }

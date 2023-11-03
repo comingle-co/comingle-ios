@@ -9,27 +9,29 @@ import SwiftUI
 
 struct LoggedInView: View {
 
-    @Binding var loginMode: LoginMode
+    @ObservedObject var appState: AppState
 
     var body: some View {
         NavigationStack {
-            ConferencesView(loginMode: $loginMode, conferences: ConferencesView_Previews.conferences)
+            ConferencesView(appState: appState, conferences: ConferencesView_Previews.conferences)
                 .navigationTitle("Conferences")
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        NavigationLink(destination: SettingsView(loginMode: $loginMode)) {
+                        NavigationLink(destination: SettingsView(appState: appState)) {
                             Image(systemName: "gear")
                         }
                     }
                 }
         }
+        .task {
+        }
     }
 }
 
 struct LoggedInView_Previews: PreviewProvider {
-    @State static var loginMode: LoginMode = .guest(relayAddress: LoginView.defaultRelay)
+    static var appState = AppState()
 
     static var previews: some View {
-        LoggedInView(loginMode: $loginMode)
+        LoggedInView(appState: appState)
     }
 }
