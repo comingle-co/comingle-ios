@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Confstr
+//  Comingle
 //
 //  Created by Terry Yiu on 5/9/23.
 //

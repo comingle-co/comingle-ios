@@ -13,13 +13,13 @@
 		3A2FF9802A3FC5E4009E1067 /* LoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF97F2A3FC5E4009E1067 /* LoggedInView.swift */; };
 		3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9812A3FD68B009E1067 /* SettingsView.swift */; };
 		3A2FF9842A40025B009E1067 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9832A40025B009E1067 /* AppState.swift */; };
-		3A453DDC2A0B348100897303 /* ConfstrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDB2A0B348100897303 /* ConfstrApp.swift */; };
+		3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDB2A0B348100897303 /* ComingleApp.swift */; };
 		3A453DDE2A0B348100897303 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDD2A0B348100897303 /* ContentView.swift */; };
 		3A453DE02A0B348200897303 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A453DDF2A0B348200897303 /* Assets.xcassets */; };
 		3A453DE42A0B348200897303 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A453DE32A0B348200897303 /* Preview Assets.xcassets */; };
-		3A453DEE2A0B348200897303 /* ConfstrTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DED2A0B348200897303 /* ConfstrTests.swift */; };
-		3A453DF82A0B348200897303 /* ConfstrUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF72A0B348200897303 /* ConfstrUITests.swift */; };
-		3A453DFA2A0B348200897303 /* ConfstrUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF92A0B348200897303 /* ConfstrUITestsLaunchTests.swift */; };
+		3A453DEE2A0B348200897303 /* ComingleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DED2A0B348200897303 /* ComingleTests.swift */; };
+		3A453DF82A0B348200897303 /* ComingleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF72A0B348200897303 /* ComingleUITests.swift */; };
+		3A453DFA2A0B348200897303 /* ComingleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF92A0B348200897303 /* ComingleUITestsLaunchTests.swift */; };
 		3A453E1A2A0C613600897303 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E172A0C613500897303 /* Person.swift */; };
 		3A453E1B2A0C613600897303 /* Conference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E182A0C613600897303 /* Conference.swift */; };
 		3A453E1C2A0C613600897303 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E192A0C613600897303 /* Session.swift */; };
@@ -38,14 +38,14 @@
 			containerPortal = 3A453DD02A0B348100897303 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 3A453DD72A0B348100897303;
-			remoteInfo = Confstr;
+			remoteInfo = Comingle;
 		};
 		3A453DF42A0B348200897303 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3A453DD02A0B348100897303 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 3A453DD72A0B348100897303;
-			remoteInfo = Confstr;
+			remoteInfo = Comingle;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -55,17 +55,17 @@
 		3A2FF97F2A3FC5E4009E1067 /* LoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInView.swift; sourceTree = "<group>"; };
 		3A2FF9812A3FD68B009E1067 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A2FF9832A40025B009E1067 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		3A453DD82A0B348100897303 /* Confstr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Confstr.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A453DDB2A0B348100897303 /* ConfstrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfstrApp.swift; sourceTree = "<group>"; };
+		3A453DD82A0B348100897303 /* Comingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A453DDB2A0B348100897303 /* ComingleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleApp.swift; sourceTree = "<group>"; };
 		3A453DDD2A0B348100897303 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3A453DDF2A0B348200897303 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3A453DE12A0B348200897303 /* Confstr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Confstr.entitlements; sourceTree = "<group>"; };
+		3A453DE12A0B348200897303 /* Comingle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Comingle.entitlements; sourceTree = "<group>"; };
 		3A453DE32A0B348200897303 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		3A453DE92A0B348200897303 /* ConfstrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConfstrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A453DED2A0B348200897303 /* ConfstrTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfstrTests.swift; sourceTree = "<group>"; };
-		3A453DF32A0B348200897303 /* ConfstrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConfstrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A453DF72A0B348200897303 /* ConfstrUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfstrUITests.swift; sourceTree = "<group>"; };
-		3A453DF92A0B348200897303 /* ConfstrUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfstrUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3A453DE92A0B348200897303 /* ComingleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ComingleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A453DED2A0B348200897303 /* ComingleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleTests.swift; sourceTree = "<group>"; };
+		3A453DF32A0B348200897303 /* ComingleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ComingleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A453DF72A0B348200897303 /* ComingleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleUITests.swift; sourceTree = "<group>"; };
+		3A453DF92A0B348200897303 /* ComingleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3A453E172A0C613500897303 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		3A453E182A0C613600897303 /* Conference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conference.swift; sourceTree = "<group>"; };
 		3A453E192A0C613600897303 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -107,9 +107,9 @@
 		3A453DCF2A0B348100897303 = {
 			isa = PBXGroup;
 			children = (
-				3A453DDA2A0B348100897303 /* Confstr */,
-				3A453DEC2A0B348200897303 /* ConfstrTests */,
-				3A453DF62A0B348200897303 /* ConfstrUITests */,
+				3A453DDA2A0B348100897303 /* Comingle */,
+				3A453DEC2A0B348200897303 /* ComingleTests */,
+				3A453DF62A0B348200897303 /* ComingleUITests */,
 				3A453DD92A0B348100897303 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,25 +117,25 @@
 		3A453DD92A0B348100897303 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3A453DD82A0B348100897303 /* Confstr.app */,
-				3A453DE92A0B348200897303 /* ConfstrTests.xctest */,
-				3A453DF32A0B348200897303 /* ConfstrUITests.xctest */,
+				3A453DD82A0B348100897303 /* Comingle.app */,
+				3A453DE92A0B348200897303 /* ComingleTests.xctest */,
+				3A453DF32A0B348200897303 /* ComingleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3A453DDA2A0B348100897303 /* Confstr */ = {
+		3A453DDA2A0B348100897303 /* Comingle */ = {
 			isa = PBXGroup;
 			children = (
 				3A4647CD2A4113E800386AD8 /* Controllers */,
 				3A453E152A0C611300897303 /* Models */,
 				3A453E162A0C611800897303 /* Views */,
-				3A453DDB2A0B348100897303 /* ConfstrApp.swift */,
+				3A453DDB2A0B348100897303 /* ComingleApp.swift */,
 				3A453DDF2A0B348200897303 /* Assets.xcassets */,
-				3A453DE12A0B348200897303 /* Confstr.entitlements */,
+				3A453DE12A0B348200897303 /* Comingle.entitlements */,
 				3A453DE22A0B348200897303 /* Preview Content */,
 			);
-			path = Confstr;
+			path = Comingle;
 			sourceTree = "<group>";
 		};
 		3A453DE22A0B348200897303 /* Preview Content */ = {
@@ -146,21 +146,21 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		3A453DEC2A0B348200897303 /* ConfstrTests */ = {
+		3A453DEC2A0B348200897303 /* ComingleTests */ = {
 			isa = PBXGroup;
 			children = (
-				3A453DED2A0B348200897303 /* ConfstrTests.swift */,
+				3A453DED2A0B348200897303 /* ComingleTests.swift */,
 			);
-			path = ConfstrTests;
+			path = ComingleTests;
 			sourceTree = "<group>";
 		};
-		3A453DF62A0B348200897303 /* ConfstrUITests */ = {
+		3A453DF62A0B348200897303 /* ComingleUITests */ = {
 			isa = PBXGroup;
 			children = (
-				3A453DF72A0B348200897303 /* ConfstrUITests.swift */,
-				3A453DF92A0B348200897303 /* ConfstrUITestsLaunchTests.swift */,
+				3A453DF72A0B348200897303 /* ComingleUITests.swift */,
+				3A453DF92A0B348200897303 /* ComingleUITestsLaunchTests.swift */,
 			);
-			path = ConfstrUITests;
+			path = ComingleUITests;
 			sourceTree = "<group>";
 		};
 		3A453E152A0C611300897303 /* Models */ = {
@@ -203,9 +203,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3A453DD72A0B348100897303 /* Confstr */ = {
+		3A453DD72A0B348100897303 /* Comingle */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3A453DFD2A0B348200897303 /* Build configuration list for PBXNativeTarget "Confstr" */;
+			buildConfigurationList = 3A453DFD2A0B348200897303 /* Build configuration list for PBXNativeTarget "Comingle" */;
 			buildPhases = (
 				3A453E0E2A0B3BE200897303 /* SwiftLint */,
 				3A453DD42A0B348100897303 /* Sources */,
@@ -216,17 +216,17 @@
 			);
 			dependencies = (
 			);
-			name = Confstr;
+			name = Comingle;
 			packageProductDependencies = (
 				3A2FF9732A3F6CE2009E1067 /* NostrSDK */,
 			);
-			productName = Confstr;
-			productReference = 3A453DD82A0B348100897303 /* Confstr.app */;
+			productName = Comingle;
+			productReference = 3A453DD82A0B348100897303 /* Comingle.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3A453DE82A0B348200897303 /* ConfstrTests */ = {
+		3A453DE82A0B348200897303 /* ComingleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3A453E002A0B348200897303 /* Build configuration list for PBXNativeTarget "ConfstrTests" */;
+			buildConfigurationList = 3A453E002A0B348200897303 /* Build configuration list for PBXNativeTarget "ComingleTests" */;
 			buildPhases = (
 				3A453DE52A0B348200897303 /* Sources */,
 				3A453DE62A0B348200897303 /* Frameworks */,
@@ -237,14 +237,14 @@
 			dependencies = (
 				3A453DEB2A0B348200897303 /* PBXTargetDependency */,
 			);
-			name = ConfstrTests;
-			productName = ConfstrTests;
-			productReference = 3A453DE92A0B348200897303 /* ConfstrTests.xctest */;
+			name = ComingleTests;
+			productName = ComingleTests;
+			productReference = 3A453DE92A0B348200897303 /* ComingleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		3A453DF22A0B348200897303 /* ConfstrUITests */ = {
+		3A453DF22A0B348200897303 /* ComingleUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3A453E032A0B348200897303 /* Build configuration list for PBXNativeTarget "ConfstrUITests" */;
+			buildConfigurationList = 3A453E032A0B348200897303 /* Build configuration list for PBXNativeTarget "ComingleUITests" */;
 			buildPhases = (
 				3A453DEF2A0B348200897303 /* Sources */,
 				3A453DF02A0B348200897303 /* Frameworks */,
@@ -255,9 +255,9 @@
 			dependencies = (
 				3A453DF52A0B348200897303 /* PBXTargetDependency */,
 			);
-			name = ConfstrUITests;
-			productName = ConfstrUITests;
-			productReference = 3A453DF32A0B348200897303 /* ConfstrUITests.xctest */;
+			name = ComingleUITests;
+			productName = ComingleUITests;
+			productReference = 3A453DF32A0B348200897303 /* ComingleUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -283,7 +283,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3A453DD32A0B348100897303 /* Build configuration list for PBXProject "Confstr" */;
+			buildConfigurationList = 3A453DD32A0B348100897303 /* Build configuration list for PBXProject "Comingle" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -299,9 +299,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3A453DD72A0B348100897303 /* Confstr */,
-				3A453DE82A0B348200897303 /* ConfstrTests */,
-				3A453DF22A0B348200897303 /* ConfstrUITests */,
+				3A453DD72A0B348100897303 /* Comingle */,
+				3A453DE82A0B348200897303 /* ComingleTests */,
+				3A453DF22A0B348200897303 /* ComingleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -372,7 +372,7 @@
 				3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */,
 				3A453DDE2A0B348100897303 /* ContentView.swift in Sources */,
 				3A2FF9802A3FC5E4009E1067 /* LoggedInView.swift in Sources */,
-				3A453DDC2A0B348100897303 /* ConfstrApp.swift in Sources */,
+				3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */,
 				3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */,
 				3A453E262A0C614900897303 /* ConferencesView.swift in Sources */,
 				3A453E1B2A0C613600897303 /* Conference.swift in Sources */,
@@ -383,7 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A453DEE2A0B348200897303 /* ConfstrTests.swift in Sources */,
+				3A453DEE2A0B348200897303 /* ComingleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,8 +391,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A453DFA2A0B348200897303 /* ConfstrUITestsLaunchTests.swift in Sources */,
-				3A453DF82A0B348200897303 /* ConfstrUITests.swift in Sources */,
+				3A453DFA2A0B348200897303 /* ComingleUITestsLaunchTests.swift in Sources */,
+				3A453DF82A0B348200897303 /* ComingleUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,12 +401,12 @@
 /* Begin PBXTargetDependency section */
 		3A453DEB2A0B348200897303 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3A453DD72A0B348100897303 /* Confstr */;
+			target = 3A453DD72A0B348100897303 /* Comingle */;
 			targetProxy = 3A453DEA2A0B348200897303 /* PBXContainerItemProxy */;
 		};
 		3A453DF52A0B348200897303 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3A453DD72A0B348100897303 /* Confstr */;
+			target = 3A453DD72A0B348100897303 /* Comingle */;
 			targetProxy = 3A453DF42A0B348200897303 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -526,14 +526,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Confstr/Confstr.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Comingle/Comingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Confstr/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Comingle/Preview Content\"";
 				DEVELOPMENT_TEAM = S99A5B637C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Confstr;
+				INFOPLIST_KEY_CFBundleDisplayName = Comingle;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -550,7 +550,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.confstr.Confstr;
+				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.Comingle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -567,14 +567,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Confstr/Confstr.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Comingle/Comingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Confstr/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Comingle/Preview Content\"";
 				DEVELOPMENT_TEAM = S99A5B637C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Confstr;
+				INFOPLIST_KEY_CFBundleDisplayName = Comingle;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -591,7 +591,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.confstr.Confstr;
+				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.Comingle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -614,14 +614,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.confstr.ConfstrTests;
+				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.ComingleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Confstr.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Confstr";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Comingle.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Comingle";
 			};
 			name = Debug;
 		};
@@ -636,14 +636,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.confstr.ConfstrTests;
+				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.ComingleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Confstr.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Confstr";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Comingle.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Comingle";
 			};
 			name = Release;
 		};
@@ -657,14 +657,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.confstr.ConfstrUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.ComingleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Confstr;
+				TEST_TARGET_NAME = Comingle;
 			};
 			name = Debug;
 		};
@@ -678,21 +678,21 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.confstr.ConfstrUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.ComingleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Confstr;
+				TEST_TARGET_NAME = Comingle;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3A453DD32A0B348100897303 /* Build configuration list for PBXProject "Confstr" */ = {
+		3A453DD32A0B348100897303 /* Build configuration list for PBXProject "Comingle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A453DFB2A0B348200897303 /* Debug */,
@@ -701,7 +701,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3A453DFD2A0B348200897303 /* Build configuration list for PBXNativeTarget "Confstr" */ = {
+		3A453DFD2A0B348200897303 /* Build configuration list for PBXNativeTarget "Comingle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A453DFE2A0B348200897303 /* Debug */,
@@ -710,7 +710,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3A453E002A0B348200897303 /* Build configuration list for PBXNativeTarget "ConfstrTests" */ = {
+		3A453E002A0B348200897303 /* Build configuration list for PBXNativeTarget "ComingleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A453E012A0B348200897303 /* Debug */,
@@ -719,7 +719,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3A453E032A0B348200897303 /* Build configuration list for PBXNativeTarget "ConfstrUITests" */ = {
+		3A453E032A0B348200897303 /* Build configuration list for PBXNativeTarget "ComingleUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A453E042A0B348200897303 /* Debug */,

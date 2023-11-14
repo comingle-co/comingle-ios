@@ -1,13 +1,13 @@
 //
-//  ConfstrUITestsLaunchTests.swift
-//  ConfstrUITests
+//  ComingleUITestsLaunchTests.swift
+//  ComingleUITests
 //
 //  Created by Terry Yiu on 5/9/23.
 //
 
 import XCTest
 
-final class ConfstrUITestsLaunchTests: XCTestCase {
+final class ComingleUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

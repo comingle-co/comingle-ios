@@ -1,6 +1,6 @@
 //
 //  LoginView.swift
-//  Confstr
+//  Comingle
 //
 //  Created by Terry Yiu on 6/18/23.
 //
@@ -18,7 +18,7 @@ struct LoginView: View {
     @State private var validKey: Bool = false
     @State private var validRelay: Bool = false
 
-    static let defaultRelay = "wss://relay.confstr.com"
+    static let defaultRelay = "wss://relay.comingle.co"
 
     private func relayFooter() -> AttributedString {
         var footer = AttributedString("Try \(LoginView.defaultRelay)")
@@ -45,7 +45,7 @@ struct LoginView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Welcome to Confstr!")
+                Text("Welcome to Comingle!")
                 Text("Your go-to conference app powered by Nostr.")
 
                 Form {

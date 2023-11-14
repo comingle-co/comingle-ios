@@ -1,6 +1,6 @@
 //
 //  ConferencesView.swift
-//  Confstr
+//  Comingle
 //
 //  Created by Terry Yiu on 5/10/23.
 //
@@ -119,7 +119,7 @@ struct ConferencesView_Previews: PreviewProvider {
     static let tyiu = Person(
         nostrPublicKey: "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf",
         name: "Terry Yiu",
-        description: "Founder @ Confstr\nContributor @ Damus\nEngineer @ Cash App",
+        description: "Founder @ Comingle\nContributor @ Damus\nEngineer @ Cash App",
         picture:
 """
 https://nostr.build/i/p/nostr.build_\

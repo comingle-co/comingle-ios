@@ -1,6 +1,6 @@
 //
 //  LoginMode.swift
-//  Confstr
+//  Comingle
 //
 //  Created by Terry Yiu on 6/18/23.
 //
