@@ -8,7 +8,7 @@
 import Foundation
 import NostrSDK
 
-enum LoginMode: CustomStringConvertible, CaseIterable, Identifiable {
+enum LoginMode: CaseIterable, Identifiable {
     case none
     case guest
     case attendee
@@ -16,16 +16,16 @@ enum LoginMode: CustomStringConvertible, CaseIterable, Identifiable {
 
     var id: Self { self }
 
-    var description: String {
+    var description: LocalizedStringResource {
         switch self {
         case .none:
-            return NSLocalizedString("None", comment: "")
+            return .localizable.loginModeNone
         case .guest:
-            return NSLocalizedString("Guest", comment: "")
+            return .localizable.loginModeGuest
         case .attendee:
-            return NSLocalizedString("Attendee", comment: "")
+            return .localizable.loginModeAttendee
         case .organizer:
-            return NSLocalizedString("Organizer", comment: "")
+            return .localizable.loginModeOrganizer
         }
     }
 }

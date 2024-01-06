@@ -13,6 +13,7 @@
 		3A2FF9802A3FC5E4009E1067 /* LoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF97F2A3FC5E4009E1067 /* LoggedInView.swift */; };
 		3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9812A3FD68B009E1067 /* SettingsView.swift */; };
 		3A2FF9842A40025B009E1067 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9832A40025B009E1067 /* AppState.swift */; };
+		3A34AAA32B48FE1F00C5F910 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */; };
 		3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDB2A0B348100897303 /* ComingleApp.swift */; };
 		3A453DDE2A0B348100897303 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDD2A0B348100897303 /* ContentView.swift */; };
 		3A453DE02A0B348200897303 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A453DDF2A0B348200897303 /* Assets.xcassets */; };
@@ -55,6 +56,7 @@
 		3A2FF97F2A3FC5E4009E1067 /* LoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInView.swift; sourceTree = "<group>"; };
 		3A2FF9812A3FD68B009E1067 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A2FF9832A40025B009E1067 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		3A453DD82A0B348100897303 /* Comingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A453DDB2A0B348100897303 /* ComingleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleApp.swift; sourceTree = "<group>"; };
 		3A453DDD2A0B348100897303 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -104,6 +106,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A34AAA02B48FDA900C5F910 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				3A453DDF2A0B348200897303 /* Assets.xcassets */,
+				3A34AAA12B48FDBA00C5F910 /* Localization */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		3A34AAA12B48FDBA00C5F910 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		3A453DCF2A0B348100897303 = {
 			isa = PBXGroup;
 			children = (
@@ -127,11 +146,11 @@
 		3A453DDA2A0B348100897303 /* Comingle */ = {
 			isa = PBXGroup;
 			children = (
+				3A34AAA02B48FDA900C5F910 /* Assets */,
 				3A4647CD2A4113E800386AD8 /* Controllers */,
 				3A453E152A0C611300897303 /* Models */,
 				3A453E162A0C611800897303 /* Views */,
 				3A453DDB2A0B348100897303 /* ComingleApp.swift */,
-				3A453DDF2A0B348200897303 /* Assets.xcassets */,
 				3A453DE12A0B348200897303 /* Comingle.entitlements */,
 				3A453DE22A0B348200897303 /* Preview Content */,
 			);
@@ -215,6 +234,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3A34AAA62B48FF9400C5F910 /* PBXTargetDependency */,
 			);
 			name = Comingle;
 			packageProductDependencies = (
@@ -268,7 +288,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					3A453DD72A0B348100897303 = {
 						CreatedOnToolsVersion = 14.3;
@@ -294,6 +314,7 @@
 			mainGroup = 3A453DCF2A0B348100897303;
 			packageReferences = (
 				3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */,
+				3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */,
 			);
 			productRefGroup = 3A453DD92A0B348100897303 /* Products */;
 			projectDirPath = "";
@@ -313,6 +334,7 @@
 			files = (
 				3A453DE42A0B348200897303 /* Preview Assets.xcassets in Resources */,
 				3A453DE02A0B348200897303 /* Assets.xcassets in Resources */,
+				3A34AAA32B48FE1F00C5F910 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +421,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3A34AAA62B48FF9400C5F910 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 3A34AAA52B48FF9400C5F910 /* XCStringsToolPlugin */;
+		};
 		3A453DEB2A0B348200897303 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3A453DD72A0B348100897303 /* Comingle */;
@@ -416,6 +442,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -476,6 +503,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -553,6 +581,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.Comingle;
@@ -561,7 +591,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -595,6 +625,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.Comingle;
@@ -603,7 +635,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -749,6 +781,14 @@
 				revision = a757e92988002d7abad3fd4b9ecb6341ddc42dad;
 			};
 		};
+		3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/liamnichols/xcstrings-tool-plugin.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -756,6 +796,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */;
 			productName = NostrSDK;
+		};
+		3A34AAA52B48FF9400C5F910 /* XCStringsToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */;
+			productName = "plugin:XCStringsToolPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

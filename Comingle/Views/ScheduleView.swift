@@ -28,9 +28,9 @@ struct ScheduleView: View {
         VStack {
             let days = Array(Set(conference.sessions.map { calendar.startOfDay(for: $0.startTime) })).sorted()
 
-            Picker(selection: $selectedDayIndex, label: Text("Date")) {
+            Picker(selection: $selectedDayIndex, label: Text(.localizable.scheduleDatePickerLabel)) {
                 ForEach(0..<days.count, id: \.self) { dayIndex in
-                    Text("\(dateFormatter.string(from: days[dayIndex]))").tag(dayIndex)
+                    Text(dateFormatter.string(from: days[dayIndex])).tag(dayIndex)
                 }
             }
             .pickerStyle(.segmented)

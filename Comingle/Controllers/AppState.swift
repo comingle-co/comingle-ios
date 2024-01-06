@@ -19,8 +19,8 @@ extension AppState: RelayDelegate {
 
     func relayStateDidChange(_ relay: Relay, state: Relay.State) {
         if let keypair, state == .connected {
-            let filter = Filter(
-                authors: [keypair.privateKey.hex],
+            _ = Filter(
+                authors: [keypair.publicKey.hex],
                 kinds: [EventKind.setMetadata.rawValue]
             )
         }

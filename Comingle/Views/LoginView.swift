@@ -21,7 +21,7 @@ struct LoginView: View {
     static let defaultRelay = "wss://relay.comingle.co"
 
     private func relayFooter() -> AttributedString {
-        var footer = AttributedString("Try \(LoginView.defaultRelay)")
+        var footer = AttributedString(localized: .localizable.tryDefaultRelay(LoginView.defaultRelay))
         if let range = footer.range(of: LoginView.defaultRelay) {
             footer[range].underlineStyle = .single
             footer[range].foregroundColor = .blue
@@ -45,13 +45,13 @@ struct LoginView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Welcome to Comingle!")
-                Text("Your go-to conference app powered by Nostr.")
+                Text(.localizable.welcome)
+                Text(.localizable.appDescription)
 
                 Form {
                     Section(
                         content: {
-                            TextField("wss://relay.example.com", text: $primaryRelay)
+                            TextField(String(localized: .localizable.exampleRelay), text: $primaryRelay)
                                 .autocorrectionDisabled(false)
                                 .textContentType(.password)
                                 .textInputAutocapitalization(.never)
@@ -67,7 +67,7 @@ struct LoginView: View {
                                 }
                         },
                         header: {
-                            Text("Primary Nostr Relay (Required)")
+                            Text(.localizable.primaryNostrRelayRequired)
                         },
                         footer: {
                             Text(relayFooter())
@@ -92,15 +92,15 @@ struct LoginView: View {
                                 }
                         },
                         header: {
-                            Text("Nostr Private Key (Optional)")
+                            Text(.localizable.privateKeyHeader)
                         },
                         footer: {
-                            Text("Leave blank if you are not logging in with an existing private key.")
+                            Text(.localizable.privateKeyFooter)
                         }
                     )
                 }
 
-                Button("Guest Login") {
+                Button(String(localized: .localizable.loginModeGuest)) {
                     appState.keypair = nil
                     appState.relayUrlString = primaryRelay
                     appState.loginMode = .guest
@@ -108,7 +108,7 @@ struct LoginView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(!validRelay)
 
-                Button("Attendee Login") {
+                Button(String(localized: .localizable.loginModeAttendee)) {
                     guard let keypair = Keypair(nsec: privateKey) else {
                         validKey = false
                         return
@@ -120,7 +120,7 @@ struct LoginView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(!validKey || !validRelay)
 
-                Button("Organizer Login") {
+                Button(String(localized: .localizable.loginModeOrganizer)) {
                     guard let keypair = Keypair(nsec: privateKey) else {
                         validKey = false
                         return

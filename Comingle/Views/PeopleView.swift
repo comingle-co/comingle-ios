@@ -15,15 +15,9 @@ struct PeopleView: View {
 
     var body: some View {
         VStack {
-            Picker(selection: $selectedGroupIndex, label: Text("Group")) {
-                Text(
-                    "Speakers",
-                    comment: "Picker option to show list of conference speakers."
-                ).tag(0)
-                Text(
-                    "Organizers",
-                    comment: "Picker option to show list of conference organizers."
-                ).tag(1)
+            Picker(selection: $selectedGroupIndex, label: Text(.localizable.peopleGroupPickerLabel)) {
+                Text(.localizable.speakers).tag(0)
+                Text(.localizable.organizers).tag(1)
             }
             .pickerStyle(.segmented)
             List {
@@ -38,7 +32,7 @@ struct PeopleView: View {
                             .frame(width: 100, height: 100)
                             NavigationLink(destination: PersonView(person: speaker)) {
                                 Text(speaker.name)
-                            }.navigationTitle("People")
+                            }.navigationTitle(String(localized: .localizable.people))
                         }
                     }
                 } else {
@@ -52,7 +46,7 @@ struct PeopleView: View {
                             .frame(width: 100, height: 100)
                             NavigationLink(destination: PersonView(person: speaker)) {
                                 Text(speaker.name)
-                            }.navigationTitle("People")
+                            }.navigationTitle(String(localized: .localizable.people))
                         }
                     }
                 }

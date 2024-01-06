@@ -49,7 +49,7 @@ struct ConferencesView: View {
                         }
                     },
                     header: {
-                        Text("Current Conferences", comment: "Section header for list of current conferences.")
+                        Text(.localizable.currentConferences)
                     }
                 )
             }
@@ -64,7 +64,7 @@ struct ConferencesView: View {
                         }
                     },
                     header: {
-                        Text("Upcoming Conferences", comment: "Section header for list of upcoming conferences.")
+                        Text(.localizable.upcomingConferences)
                     }
                 )
             }
@@ -79,7 +79,7 @@ struct ConferencesView: View {
                         }
                     },
                     header: {
-                        Text("Past Conferences", comment: "Section header for list of past conferences.")
+                        Text(.localizable.pastConferences)
                     }
                 )
             }

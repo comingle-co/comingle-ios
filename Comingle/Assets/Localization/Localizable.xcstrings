@@ -1,0 +1,438 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "appDescription" : {
+      "comment" : "Description of the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your go-to conference app powered by Nostr."
+          }
+        }
+      }
+    },
+    "conferences" : {
+      "comment" : "Navigation title for the view showing the list of conferences.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conferences"
+          }
+        }
+      }
+    },
+    "currentConferences" : {
+      "comment" : "Section header for list of current conferences.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Conferences"
+          }
+        }
+      }
+    },
+    "exampleRelay" : {
+      "comment" : "Example URL of a Nostr relay address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wss://relay.example.com"
+          }
+        }
+      }
+    },
+    "loginModeAttendee" : {
+      "comment" : "Status when the user is logged in as a conference attendee.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attendee"
+          }
+        }
+      }
+    },
+    "loginModeGuest" : {
+      "comment" : "Status when the user is logged in as a guest.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guest"
+          }
+        }
+      }
+    },
+    "loginModeNone" : {
+      "comment" : "Status when the user is not logged in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
+          }
+        }
+      }
+    },
+    "loginModeOrganizer" : {
+      "comment" : "Status when the user is logged in as a conference organizer.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organizer"
+          }
+        }
+      }
+    },
+    "nostrProfile" : {
+      "comment" : "Button to navigate to a person's Nostr profile.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nostr Profile"
+          }
+        }
+      }
+    },
+    "organizers" : {
+      "comment" : "Picker option to show list of conference organizers.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organizers"
+          }
+        }
+      }
+    },
+    "pastConferences" : {
+      "comment" : "Section header for list of past conferences.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Past Conferences"
+          }
+        }
+      }
+    },
+    "people" : {
+      "comment" : "Label for view that shows people involved with the conference.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "People"
+          }
+        }
+      }
+    },
+    "peopleGroupPickerLabel" : {
+      "comment" : "Label for group picker on people view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Group"
+          }
+        }
+      }
+    },
+    "primaryNostrRelayRequired" : {
+      "comment" : "Header text prompting required entry of the primary Nostr relay.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primary Nostr Relay (Required)"
+          }
+        }
+      }
+    },
+    "privateKeyFooter" : {
+      "comment" : "Footer text indicating that the private key can be left blank if the user is not logging in with an existing private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave blank if you are not logging in with an existing private key."
+          }
+        }
+      }
+    },
+    "privateKeyHeader" : {
+      "comment" : "Header text prompting optional entry of the user's private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nostr Private Key (Optional)"
+          }
+        }
+      }
+    },
+    "role" : {
+      "comment" : "Text to indicate the view is showing the user's login role.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Role"
+          }
+        }
+      }
+    },
+    "schedule" : {
+      "comment" : "Label for conference schedule view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schedule"
+          }
+        }
+      }
+    },
+    "scheduleDatePickerLabel" : {
+      "comment" : "Label for date picker on conference schedule view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "comment" : "Navigation title for the settings view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "settingsEnterPrivateKey" : {
+      "comment" : "Prompt in settings view asking user to enter a private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a private key"
+          }
+        }
+      }
+    },
+    "settingsPrivateKeyHeader" : {
+      "comment" : "Section header in settings view for private key configurations.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Private Key"
+          }
+        }
+      }
+    },
+    "settingsPublicKey" : {
+      "comment" : "Header text in settings view to indicate the text next to it is the user's public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Public Key"
+          }
+        }
+      }
+    },
+    "settingsRelayConnected" : {
+      "comment" : "Relay connection status indicating that it is connected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connected"
+          }
+        }
+      }
+    },
+    "settingsRelayConnecting" : {
+      "comment" : "Relay connection status indicating that it is connecting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecting..."
+          }
+        }
+      }
+    },
+    "settingsRelayConnectionError" : {
+      "comment" : "Relay connection status indicating that there was an error.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error: %@"
+          }
+        }
+      }
+    },
+    "settingsRelayConnectionHeader" : {
+      "comment" : "Header text in settings view for section that displays relay connection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relay Connection"
+          }
+        }
+      }
+    },
+    "settingsRelayConnectionStatus" : {
+      "comment" : "Text indicating that the relay connection status is beside this text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection Status:"
+          }
+        }
+      }
+    },
+    "settingsRelayLabel" : {
+      "comment" : "Text indicating that the relay URL is next to it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relay:"
+          }
+        }
+      }
+    },
+    "settingsRelayNotConnected" : {
+      "comment" : "Relay connection status indicating that it is not connected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not connected"
+          }
+        }
+      }
+    },
+    "signOut" : {
+      "comment" : "Button to sign out.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out"
+          }
+        }
+      }
+    },
+    "speakers" : {
+      "comment" : "Picker option to show list of conference speakers.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speakers"
+          }
+        }
+      }
+    },
+    "tryDefaultRelay" : {
+      "comment" : "Text prompting user to try connecting to the default relay.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try %@"
+          }
+        }
+      }
+    },
+    "upcomingConferences" : {
+      "comment" : "Section header for list of upcoming conferences.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming Conferences"
+          }
+        }
+      }
+    },
+    "welcome" : {
+      "comment" : "Text welcoming the user to the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to Comingle!"
+          }
+        }
+      }
+    },
+    "zapWithCommentOrQuestion" : {
+      "comment" : "Button to zap a speaker with a comment or question.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚡️ Zap with comment or question"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

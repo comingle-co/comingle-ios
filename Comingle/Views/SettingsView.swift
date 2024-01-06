@@ -24,7 +24,7 @@ struct SettingsView: View {
             Form {
                 Section(
                     content: {
-                        Picker("Role", selection: $appState.loginMode) {
+                        Picker(String(localized: .localizable.role), selection: $appState.loginMode) {
 
                             Text(LoginMode.guest.description)
                                 .tag(LoginMode.guest.id)
@@ -35,17 +35,21 @@ struct SettingsView: View {
                         }
                     },
                     header: {
-                        Text("Role")
+                        Text(.localizable.role)
                     }
                 )
 
                 if appState.loginMode == .attendee || appState.loginMode == .organizer {
                     Section(
                         content: {
-                            Text(appState.keypair?.publicKey.npub ?? "Enter a private key below")
+                            if let npub = appState.keypair?.publicKey.npub {
+                                Text(npub)
+                            } else {
+                                Text(.localizable.settingsEnterPrivateKey)
+                            }
                         },
                         header: {
-                            Text("Public Key")
+                            Text(.localizable.settingsPublicKey)
                         }
                     )
 
@@ -69,7 +73,7 @@ struct SettingsView: View {
                                 }
                         },
                         header: {
-                            Text("Private Key")
+                            Text(.localizable.settingsPrivateKeyHeader)
                         }
                     )
                 }
@@ -77,33 +81,33 @@ struct SettingsView: View {
                 Section(
                     content: {
                         HStack {
-                            Text("Relay:")
+                            Text(.localizable.settingsRelayLabel)
                             Text(appState.relayUrlString ?? "")
                         }
                         HStack {
-                            Text("Connection Status:")
+                            Text(.localizable.settingsRelayConnectionStatus)
 
                             if let relayState = appState.relay?.state {
                                 switch relayState {
                                 case .notConnected:
-                                    Text("Not connected")
+                                    Text(.localizable.settingsRelayNotConnected)
                                 case .error(let error):
-                                    Text("Error: \(error.localizedDescription)")
+                                    Text(.localizable.settingsRelayConnectionError(error.localizedDescription))
                                 case .connecting:
-                                    Text("Connecting...")
+                                    Text(.localizable.settingsRelayConnecting)
                                 case .connected:
-                                    Text("Connected")
+                                    Text(.localizable.settingsRelayConnected)
                                 }
                             } else {
-                                Text("Not connected")
+                                Text(.localizable.settingsRelayNotConnected)
                             }
                         }
                     },
                     header: {
-                        Text("Relay Connection")
+                        Text(.localizable.settingsRelayConnectionHeader)
                     }
                 )
-                Button("Sign Out") {
+                Button(String(localized: .localizable.signOut)) {
                     appState.keypair = nil
                     appState.relayUrlString = nil
                     if let relay = appState.relay {
@@ -114,7 +118,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .navigationTitle("Settings")
+        .navigationTitle(String(localized: .localizable.settings))
     }
 }
 

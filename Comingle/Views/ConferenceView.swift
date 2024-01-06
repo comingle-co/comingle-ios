@@ -28,7 +28,7 @@ struct ConferenceView: View {
         TabView {
             ScheduleView(conference: conference)
                 .tabItem {
-                    Label("Schedule", systemImage: "calendar")
+                    Label(String(localized: .localizable.schedule), systemImage: "calendar")
                 }
 
             PeopleView(
@@ -36,7 +36,7 @@ struct ConferenceView: View {
                 organizers: conference.organizers
             )
             .tabItem {
-                Label("People", systemImage: "person")
+                Label(String(localized: .localizable.people), systemImage: "person")
             }
         }
         .navigationTitle(conference.name)
