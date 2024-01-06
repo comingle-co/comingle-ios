@@ -50,7 +50,7 @@ struct SessionView: View {
                 .font(.title)
             ForEach(session.speakers, id: \.self) { speaker in
                 PersonView(person: speaker)
-                Link(String(localized: .localizable.zapWithCommentOrQuestion), destination: URL(string: "lightning:tyiu@tyiu.xyz")!)
+                Link(.localizable.zapWithCommentOrQuestion, destination: URL(string: "lightning:tyiu@tyiu.xyz")!)
                 Divider()
             }
         }

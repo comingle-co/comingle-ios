@@ -24,7 +24,7 @@ struct SettingsView: View {
             Form {
                 Section(
                     content: {
-                        Picker(String(localized: .localizable.role), selection: $appState.loginMode) {
+                        Picker(.localizable.role, selection: $appState.loginMode) {
 
                             Text(LoginMode.guest.description)
                                 .tag(LoginMode.guest.id)
@@ -107,7 +107,7 @@ struct SettingsView: View {
                         Text(.localizable.settingsRelayConnectionHeader)
                     }
                 )
-                Button(String(localized: .localizable.signOut)) {
+                Button(.localizable.signOut) {
                     appState.keypair = nil
                     appState.relayUrlString = nil
                     if let relay = appState.relay {
@@ -118,7 +118,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .navigationTitle(String(localized: .localizable.settings))
+        .navigationTitle(.localizable.settings)
     }
 }
 

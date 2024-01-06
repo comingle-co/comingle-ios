@@ -32,7 +32,7 @@ struct PeopleView: View {
                             .frame(width: 100, height: 100)
                             NavigationLink(destination: PersonView(person: speaker)) {
                                 Text(speaker.name)
-                            }.navigationTitle(String(localized: .localizable.people))
+                            }.navigationTitle(.localizable.people)
                         }
                     }
                 } else {
@@ -46,7 +46,7 @@ struct PeopleView: View {
                             .frame(width: 100, height: 100)
                             NavigationLink(destination: PersonView(person: speaker)) {
                                 Text(speaker.name)
-                            }.navigationTitle(String(localized: .localizable.people))
+                            }.navigationTitle(.localizable.people)
                         }
                     }
                 }

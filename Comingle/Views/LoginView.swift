@@ -51,7 +51,7 @@ struct LoginView: View {
                 Form {
                     Section(
                         content: {
-                            TextField(String(localized: .localizable.exampleRelay), text: $primaryRelay)
+                            TextField(localized: .localizable.exampleRelay, text: $primaryRelay)
                                 .autocorrectionDisabled(false)
                                 .textContentType(.password)
                                 .textInputAutocapitalization(.never)
@@ -100,7 +100,7 @@ struct LoginView: View {
                     )
                 }
 
-                Button(String(localized: .localizable.loginModeGuest)) {
+                Button(.localizable.loginModeGuest) {
                     appState.keypair = nil
                     appState.relayUrlString = primaryRelay
                     appState.loginMode = .guest
@@ -108,7 +108,7 @@ struct LoginView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(!validRelay)
 
-                Button(String(localized: .localizable.loginModeAttendee)) {
+                Button(.localizable.loginModeAttendee) {
                     guard let keypair = Keypair(nsec: privateKey) else {
                         validKey = false
                         return
@@ -120,7 +120,7 @@ struct LoginView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(!validKey || !validRelay)
 
-                Button(String(localized: .localizable.loginModeOrganizer)) {
+                Button(.localizable.loginModeOrganizer) {
                     guard let keypair = Keypair(nsec: privateKey) else {
                         validKey = false
                         return

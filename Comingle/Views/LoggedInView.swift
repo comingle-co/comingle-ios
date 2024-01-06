@@ -14,7 +14,7 @@ struct LoggedInView: View {
     var body: some View {
         NavigationStack {
             ConferencesView(appState: appState, conferences: ConferencesView_Previews.conferences)
-                .navigationTitle(String(localized: .localizable.conferences))
+                .navigationTitle(.localizable.conferences)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         NavigationLink(destination: SettingsView(appState: appState)) {
