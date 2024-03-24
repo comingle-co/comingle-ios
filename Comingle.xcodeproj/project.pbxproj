@@ -790,7 +790,7 @@
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
 			requirement = {
 				kind = revision;
-				revision = a757e92988002d7abad3fd4b9ecb6341ddc42dad;
+				revision = d08754d7e12b71e34157edaab8b221c385587601;
 			};
 		};
 		3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */ = {
