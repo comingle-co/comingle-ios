@@ -13,6 +13,13 @@ class AppState: ObservableObject {
     @Published var relayUrlString: String?
     @Published var relay: Relay?
     @Published var keypair: Keypair?
+
+    init(loginMode: LoginMode = .none, relayUrlString: String? = nil, relay: Relay? = nil, keypair: Keypair? = nil) {
+        self.loginMode = loginMode
+        self.relayUrlString = relayUrlString
+        self.relay = relay
+        self.keypair = keypair
+    }
 }
 
 extension AppState: RelayDelegate {

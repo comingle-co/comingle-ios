@@ -9,15 +9,15 @@ import SwiftUI
 
 struct LoggedInView: View {
 
-    @ObservedObject var appState: AppState
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         NavigationStack {
-            ConferencesView(appState: appState, conferences: ConferencesView_Previews.conferences)
+            ConferencesView(conferences: ConferencesView_Previews.conferences)
                 .navigationTitle(.localizable.conferences)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        NavigationLink(destination: SettingsView(appState: appState)) {
+                        NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gear")
                         }
                     }
@@ -32,6 +32,7 @@ struct LoggedInView_Previews: PreviewProvider {
     static var appState = AppState()
 
     static var previews: some View {
-        LoggedInView(appState: appState)
+        LoggedInView()
+            .environmentObject(appState)
     }
 }

@@ -10,7 +10,7 @@ import NostrSDK
 
 struct ConferencesView: View {
 
-    @ObservedObject var appState: AppState
+    @EnvironmentObject var appState: AppState
 
     private let calendar = Calendar.current
 
@@ -18,9 +18,7 @@ struct ConferencesView: View {
     private var upcomingConferences: [Conference] = []
     private var pastConferences: [Conference] = []
 
-    init(appState: AppState, conferences: [Conference]) {
-        self.appState = appState
-
+    init(conferences: [Conference]) {
         let currentDate = Date.now
 
         conferences.forEach {
@@ -208,6 +206,7 @@ and what needs to happen to truly be globally accessible.
     @State static var appState = AppState()
 
     static var previews: some View {
-        ConferencesView(appState: appState, conferences: conferences)
+        ConferencesView(conferences: conferences)
+            .environmentObject(appState)
     }
 }

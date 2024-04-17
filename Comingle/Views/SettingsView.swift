@@ -11,13 +11,8 @@ import Combine
 
 struct SettingsView: View {
 
-    @ObservedObject var appState: AppState
-    @State var privateKey: String
-
-    init(appState: AppState) {
-        self.appState = appState
-        self.privateKey = appState.keypair?.privateKey.nsec ?? ""
-    }
+    @EnvironmentObject var appState: AppState
+    @State var privateKey: String = ""
 
     var body: some View {
         NavigationStack {
@@ -119,20 +114,21 @@ struct SettingsView: View {
             }
         }
         .navigationTitle(.localizable.settings)
+        .onAppear {
+            self.privateKey = appState.keypair?.privateKey.nsec ?? ""
+        }
     }
 }
 
 struct SettingsView_Previews: PreviewProvider {
 
-    @State static var appState = {
-        let appState = AppState()
-        appState.loginMode = .attendee
-        appState.keypair = Keypair()
-
-        return appState
-    }
+    @State static var appState = AppState(
+        loginMode: .attendee,
+        keypair: Keypair()
+    )
 
     static var previews: some View {
-        SettingsView(appState: appState())
+        SettingsView()
+            .environmentObject(appState)
     }
 }

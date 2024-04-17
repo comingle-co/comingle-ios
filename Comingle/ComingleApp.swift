@@ -9,11 +9,12 @@ import SwiftUI
 
 @main
 struct ComingleApp: App {
-    private let appState = AppState()
+    @StateObject var appState = AppState()
 
     var body: some Scene {
         WindowGroup {
-            ContentView(appState: appState)
+            ContentView()
+                .environmentObject(appState)
         }
     }
 }

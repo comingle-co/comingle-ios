@@ -10,7 +10,7 @@ import Combine
 import NostrSDK
 
 struct LoginView: View {
-    @ObservedObject var appState: AppState
+    @EnvironmentObject var appState: AppState
 
     @State private var privateKey: String = ""
     @State private var primaryRelay: String = ""
@@ -141,6 +141,7 @@ struct LoginView_Previews: PreviewProvider {
     static var appState = AppState()
 
     static var previews: some View {
-        LoginView(appState: appState)
+        LoginView()
+            .environmentObject(appState)
     }
 }

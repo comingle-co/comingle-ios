@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var appState: AppState
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         switch appState.loginMode {
         case .none:
-            LoginView(appState: appState)
+            LoginView()
         default:
-            LoggedInView(appState: appState)
+            LoggedInView()
         }
     }
 }
@@ -25,6 +25,7 @@ struct ContentView_Previews: PreviewProvider {
     static var appState = AppState()
 
     static var previews: some View {
-        ContentView(appState: appState)
+        ContentView()
+            .environmentObject(appState)
     }
 }
