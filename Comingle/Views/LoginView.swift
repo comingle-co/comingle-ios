@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import NostrSDK
 
-struct LoginView: View {
+struct LoginView: View, RelayURLValidating {
     @EnvironmentObject var appState: AppState
     @Environment(\.colorScheme) var colorScheme
 
@@ -32,15 +32,12 @@ struct LoginView: View {
     }
 
     private func isValidRelay(address: String) -> Bool {
-        guard let url = URL(string: address), let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+        do {
+            _ = try validateRelayURLString(address)
+            return true
+        } catch {
             return false
         }
-
-        guard components.scheme == "wss" || components.scheme == "ws" else {
-            return false
-        }
-
-        return true
     }
 
     var body: some View {
@@ -56,8 +53,9 @@ struct LoginView: View {
                     content: {
                         TextField(localized: .localizable.exampleRelay, text: $primaryRelay)
                             .autocorrectionDisabled(false)
-                            .textContentType(.password)
+                            .textContentType(.URL)
                             .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
                             .onReceive(Just(primaryRelay)) { newValue in
                                 let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                                 primaryRelay = filtered
