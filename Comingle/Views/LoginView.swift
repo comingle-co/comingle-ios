@@ -11,6 +11,7 @@ import NostrSDK
 
 struct LoginView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.colorScheme) var colorScheme
 
     @State private var privateKey: String = ""
     @State private var primaryRelay: String = ""
@@ -18,7 +19,7 @@ struct LoginView: View {
     @State private var validKey: Bool = false
     @State private var validRelay: Bool = false
 
-    static let defaultRelay = "wss://relay.comingle.co"
+    static let defaultRelay = "wss://relay.primal.net"
 
     private func relayFooter() -> AttributedString {
         var footer = AttributedString(localized: .localizable.tryDefaultRelay(LoginView.defaultRelay))
@@ -44,94 +45,95 @@ struct LoginView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
-                Text(.localizable.welcome)
-                Text(.localizable.appDescription)
+            Image("ComingleLogo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 300, maxHeight: 300)
 
-                Form {
-                    Section(
-                        content: {
-                            TextField(localized: .localizable.exampleRelay, text: $primaryRelay)
-                                .autocorrectionDisabled(false)
-                                .textContentType(.password)
-                                .textInputAutocapitalization(.never)
-                                .onReceive(Just(primaryRelay)) { newValue in
-                                    let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    primaryRelay = filtered
+            Form {
 
-                                    if filtered.isEmpty {
-                                        return
-                                    }
+                Section(
+                    content: {
+                        TextField(localized: .localizable.exampleRelay, text: $primaryRelay)
+                            .autocorrectionDisabled(false)
+                            .textContentType(.password)
+                            .textInputAutocapitalization(.never)
+                            .onReceive(Just(primaryRelay)) { newValue in
+                                let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                                primaryRelay = filtered
 
-                                    validRelay = isValidRelay(address: filtered)
+                                if filtered.isEmpty {
+                                    return
                                 }
-                        },
-                        header: {
-                            Text(.localizable.primaryNostrRelayRequired)
-                        },
-                        footer: {
-                            Text(relayFooter())
-                                .onTapGesture {
-                                    primaryRelay = LoginView.defaultRelay
-                                }
-                        }
-                    )
 
-                    Section(
-                        content: {
-                            SecureField("nsec1...", text: $privateKey)
-                                .autocorrectionDisabled(false)
-                                .textContentType(.password)
-                                .textInputAutocapitalization(.never)
-                                .onReceive(Just(privateKey)) { newValue in
-                                    let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    privateKey = filtered
-
-                                    let keypair = Keypair(nsec: filtered)
-                                    validKey = (keypair != nil)
-                                }
-                        },
-                        header: {
-                            Text(.localizable.privateKeyHeader)
-                        },
-                        footer: {
-                            Text(.localizable.privateKeyFooter)
-                        }
-                    )
-                }
-
-                Button(.localizable.loginModeGuest) {
-                    appState.keypair = nil
-                    appState.relayUrlString = primaryRelay
-                    appState.loginMode = .guest
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(!validRelay)
-
-                Button(.localizable.loginModeAttendee) {
-                    guard let keypair = Keypair(nsec: privateKey) else {
-                        validKey = false
-                        return
+                                validRelay = isValidRelay(address: filtered)
+                            }
+                    },
+                    header: {
+                        Text(.localizable.primaryNostrRelayRequired)
+                    },
+                    footer: {
+                        Text(relayFooter())
+                            .onTapGesture {
+                                primaryRelay = LoginView.defaultRelay
+                            }
                     }
-                    appState.keypair = keypair
-                    appState.relayUrlString = primaryRelay
-                    appState.loginMode = .attendee
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(!validKey || !validRelay)
+                )
 
-                Button(.localizable.loginModeOrganizer) {
-                    guard let keypair = Keypair(nsec: privateKey) else {
-                        validKey = false
-                        return
+                Section(
+                    content: {
+                        SecureField("nsec1...", text: $privateKey)
+                            .autocorrectionDisabled(false)
+                            .textContentType(.password)
+                            .textInputAutocapitalization(.never)
+                            .onReceive(Just(privateKey)) { newValue in
+                                let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                                privateKey = filtered
+
+                                let keypair = Keypair(nsec: filtered)
+                                validKey = (keypair != nil)
+                            }
+                    },
+                    header: {
+                        Text(.localizable.privateKeyHeader)
+                    },
+                    footer: {
+                        Text(.localizable.privateKeyFooter)
                     }
-                    appState.keypair = keypair
-                    appState.relayUrlString = primaryRelay
-                    appState.loginMode = .organizer
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(!validKey || !validRelay)
+                )
             }
+
+            Button(.localizable.loginModeGuest) {
+                appState.keypair = nil
+                appState.relayUrlString = primaryRelay
+                appState.loginMode = .guest
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(!validRelay)
+
+            Button(.localizable.loginModeAttendee) {
+                guard let keypair = Keypair(nsec: privateKey) else {
+                    validKey = false
+                    return
+                }
+                appState.keypair = keypair
+                appState.relayUrlString = primaryRelay
+                appState.loginMode = .attendee
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(!validKey || !validRelay)
+
+            Button(.localizable.loginModeOrganizer) {
+                guard let keypair = Keypair(nsec: privateKey) else {
+                    validKey = false
+                    return
+                }
+                appState.keypair = keypair
+                appState.relayUrlString = primaryRelay
+                appState.loginMode = .organizer
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(!validKey || !validRelay)
         }
     }
 }
