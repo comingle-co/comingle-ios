@@ -27,11 +27,11 @@
 		3A453E1C2A0C613600897303 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E192A0C613600897303 /* Session.swift */; };
 		3A453E242A0C614900897303 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1D2A0C614800897303 /* SessionView.swift */; };
 		3A453E252A0C614900897303 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1E2A0C614800897303 /* ScheduleView.swift */; };
-		3A453E262A0C614900897303 /* ConferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1F2A0C614800897303 /* ConferencesView.swift */; };
+		3A453E262A0C614900897303 /* CalendarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1F2A0C614800897303 /* CalendarsView.swift */; };
 		3A453E272A0C614900897303 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E202A0C614900897303 /* PeopleView.swift */; };
 		3A453E282A0C614900897303 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E212A0C614900897303 /* PersonView.swift */; };
 		3A453E292A0C614900897303 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E222A0C614900897303 /* DayView.swift */; };
-		3A453E2A2A0C614900897303 /* ConferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E232A0C614900897303 /* ConferenceView.swift */; };
+		3A453E2A2A0C614900897303 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E232A0C614900897303 /* CalendarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,11 +75,11 @@
 		3A453E192A0C613600897303 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		3A453E1D2A0C614800897303 /* SessionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		3A453E1E2A0C614800897303 /* ScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
-		3A453E1F2A0C614800897303 /* ConferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConferencesView.swift; sourceTree = "<group>"; };
+		3A453E1F2A0C614800897303 /* CalendarsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarsView.swift; sourceTree = "<group>"; };
 		3A453E202A0C614900897303 /* PeopleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 		3A453E212A0C614900897303 /* PersonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
 		3A453E222A0C614900897303 /* DayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
-		3A453E232A0C614900897303 /* ConferenceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConferenceView.swift; sourceTree = "<group>"; };
+		3A453E232A0C614900897303 /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,8 +207,8 @@
 			isa = PBXGroup;
 			children = (
 				3A34AAA82B491D9700C5F910 /* Extensions */,
-				3A453E1F2A0C614800897303 /* ConferencesView.swift */,
-				3A453E232A0C614900897303 /* ConferenceView.swift */,
+				3A453E1F2A0C614800897303 /* CalendarsView.swift */,
+				3A453E232A0C614900897303 /* CalendarView.swift */,
 				3A453DDD2A0B348100897303 /* ContentView.swift */,
 				3A453E222A0C614900897303 /* DayView.swift */,
 				3A2FF97F2A3FC5E4009E1067 /* LoggedInView.swift */,
@@ -401,14 +401,14 @@
 				3A453E252A0C614900897303 /* ScheduleView.swift in Sources */,
 				3A34AAAA2B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift in Sources */,
 				3A2FF97C2A3FA6E9009E1067 /* LoginMode.swift in Sources */,
-				3A453E2A2A0C614900897303 /* ConferenceView.swift in Sources */,
+				3A453E2A2A0C614900897303 /* CalendarView.swift in Sources */,
 				3A453E282A0C614900897303 /* PersonView.swift in Sources */,
 				3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */,
 				3A453DDE2A0B348100897303 /* ContentView.swift in Sources */,
 				3A2FF9802A3FC5E4009E1067 /* LoggedInView.swift in Sources */,
 				3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */,
 				3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */,
-				3A453E262A0C614900897303 /* ConferencesView.swift in Sources */,
+				3A453E262A0C614900897303 /* CalendarsView.swift in Sources */,
 				3A453E1B2A0C613600897303 /* Conference.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -789,8 +789,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */ = {

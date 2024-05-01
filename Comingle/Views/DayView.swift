@@ -6,18 +6,19 @@
 //
 
 import SwiftUI
+import NostrSDK
 
 struct DayView: View {
-    private let sessionsByStartTime: [Date: [Session]]
+    private let sessionsByStartTime: [Date: [TimeBasedCalendarEvent]]
     private let sortedStartTimes: [Date]
     private let dateIntervalFormatter = DateIntervalFormatter()
     private let timeFormatter = DateFormatter()
     private let calendar: Calendar
 
-    init(sessions: [Session], calendar: Calendar) {
+    init(sessions: [TimeBasedCalendarEvent], calendar: Calendar) {
         self.calendar = calendar
 
-        sessionsByStartTime = Dictionary(grouping: sessions) { $0.startTime }
+        sessionsByStartTime = Dictionary(grouping: sessions.filter { $0.startTimestamp != nil }) { $0.startTimestamp! }
         sortedStartTimes = sessionsByStartTime.keys.sorted()
 
         timeFormatter.dateStyle = .none
@@ -34,26 +35,29 @@ struct DayView: View {
             ForEach(sortedStartTimes, id: \.self) { startTime in
                 Section(
                     content: {
-                        ForEach(sessionsByStartTime[startTime]!, id: \.self) { session in
-                            NavigationLink(destination: SessionView(session: session, calendar: calendar)) {
+                        ForEach(sessionsByStartTime[startTime].unsafelyUnwrapped, id: \.id) { event in
+//                            guard let timeBasedCalendarEvent = event as TimeBasedCalendarEvent else {
+//                                continue
+//                            }
+                            NavigationLink(destination: SessionView(session: event, calendar: calendar)) {
                                 VStack(alignment: .leading) {
-                                    /*@START_MENU_TOKEN@*/Text(session.name)/*@END_MENU_TOKEN@*/
+                                    Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
                                         .padding(.vertical, 2)
                                         .font(.headline)
 
                                     Divider()
 
-                                    Text(session.speakers.map { $0.name }.joined(separator: ", ") )
+                                    Text(event.participants.map { $0.pubkey?.npub ?? "No npub" }.joined(separator: ", ") )
                                         .padding(.vertical, 2)
                                         .font(.subheadline)
 
                                     Divider()
 
-                                    Text(session.stage)
+                                    Text(event.locations.joined())
                                         .padding(.vertical, 2)
                                         .font(.subheadline)
 
-                                    Text(dateIntervalFormatter.string(from: session.startTime, to: session.endTime))
+                                    Text(dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))
                                         .font(.footnote)
                                 }
                             }
@@ -68,11 +72,11 @@ struct DayView: View {
     }
 }
 
-struct DayView_Previews: PreviewProvider {
-    static var previews: some View {
-        DayView(
-            sessions: ConferencesView_Previews.sessions,
-            calendar: Calendar.current
-        )
-    }
-}
+//struct DayView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DayView(
+//            sessions: ConferencesView_Previews.sessions,
+//            calendar: Calendar.current
+//        )
+//    }
+//}

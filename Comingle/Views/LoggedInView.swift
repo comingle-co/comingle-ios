@@ -13,8 +13,8 @@ struct LoggedInView: View {
 
     var body: some View {
         NavigationStack {
-            ConferencesView(conferences: ConferencesView_Previews.conferences)
-                .navigationTitle(.localizable.conferences)
+            CalendarsView()
+                .navigationTitle(.localizable.calendars)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         NavigationLink(destination: SettingsView()) {
@@ -22,8 +22,6 @@ struct LoggedInView: View {
                         }
                     }
                 }
-        }
-        .task {
         }
     }
 }

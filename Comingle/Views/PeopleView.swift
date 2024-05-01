@@ -16,7 +16,7 @@ struct PeopleView: View {
     var body: some View {
         VStack {
             Picker(selection: $selectedGroupIndex, label: Text(.localizable.peopleGroupPickerLabel)) {
-                Text(.localizable.speakers).tag(0)
+                Text(.localizable.participants).tag(0)
                 Text(.localizable.organizers).tag(1)
             }
             .pickerStyle(.segmented)
@@ -30,9 +30,9 @@ struct PeopleView: View {
                                 ProgressView()
                             }
                             .frame(width: 100, height: 100)
-                            NavigationLink(destination: PersonView(person: speaker)) {
-                                Text(speaker.name)
-                            }.navigationTitle(.localizable.people)
+//                            NavigationLink(destination: PersonView(person: speaker)) {
+//                                Text(speaker.name)
+//                            }.navigationTitle(.localizable.people)
                         }
                     }
                 } else {
@@ -44,9 +44,9 @@ struct PeopleView: View {
                                 ProgressView()
                             }
                             .frame(width: 100, height: 100)
-                            NavigationLink(destination: PersonView(person: speaker)) {
-                                Text(speaker.name)
-                            }.navigationTitle(.localizable.people)
+//                            NavigationLink(destination: PersonView(person: speaker)) {
+//                                Text(speaker.name)
+//                            }.navigationTitle(.localizable.people)
                         }
                     }
                 }
@@ -55,17 +55,17 @@ struct PeopleView: View {
     }
 }
 
-struct PeopleView_Previews: PreviewProvider {
-    static var previews: some View {
-        PeopleView(
-            speakers: [
-                ConferencesView_Previews.tyiu,
-                ConferencesView_Previews.jack,
-                ConferencesView_Previews.jb55,
-                ConferencesView_Previews.derekross
-            ],
-            organizers: [
-            ]
-        )
-    }
-}
+//struct PeopleView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PeopleView(
+//            speakers: [
+//                ConferencesView_Previews.tyiu,
+//                ConferencesView_Previews.jack,
+//                ConferencesView_Previews.jb55,
+//                ConferencesView_Previews.derekross
+//            ],
+//            organizers: [
+//            ]
+//        )
+//    }
+//}

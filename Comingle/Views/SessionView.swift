@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
+import NostrSDK
 
 struct SessionView: View {
 
     private let dateIntervalFormatter = DateIntervalFormatter()
-    private let session: Session
+    private let session: TimeBasedCalendarEvent
     private let calendar: Calendar
 
-    init(session: Session, calendar: Calendar) {
+    init(session: TimeBasedCalendarEvent, calendar: Calendar) {
         self.session = session
         self.calendar = calendar
 
@@ -24,41 +25,42 @@ struct SessionView: View {
 
     var body: some View {
         ScrollView {
-            Text(session.name)
+            Text(session.title ?? session.firstValueForRawTagName("name") ?? "Unnamed Event")
                 .padding(.vertical, 2)
                 .font(.largeTitle)
 
             Divider()
 
-            Text(session.stage)
+            Text(session.locations.joined())
                 .padding(.vertical, 2)
                 .font(.subheadline)
 
-            Text(dateIntervalFormatter.string(from: session.startTime, to: session.endTime))
+            Text(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))
                 .font(.footnote)
 
             Divider()
 
-            Text(session.description)
+            Text(session.content)
                 .padding(.vertical, 2)
                 .font(.subheadline)
 
             Divider()
 
-            Text(.localizable.speakers)
+            Text(.localizable.participants)
                 .padding(.vertical, 2)
                 .font(.title)
-            ForEach(session.speakers, id: \.self) { speaker in
-                PersonView(person: speaker)
-                Link(.localizable.zapWithCommentOrQuestion, destination: URL(string: "lightning:tyiu@tyiu.xyz")!)
+            ForEach(session.participants, id: \.self) { participant in
+                Text(participant.pubkey?.npub ?? "No npub")
+//                PersonView(person: participant)
+//                Link(.localizable.zapWithCommentOrQuestion, destination: URL(string: "lightning:tyiu@tyiu.xyz")!)
                 Divider()
             }
         }
     }
 }
 
-struct SessionView_Previews: PreviewProvider {
-    static var previews: some View {
-        SessionView(session: ConferencesView_Previews.session1, calendar: Calendar.current)
-    }
-}
+//struct SessionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SessionView(session: TimeBasedCalendarEvent(content: "description", signedBy: Keypair()!), calendar: Calendar.current)
+//    }
+//}

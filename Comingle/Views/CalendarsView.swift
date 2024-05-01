@@ -1,5 +1,5 @@
 //
-//  ConferencesView.swift
+//  CalendarsView.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 5/10/23.
@@ -8,76 +8,23 @@
 import SwiftUI
 import NostrSDK
 
-struct ConferencesView: View {
+struct CalendarsView: View {
 
     @EnvironmentObject var appState: AppState
 
-    private let calendar = Calendar.current
-
-    private var currentConferences: [Conference] = []
-    private var upcomingConferences: [Conference] = []
-    private var pastConferences: [Conference] = []
-
-    init(conferences: [Conference]) {
-        let currentDate = Date.now
-
-        conferences.forEach {
-            let startDay = calendar.startOfDay(for: $0.startDate)
-            let endDay = calendar.startOfDay(for: $0.endDate.addingTimeInterval(86400)) // 86400 seconds in 1 day
-
-            if currentDate > endDay {
-                pastConferences.append($0)
-            } else if currentDate < startDay {
-                upcomingConferences.append($0)
-            } else {
-                currentConferences.append($0)
-            }
-        }
-    }
-
     var body: some View {
         List {
-            if !currentConferences.isEmpty {
+            if !appState.calendarListEvents.isEmpty {
                 Section(
                     content: {
-                        ForEach(currentConferences, id: \.self) { conference in
-                            NavigationLink(destination: ConferenceView(conference: conference)) {
-                                Text(conference.name)
+                        ForEach(appState.calendarListEvents.sorted { $0.title ?? $0.firstValueForRawTagName("name") ?? "Unnamed Calendar" < $1.title ?? $1.firstValueForRawTagName("name") ?? "Unnamed Name" }, id: \.id) { calendarListEvent in
+                            NavigationLink(destination: CalendarView(calendarListEvent: calendarListEvent).environmentObject(appState)) {
+                                Text(calendarListEvent.title ?? calendarListEvent.firstValueForRawTagName("name") ?? "Unnamed Calendar")
                             }
                         }
                     },
                     header: {
-                        Text(.localizable.currentConferences)
-                    }
-                )
-            }
-
-            if !upcomingConferences.isEmpty {
-                Section(
-                    content: {
-                        ForEach(upcomingConferences, id: \.self) { conference in
-                            NavigationLink(destination: ConferenceView(conference: conference)) {
-                                Text(conference.name)
-                            }
-                        }
-                    },
-                    header: {
-                        Text(.localizable.upcomingConferences)
-                    }
-                )
-            }
-
-            if !pastConferences.isEmpty {
-                Section(
-                    content: {
-                        ForEach(pastConferences, id: \.self) { conference in
-                            NavigationLink(destination: ConferenceView(conference: conference)) {
-                                Text(conference.name)
-                            }
-                        }
-                    },
-                    header: {
-                        Text(.localizable.pastConferences)
+                        Text(.localizable.currentCalendars)
                     }
                 )
             }
@@ -85,7 +32,7 @@ struct ConferencesView: View {
     }
 }
 
-struct ConferencesView_Previews: PreviewProvider {
+struct CalendarsView_Previews: PreviewProvider {
 
     static let isoDateFormatter = ISO8601DateFormatter()
 
@@ -206,7 +153,7 @@ and what needs to happen to truly be globally accessible.
     @State static var appState = AppState()
 
     static var previews: some View {
-        ConferencesView(conferences: conferences)
+        CalendarsView()
             .environmentObject(appState)
     }
 }

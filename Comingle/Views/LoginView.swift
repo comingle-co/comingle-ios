@@ -40,6 +40,24 @@ struct LoginView: View, RelayURLValidating {
         }
     }
 
+    @MainActor
+    private func login(keypair: Keypair?, loginMode: LoginMode) {
+        appState.keypair = keypair
+
+        guard let relayURL = URL(string: primaryRelay) else {
+            return
+        }
+        do {
+            let relay = try Relay(url: relayURL)
+            relay.delegate = appState
+            appState.relay = relay
+            relay.connect()
+            appState.loginMode = loginMode
+        } catch {
+            return
+        }
+    }
+
     var body: some View {
         NavigationStack {
             Image("ComingleLogo")
@@ -102,9 +120,7 @@ struct LoginView: View, RelayURLValidating {
             }
 
             Button(.localizable.loginModeGuest) {
-                appState.keypair = nil
-                appState.relayUrlString = primaryRelay
-                appState.loginMode = .guest
+                login(keypair: nil, loginMode: .guest)
             }
             .buttonStyle(.borderedProminent)
             .disabled(!validRelay)
@@ -114,9 +130,7 @@ struct LoginView: View, RelayURLValidating {
                     validKey = false
                     return
                 }
-                appState.keypair = keypair
-                appState.relayUrlString = primaryRelay
-                appState.loginMode = .attendee
+                login(keypair: keypair, loginMode: .attendee)
             }
             .buttonStyle(.borderedProminent)
             .disabled(!validKey || !validRelay)
@@ -126,9 +140,7 @@ struct LoginView: View, RelayURLValidating {
                     validKey = false
                     return
                 }
-                appState.keypair = keypair
-                appState.relayUrlString = primaryRelay
-                appState.loginMode = .organizer
+                login(keypair: keypair, loginMode: .organizer)
             }
             .buttonStyle(.borderedProminent)
             .disabled(!validKey || !validRelay)

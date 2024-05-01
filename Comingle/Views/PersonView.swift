@@ -6,23 +6,24 @@
 //
 
 import SwiftUI
+import NostrSDK
 
 struct PersonView: View {
-    let person: Person
+    let person: CalendarEventParticipant
 
     var body: some View {
         VStack(alignment: .center) {
-            Text(person.name)
+            Text(person.pubkey?.npub ?? "No pubkey")
                 .font(.headline)
-            Text(person.description)
+            Text(person.role ?? "No role")
                 .font(.subheadline)
-            Link(.localizable.nostrProfile, destination: URL(string: "nostr:\(person.nostrPublicKey)")!)
-            AsyncImage(url: URL(string: person.picture)) { image in
-                image.resizable()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 200, height: 200)
+            Link(.localizable.nostrProfile, destination: URL(string: "nostr:\(person.pubkey!.hex)")!)
+//            AsyncImage(url: URL(string: person.picture)) { image in
+//                image.resizable()
+//            } placeholder: {
+//                ProgressView()
+//            }
+//            .frame(width: 200, height: 200)
 
         }
     }
@@ -30,6 +31,7 @@ struct PersonView: View {
 
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
-        PersonView(person: ConferencesView_Previews.tyiu)
+//        PersonView(person: ConferencesView_Previews.tyiu)
+        PersonView(person: CalendarEventParticipant(pubkey: Keypair()!.publicKey))
     }
 }

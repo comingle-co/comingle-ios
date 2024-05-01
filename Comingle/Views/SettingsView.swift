@@ -77,7 +77,7 @@ struct SettingsView: View {
                     content: {
                         HStack {
                             Text(.localizable.settingsRelayLabel)
-                            Text(appState.relayUrlString ?? "")
+                            Text(appState.relay?.url.absoluteString ?? "")
                         }
                         HStack {
                             Text(.localizable.settingsRelayConnectionStatus)
@@ -104,7 +104,7 @@ struct SettingsView: View {
                 )
                 Button(.localizable.signOut) {
                     appState.keypair = nil
-                    appState.relayUrlString = nil
+                    appState.relay = nil
                     if let relay = appState.relay {
                         relay.disconnect()
                         appState.relay = nil

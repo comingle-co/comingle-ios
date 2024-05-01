@@ -13,26 +13,26 @@
         }
       }
     },
-    "conferences" : {
+    "calendars" : {
       "comment" : "Navigation title for the view showing the list of conferences.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conferences"
+            "value" : "Calendars"
           }
         }
       }
     },
-    "currentConferences" : {
+    "currentCalendars" : {
       "comment" : "Section header for list of current conferences.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Current Conferences"
+            "value" : "Calendars with Upcoming Events"
           }
         }
       }
@@ -117,6 +117,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Organizers"
+          }
+        }
+      }
+    },
+    "participants" : {
+      "comment" : "Picker option to show list of participants.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participants"
           }
         }
       }
@@ -369,18 +381,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sign out"
-          }
-        }
-      }
-    },
-    "speakers" : {
-      "comment" : "Picker option to show list of conference speakers.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Speakers"
           }
         }
       }

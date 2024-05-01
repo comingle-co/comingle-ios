@@ -14,8 +14,10 @@ struct ContentView: View {
         switch appState.loginMode {
         case .none:
             LoginView()
+                .environmentObject(appState)
         default:
             LoggedInView()
+                .environmentObject(appState)
         }
     }
 }
