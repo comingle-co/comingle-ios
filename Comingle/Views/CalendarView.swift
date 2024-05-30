@@ -39,9 +39,10 @@ struct CalendarView: View {
                 }
                 return conferenceSessionIds.contains(identifier)
             })
-                .tabItem {
-                    Label(.localizable.schedule, systemImage: "calendar")
-                }
+            .environmentObject(appState)
+            .tabItem {
+                Label(.localizable.schedule, systemImage: "calendar")
+            }
 
 //            PeopleView(
 //                speakers: Array(Set(conference.sessions.flatMap { $0.speakers })),

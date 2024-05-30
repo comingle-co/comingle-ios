@@ -15,6 +15,8 @@ struct DayView: View {
     private let timeFormatter = DateFormatter()
     private let calendar: Calendar
 
+    @EnvironmentObject private var appState: AppState
+
     init(sessions: [TimeBasedCalendarEvent], calendar: Calendar) {
         self.calendar = calendar
 
@@ -39,7 +41,7 @@ struct DayView: View {
 //                            guard let timeBasedCalendarEvent = event as TimeBasedCalendarEvent else {
 //                                continue
 //                            }
-                            NavigationLink(destination: SessionView(session: event, calendar: calendar)) {
+                            NavigationLink(destination: SessionView(session: event, calendar: calendar).environmentObject(appState)) {
                                 VStack(alignment: .leading) {
                                     Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
                                         .padding(.vertical, 2)
@@ -47,9 +49,22 @@ struct DayView: View {
 
                                     Divider()
 
-                                    Text(event.participants.map { $0.pubkey?.npub ?? "No npub" }.joined(separator: ", ") )
-                                        .padding(.vertical, 2)
-                                        .font(.subheadline)
+                                    Text(
+                                        event.participants.map {
+                                            if let pubkey = $0.pubkey {
+                                                if let userMetadata = appState.metadataEvents[pubkey.hex]?.userMetadata, let name = userMetadata.name ?? userMetadata.displayName {
+                                                    name
+                                                } else {
+                                                    pubkey.npub
+                                                }
+                                            } else {
+                                                "No npub"
+                                            }
+                                        }
+                                            .joined(separator: ", ")
+                                    )
+                                    .padding(.vertical, 2)
+                                    .font(.subheadline)
 
                                     Divider()
 

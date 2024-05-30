@@ -11,6 +11,7 @@ import NostrSDK
 struct ScheduleView: View {
 //    private let conference: Conference
     private let sessions: [TimeBasedCalendarEvent]
+    @EnvironmentObject private var appState: AppState
     private let dateFormatter = DateFormatter()
     private var calendar = Calendar.current
 
@@ -57,6 +58,7 @@ struct ScheduleView: View {
                             },
                             calendar: calendar
                         )
+                        .environmentObject(appState)
                     }
                 }
             }

@@ -14,6 +14,8 @@ struct SessionView: View {
     private let session: TimeBasedCalendarEvent
     private let calendar: Calendar
 
+    @EnvironmentObject private var appState: AppState
+
     init(session: TimeBasedCalendarEvent, calendar: Calendar) {
         self.session = session
         self.calendar = calendar
@@ -50,11 +52,35 @@ struct SessionView: View {
                 .padding(.vertical, 2)
                 .font(.title)
             ForEach(session.participants, id: \.self) { participant in
-                Text(participant.pubkey?.npub ?? "No npub")
+                if let pubkey = participant.pubkey {
+                    if let userMetadata = appState.metadataEvents[pubkey.hex]?.userMetadata, let name = userMetadata.name ?? userMetadata.displayName {
+                        Text(name)
+                    } else {
+                        Text(pubkey.npub)
+                    }
+                } else {
+                    Text("No npub")
+                }
 //                PersonView(person: participant)
 //                Link(.localizable.zapWithCommentOrQuestion, destination: URL(string: "lightning:tyiu@tyiu.xyz")!)
                 Divider()
             }
+//            if let eventIdentifier = session.replaceableEventCoordinates()?.identifier, let rsvps = appState.rsvps[eventIdentifier] {
+//                ForEach(rsvps., id: \.self) { participant in
+//                    if let pubkey = participant.pubkey {
+//                        if let userMetadata = appState.metadataEvents[pubkey.hex]?.userMetadata, let name = userMetadata.name ?? userMetadata.displayName {
+//                            Text(name)
+//                        } else {
+//                            Text(pubkey.npub)
+//                        }
+//                    } else {
+//                        Text("No npub")
+//                    }
+//                    //                PersonView(person: participant)
+//                    //                Link(.localizable.zapWithCommentOrQuestion, destination: URL(string: "lightning:tyiu@tyiu.xyz")!)
+//                    Divider()
+//                }
+//            }
         }
     }
 }
