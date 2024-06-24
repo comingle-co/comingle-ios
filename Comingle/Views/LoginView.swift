@@ -13,8 +13,8 @@ struct LoginView: View, RelayURLValidating {
     @EnvironmentObject var appState: AppState
     @Environment(\.colorScheme) var colorScheme
 
-    @State private var privateKey: String = ""
-    @State private var primaryRelay: String = ""
+    @State private var nostrIdentifier: String = "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf"
+    @State private var primaryRelay: String = defaultRelay
 
     @State private var validKey: Bool = false
     @State private var validRelay: Bool = false
@@ -41,8 +41,9 @@ struct LoginView: View, RelayURLValidating {
     }
 
     @MainActor
-    private func login(keypair: Keypair?, loginMode: LoginMode) {
+    private func login(forAttendee keypair: Keypair) {
         appState.keypair = keypair
+        appState.publicKey = keypair.publicKey
 
         guard let relayURL = URL(string: primaryRelay) else {
             return
@@ -52,7 +53,26 @@ struct LoginView: View, RelayURLValidating {
             relay.delegate = appState
             appState.relay = relay
             relay.connect()
-            appState.loginMode = loginMode
+            appState.loginMode = .attendee
+        } catch {
+            return
+        }
+    }
+
+    @MainActor
+    private func login(forGuest publicKey: PublicKey?) {
+        appState.keypair = nil
+        appState.publicKey = publicKey
+
+        guard let relayURL = URL(string: primaryRelay) else {
+            return
+        }
+        do {
+            let relay = try Relay(url: relayURL)
+            relay.delegate = appState
+            appState.relay = relay
+            relay.connect()
+            appState.loginMode = .guest
         } catch {
             return
         }
@@ -98,52 +118,54 @@ struct LoginView: View, RelayURLValidating {
 
                 Section(
                     content: {
-                        SecureField("nsec1...", text: $privateKey)
+                        SecureField("nsec1 or npub1...", text: $nostrIdentifier)
                             .autocorrectionDisabled(false)
                             .textContentType(.password)
                             .textInputAutocapitalization(.never)
-                            .onReceive(Just(privateKey)) { newValue in
+                            .onReceive(Just(nostrIdentifier)) { newValue in
                                 let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                                privateKey = filtered
-
-                                let keypair = Keypair(nsec: filtered)
-                                validKey = (keypair != nil)
+                                nostrIdentifier = filtered
+                                validKey = Keypair(nsec: filtered) != nil || PublicKey(npub: filtered) != nil
                             }
                     },
                     header: {
-                        Text(.localizable.privateKeyHeader)
+                        Text(.localizable.nostrKeyHeader)
                     },
                     footer: {
-                        Text(.localizable.privateKeyFooter)
+                        Text(.localizable.nostrKeyFooter)
                     }
                 )
             }
 
             Button(.localizable.loginModeGuest) {
-                login(keypair: nil, loginMode: .guest)
+                if let publicKey = PublicKey(npub: nostrIdentifier) {
+                    login(forGuest: publicKey)
+                } else {
+                    validKey = false
+                }
             }
             .buttonStyle(.borderedProminent)
             .disabled(!validRelay)
 
             Button(.localizable.loginModeAttendee) {
-                guard let keypair = Keypair(nsec: privateKey) else {
+                guard let keypair = Keypair(nsec: nostrIdentifier) else {
                     validKey = false
                     return
                 }
-                login(keypair: keypair, loginMode: .attendee)
+                login(forAttendee: keypair)
             }
             .buttonStyle(.borderedProminent)
             .disabled(!validKey || !validRelay)
 
-            Button(.localizable.loginModeOrganizer) {
-                guard let keypair = Keypair(nsec: privateKey) else {
-                    validKey = false
-                    return
-                }
-                login(keypair: keypair, loginMode: .organizer)
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(!validKey || !validRelay)
+//            Button(.localizable.loginModeOrganizer) {
+//                guard let keypair = Keypair(nsec: privateKey) else {
+//                    validKey = false
+//                    return
+//                }
+//                login(keypair: keypair, loginMode: .organizer)
+//            }
+//            .buttonStyle(.borderedProminent)
+//            .disabled(!validKey || !validRelay)
         }
     }
 }

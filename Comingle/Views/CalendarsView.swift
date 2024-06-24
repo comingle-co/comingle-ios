@@ -17,7 +17,7 @@ struct CalendarsView: View {
             if !appState.calendarListEvents.isEmpty {
                 Section(
                     content: {
-                        ForEach(appState.calendarListEvents.sorted { $0.title ?? $0.firstValueForRawTagName("name") ?? "Unnamed Calendar" < $1.title ?? $1.firstValueForRawTagName("name") ?? "Unnamed Name" }, id: \.id) { calendarListEvent in
+                        ForEach(appState.calendarListEvents.values.sorted { $0.title ?? $0.firstValueForRawTagName("name") ?? "Unnamed Calendar" < $1.title ?? $1.firstValueForRawTagName("name") ?? "Unnamed Name" }, id: \.id) { calendarListEvent in
                             NavigationLink(destination: CalendarView(calendarListEvent: calendarListEvent).environmentObject(appState)) {
                                 Text(calendarListEvent.title ?? calendarListEvent.firstValueForRawTagName("name") ?? "Unnamed Calendar")
                             }

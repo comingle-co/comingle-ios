@@ -49,6 +49,78 @@
         }
       }
     },
+    "explore" : {
+      "comment" : "Tab label for view to explore view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore"
+          }
+        }
+      }
+    },
+    "following" : {
+      "comment" : "Section header for listing calendar events from accounts that the user follows.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Following"
+          }
+        }
+      }
+    },
+    "followingPast" : {
+      "comment" : "Picker label to filter down past calendar events from profiles the user is following.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Past"
+          }
+        }
+      }
+    },
+    "followingUpcoming" : {
+      "comment" : "Picker label to filter down upcoming calendar events from profiles the user is following.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming"
+          }
+        }
+      }
+    },
+    "going" : {
+      "comment" : "Picker label to filter down upcoming events down to only those that the user is going to.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Going"
+          }
+        }
+      }
+    },
+    "home" : {
+      "comment" : "Tab label for the home view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        }
+      }
+    },
     "loginModeAttendee" : {
       "comment" : "Status when the user is logged in as a conference attendee.",
       "extractionState" : "manual",
@@ -97,6 +169,30 @@
         }
       }
     },
+    "nostrKeyFooter" : {
+      "comment" : "Footer text indicating that the private or public key can be left blank if the user is not logging in with an existing key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave blank if you are not logging in with an existing private or public key."
+          }
+        }
+      }
+    },
+    "nostrKeyHeader" : {
+      "comment" : "Header text prompting optional entry of the user's private or public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nostr Key (Optional)"
+          }
+        }
+      }
+    },
     "nostrProfile" : {
       "comment" : "Button to navigate to a person's Nostr profile.",
       "extractionState" : "manual",
@@ -105,6 +201,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nostr Profile"
+          }
+        }
+      }
+    },
+    "numAttended" : {
+      "comment" : "Number of people who attended the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d attended"
+          }
+        }
+      }
+    },
+    "numGoing" : {
+      "comment" : "Number of people who are going to the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d going"
           }
         }
       }
@@ -181,30 +301,6 @@
         }
       }
     },
-    "privateKeyFooter" : {
-      "comment" : "Footer text indicating that the private key can be left blank if the user is not logging in with an existing private key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leave blank if you are not logging in with an existing private key."
-          }
-        }
-      }
-    },
-    "privateKeyHeader" : {
-      "comment" : "Header text prompting optional entry of the user's private key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nostr Private Key (Optional)"
-          }
-        }
-      }
-    },
     "role" : {
       "comment" : "Text to indicate the view is showing the user's login role.",
       "extractionState" : "manual",
@@ -213,6 +309,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Role"
+          }
+        }
+      }
+    },
+    "saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved"
           }
         }
       }
@@ -405,6 +512,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Upcoming Conferences"
+          }
+        }
+      }
+    },
+    "upcomingEvents" : {
+      "comment" : "Section header for upcoming events",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming Events"
           }
         }
       }

@@ -33,7 +33,7 @@ struct CalendarView: View {
 
     var body: some View {
         TabView {
-            ScheduleView(sessions: appState.timeBasedCalendarEvents.filter {
+            ScheduleView(sessions: appState.timeBasedCalendarEvents.values.filter {
                 guard let identifier = $0.identifier else {
                     return false
                 }
