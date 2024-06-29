@@ -123,15 +123,6 @@ struct HomeView: View {
                                                     .font(.subheadline)
                                             }
                                         }
-//                                        if let startTimestamp = event.startTimestamp, startTimestamp < event.endTimestamp ?? startTimestamp, let formattedDuration = dateComponentsFormatter.string(from: startTimestamp, to: event.endTimestamp ?? startTimestamp) {
-//                                            Divider()
-//
-//                                            Text(formattedDuration)
-//                                        }
-                                    }
-
-                                    if !event.references.isEmpty {
-                                        Text(event.references.map { $0.pathExtension }.joined())
                                     }
 
                                     if let calendarEventImage = event.references.first(where: { $0.isImage }) {
