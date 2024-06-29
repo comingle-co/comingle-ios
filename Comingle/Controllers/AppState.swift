@@ -272,8 +272,6 @@ extension AppState: RelayDelegate {
                 }
             }
         }
-
-
     }
 
     func relay(_ relay: Relay, didReceive event: RelayEvent) {
@@ -293,6 +291,14 @@ extension AppState: RelayDelegate {
             default:
                 break
             }
+        }
+    }
+
+    func relay(_ relay: Relay, didReceive response: RelayResponse) {
+        if case let .eose(subscriptionId) = response {
+            // Live new events are not strictly needed for this app for now.
+            // In the future, we could keep subscriptions open for updates.
+            try? relay.closeSubscription(with: subscriptionId)
         }
     }
 

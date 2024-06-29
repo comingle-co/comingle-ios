@@ -793,8 +793,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = revision;
+				revision = 4f942cabab3ba51cc92299962bc9d27aca3e9610;
 			};
 		};
 		3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */ = {
