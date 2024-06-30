@@ -177,6 +177,8 @@ extension AppState: RelayDelegate {
             return
         }
 
+        // TODO(tyiu) validate signatures of events
+        // TODO(tyiu) use event coordinates instead of just the identifier so that people can't overwrite others' events
         if let existingCalendarList = self.calendarListEvents[identifier] {
             if existingCalendarList.createdAt < calendarListEvent.createdAt {
                 calendarListEvents[identifier] = calendarListEvent
@@ -207,6 +209,8 @@ extension AppState: RelayDelegate {
             return
         }
 
+        // TODO(tyiu) validate signatures of events
+        // TODO(tyiu) use event coordinates instead of just the identifier so that people can't overwrite others' events
         if let existingEvent = self.timeBasedCalendarEvents[identifier] {
             if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
                 timeBasedCalendarEvents[identifier] = timeBasedCalendarEvent
@@ -215,18 +219,20 @@ extension AppState: RelayDelegate {
             timeBasedCalendarEvents[identifier] = timeBasedCalendarEvent
         }
 
-        guard let metadataFilter = Filter(
-            authors: [timeBasedCalendarEvent.pubkey],
-            kinds: [EventKind.metadata.rawValue]
-        ) else {
-            print("Unable to create metadata filter authored by time-based calendar event authors.")
-            return
-        }
+        if self.metadataEvents[timeBasedCalendarEvent.pubkey] == nil {
+            guard let metadataFilter = Filter(
+                authors: [timeBasedCalendarEvent.pubkey],
+                kinds: [EventKind.metadata.rawValue]
+            ) else {
+                print("Unable to create metadata filter authored by calendar event authors.")
+                return
+            }
 
-        do {
-            try relay.subscribe(with: metadataFilter)
-        } catch {
-            print("Could not subscribe to relay with metadata filter.")
+            do {
+                try relay.subscribe(with: metadataFilter)
+            } catch {
+                print("Could not subscribe to relay with metadata filter.")
+            }
         }
 
         guard let rsvpFilter = Filter(
@@ -249,6 +255,8 @@ extension AppState: RelayDelegate {
             return
         }
 
+        // TODO(tyiu) validate signatures of events
+        // TODO(tyiu) use event coordinates instead of just the identifier so that people can't overwrite others' events
         if let existingRsvp = self.rsvps[identifier] {
             if existingRsvp.createdAt < rsvp.createdAt {
                 rsvps[identifier] = rsvp
@@ -270,6 +278,22 @@ extension AppState: RelayDelegate {
                 } else {
                     calendarEventsToRsvps[calendarEventIdentifier] = [rsvp]
                 }
+            }
+        }
+
+        if self.metadataEvents[rsvp.pubkey] == nil {
+            guard let metadataFilter = Filter(
+                authors: [rsvp.pubkey],
+                kinds: [EventKind.metadata.rawValue]
+            ) else {
+                print("Unable to create metadata filter authored by calendar event RSVP authors.")
+                return
+            }
+
+            do {
+                try relay.subscribe(with: metadataFilter)
+            } catch {
+                print("Could not subscribe to relay with metadata filter.")
             }
         }
     }

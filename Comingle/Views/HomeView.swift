@@ -219,22 +219,6 @@ enum FollowingFilter: CaseIterable {
     }
 }
 
-extension MetadataEvent {
-    var resolvedName: String {
-        guard let userMetadata, let bestName = userMetadata.name ?? userMetadata.displayName else {
-            return PublicKey(hex: pubkey)?.npub ?? pubkey
-        }
-
-        let trimmedName = bestName.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        guard !trimmedName.isEmpty else {
-            return PublicKey(hex: pubkey)?.npub ?? pubkey
-        }
-
-        return trimmedName
-    }
-}
-
 #Preview {
     HomeView()
 }

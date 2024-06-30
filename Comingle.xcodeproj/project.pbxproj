@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A052E3A2C307F41000B5EA5 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 3A052E392C307F41000B5EA5 /* Collections */; };
+		3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */; };
 		3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */; };
 		3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 3A2FF9732A3F6CE2009E1067 /* NostrSDK */; };
 		3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9772A3F6DFD009E1067 /* LoginView.swift */; };
@@ -53,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetadataEvent+Extensions.swift"; sourceTree = "<group>"; };
 		3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		3A2FF9772A3F6DFD009E1067 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		3A2FF97B2A3FA6E9009E1067 /* LoginMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginMode.swift; sourceTree = "<group>"; };
@@ -89,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A052E3A2C307F41000B5EA5 /* Collections in Frameworks */,
 				3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -201,6 +205,7 @@
 				3A2FF97B2A3FA6E9009E1067 /* LoginMode.swift */,
 				3A453E172A0C613500897303 /* Person.swift */,
 				3A453E192A0C613600897303 /* Session.swift */,
+				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 			name = Comingle;
 			packageProductDependencies = (
 				3A2FF9732A3F6CE2009E1067 /* NostrSDK */,
+				3A052E392C307F41000B5EA5 /* Collections */,
 			);
 			productName = Comingle;
 			productReference = 3A453DD82A0B348100897303 /* Comingle.app */;
@@ -329,6 +335,7 @@
 			packageReferences = (
 				3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */,
 				3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */,
+				3A052E382C307F41000B5EA5 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 3A453DD92A0B348100897303 /* Products */;
 			projectDirPath = "";
@@ -414,6 +421,7 @@
 				3A453E262A0C614900897303 /* CalendarsView.swift in Sources */,
 				3A453E1B2A0C613600897303 /* Conference.swift in Sources */,
 				3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */,
+				3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,6 +797,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3A052E382C307F41000B5EA5 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.1;
+			};
+		};
 		3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
@@ -808,6 +824,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3A052E392C307F41000B5EA5 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A052E382C307F41000B5EA5 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
 		3A2FF9732A3F6CE2009E1067 /* NostrSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */;

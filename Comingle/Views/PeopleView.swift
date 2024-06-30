@@ -16,8 +16,8 @@ struct PeopleView: View {
     var body: some View {
         VStack {
             Picker(selection: $selectedGroupIndex, label: Text(.localizable.peopleGroupPickerLabel)) {
-                Text(.localizable.participants).tag(0)
-                Text(.localizable.organizers).tag(1)
+//                Text(.localizable.participants).tag(0)
+//                Text(.localizable.organizers).tag(1)
             }
             .pickerStyle(.segmented)
             List {

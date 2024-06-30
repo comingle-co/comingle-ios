@@ -121,6 +121,18 @@
         }
       }
     },
+    "invited" : {
+      "comment" : "Picker option to show list of invited people and the number of invited in parentheses.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invited (%d)"
+          }
+        }
+      }
+    },
     "loginModeAttendee" : {
       "comment" : "Status when the user is logged in as a conference attendee.",
       "extractionState" : "manual",
@@ -165,6 +177,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Organizer"
+          }
+        }
+      }
+    },
+    "menu" : {
+      "comment" : "Label for drop down menu in calendar event view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu"
           }
         }
       }
@@ -241,18 +265,6 @@
         }
       }
     },
-    "participants" : {
-      "comment" : "Picker option to show list of participants.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Participants"
-          }
-        }
-      }
-    },
     "pastConferences" : {
       "comment" : "Section header for list of past conferences.",
       "extractionState" : "manual",
@@ -309,6 +321,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Role"
+          }
+        }
+      }
+    },
+    "rsvps" : {
+      "comment" : "Text for section for RSVPs to a calendar event and the number of RSVPs in parentheses.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RSVPs (%d)"
           }
         }
       }
