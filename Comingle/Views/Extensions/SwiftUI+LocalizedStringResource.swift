@@ -110,4 +110,8 @@ extension View {
     func navigationTitle(_ title: LocalizedStringResource) -> some View {
         navigationTitle(String(localized: title))
     }
+
+    func confirmationDialog<A>(_ title: LocalizedStringResource, isPresented: Binding<Bool>, titleVisibility: Visibility = .automatic, @ViewBuilder actions: () -> A) -> some View where A : View {
+        confirmationDialog(String(localized: title), isPresented: isPresented, titleVisibility: titleVisibility, actions: actions)
+    }
 }

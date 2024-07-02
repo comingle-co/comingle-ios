@@ -34,9 +34,15 @@ struct SessionView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Text(session.title ?? session.firstValueForRawTagName("name") ?? "Unnamed Event")
-                    .padding(.vertical, 2)
-                    .font(.largeTitle)
+                if let title = (session.title ?? session.firstValueForRawTagName("name"))?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                    Text(title)
+                        .padding(.vertical, 2)
+                        .font(.largeTitle)
+                } else {
+                    Text(.localizable.unnamedEvent)
+                        .padding(.vertical, 2)
+                        .font(.largeTitle)
+                }
 
                 Divider()
 
@@ -58,8 +64,9 @@ struct SessionView: View {
 
                 Divider()
 
-                let metadataEvent = appState.metadataEvents[session.pubkey]
                 HStack {
+                    let metadataEvent = appState.metadataEvents[session.pubkey]
+
                     if let pictureURL = metadataEvent?.userMetadata?.pictureURL {
                         AsyncImage(url: pictureURL) { image in
                             image.resizable()
@@ -82,7 +89,7 @@ struct SessionView: View {
 
                 Divider()
 
-                Text("About")
+                Text(.localizable.about)
                     .font(.headline)
 
                 Text(session.content)
@@ -112,10 +119,17 @@ struct SessionView: View {
                                     }
                                 }
 
-                                if let nostrURI = URL(string: "nostr:\(publicKey.npub)") {
-                                    Link(metadataEvent.resolvedName, destination: nostrURI)
-                                } else {
-                                    Text(metadataEvent.resolvedName)
+                                VStack {
+                                    if let nostrURI = URL(string: "nostr:\(publicKey.npub)") {
+                                        Link(metadataEvent.resolvedName, destination: nostrURI)
+                                    } else {
+                                        Text(metadataEvent.resolvedName)
+                                    }
+
+                                    if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
+                                        Text(role)
+                                            .font(.footnote)
+                                    }
                                 }
                             }
                         } else {
@@ -170,7 +184,7 @@ struct SessionView: View {
                     }
                 }
             }
-            .confirmationDialog("Go to address", isPresented: $showLocationAlert) {
+            .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
                 if !selectedLocation.isEmpty {
                     let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
                     Button(action: {
@@ -179,7 +193,7 @@ struct SessionView: View {
                         }
                         selectedLocation = ""
                     }, label: {
-                        Text("Open in Apple Maps")
+                        Text(.localizable.openInAppleMaps)
                     })
                     Button(action: {
                         if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
@@ -187,13 +201,13 @@ struct SessionView: View {
                         }
                         selectedLocation = ""
                     }, label: {
-                        Text("Open in Google Maps")
+                        Text(.localizable.openInGoogleMaps)
                     })
                     Button(action: {
                         UIPasteboard.general.string = selectedLocation
                         selectedLocation = ""
                     }, label: {
-                        Text("Copy address")
+                        Text(.localizable.copyLocation)
                     })
                 }
             }
@@ -203,7 +217,7 @@ struct SessionView: View {
                         Button(action: {
                             UIPasteboard.general.string = session.identifier ?? ""
                         }, label: {
-                            Text("Copy event ID")
+                            Text(.localizable.copyEventID)
                         })
                     } label: {
                         Label(.localizable.menu, systemImage: "ellipsis.circle")

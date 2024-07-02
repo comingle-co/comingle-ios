@@ -1,6 +1,18 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "about" : {
+      "comment" : "Section title for About section for calendar event description.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        }
+      }
+    },
     "appDescription" : {
       "comment" : "Description of the app.",
       "extractionState" : "manual",
@@ -21,6 +33,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Calendars"
+          }
+        }
+      }
+    },
+    "copyEventID" : {
+      "comment" : "Button to copy a calendar event ID.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy event ID"
+          }
+        }
+      }
+    },
+    "copyLocation" : {
+      "comment" : "Button to copy location of calendar event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Location"
           }
         }
       }
@@ -129,6 +165,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invited (%d)"
+          }
+        }
+      }
+    },
+    "location" : {
+      "comment" : "Confirmation dialog for taking action on the location of a calendar event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
           }
         }
       }
@@ -249,6 +297,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%d going"
+          }
+        }
+      }
+    },
+    "openInAppleMaps" : {
+      "comment" : "Button to open a location in Apple Maps.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Apple Maps"
+          }
+        }
+      }
+    },
+    "openInGoogleMaps" : {
+      "comment" : "Button to open a location in Google Maps.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Google Maps"
           }
         }
       }
@@ -524,6 +596,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Try %@"
+          }
+        }
+      }
+    },
+    "unnamedEvent" : {
+      "comment" : "Text to display when a calendar event does not have a name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unnamed Event"
           }
         }
       }
