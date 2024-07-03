@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A052E3A2C307F41000B5EA5 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 3A052E392C307F41000B5EA5 /* Collections */; };
 		3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */; };
 		3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */; };
 		3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 3A2FF9732A3F6CE2009E1067 /* NostrSDK */; };
@@ -92,7 +91,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A052E3A2C307F41000B5EA5 /* Collections in Frameworks */,
 				3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,7 +256,6 @@
 			name = Comingle;
 			packageProductDependencies = (
 				3A2FF9732A3F6CE2009E1067 /* NostrSDK */,
-				3A052E392C307F41000B5EA5 /* Collections */,
 			);
 			productName = Comingle;
 			productReference = 3A453DD82A0B348100897303 /* Comingle.app */;
@@ -335,7 +332,6 @@
 			packageReferences = (
 				3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */,
 				3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */,
-				3A052E382C307F41000B5EA5 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 3A453DD92A0B348100897303 /* Products */;
 			projectDirPath = "";
@@ -797,20 +793,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3A052E382C307F41000B5EA5 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.1;
-			};
-		};
 		3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
 			requirement = {
 				kind = revision;
-				revision = 4f942cabab3ba51cc92299962bc9d27aca3e9610;
+				revision = 02756578af55b9ac7119cdd4d8a1dfd39e15c2c3;
 			};
 		};
 		3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */ = {
@@ -824,11 +812,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3A052E392C307F41000B5EA5 /* Collections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3A052E382C307F41000B5EA5 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = Collections;
-		};
 		3A2FF9732A3F6CE2009E1067 /* NostrSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */;

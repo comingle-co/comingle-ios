@@ -7,7 +7,6 @@
 
 import MapKit
 import NostrSDK
-import OrderedCollections
 import SwiftUI
 
 struct SessionView: View {
