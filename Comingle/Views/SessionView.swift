@@ -93,6 +93,14 @@ struct SessionView: View {
     var body: some View {
         ScrollView {
             VStack {
+                if let calendarEventImage = session.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
+                    KFImage.url(calendarEventImageURL)
+                        .resizable()
+                        .placeholder { ProgressView() }
+                        .scaledToFit()
+                        .frame(maxWidth: 500, maxHeight: 200)
+                }
+
                 Text(eventTitle)
                     .padding(.vertical, 2)
                     .font(.largeTitle)

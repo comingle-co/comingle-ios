@@ -122,12 +122,12 @@ struct HomeView: View {
                                         }
                                     }
 
-                                    if let calendarEventImage = event.references.first(where: { $0.isImage }) {
-                                        KFImage.url(calendarEventImage)
+                                    if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
+                                        KFImage.url(calendarEventImageURL)
                                             .resizable()
                                             .placeholder { ProgressView() }
                                             .scaledToFit()
-                                            .frame(width: 100)
+                                            .frame(maxWidth: 100, maxHeight: 200)
                                     }
                                 }
                             }
