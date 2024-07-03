@@ -1,5 +1,5 @@
 {
-  "originHash" : "89e57c7c273b8f356043fd185eb8347100301a359c461c2fd02b542fde2b35da",
+  "originHash" : "5f00aeecdba239e23f7bada0a2073caa64f1e61104d4e3f99af15a2db1eee5f2",
   "pins" : [
     {
       "identity" : "cryptoswift",
@@ -29,6 +29,15 @@
       }
     },
     {
+      "identity" : "networkimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/NetworkImage",
+      "state" : {
+        "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
+        "version" : "6.0.0"
+      }
+    },
+    {
       "identity" : "nostr-sdk-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nostr-sdk/nostr-sdk-ios.git",
@@ -43,6 +52,15 @@
       "state" : {
         "revision" : "1a14e189def5eaa92f839afdd2faad8e43b61a6e",
         "version" : "0.12.2"
+      }
+    },
+    {
+      "identity" : "swift-markdown-ui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/swift-markdown-ui.git",
+      "state" : {
+        "revision" : "9a8119b37e09a770367eeb26e05267c75d854053",
+        "version" : "2.3.1"
       }
     },
     {

@@ -21,6 +21,7 @@ struct SessionView: View {
     @State private var selectedLocation: String = ""
 
     private let eventTitle: String
+    private let filteredLocations: [String]
 
     private let geohash: Geohash?
 
@@ -48,6 +49,10 @@ struct SessionView: View {
         } else {
             self.eventTitle = String(localized: .localizable.unnamedEvent)
         }
+
+        filteredLocations = session.locations
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
     }
 
     private func missingProfilePictureSmallView(_ rsvpStatus: CalendarEventRSVPStatus?) -> some View {
@@ -96,9 +101,6 @@ struct SessionView: View {
 
                 Text(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))
 
-                let filteredLocations = session.locations
-                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                    .filter { !$0.isEmpty }
                 ForEach(filteredLocations, id: \.self) { location in
                     Divider()
 
@@ -305,17 +307,28 @@ struct SessionView: View {
                 }
             }
             .toolbar {
-                if let shareableEventcoordinates = try? session.shareableEventCoordinates() {
-                    ToolbarItem {
-                        Menu {
+                ToolbarItem {
+                    Menu {
+                        let shareableEventCoordinates = try? session.shareableEventCoordinates()
+                        Button(action: {
+                            var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(session.content.trimmingCharacters(in: .whitespacesAndNewlines))"
+                            if let shareableEventCoordinates {
+                                stringToCopy += "\n\nhttps://njump.me/\(shareableEventCoordinates)"
+                            }
+
+                            UIPasteboard.general.string = stringToCopy
+                        }, label: {
+                            Text(.localizable.copyEventDetails)
+                        })
+                        if let shareableEventCoordinates {
                             Button(action: {
-                                UIPasteboard.general.string = shareableEventcoordinates
+                                UIPasteboard.general.string = shareableEventCoordinates
                             }, label: {
                                 Text(.localizable.copyEventID)
                             })
-                        } label: {
-                            Label(.localizable.menu, systemImage: "ellipsis.circle")
                         }
+                    } label: {
+                        Label(.localizable.menu, systemImage: "ellipsis.circle")
                     }
                 }
             }

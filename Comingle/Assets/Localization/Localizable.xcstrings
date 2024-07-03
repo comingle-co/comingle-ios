@@ -37,6 +37,18 @@
         }
       }
     },
+    "copyEventDetails" : {
+      "comment" : "Button to copy the details of a calendar event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy event details"
+          }
+        }
+      }
+    },
     "copyEventID" : {
       "comment" : "Button to copy a calendar event ID.",
       "extractionState" : "manual",
