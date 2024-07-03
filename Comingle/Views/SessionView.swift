@@ -262,15 +262,17 @@ struct SessionView: View {
                 }
             }
             .toolbar {
-                ToolbarItem {
-                    Menu {
-                        Button(action: {
-                            UIPasteboard.general.string = session.identifier ?? ""
-                        }, label: {
-                            Text(.localizable.copyEventID)
-                        })
-                    } label: {
-                        Label(.localizable.menu, systemImage: "ellipsis.circle")
+                if let shareableEventcoordinates = try? session.shareableEventCoordinates() {
+                    ToolbarItem {
+                        Menu {
+                            Button(action: {
+                                UIPasteboard.general.string = shareableEventcoordinates
+                            }, label: {
+                                Text(.localizable.copyEventID)
+                            })
+                        } label: {
+                            Label(.localizable.menu, systemImage: "ellipsis.circle")
+                        }
                     }
                 }
             }
