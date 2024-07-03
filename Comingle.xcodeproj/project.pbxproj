@@ -35,6 +35,7 @@
 		3A453E292A0C614900897303 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E222A0C614900897303 /* DayView.swift */; };
 		3A453E2A2A0C614900897303 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E232A0C614900897303 /* CalendarView.swift */; };
 		3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB3C2C34E567007AE9A4 /* Kingfisher */; };
+		3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB452C34FD98007AE9A4 /* GeohashKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */,
+				3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */,
 				3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,6 +261,7 @@
 			packageProductDependencies = (
 				3A2FF9732A3F6CE2009E1067 /* NostrSDK */,
 				3A4FCB3C2C34E567007AE9A4 /* Kingfisher */,
+				3A4FCB452C34FD98007AE9A4 /* GeohashKit */,
 			);
 			productName = Comingle;
 			productReference = 3A453DD82A0B348100897303 /* Comingle.app */;
@@ -336,6 +339,7 @@
 				3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */,
 				3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */,
 				3A4FCB3B2C34E567007AE9A4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				3A4FCB442C34FD98007AE9A4 /* XCRemoteSwiftPackageReference "GeohashKit" */,
 			);
 			productRefGroup = 3A453DD92A0B348100897303 /* Products */;
 			projectDirPath = "";
@@ -821,6 +825,14 @@
 				minimumVersion = 7.12.0;
 			};
 		};
+		3A4FCB442C34FD98007AE9A4 /* XCRemoteSwiftPackageReference "GeohashKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ualch9/GeohashKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -838,6 +850,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A4FCB3B2C34E567007AE9A4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		3A4FCB452C34FD98007AE9A4 /* GeohashKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A4FCB442C34FD98007AE9A4 /* XCRemoteSwiftPackageReference "GeohashKit" */;
+			productName = GeohashKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

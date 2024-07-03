@@ -1,5 +1,5 @@
 {
-  "originHash" : "331b250c72b83bb93b2cd9307e8c3a082cb456e9b9465b262b4b472d1a75eb0d",
+  "originHash" : "89e57c7c273b8f356043fd185eb8347100301a359c461c2fd02b542fde2b35da",
   "pins" : [
     {
       "identity" : "cryptoswift",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "c9c3df6ab812de32bae61fc0cd1bf6d45170ebf0",
         "version" : "1.8.2"
+      }
+    },
+    {
+      "identity" : "geohashkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ualch9/GeohashKit.git",
+      "state" : {
+        "revision" : "d514b5af0b43bdb0a0912eaa036442f4d02f5661",
+        "version" : "3.0.0"
       }
     },
     {

@@ -5,6 +5,7 @@
 //  Created by Terry Yiu on 5/10/23.
 //
 
+import GeohashKit
 import Kingfisher
 import NostrSDK
 import SwiftUI
@@ -16,7 +17,12 @@ struct SessionView: View {
     private let calendar: Calendar
 
     @State private var showLocationAlert: Bool = false
+    @State private var selectedGeohash: Bool = false
     @State private var selectedLocation: String = ""
+
+    private let eventTitle: String
+
+    private let geohash: Geohash?
 
     @EnvironmentObject private var appState: AppState
 
@@ -28,6 +34,20 @@ struct SessionView: View {
 
         dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
         dateIntervalFormatter.timeZone = timeZone
+
+        if let geohashString = session.geohash {
+            geohash = Geohash(geohash: geohashString)
+        } else {
+            geohash = nil
+        }
+
+        if let eventTitle = session.title?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
+            self.eventTitle = eventTitle
+        } else if let eventTitle = session.firstValueForRawTagName("name")?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
+            self.eventTitle = eventTitle
+        } else {
+            self.eventTitle = String(localized: .localizable.unnamedEvent)
+        }
     }
 
     private func missingProfilePictureSmallView(_ rsvpStatus: CalendarEventRSVPStatus?) -> some View {
@@ -68,31 +88,38 @@ struct SessionView: View {
     var body: some View {
         ScrollView {
             VStack {
-                if let title = (session.title ?? session.firstValueForRawTagName("name"))?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                    Text(title)
-                        .padding(.vertical, 2)
-                        .font(.largeTitle)
-                } else {
-                    Text(.localizable.unnamedEvent)
-                        .padding(.vertical, 2)
-                        .font(.largeTitle)
-                }
+                Text(eventTitle)
+                    .padding(.vertical, 2)
+                    .font(.largeTitle)
 
                 Divider()
 
                 Text(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))
 
-                Divider()
-
                 let filteredLocations = session.locations
                     .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                     .filter { !$0.isEmpty }
                 ForEach(filteredLocations, id: \.self) { location in
+                    Divider()
+
                     Button(action: {
                         selectedLocation = location
+                        selectedGeohash = false
                         showLocationAlert = true
                     }, label: {
                         Text(location)
+                    })
+                }
+
+                if let geohash {
+                    Divider()
+
+                    Button(action: {
+                        selectedLocation = ""
+                        selectedGeohash = true
+                        showLocationAlert = true
+                    }, label: {
+                        Text("\(geohash.latitude), \(geohash.longitude)")
                     })
                 }
 
@@ -136,6 +163,7 @@ struct SessionView: View {
                     .font(.headline)
 
                 ForEach(session.participants, id: \.self) { participant in
+                    Divider()
                     HStack {
                         if let publicKey = participant.pubkey {
                             if let metadataEvent = appState.metadataEvents[publicKey.hex] {
@@ -165,10 +193,11 @@ struct SessionView: View {
                             Text("No npub")
                         }
                     }
-                    Divider()
                 }
 
                 if let eventIdentifier = session.identifier, let rsvps = appState.calendarEventsToRsvps[eventIdentifier] {
+                    Divider()
+
                     Text(.localizable.rsvps(rsvps.count))
                         .padding(.vertical, 2)
                         .font(.headline)
@@ -217,12 +246,15 @@ struct SessionView: View {
                 }
             }
             .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
-                if !selectedLocation.isEmpty {
-                    let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
+                if selectedGeohash, let geohash {
+                    let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
+                    let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
                     Button(action: {
-                        if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
+                        let encodedTitle = eventTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? eventTitle
+                        if let url = URL(string: "https://maps.apple.com/?ll=\(encodedLocation)&q=\(encodedTitle)") {
                             UIApplication.shared.open(url)
                         }
+                        selectedGeohash = false
                         selectedLocation = ""
                     }, label: {
                         Text(.localizable.openInAppleMaps)
@@ -231,12 +263,41 @@ struct SessionView: View {
                         if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
                             UIApplication.shared.open(url)
                         }
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openInGoogleMaps)
+                    })
+                    Button(action: {
+                        UIPasteboard.general.string = coordinatesString
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.copyLocation)
+                    })
+                } else if !selectedLocation.isEmpty {
+                    let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
+                    Button(action: {
+                        if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
+                            UIApplication.shared.open(url)
+                        }
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openInAppleMaps)
+                    })
+                    Button(action: {
+                        if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
+                            UIApplication.shared.open(url)
+                        }
+                        selectedGeohash = false
                         selectedLocation = ""
                     }, label: {
                         Text(.localizable.openInGoogleMaps)
                     })
                     Button(action: {
                         UIPasteboard.general.string = selectedLocation
+                        selectedGeohash = false
                         selectedLocation = ""
                     }, label: {
                         Text(.localizable.copyLocation)
