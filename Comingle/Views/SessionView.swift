@@ -31,6 +31,41 @@ struct SessionView: View {
         dateIntervalFormatter.timeZone = timeZone
     }
 
+    private func missingProfilePictureSmallView(_ rsvpStatus: CalendarEventRSVPStatus?) -> some View {
+        Image(systemName: "person.crop.circle.fill")
+            .aspectRatio(contentMode: .fill)
+            .frame(width: 40, height: 40)
+            .clipShape(Circle())
+            .overlay(
+                rsvpStatusView(rsvpStatus)
+                    .offset(x: 4, y: 4),
+                alignment: .bottomTrailing
+            )
+    }
+
+    private func rsvpStatusView(_ rsvpStatus: CalendarEventRSVPStatus?) -> some View {
+        guard let rsvpStatus else {
+            return Image(systemName: "questionmark.circle.fill")
+                .foregroundColor(.yellow)
+                .frame(width: 16, height: 16)
+        }
+
+        return switch rsvpStatus {
+        case .accepted:
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundColor(.green)
+                .frame(width: 16, height: 16)
+        case .declined:
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundColor(.red)
+                .frame(width: 16, height: 16)
+        default:
+            Image(systemName: "questionmark.circle.fill")
+                .foregroundColor(.yellow)
+                .frame(width: 16, height: 16)
+        }
+    }
+
     var body: some View {
         ScrollView {
             VStack {
@@ -148,16 +183,32 @@ struct SessionView: View {
                         if let metadataEvent = appState.metadataEvents[rsvp.pubkey] {
                             HStack {
                                 if let pictureURL = metadataEvent.userMetadata?.pictureURL {
-                                    AsyncImage(url: pictureURL) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 40, height: 40)
-                                            .clipShape(Circle())
-                                    } placeholder: {
-                                        ProgressView()
-                                            .frame(width: 40, height: 40)
+                                    AsyncImage(url: pictureURL) { phase in
+                                        if let image = phase.image {
+                                            image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 40, height: 40)
+                                                .clipShape(Circle())
+                                                .overlay(
+                                                    rsvpStatusView(rsvp.status)
+                                                        .offset(x: 4, y: 4),
+                                                    alignment: .bottomTrailing
+                                                )
+                                        } else if phase.error != nil {
+                                            missingProfilePictureSmallView(rsvp.status)
+                                        } else {
+                                            ProgressView()
+                                                .frame(width: 40, height: 40)
+                                                .overlay(
+                                                    rsvpStatusView(rsvp.status)
+                                                        .offset(x: 4, y: 4),
+                                                    alignment: .bottomTrailing
+                                                )
+                                        }
                                     }
+                                } else {
+                                    missingProfilePictureSmallView(rsvp.status)
                                 }
 
                                 if let publicKey = PublicKey(hex: rsvp.pubkey) {
