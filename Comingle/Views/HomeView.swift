@@ -5,8 +5,9 @@
 //  Created by Terry Yiu on 6/22/24.
 //
 
-import SwiftUI
+import Kingfisher
 import NostrSDK
+import SwiftUI
 
 struct HomeView: View {
 
@@ -66,16 +67,12 @@ struct HomeView: View {
                                             let metadataEvent = appState.metadataEvents[event.pubkey]
 
                                             if let pictureURL = metadataEvent?.userMetadata?.pictureURL {
-                                                AsyncImage(url: pictureURL) { image in
-                                                    image
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fill)
-                                                        .frame(width: 40, height: 40)
-                                                        .clipShape(Circle())
-                                                } placeholder: {
-                                                    ProgressView()
-                                                        .frame(width: 40, height: 40)
-                                                }
+                                                KFImage.url(pictureURL)
+                                                    .resizable()
+                                                    .placeholder { ProgressView() }
+                                                    .scaledToFit()
+                                                    .frame(width: 40)
+                                                    .clipShape(.circle)
                                             }
 
                                             Text(metadataEvent?.resolvedName ?? event.pubkey)
@@ -126,15 +123,11 @@ struct HomeView: View {
                                     }
 
                                     if let calendarEventImage = event.references.first(where: { $0.isImage }) {
-                                        AsyncImage(url: calendarEventImage) { image in
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .frame(width: 100, height: 100)
-                                        } placeholder: {
-                                            ProgressView()
-                                                .frame(width: 100, height: 100)
-                                        }
+                                        KFImage.url(calendarEventImage)
+                                            .resizable()
+                                            .placeholder { ProgressView() }
+                                            .scaledToFit()
+                                            .frame(width: 100)
                                     }
                                 }
                             }

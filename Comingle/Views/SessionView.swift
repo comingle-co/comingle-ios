@@ -5,7 +5,7 @@
 //  Created by Terry Yiu on 5/10/23.
 //
 
-import MapKit
+import Kingfisher
 import NostrSDK
 import SwiftUI
 
@@ -34,7 +34,7 @@ struct SessionView: View {
         Image(systemName: "person.crop.circle.fill")
             .aspectRatio(contentMode: .fill)
             .frame(width: 40, height: 40)
-            .clipShape(Circle())
+            .clipShape(.circle)
             .overlay(
                 rsvpStatusView(rsvpStatus)
                     .offset(x: 4, y: 4),
@@ -102,12 +102,11 @@ struct SessionView: View {
                     let metadataEvent = appState.metadataEvents[session.pubkey]
 
                     if let pictureURL = metadataEvent?.userMetadata?.pictureURL {
-                        AsyncImage(url: pictureURL) { image in
-                            image.resizable()
-                        } placeholder: {
-                            ProgressView()
-                        }
-                        .frame(width: 100, height: 100)
+                        KFImage.url(pictureURL)
+                            .resizable()
+                            .placeholder { ProgressView() }
+                            .scaledToFit()
+                            .frame(width: 100)
                     }
 
                     if let publicKey = PublicKey(hex: session.pubkey) {
@@ -141,16 +140,12 @@ struct SessionView: View {
                         if let publicKey = participant.pubkey {
                             if let metadataEvent = appState.metadataEvents[publicKey.hex] {
                                 if let pictureURL = metadataEvent.userMetadata?.pictureURL {
-                                    AsyncImage(url: pictureURL) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 40, height: 40)
-                                            .clipShape(Circle())
-                                    } placeholder: {
-                                        ProgressView()
-                                            .frame(width: 40, height: 40)
-                                    }
+                                    KFImage.url(pictureURL)
+                                        .resizable()
+                                        .placeholder { ProgressView() }
+                                        .scaledToFit()
+                                        .frame(width: 40)
+                                        .clipShape(.circle)
                                 }
 
                                 VStack {
@@ -182,30 +177,17 @@ struct SessionView: View {
                         if let metadataEvent = appState.metadataEvents[rsvp.pubkey] {
                             HStack {
                                 if let pictureURL = metadataEvent.userMetadata?.pictureURL {
-                                    AsyncImage(url: pictureURL) { phase in
-                                        if let image = phase.image {
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .frame(width: 40, height: 40)
-                                                .clipShape(Circle())
-                                                .overlay(
-                                                    rsvpStatusView(rsvp.status)
-                                                        .offset(x: 4, y: 4),
-                                                    alignment: .bottomTrailing
-                                                )
-                                        } else if phase.error != nil {
-                                            missingProfilePictureSmallView(rsvp.status)
-                                        } else {
-                                            ProgressView()
-                                                .frame(width: 40, height: 40)
-                                                .overlay(
-                                                    rsvpStatusView(rsvp.status)
-                                                        .offset(x: 4, y: 4),
-                                                    alignment: .bottomTrailing
-                                                )
-                                        }
-                                    }
+                                    KFImage.url(pictureURL)
+                                        .resizable()
+                                        .placeholder { ProgressView() }
+                                        .scaledToFit()
+                                        .frame(width: 40)
+                                        .clipShape(.circle)
+                                        .overlay(
+                                            rsvpStatusView(rsvp.status)
+                                                .offset(x: 4, y: 4),
+                                            alignment: .bottomTrailing
+                                        )
                                 } else {
                                     missingProfilePictureSmallView(rsvp.status)
                                 }

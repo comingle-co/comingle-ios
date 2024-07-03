@@ -5,6 +5,7 @@
 //  Created by Terry Yiu on 5/10/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct PeopleView: View {
@@ -24,12 +25,11 @@ struct PeopleView: View {
                 if selectedGroupIndex == 0 {
                     ForEach(speakers, id: \.self) { speaker in
                         HStack {
-                            AsyncImage(url: URL(string: speaker.picture)) { image in
-                                image.resizable()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 100, height: 100)
+                            KFImage.url(URL(string: speaker.picture))
+                                .resizable()
+                                .placeholder { ProgressView() }
+                                .scaledToFit()
+                                .frame(width: 100)
 //                            NavigationLink(destination: PersonView(person: speaker)) {
 //                                Text(speaker.name)
 //                            }.navigationTitle(.localizable.people)
@@ -38,12 +38,11 @@ struct PeopleView: View {
                 } else {
                     ForEach(organizers, id: \.self) { speaker in
                         HStack {
-                            AsyncImage(url: URL(string: speaker.picture)) { image in
-                                image.resizable()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 100, height: 100)
+                            KFImage.url(URL(string: speaker.picture))
+                                .resizable()
+                                .placeholder { ProgressView() }
+                                .scaledToFit()
+                                .frame(width: 100)
 //                            NavigationLink(destination: PersonView(person: speaker)) {
 //                                Text(speaker.name)
 //                            }.navigationTitle(.localizable.people)

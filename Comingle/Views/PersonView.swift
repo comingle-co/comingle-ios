@@ -18,13 +18,6 @@ struct PersonView: View {
             Text(person.role ?? "No role")
                 .font(.subheadline)
             Link(.localizable.nostrProfile, destination: URL(string: "nostr:\(person.pubkey!.hex)")!)
-//            AsyncImage(url: URL(string: person.picture)) { image in
-//                image.resizable()
-//            } placeholder: {
-//                ProgressView()
-//            }
-//            .frame(width: 200, height: 200)
-
         }
     }
 }

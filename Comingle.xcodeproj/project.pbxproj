@@ -34,6 +34,7 @@
 		3A453E282A0C614900897303 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E212A0C614900897303 /* PersonView.swift */; };
 		3A453E292A0C614900897303 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E222A0C614900897303 /* DayView.swift */; };
 		3A453E2A2A0C614900897303 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E232A0C614900897303 /* CalendarView.swift */; };
+		3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB3C2C34E567007AE9A4 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */,
 				3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,6 +258,7 @@
 			name = Comingle;
 			packageProductDependencies = (
 				3A2FF9732A3F6CE2009E1067 /* NostrSDK */,
+				3A4FCB3C2C34E567007AE9A4 /* Kingfisher */,
 			);
 			productName = Comingle;
 			productReference = 3A453DD82A0B348100897303 /* Comingle.app */;
@@ -332,6 +335,7 @@
 			packageReferences = (
 				3A2FF9722A3F6CE2009E1067 /* XCRemoteSwiftPackageReference "nostr-sdk-ios" */,
 				3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */,
+				3A4FCB3B2C34E567007AE9A4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 3A453DD92A0B348100897303 /* Products */;
 			projectDirPath = "";
@@ -809,6 +813,14 @@
 				minimumVersion = 0.1.1;
 			};
 		};
+		3A4FCB3B2C34E567007AE9A4 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -821,6 +833,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A34AAA42B48FF7B00C5F910 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */;
 			productName = "plugin:XCStringsToolPlugin";
+		};
+		3A4FCB3C2C34E567007AE9A4 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A4FCB3B2C34E567007AE9A4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
