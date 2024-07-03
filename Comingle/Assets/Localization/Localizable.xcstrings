@@ -337,6 +337,18 @@
         }
       }
     },
+    "organizer" : {
+      "comment" : "Text that indicates who is the event organizer.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organizer: %@"
+          }
+        }
+      }
+    },
     "organizers" : {
       "comment" : "Picker option to show list of conference organizers.",
       "extractionState" : "manual",

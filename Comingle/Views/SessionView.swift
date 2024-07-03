@@ -311,8 +311,17 @@ struct SessionView: View {
                     Menu {
                         let shareableEventCoordinates = try? session.shareableEventCoordinates()
                         Button(action: {
-                            var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(session.content.trimmingCharacters(in: .whitespacesAndNewlines))"
+                            var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(session.content.trimmingCharacters(in: .whitespacesAndNewlines))\n\n"
+
+                            let metadataEvent = appState.metadataEvents[session.pubkey]
+                            if let publicKey = PublicKey(hex: session.pubkey) {
+                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? publicKey.npub))
+                            } else {
+                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? session.pubkey))
+                            }
+
                             if let shareableEventCoordinates {
+                                // TODO Change to a Comingle URL once the website is set up.
                                 stringToCopy += "\n\nhttps://njump.me/\(shareableEventCoordinates)"
                             }
 
