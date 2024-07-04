@@ -45,18 +45,13 @@ struct LoginView: View, RelayURLValidating {
         appState.keypair = keypair
         appState.publicKey = publicKey
 
-        guard let relayURL = URL(string: primaryRelay) else {
+        guard let relayURL = URL(string: primaryRelay), let relay = try? Relay(url: relayURL) else {
             return
         }
-        do {
-            let relay = try Relay(url: relayURL)
-            relay.delegate = appState
-            appState.relay = relay
-            relay.connect()
-            appState.loginMode = .guest
-        } catch {
-            return
-        }
+        relay.delegate = appState
+        appState.relay = relay
+        relay.connect()
+        appState.loginMode = .guest
     }
 
     var body: some View {
