@@ -8,7 +8,9 @@
 import GeohashKit
 import Kingfisher
 import NostrSDK
+import NaturalLanguage
 import SwiftUI
+import Translation
 
 struct SessionView: View {
 
@@ -19,6 +21,9 @@ struct SessionView: View {
     @State private var showLocationAlert: Bool = false
     @State private var selectedGeohash: Bool = false
     @State private var selectedLocation: String = ""
+
+    @State private var isTitleTranslationPresented: Bool = false
+    @State private var isContentTranslationPresented: Bool = false
 
     private let eventTitle: String
     private let filteredLocations: [String]
@@ -90,6 +95,21 @@ struct SessionView: View {
         }
     }
 
+    private func shouldAllowTranslation(_ string: String) -> Bool {
+        let languageRecognizer = NLLanguageRecognizer()
+        languageRecognizer.processString(string)
+        guard let locale = languageRecognizer.languageHypotheses(withMaximum: 1).first(where: { $0.value >= 0.5 })?.key.rawValue,
+              let language = localeToLanguage(locale) else {
+            return false
+        }
+        let preferredLanguages = Set(Locale.preferredLanguages.compactMap { localeToLanguage($0) })
+        return !preferredLanguages.contains(language)
+    }
+
+    private func localeToLanguage(_ locale: String) -> String? {
+        return Locale.LanguageCode(stringLiteral: locale).identifier(.alpha2)
+    }
+
     var body: some View {
         ScrollView {
             VStack {
@@ -101,9 +121,20 @@ struct SessionView: View {
                         .frame(maxWidth: 500, maxHeight: 200)
                 }
 
-                Text(eventTitle)
-                    .padding(.vertical, 2)
-                    .font(.largeTitle)
+                let trimmedTitle = eventTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+                if shouldAllowTranslation(trimmedTitle), #available(iOS 17.4, macOS 14.4, *) {
+                    Text(trimmedTitle)
+                        .padding(.vertical, 2)
+                        .font(.largeTitle)
+                        .translationPresentation(isPresented: $isTitleTranslationPresented, text: trimmedTitle)
+                        .onTapGesture {
+                            isTitleTranslationPresented = true
+                        }
+                } else {
+                    Text(trimmedTitle)
+                        .padding(.vertical, 2)
+                        .font(.largeTitle)
+                }
 
                 Divider()
 
@@ -162,10 +193,20 @@ struct SessionView: View {
                 Text(.localizable.about)
                     .font(.headline)
 
-                Text(session.content)
-                    .padding(.vertical, 2)
-                    .font(.subheadline)
-                    .textSelection(.enabled)
+                let trimmedContent = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                if shouldAllowTranslation(trimmedContent), #available(iOS 17.4, macOS 14.4, *) {
+                    Text(trimmedContent)
+                        .padding(.vertical, 2)
+                        .font(.subheadline)
+                        .translationPresentation(isPresented: $isContentTranslationPresented, text: trimmedContent)
+                        .onTapGesture {
+                            isContentTranslationPresented = true
+                        }
+                } else {
+                    Text(trimmedContent)
+                        .padding(.vertical, 2)
+                        .font(.subheadline)
+                }
 
                 Divider()
 
