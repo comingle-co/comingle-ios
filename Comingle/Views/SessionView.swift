@@ -165,6 +165,7 @@ struct SessionView: View {
                 Text(session.content)
                     .padding(.vertical, 2)
                     .font(.subheadline)
+                    .textSelection(.enabled)
 
                 Divider()
 

@@ -16,19 +16,6 @@ struct HomeView: View {
     @State private var upcomingEventsFilter: UpcomingEventsFilter = .going
     @State private var followingFilter: FollowingFilter = .upcoming
 
-    private let dateFormatterCurrentYear = DateFormatter()
-    private let dateFormatterDifferentYear = DateFormatter()
-
-    private let dateComponentsFormatter = DateComponentsFormatter()
-
-    init() {
-        dateFormatterCurrentYear.setLocalizedDateFormatFromTemplate("EdMMMhmmz")
-        dateFormatterDifferentYear.setLocalizedDateFormatFromTemplate("EdMMMyyyyhmmz")
-
-        dateComponentsFormatter.allowedUnits = [.year, .day, .hour, .minute]
-        dateComponentsFormatter.unitsStyle = .full
-    }
-
     var body: some View {
         VStack {
 //            Section {
@@ -133,18 +120,27 @@ struct HomeView: View {
                             }
                         }, header: {
                             if let startTimestamp = event.startTimestamp {
-                                if startTimestamp.isInCurrentYear {
-                                    Text(dateFormatterCurrentYear.string(from: startTimestamp))
-                                } else {
-                                    Text(dateFormatterDifferentYear.string(from: startTimestamp))
-                                }
+                                Text(format(date: startTimestamp, timeZone: event.startTimeZone))
                             }
-
                         }
                     )
                     .padding(.vertical, 10)
                 }
             }
+        }
+        .navigationTitle(.localizable.yourNetwork)
+    }
+
+    private func format(date: Date, timeZone: TimeZone?) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = timeZone ?? Calendar.current.timeZone
+
+        if date.isInCurrentYear {
+            dateFormatter.setLocalizedDateFormatFromTemplate("EdMMMhmmz")
+            return dateFormatter.string(from: date)
+        } else {
+            dateFormatter.setLocalizedDateFormatFromTemplate("EdMMMyyyyhmmz")
+            return dateFormatter.string(from: date)
         }
     }
 

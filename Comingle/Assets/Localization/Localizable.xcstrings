@@ -672,6 +672,18 @@
         }
       }
     },
+    "yourNetwork" : {
+      "comment" : "Title text for view that shows events from your network.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Network"
+          }
+        }
+      }
+    },
     "zapWithCommentOrQuestion" : {
       "comment" : "Button to zap a speaker with a comment or question.",
       "extractionState" : "manual",
