@@ -180,18 +180,17 @@ extension AppState: RelayDelegate {
     }
 
     private func didReceiveCalendarListEvent(_ calendarListEvent: CalendarListEvent, forRelay relay: Relay) {
-        guard let identifier = calendarListEvent.identifier else {
+        guard let calendarListEventCoordinates = try? calendarListEvent.shareableEventCoordinates() else {
             return
         }
 
         // TODO(tyiu) validate signatures of events
-        // TODO(tyiu) use event coordinates instead of just the identifier so that people can't overwrite others' events
-        if let existingCalendarList = self.calendarListEvents[identifier] {
+        if let existingCalendarList = self.calendarListEvents[calendarListEventCoordinates] {
             if existingCalendarList.createdAt < calendarListEvent.createdAt {
-                calendarListEvents[identifier] = calendarListEvent
+                calendarListEvents[calendarListEventCoordinates] = calendarListEvent
             }
         } else {
-            calendarListEvents[identifier] = calendarListEvent
+            calendarListEvents[calendarListEventCoordinates] = calendarListEvent
         }
 
         if self.metadataEvents[calendarListEvent.pubkey] == nil {
@@ -212,7 +211,7 @@ extension AppState: RelayDelegate {
     }
 
     private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent, forRelay relay: Relay) {
-        guard let identifier = timeBasedCalendarEvent.identifier,
+        guard let shareableEventCoordinates = try? timeBasedCalendarEvent.shareableEventCoordinates(),
               let startTimestamp = timeBasedCalendarEvent.startTimestamp,
               startTimestamp <= timeBasedCalendarEvent.endTimestamp ?? startTimestamp,
               startTimestamp.timeIntervalSince1970 > 0 else {
@@ -220,13 +219,12 @@ extension AppState: RelayDelegate {
         }
 
         // TODO(tyiu) validate signatures of events
-        // TODO(tyiu) use event coordinates instead of just the identifier so that people can't overwrite others' events
-        if let existingEvent = self.timeBasedCalendarEvents[identifier] {
+        if let existingEvent = self.timeBasedCalendarEvents[shareableEventCoordinates] {
             if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
-                timeBasedCalendarEvents[identifier] = timeBasedCalendarEvent
+                timeBasedCalendarEvents[shareableEventCoordinates] = timeBasedCalendarEvent
             }
         } else {
-            timeBasedCalendarEvents[identifier] = timeBasedCalendarEvent
+            timeBasedCalendarEvents[shareableEventCoordinates] = timeBasedCalendarEvent
         }
 
         if self.metadataEvents[timeBasedCalendarEvent.pubkey] == nil {
@@ -245,10 +243,17 @@ extension AppState: RelayDelegate {
             }
         }
 
+        guard let replaceableEventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates() else {
+            print("Unable to get replaceable event coordinates for time-based calendar event.")
+            return
+        }
+
+        let replaceableEventCoordinatesTag = replaceableEventCoordinates.tag
+
         guard let rsvpFilter = Filter(
             kinds: [EventKind.calendarEventRSVP.rawValue],
-            tags: ["a": ["\(EventKind.timeBasedCalendarEvent.rawValue):\(timeBasedCalendarEvent.pubkey):\(timeBasedCalendarEvent.identifier ?? "")"]]
-        ) else {
+            tags: ["a": [replaceableEventCoordinatesTag.value]])
+        else {
             print("Unable to create calendar event RSVP filter.")
             return
         }
@@ -261,30 +266,29 @@ extension AppState: RelayDelegate {
     }
 
     private func didReceiveCalendarEventRSVP(_ rsvp: CalendarEventRSVP, forRelay relay: Relay) {
-        guard let identifier = rsvp.identifier else {
+        guard let rsvpEventCoordinates = try? rsvp.shareableEventCoordinates() else {
             return
         }
 
         // TODO(tyiu) validate signatures of events
-        // TODO(tyiu) use event coordinates instead of just the identifier so that people can't overwrite others' events
-        if let existingRsvp = self.rsvps[identifier] {
+        if let existingRsvp = self.rsvps[rsvpEventCoordinates] {
             if existingRsvp.createdAt < rsvp.createdAt {
-                rsvps[identifier] = rsvp
+                rsvps[rsvpEventCoordinates] = rsvp
 
-                if let calendarEventIdentifier = rsvp.calendarEventCoordinates?.identifier {
-                    if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventIdentifier] {
-                        calendarEventsToRsvps[calendarEventIdentifier] = rsvpsForCalendarEvent.filter { $0.identifier != identifier } + [rsvp]
+                if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
+                    if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventCoordinates] {
+                        calendarEventsToRsvps[calendarEventCoordinates] = rsvpsForCalendarEvent.filter { (try? $0.shareableEventCoordinates()) != rsvpEventCoordinates } + [rsvp]
                     } else {
-                        calendarEventsToRsvps[calendarEventIdentifier] = [rsvp]
+                        calendarEventsToRsvps[calendarEventCoordinates] = [rsvp]
                     }
                 }
             }
         } else {
-            rsvps[identifier] = rsvp
+            rsvps[rsvpEventCoordinates] = rsvp
 
             if let calendarEventIdentifier = rsvp.calendarEventCoordinates?.identifier {
                 if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventIdentifier] {
-                    calendarEventsToRsvps[calendarEventIdentifier] = rsvpsForCalendarEvent.filter { $0.identifier != identifier } + [rsvp]
+                    calendarEventsToRsvps[calendarEventIdentifier] = rsvpsForCalendarEvent.filter { (try? $0.shareableEventCoordinates()) != rsvpEventCoordinates } + [rsvp]
                 } else {
                     calendarEventsToRsvps[calendarEventIdentifier] = [rsvp]
                 }
