@@ -14,16 +14,17 @@ struct LoginView: View, RelayURLValidating {
     @Environment(\.colorScheme) var colorScheme
 
     @State private var nostrIdentifier: String = "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf"
-    @State private var primaryRelay: String = defaultRelay
+    @State private var primaryRelay: String = AppState.defaultRelayURLString
 
     @State private var validKey: Bool = false
     @State private var validRelay: Bool = false
 
-    static let defaultRelay = "wss://relay.primal.net"
+    @State private var keypair: Keypair?
+    @State private var publicKey: PublicKey?
 
     private func relayFooter() -> AttributedString {
-        var footer = AttributedString(localized: .localizable.tryDefaultRelay(LoginView.defaultRelay))
-        if let range = footer.range(of: LoginView.defaultRelay) {
+        var footer = AttributedString(localized: .localizable.tryDefaultRelay(AppState.defaultRelayURLString))
+        if let range = footer.range(of: AppState.defaultRelayURLString) {
             footer[range].underlineStyle = .single
             footer[range].foregroundColor = .blue
         }
@@ -32,36 +33,16 @@ struct LoginView: View, RelayURLValidating {
     }
 
     private func isValidRelay(address: String) -> Bool {
-        do {
-            _ = try validateRelayURLString(address)
-            return true
-        } catch {
-            return false
-        }
+        (try? validateRelayURLString(address)) != nil
     }
 
     @MainActor
-    private func login(forAttendee keypair: Keypair) {
+    private func login() {
+        guard let publicKey else {
+            return
+        }
+
         appState.keypair = keypair
-        appState.publicKey = keypair.publicKey
-
-        guard let relayURL = URL(string: primaryRelay) else {
-            return
-        }
-        do {
-            let relay = try Relay(url: relayURL)
-            relay.delegate = appState
-            appState.relay = relay
-            relay.connect()
-            appState.loginMode = .attendee
-        } catch {
-            return
-        }
-    }
-
-    @MainActor
-    private func login(forGuest publicKey: PublicKey?) {
-        appState.keypair = nil
         appState.publicKey = publicKey
 
         guard let relayURL = URL(string: primaryRelay) else {
@@ -86,7 +67,6 @@ struct LoginView: View, RelayURLValidating {
                 .frame(maxWidth: 300, maxHeight: 300)
 
             Form {
-
                 Section(
                     content: {
                         TextField(localized: .localizable.exampleRelay, text: $primaryRelay)
@@ -111,71 +91,61 @@ struct LoginView: View, RelayURLValidating {
                     footer: {
                         Text(relayFooter())
                             .onTapGesture {
-                                primaryRelay = LoginView.defaultRelay
+                                primaryRelay = AppState.defaultRelayURLString
                             }
                     }
                 )
 
                 Section(
                     content: {
-                        SecureField("nsec1 or npub1...", text: $nostrIdentifier)
+                        SecureField("npub or nsec...", text: $nostrIdentifier)
                             .autocorrectionDisabled(false)
                             .textContentType(.password)
                             .textInputAutocapitalization(.never)
                             .onReceive(Just(nostrIdentifier)) { newValue in
                                 let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                                 nostrIdentifier = filtered
-                                validKey = Keypair(nsec: filtered) != nil || PublicKey(npub: filtered) != nil
+
+                                if let keypair = Keypair(nsec: filtered) {
+                                    self.keypair = keypair
+                                    self.publicKey = keypair.publicKey
+                                    validKey = true
+                                } else if let publicKey = PublicKey(npub: filtered) {
+                                    self.keypair = nil
+                                    self.publicKey = publicKey
+                                    validKey = true
+                                } else {
+                                    self.keypair = nil
+                                    self.publicKey = nil
+                                    validKey = false
+                                }
                             }
                     },
                     header: {
                         Text(.localizable.nostrKeyHeader)
                     },
                     footer: {
-                        Text(.localizable.nostrKeyFooter)
+                        if keypair != nil {
+                            Text(.localizable.nostrPrivateKeyFooter)
+                        } else if publicKey != nil {
+                            Text(.localizable.nostrPublicKeyFooter)
+                        }
                     }
                 )
             }
 
-            Button(.localizable.loginModeGuest) {
-                if let publicKey = PublicKey(npub: nostrIdentifier) {
-                    login(forGuest: publicKey)
-                } else {
-                    validKey = false
-                }
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(!validRelay)
-
-            Button(.localizable.loginModeAttendee) {
-                guard let keypair = Keypair(nsec: nostrIdentifier) else {
-                    validKey = false
-                    return
-                }
-                login(forAttendee: keypair)
+            Button(.localizable.findMeOnNostr) {
+                login()
             }
             .buttonStyle(.borderedProminent)
             .disabled(!validKey || !validRelay)
-
-//            Button(.localizable.loginModeOrganizer) {
-//                guard let keypair = Keypair(nsec: privateKey) else {
-//                    validKey = false
-//                    return
-//                }
-//                login(keypair: keypair, loginMode: .organizer)
-//            }
-//            .buttonStyle(.borderedProminent)
-//            .disabled(!validKey || !validRelay)
         }
     }
 }
 
 struct LoginView_Previews: PreviewProvider {
 
-    static var appState = AppState()
-
     static var previews: some View {
         LoginView()
-            .environmentObject(appState)
     }
 }

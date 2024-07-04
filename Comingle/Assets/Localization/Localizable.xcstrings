@@ -109,6 +109,30 @@
         }
       }
     },
+    "exploreEvents" : {
+      "comment" : "Button to explore calendar events.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore Events"
+          }
+        }
+      }
+    },
+    "findMeOnNostr" : {
+      "comment" : "Button to query data using the private or public key on Nostr relays.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find me on Nostr"
+          }
+        }
+      }
+    },
     "following" : {
       "comment" : "Section header for listing calendar events from accounts that the user follows.",
       "extractionState" : "manual",
@@ -117,30 +141,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Following"
-          }
-        }
-      }
-    },
-    "followingPast" : {
-      "comment" : "Picker label to filter down past calendar events from profiles the user is following.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Past"
-          }
-        }
-      }
-    },
-    "followingUpcoming" : {
-      "comment" : "Picker label to filter down upcoming calendar events from profiles the user is following.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upcoming"
           }
         }
       }
@@ -253,18 +253,6 @@
         }
       }
     },
-    "nostrKeyFooter" : {
-      "comment" : "Footer text indicating that the private or public key can be left blank if the user is not logging in with an existing key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leave blank if you are not logging in with an existing private or public key."
-          }
-        }
-      }
-    },
     "nostrKeyHeader" : {
       "comment" : "Header text prompting optional entry of the user's private or public key.",
       "extractionState" : "manual",
@@ -272,7 +260,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nostr Key (Optional)"
+            "value" : "Nostr Key"
+          }
+        }
+      }
+    },
+    "nostrPrivateKeyFooter" : {
+      "comment" : "Footer text indicating what it means to use a private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have entered a private key, which means you will be able to view, create, modify, and RSVP to events."
           }
         }
       }
@@ -285,6 +285,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nostr Profile"
+          }
+        }
+      }
+    },
+    "nostrPublicKeyFooter" : {
+      "comment" : "Footer text indicating what it means to use a public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have entered a public key, which means you will be able to only view events."
           }
         }
       }
@@ -357,6 +369,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Organizers"
+          }
+        }
+      }
+    },
+    "past" : {
+      "comment" : "Picker label to filter down past calendar events.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Past"
           }
         }
       }
@@ -632,6 +656,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unnamed Event"
+          }
+        }
+      }
+    },
+    "upcoming" : {
+      "comment" : "Picker label to filter down upcoming calendar events.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming"
           }
         }
       }

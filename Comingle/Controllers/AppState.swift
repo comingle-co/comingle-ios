@@ -10,8 +10,11 @@ import NostrSDK
 import Combine
 
 class AppState: ObservableObject {
+    static let defaultRelayURLString = "wss://relay.primal.net"
+
     @Published var loginMode: LoginMode = .none
     @Published var relay: Relay?
+    @Published var activeTab: HomeTabs = .following
 
     @Published var publicKey: PublicKey?
     @Published var keypair: Keypair?
@@ -30,6 +33,39 @@ class AppState: ObservableObject {
         self.keypair = keypair
     }
 
+    private var allEvents: [TimeBasedCalendarEvent] {
+        Array(timeBasedCalendarEvents.values)
+    }
+
+    var allUpcomingEvents: [TimeBasedCalendarEvent] {
+        allEvents.filter {
+            guard let startTimestamp = $0.startTimestamp else {
+                return false
+            }
+
+            guard let endTimestamp = $0.endTimestamp else {
+                return startTimestamp >= Date.now
+            }
+
+            return startTimestamp >= Date.now || endTimestamp >= Date.now
+        }
+    }
+
+    var allPastEvents: [TimeBasedCalendarEvent] {
+        allEvents.filter {
+            guard let startTimestamp = $0.startTimestamp else {
+                return false
+            }
+
+            guard let endTimestamp = $0.endTimestamp else {
+                return startTimestamp < Date.now
+            }
+
+            return endTimestamp < Date.now
+        }
+        .reversed()
+    }
+
     private var followedEvents: [TimeBasedCalendarEvent] {
         guard let followedPubkeys = followList?.followedPubkeys, !followedPubkeys.isEmpty else {
             return []
@@ -38,24 +74,7 @@ class AppState: ObservableObject {
         let followedPubkeysSet = Set(followedPubkeys)
 
         return timeBasedCalendarEvents.values.filter { $0.startTimestamp != nil && followedPubkeysSet.contains($0.pubkey) }
-            .sorted(by: { lhs, rhs in
-                guard let lhsStartTimestamp = lhs.startTimestamp else {
-                    return false
-                }
-
-                guard let rhsStartTimestamp = rhs.startTimestamp else {
-                    return true
-                }
-
-                let lhsEndTimestamp = lhs.endTimestamp ?? lhsStartTimestamp
-                let rhsEndTimestamp = rhs.endTimestamp ?? rhsStartTimestamp
-
-                if lhsStartTimestamp == rhsStartTimestamp {
-                    return lhsEndTimestamp < rhsEndTimestamp
-                } else {
-                    return lhsStartTimestamp < rhsStartTimestamp
-                }
-            })
+            .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
     }
 
     var upcomingFollowedEvents: [TimeBasedCalendarEvent] {
@@ -205,7 +224,9 @@ extension AppState: RelayDelegate {
     }
 
     private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent, forRelay relay: Relay) {
-        guard let identifier = timeBasedCalendarEvent.identifier else {
+        guard let identifier = timeBasedCalendarEvent.identifier,
+              let startTimestamp = timeBasedCalendarEvent.startTimestamp,
+              startTimestamp <= timeBasedCalendarEvent.endTimestamp ?? startTimestamp else {
             return
         }
 
@@ -326,4 +347,9 @@ extension AppState: RelayDelegate {
         }
     }
 
+}
+
+enum HomeTabs {
+    case following
+    case explore
 }
