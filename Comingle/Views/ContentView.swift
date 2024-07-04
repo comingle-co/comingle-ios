@@ -40,23 +40,16 @@ struct ContentView: View {
             }
         }
         .task {
-            guard let relayURL = URL(string: AppState.defaultRelayURLString) else {
+            guard let relayURL = URL(string: AppState.defaultRelayURLString), let relay = try? Relay(url: relayURL) else {
                 return
             }
-            do {
-                let relay = try Relay(url: relayURL)
-                relay.delegate = appState
-                appState.relay = relay
-                relay.connect()
-            } catch {
-                return
-            }
+            relay.delegate = appState
+            appState.relay = relay
+            relay.connect()
         }
     }
 }
 
-//#Preview {
-//    var appState = AppState()
-//
-//    ContentView()
-//}
+#Preview {
+    ContentView()
+}

@@ -31,7 +31,7 @@ struct ScheduleView: View {
 
     var body: some View {
         if sessions.isEmpty {
-            Text("No events")
+            Text(.localizable.noEvents)
         } else {
             VStack {
                 let days = sessions

@@ -253,6 +253,18 @@
         }
       }
     },
+    "noEvents" : {
+      "comment" : "Text indicating that there are no calendar events.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No events"
+          }
+        }
+      }
+    },
     "nostrKeyHeader" : {
       "comment" : "Header text prompting optional entry of the user's private or public key.",
       "extractionState" : "manual",

@@ -60,26 +60,6 @@ struct CalendarEventListView: View {
                                                 .font(.subheadline)
                                         }
 
-                                        if event.participants.count > 1 {
-                                            let participants = event.participants.map {
-                                                if let pubkey = $0.pubkey {
-                                                    appState.metadataEvents[pubkey.hex]?.resolvedName ?? pubkey.hex
-                                                } else {
-                                                    "No npub"
-                                                }
-                                            }.joined(separator: ", ")
-
-                                            Divider()
-
-                                            Text(participants)
-                                                .font(.subheadline)
-                                        } else if let firstParticipant = event.participants.first, let firstParticipantPublicKey = firstParticipant.pubkey, firstParticipantPublicKey.hex != event.pubkey {
-                                            Divider()
-
-                                            Text(appState.metadataEvents[firstParticipantPublicKey.hex]?.resolvedName ?? firstParticipantPublicKey.hex)
-                                                .font(.subheadline)
-                                        }
-
                                         let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
 
                                         if !locations.isEmpty {

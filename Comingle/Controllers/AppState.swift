@@ -49,6 +49,7 @@ class AppState: ObservableObject {
 
             return startTimestamp >= Date.now || endTimestamp >= Date.now
         }
+        .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
     }
 
     var allPastEvents: [TimeBasedCalendarEvent] {
@@ -63,7 +64,7 @@ class AppState: ObservableObject {
 
             return endTimestamp < Date.now
         }
-        .reversed()
+        .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
     }
 
     private var followedEvents: [TimeBasedCalendarEvent] {
@@ -74,7 +75,6 @@ class AppState: ObservableObject {
         let followedPubkeysSet = Set(followedPubkeys)
 
         return timeBasedCalendarEvents.values.filter { $0.startTimestamp != nil && followedPubkeysSet.contains($0.pubkey) }
-            .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
     }
 
     var upcomingFollowedEvents: [TimeBasedCalendarEvent] {
@@ -89,6 +89,7 @@ class AppState: ObservableObject {
 
             return startTimestamp >= Date.now || endTimestamp >= Date.now
         }
+        .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
     }
 
     var pastFollowedEvents: [TimeBasedCalendarEvent] {
@@ -103,7 +104,7 @@ class AppState: ObservableObject {
 
             return endTimestamp < Date.now
         }
-        .reversed()
+        .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
     }
 }
 
@@ -111,19 +112,6 @@ extension AppState: RelayDelegate {
 
     func relayStateDidChange(_ relay: Relay, state: Relay.State) {
         if state == .connected {
-//            guard let filter = Filter(
-//                kinds: [EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue]
-//            ) else {
-//                print("Unable to create the follow list and time-based calendar event filter.")
-//                return
-//            }
-//
-//            do {
-//                try relay.subscribe(with: filter)
-//            } catch {
-//                print("Could not subscribe to relay with follow list filter.")
-//            }
-
             if let publicKey {
                 guard let bootstrapFilter = Filter(
                     authors: [publicKey.hex],
@@ -226,7 +214,8 @@ extension AppState: RelayDelegate {
     private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent, forRelay relay: Relay) {
         guard let identifier = timeBasedCalendarEvent.identifier,
               let startTimestamp = timeBasedCalendarEvent.startTimestamp,
-              startTimestamp <= timeBasedCalendarEvent.endTimestamp ?? startTimestamp else {
+              startTimestamp <= timeBasedCalendarEvent.endTimestamp ?? startTimestamp,
+              startTimestamp.timeIntervalSince1970 > 0 else {
             return
         }
 

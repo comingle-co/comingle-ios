@@ -17,25 +17,49 @@ struct TimeBasedCalendarEventSortComparator: SortComparator {
         }
 
         guard let lhsStartTimestamp = lhs.startTimestamp else {
-            return .orderedDescending
+            if order == .forward {
+                return .orderedDescending
+            } else {
+                return .orderedAscending
+            }
         }
 
         guard let rhsStartTimestamp = rhs.startTimestamp else {
-            return .orderedAscending
+            if order == .forward {
+                return .orderedAscending
+            } else {
+                return .orderedDescending
+            }
         }
 
         let lhsEndTimestamp = lhs.endTimestamp ?? lhsStartTimestamp
         let rhsEndTimestamp = rhs.endTimestamp ?? rhsStartTimestamp
 
         if lhsStartTimestamp < rhsStartTimestamp {
-            return .orderedAscending
+            if order == .forward {
+                return .orderedAscending
+            } else {
+                return .orderedDescending
+            }
         } else if lhsStartTimestamp > rhsStartTimestamp {
-            return .orderedDescending
+            if order == .forward {
+                return .orderedDescending
+            } else {
+                return .orderedAscending
+            }
         } else {
             if lhsEndTimestamp < rhsEndTimestamp {
-                return .orderedAscending
+                if order == .forward {
+                    return .orderedAscending
+                } else {
+                    return .orderedDescending
+                }
             } else if lhsEndTimestamp > rhsEndTimestamp {
-                return .orderedDescending
+                if order == .forward {
+                    return .orderedDescending
+                } else {
+                    return .orderedAscending
+                }
             } else {
                 return .orderedSame
             }
