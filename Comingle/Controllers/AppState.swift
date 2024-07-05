@@ -67,14 +67,39 @@ class AppState: ObservableObject {
         .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
     }
 
-    private var followedEvents: [TimeBasedCalendarEvent] {
+    private var followedRSVPCalendarEventCoordinates: Set<String> {
         guard let followedPubkeys = followList?.followedPubkeys, !followedPubkeys.isEmpty else {
             return []
         }
 
         let followedPubkeysSet = Set(followedPubkeys)
 
-        return timeBasedCalendarEvents.values.filter { $0.startTimestamp != nil && followedPubkeysSet.contains($0.pubkey) }
+        return Set(
+            rsvps.values
+                .filter { followedPubkeysSet.contains($0.pubkey) }
+                .compactMap { $0.calendarEventCoordinates?.tag.value })
+    }
+
+    /// Events that were created or RSVP'd by follow list.
+    private var followedEvents: [TimeBasedCalendarEvent] {
+        guard let followedPubkeys = followList?.followedPubkeys, !followedPubkeys.isEmpty else {
+            return []
+        }
+
+        let followedPubkeysSet = Set(followedPubkeys)
+        let followedRSVPCalendarEventCoordinates = followedRSVPCalendarEventCoordinates
+
+        return timeBasedCalendarEvents.values.filter {
+            $0.startTimestamp != nil
+            && (followedPubkeysSet.contains($0.pubkey)
+                || followedRSVPCalendarEventCoordinates.contains($0.pubkey)
+                || $0.participants.contains(where: {
+                guard let pubkey = $0.pubkey else {
+                    return false
+                }
+                return followedPubkeysSet.contains(pubkey.hex)
+            }))
+        }
     }
 
     var upcomingFollowedEvents: [TimeBasedCalendarEvent] {
