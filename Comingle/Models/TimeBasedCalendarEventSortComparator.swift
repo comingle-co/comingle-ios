@@ -12,54 +12,47 @@ struct TimeBasedCalendarEventSortComparator: SortComparator {
     var order: SortOrder
 
     func compare(_ lhs: TimeBasedCalendarEvent, _ rhs: TimeBasedCalendarEvent) -> ComparisonResult {
+        let comparisonResult = compareForward(lhs, rhs)
+        switch order {
+        case .forward:
+            return comparisonResult
+        case .reverse:
+            switch comparisonResult {
+            case .orderedAscending:
+                return .orderedDescending
+            case .orderedDescending:
+                return .orderedAscending
+            case .orderedSame:
+                return .orderedSame
+            }
+        }
+    }
+
+    private func compareForward(_ lhs: TimeBasedCalendarEvent, _ rhs: TimeBasedCalendarEvent) -> ComparisonResult {
         if lhs == rhs {
             return .orderedSame
         }
 
         guard let lhsStartTimestamp = lhs.startTimestamp else {
-            if order == .forward {
-                return .orderedDescending
-            } else {
-                return .orderedAscending
-            }
+            return .orderedDescending
         }
 
         guard let rhsStartTimestamp = rhs.startTimestamp else {
-            if order == .forward {
-                return .orderedAscending
-            } else {
-                return .orderedDescending
-            }
+            return .orderedAscending
         }
 
         let lhsEndTimestamp = lhs.endTimestamp ?? lhsStartTimestamp
         let rhsEndTimestamp = rhs.endTimestamp ?? rhsStartTimestamp
 
         if lhsStartTimestamp < rhsStartTimestamp {
-            if order == .forward {
-                return .orderedAscending
-            } else {
-                return .orderedDescending
-            }
+            return .orderedAscending
         } else if lhsStartTimestamp > rhsStartTimestamp {
-            if order == .forward {
-                return .orderedDescending
-            } else {
-                return .orderedAscending
-            }
+            return .orderedDescending
         } else {
             if lhsEndTimestamp < rhsEndTimestamp {
-                if order == .forward {
-                    return .orderedAscending
-                } else {
-                    return .orderedDescending
-                }
+                return .orderedAscending
             } else if lhsEndTimestamp > rhsEndTimestamp {
-                if order == .forward {
-                    return .orderedDescending
-                } else {
-                    return .orderedAscending
-                }
+                return .orderedDescending
             } else {
                 return .orderedSame
             }
