@@ -13,6 +13,18 @@
         }
       }
     },
+    "aboutTranslated" : {
+      "comment" : "Section title for About section for calendar event description that has been translated from a non-preferred language to a preferred language.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About (Translated)"
+          }
+        }
+      }
+    },
     "appDescription" : {
       "comment" : "Description of the app.",
       "extractionState" : "manual",

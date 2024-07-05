@@ -22,10 +22,12 @@ struct SessionView: View {
     @State private var selectedGeohash: Bool = false
     @State private var selectedLocation: String = ""
 
-    @State private var isTitleTranslationPresented: Bool = false
     @State private var isContentTranslationPresented: Bool = false
+    @State private var contentText: String
+    @State private var contentTranslationReplaced: Bool = false
 
     private let eventTitle: String
+
     private let filteredLocations: [String]
 
     private let geohash: Geohash?
@@ -54,6 +56,8 @@ struct SessionView: View {
         } else {
             self.eventTitle = String(localized: .localizable.unnamedEvent)
         }
+
+        contentText = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
 
         filteredLocations = session.locations
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -121,23 +125,9 @@ struct SessionView: View {
                         .frame(maxWidth: 500, maxHeight: 200)
                 }
 
-                let trimmedTitle = eventTitle.trimmingCharacters(in: .whitespacesAndNewlines)
-                if shouldAllowTranslation(trimmedTitle), #available(iOS 17.4, macOS 14.4, *) {
-                    Text(trimmedTitle)
-                        .padding(.vertical, 2)
-                        .font(.largeTitle)
-                        .translationPresentation(isPresented: $isTitleTranslationPresented, text: trimmedTitle)
-                        .onTapGesture {
-                            isTitleTranslationPresented = true
-                        }
-                        .onLongPressGesture {
-                            isContentTranslationPresented = true
-                        }
-                } else {
-                    Text(trimmedTitle)
-                        .padding(.vertical, 2)
-                        .font(.largeTitle)
-                }
+                Text(eventTitle)
+                    .padding(.vertical, 2)
+                    .font(.largeTitle)
 
                 Divider()
 
@@ -193,23 +183,40 @@ struct SessionView: View {
 
                 Divider()
 
-                Text(.localizable.about)
-                    .font(.headline)
+                if contentTranslationReplaced {
+                    Text(.localizable.aboutTranslated)
+                        .font(.headline)
+                } else {
+                    Text(.localizable.about)
+                        .font(.headline)
+                }
 
-                let trimmedContent = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
-                if shouldAllowTranslation(trimmedContent), #available(iOS 17.4, macOS 14.4, *) {
-                    Text(trimmedContent)
+                if #available(iOS 17.4, macOS 14.4, *), contentTranslationReplaced || shouldAllowTranslation(contentText) {
+                    Text(contentText)
                         .padding(.vertical, 2)
                         .font(.subheadline)
-                        .translationPresentation(isPresented: $isContentTranslationPresented, text: trimmedContent)
+                        .translationPresentation(isPresented: $isContentTranslationPresented, text: contentText) { translatedString in
+                            contentText = translatedString
+                            contentTranslationReplaced = true
+                        }
                         .onTapGesture {
-                            isContentTranslationPresented = true
+                            if contentTranslationReplaced {
+                                contentText = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                                contentTranslationReplaced = false
+                            } else {
+                                isContentTranslationPresented = true
+                            }
                         }
                         .onLongPressGesture {
-                            isContentTranslationPresented = true
+                            if contentTranslationReplaced {
+                                contentText = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                                contentTranslationReplaced = false
+                            } else {
+                                isContentTranslationPresented = true
+                            }
                         }
                 } else {
-                    Text(trimmedContent)
+                    Text(contentText)
                         .padding(.vertical, 2)
                         .font(.subheadline)
                 }
