@@ -130,6 +130,9 @@ struct SessionView: View {
                         .onTapGesture {
                             isTitleTranslationPresented = true
                         }
+                        .onLongPressGesture {
+                            isContentTranslationPresented = true
+                        }
                 } else {
                     Text(trimmedTitle)
                         .padding(.vertical, 2)
@@ -200,6 +203,9 @@ struct SessionView: View {
                         .font(.subheadline)
                         .translationPresentation(isPresented: $isContentTranslationPresented, text: trimmedContent)
                         .onTapGesture {
+                            isContentTranslationPresented = true
+                        }
+                        .onLongPressGesture {
                             isContentTranslationPresented = true
                         }
                 } else {
