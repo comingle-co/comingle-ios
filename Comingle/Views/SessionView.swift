@@ -192,7 +192,7 @@ struct SessionView: View {
                 }
 
                 if #available(iOS 17.4, macOS 14.4, *), contentTranslationReplaced || shouldAllowTranslation(contentText) {
-                    Text(contentText)
+                    Text(.init(contentText))
                         .padding(.vertical, 2)
                         .font(.subheadline)
                         .translationPresentation(isPresented: $isContentTranslationPresented, text: contentText) { translatedString in
@@ -216,7 +216,7 @@ struct SessionView: View {
                             }
                         }
                 } else {
-                    Text(contentText)
+                    Text(.init(contentText))
                         .padding(.vertical, 2)
                         .font(.subheadline)
                 }
@@ -374,7 +374,7 @@ struct SessionView: View {
                     Menu {
                         let shareableEventCoordinates = try? session.shareableEventCoordinates()
                         Button(action: {
-                            var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(session.content.trimmingCharacters(in: .whitespacesAndNewlines))\n\n"
+                            var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(contentText)\n\n"
 
                             let metadataEvent = appState.metadataEvents[session.pubkey]
                             if let publicKey = PublicKey(hex: session.pubkey) {
