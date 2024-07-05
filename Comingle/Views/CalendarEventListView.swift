@@ -69,7 +69,7 @@ struct CalendarEventListView: View {
                                                 .font(.subheadline)
                                         }
 
-                                        if let eventIdentifier = event.identifier, let rsvps = appState.calendarEventsToRsvps[eventIdentifier] {
+                                        if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
                                             Divider()
 
                                             switch timeTabFilter {

@@ -180,7 +180,7 @@ extension AppState: RelayDelegate {
     }
 
     private func didReceiveCalendarListEvent(_ calendarListEvent: CalendarListEvent, forRelay relay: Relay) {
-        guard let calendarListEventCoordinates = try? calendarListEvent.shareableEventCoordinates() else {
+        guard let calendarListEventCoordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value else {
             return
         }
 
@@ -211,7 +211,7 @@ extension AppState: RelayDelegate {
     }
 
     private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent, forRelay relay: Relay) {
-        guard let shareableEventCoordinates = try? timeBasedCalendarEvent.shareableEventCoordinates(),
+        guard let eventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates()?.tag.value,
               let startTimestamp = timeBasedCalendarEvent.startTimestamp,
               startTimestamp <= timeBasedCalendarEvent.endTimestamp ?? startTimestamp,
               startTimestamp.timeIntervalSince1970 > 0 else {
@@ -219,12 +219,12 @@ extension AppState: RelayDelegate {
         }
 
         // TODO(tyiu) validate signatures of events
-        if let existingEvent = self.timeBasedCalendarEvents[shareableEventCoordinates] {
+        if let existingEvent = self.timeBasedCalendarEvents[eventCoordinates] {
             if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
-                timeBasedCalendarEvents[shareableEventCoordinates] = timeBasedCalendarEvent
+                timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
             }
         } else {
-            timeBasedCalendarEvents[shareableEventCoordinates] = timeBasedCalendarEvent
+            timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
         }
 
         if self.metadataEvents[timeBasedCalendarEvent.pubkey] == nil {
@@ -266,7 +266,7 @@ extension AppState: RelayDelegate {
     }
 
     private func didReceiveCalendarEventRSVP(_ rsvp: CalendarEventRSVP, forRelay relay: Relay) {
-        guard let rsvpEventCoordinates = try? rsvp.shareableEventCoordinates() else {
+        guard let rsvpEventCoordinates = rsvp.replaceableEventCoordinates()?.tag.value else {
             return
         }
 
@@ -277,7 +277,7 @@ extension AppState: RelayDelegate {
 
                 if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
                     if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventCoordinates] {
-                        calendarEventsToRsvps[calendarEventCoordinates] = rsvpsForCalendarEvent.filter { (try? $0.shareableEventCoordinates()) != rsvpEventCoordinates } + [rsvp]
+                        calendarEventsToRsvps[calendarEventCoordinates] = rsvpsForCalendarEvent.filter { $0.replaceableEventCoordinates()?.tag.value != rsvpEventCoordinates } + [rsvp]
                     } else {
                         calendarEventsToRsvps[calendarEventCoordinates] = [rsvp]
                     }
@@ -286,11 +286,11 @@ extension AppState: RelayDelegate {
         } else {
             rsvps[rsvpEventCoordinates] = rsvp
 
-            if let calendarEventIdentifier = rsvp.calendarEventCoordinates?.identifier {
-                if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventIdentifier] {
-                    calendarEventsToRsvps[calendarEventIdentifier] = rsvpsForCalendarEvent.filter { (try? $0.shareableEventCoordinates()) != rsvpEventCoordinates } + [rsvp]
+            if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
+                if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventCoordinates] {
+                    calendarEventsToRsvps[calendarEventCoordinates] = rsvpsForCalendarEvent.filter { $0.replaceableEventCoordinates()?.tag.value != rsvpEventCoordinates } + [rsvp]
                 } else {
-                    calendarEventsToRsvps[calendarEventIdentifier] = [rsvp]
+                    calendarEventsToRsvps[calendarEventCoordinates] = [rsvp]
                 }
             }
         }
