@@ -50,7 +50,7 @@ struct LoginView: View, RelayURLValidating {
         }
 
         appState.relayPool.add(relay: relay)
-        appState.refresh()
+        appState.refresh(relay)
         appState.loginMode = .guest
     }
 

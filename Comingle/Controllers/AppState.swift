@@ -141,6 +141,10 @@ extension AppState: EventVerifying, RelayDelegate {
     }
 
     func refresh(_ relay: Relay? = nil) {
+        guard relay == nil || relay?.state == .connected else {
+            return
+        }
+
         if let publicKey {
             guard let bootstrapFilter = Filter(
                 authors: [publicKey.hex],
