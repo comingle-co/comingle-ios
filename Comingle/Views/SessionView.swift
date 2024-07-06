@@ -312,109 +312,109 @@ struct SessionView: View {
                     }
                 }
             }
-            .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
-                if selectedGeohash, let geohash {
-                    let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
-                    let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
-                    Button(action: {
-                        let encodedTitle = eventTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? eventTitle
-                        if let url = URL(string: "https://maps.apple.com/?ll=\(encodedLocation)&q=\(encodedTitle)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInAppleMaps)
-                    })
-                    Button(action: {
-                        if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInGoogleMaps)
-                    })
-                    Button(action: {
-                        UIPasteboard.general.string = coordinatesString
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.copyLocation)
-                    })
-                } else if !selectedLocation.isEmpty {
-                    let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
-                    Button(action: {
-                        if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInAppleMaps)
-                    })
-                    Button(action: {
-                        if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInGoogleMaps)
-                    })
-                    Button(action: {
-                        UIPasteboard.general.string = selectedLocation
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.copyLocation)
-                    })
-                }
-            }
-            .toolbar {
-                ToolbarItem {
-                    Menu {
-                        let shareableEventCoordinates = try? session.shareableEventCoordinates()
-                        Button(action: {
-                            var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(contentText)\n\n"
-
-                            let metadataEvent = appState.metadataEvents[session.pubkey]
-                            if let publicKey = PublicKey(hex: session.pubkey) {
-                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? publicKey.npub))
-                            } else {
-                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? session.pubkey))
-                            }
-
-                            if let shareableEventCoordinates {
-                                // TODO Change to a Comingle URL once the website is set up.
-                                stringToCopy += "\n\nhttps://njump.me/\(shareableEventCoordinates)"
-                            }
-
-                            UIPasteboard.general.string = stringToCopy
-                        }, label: {
-                            Text(.localizable.copyEventDetails)
-                        })
-                        if let shareableEventCoordinates {
-                            Button(action: {
-                                UIPasteboard.general.string = shareableEventCoordinates
-                            }, label: {
-                                Text(.localizable.copyEventID)
-                            })
-                        }
-                    } label: {
-                        Label(.localizable.menu, systemImage: "ellipsis.circle")
+        }
+        .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
+            if selectedGeohash, let geohash {
+                let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
+                let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
+                Button(action: {
+                    let encodedTitle = eventTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? eventTitle
+                    if let url = URL(string: "https://maps.apple.com/?ll=\(encodedLocation)&q=\(encodedTitle)") {
+                        UIApplication.shared.open(url)
                     }
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.openInAppleMaps)
+                })
+                Button(action: {
+                    if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
+                        UIApplication.shared.open(url)
+                    }
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.openInGoogleMaps)
+                })
+                Button(action: {
+                    UIPasteboard.general.string = coordinatesString
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.copyLocation)
+                })
+            } else if !selectedLocation.isEmpty {
+                let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
+                Button(action: {
+                    if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
+                        UIApplication.shared.open(url)
+                    }
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.openInAppleMaps)
+                })
+                Button(action: {
+                    if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
+                        UIApplication.shared.open(url)
+                    }
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.openInGoogleMaps)
+                })
+                Button(action: {
+                    UIPasteboard.general.string = selectedLocation
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.copyLocation)
+                })
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                Menu {
+                    let shareableEventCoordinates = try? session.shareableEventCoordinates()
+                    Button(action: {
+                        var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(contentText)\n\n"
+
+                        let metadataEvent = appState.metadataEvents[session.pubkey]
+                        if let publicKey = PublicKey(hex: session.pubkey) {
+                            stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? publicKey.npub))
+                        } else {
+                            stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? session.pubkey))
+                        }
+
+                        if let shareableEventCoordinates {
+                            // TODO Change to a Comingle URL once the website is set up.
+                            stringToCopy += "\n\nhttps://njump.me/\(shareableEventCoordinates)"
+                        }
+
+                        UIPasteboard.general.string = stringToCopy
+                    }, label: {
+                        Text(.localizable.copyEventDetails)
+                    })
+                    if let shareableEventCoordinates {
+                        Button(action: {
+                            UIPasteboard.general.string = shareableEventCoordinates
+                        }, label: {
+                            Text(.localizable.copyEventID)
+                        })
+                    }
+                } label: {
+                    Label(.localizable.menu, systemImage: "ellipsis.circle")
                 }
             }
-            .task {
-                var pubkeysToPullMetadata = session.participants.compactMap { $0.pubkey?.hex }
+        }
+        .task {
+            var pubkeysToPullMetadata = session.participants.compactMap { $0.pubkey?.hex }
 
-                if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
-                    pubkeysToPullMetadata += rsvps.map { $0.pubkey }
-                }
-
-                appState.pullMissingMetadata(pubkeysToPullMetadata)
+            if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                pubkeysToPullMetadata += rsvps.map { $0.pubkey }
             }
+
+            appState.pullMissingMetadata(pubkeysToPullMetadata)
         }
     }
 }
