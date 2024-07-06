@@ -253,6 +253,8 @@ struct SessionView: View {
                                             .font(.footnote)
                                     }
                                 }
+                            } else {
+                                Text(publicKey.npub)
                             }
                         } else {
                             Text("No npub")
@@ -403,6 +405,15 @@ struct SessionView: View {
                         Label(.localizable.menu, systemImage: "ellipsis.circle")
                     }
                 }
+            }
+            .task {
+                var pubkeysToPullMetadata = session.participants.compactMap { $0.pubkey?.hex }
+
+                if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                    pubkeysToPullMetadata += rsvps.map { $0.pubkey }
+                }
+
+                appState.pullMissingMetadata(pubkeysToPullMetadata)
             }
         }
     }

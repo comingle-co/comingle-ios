@@ -140,6 +140,21 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
+    func pullMissingMetadata(_ pubkeys: [String]) {
+        let pubkeysToFetchMetadata = Set(pubkeys).filter { self.metadataEvents[$0] == nil }
+        if !pubkeysToFetchMetadata.isEmpty {
+            guard let metadataFilter = Filter(
+                authors: Array(pubkeysToFetchMetadata),
+                kinds: [EventKind.metadata.rawValue]
+            ) else {
+                print("Unable to create metadata filter for \(pubkeysToFetchMetadata).")
+                return
+            }
+
+            _ = relayPool.subscribe(with: metadataFilter)
+        }
+    }
+
     func refresh(_ relay: Relay? = nil) {
         guard relay == nil || relay?.state == .connected else {
             return
@@ -187,21 +202,7 @@ extension AppState: EventVerifying, RelayDelegate {
         if self.followList == nil || self.followList!.createdAt < followListEvent.createdAt {
             self.followList = followListEvent
 
-            let newPubkeys = Set(followListEvent.followedPubkeys).subtracting(Set(self.metadataEvents.keys))
-
-            guard !newPubkeys.isEmpty else {
-                return
-            }
-
-            guard let metadataFilter = Filter(
-                authors: Array(newPubkeys),
-                kinds: [EventKind.metadata.rawValue]
-            ) else {
-                print("Unable to create a metadata filter.")
-                return
-            }
-
-            _ = relayPool.subscribe(with: metadataFilter)
+            pullMissingMetadata(followListEvent.followedPubkeys)
         }
     }
 
@@ -228,17 +229,7 @@ extension AppState: EventVerifying, RelayDelegate {
             calendarListEvents[calendarListEventCoordinates] = calendarListEvent
         }
 
-        if self.metadataEvents[calendarListEvent.pubkey] == nil {
-            guard let metadataFilter = Filter(
-                authors: [calendarListEvent.pubkey],
-                kinds: [EventKind.metadata.rawValue]
-            ) else {
-                print("Unable to create metadata filter authored by calendar list event authors.")
-                return
-            }
-
-            _ = relayPool.subscribe(with: metadataFilter)
-        }
+        pullMissingMetadata([calendarListEvent.pubkey])
     }
 
     private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent, forRelay relay: Relay) {
@@ -257,17 +248,7 @@ extension AppState: EventVerifying, RelayDelegate {
             timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
         }
 
-        if self.metadataEvents[timeBasedCalendarEvent.pubkey] == nil {
-            guard let metadataFilter = Filter(
-                authors: [timeBasedCalendarEvent.pubkey],
-                kinds: [EventKind.metadata.rawValue]
-            ) else {
-                print("Unable to create metadata filter authored by calendar event authors.")
-                return
-            }
-
-            _ = relayPool.subscribe(with: metadataFilter)
-        }
+        pullMissingMetadata([timeBasedCalendarEvent.pubkey])
 
         guard let replaceableEventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates() else {
             print("Unable to get replaceable event coordinates for time-based calendar event.")
@@ -316,17 +297,9 @@ extension AppState: EventVerifying, RelayDelegate {
             }
         }
 
-        if self.metadataEvents[rsvp.pubkey] == nil {
-            guard let metadataFilter = Filter(
-                authors: [rsvp.pubkey],
-                kinds: [EventKind.metadata.rawValue]
-            ) else {
-                print("Unable to create metadata filter authored by calendar event RSVP authors.")
-                return
-            }
-
-            _ = relayPool.subscribe(with: metadataFilter)
-        }
+        // Optimization: do not pull metadata of people who RSVP until we actually need to look at it. Lazy load.
+        // Perhaps reconsider if UX suffers because of this decision..
+        // pullMissingMetadata([rsvp.pubkey])
     }
 
     func relay(_ relay: Relay, didReceive event: RelayEvent) {
