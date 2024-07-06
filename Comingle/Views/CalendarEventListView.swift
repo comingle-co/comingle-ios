@@ -109,6 +109,9 @@ struct CalendarEventListView: View {
                     .padding(.vertical, 10)
                 }
             }
+            .refreshable {
+                appState.refresh()
+            }
         }
     }
 
