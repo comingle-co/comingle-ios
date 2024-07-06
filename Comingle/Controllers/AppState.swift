@@ -220,7 +220,6 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        // TODO(tyiu) validate signatures of events
         if let existingCalendarList = self.calendarListEvents[calendarListEventCoordinates] {
             if existingCalendarList.createdAt < calendarListEvent.createdAt {
                 calendarListEvents[calendarListEventCoordinates] = calendarListEvent
@@ -250,7 +249,6 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        // TODO(tyiu) validate signatures of events
         if let existingEvent = self.timeBasedCalendarEvents[eventCoordinates] {
             if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
                 timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
@@ -294,7 +292,6 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        // TODO(tyiu) validate signatures of events
         if let existingRsvp = self.rsvps[rsvpEventCoordinates] {
             if existingRsvp.createdAt < rsvp.createdAt {
                 rsvps[rsvpEventCoordinates] = rsvp
