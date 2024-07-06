@@ -77,12 +77,12 @@ struct SettingsView: View {
                     content: {
                         HStack {
                             Text(.localizable.settingsRelayLabel)
-                            Text(appState.relay?.url.absoluteString ?? "")
+                            Text(appState.relayPool.relays.first?.url.absoluteString ?? "")
                         }
                         HStack {
                             Text(.localizable.settingsRelayConnectionStatus)
 
-                            if let relayState = appState.relay?.state {
+                            if let relayState = appState.relayPool.relays.first?.state {
                                 switch relayState {
                                 case .notConnected:
                                     Text(.localizable.settingsRelayNotConnected)
@@ -104,11 +104,7 @@ struct SettingsView: View {
                 )
                 Button(.localizable.signOut) {
                     appState.keypair = nil
-                    appState.relay = nil
-                    if let relay = appState.relay {
-                        relay.disconnect()
-                        appState.relay = nil
-                    }
+                    appState.relayPool.disconnect()
                     appState.loginMode = .none
                 }
             }

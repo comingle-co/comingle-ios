@@ -43,9 +43,8 @@ struct ContentView: View {
             guard let relayURL = URL(string: AppState.defaultRelayURLString), let relay = try? Relay(url: relayURL) else {
                 return
             }
-            relay.delegate = appState
-            appState.relay = relay
-            relay.connect()
+            appState.relayPool.delegate = appState
+            appState.relayPool.add(relay: relay)
         }
     }
 }

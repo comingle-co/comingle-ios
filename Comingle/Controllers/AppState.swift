@@ -13,7 +13,7 @@ class AppState: ObservableObject {
     static let defaultRelayURLString = "wss://relay.primal.net"
 
     @Published var loginMode: LoginMode = .none
-    @Published var relay: Relay?
+    @Published var relayPool: RelayPool = RelayPool(relays: [])
     @Published var activeTab: HomeTabs = .following
 
     @Published var publicKey: PublicKey?
@@ -26,9 +26,8 @@ class AppState: ObservableObject {
     @Published var rsvps: [String: CalendarEventRSVP] = [:]
     @Published var calendarEventsToRsvps: [String: [CalendarEventRSVP]] = [:]
 
-    init(loginMode: LoginMode = .none, relayUrlString: String? = nil, relay: Relay? = nil, publicKey: PublicKey? = nil, keypair: Keypair? = nil) {
+    init(loginMode: LoginMode = .none, publicKey: PublicKey? = nil, keypair: Keypair? = nil) {
         self.loginMode = loginMode
-        self.relay = relay
         self.publicKey = publicKey
         self.keypair = keypair
     }
@@ -137,34 +136,46 @@ extension AppState: EventVerifying, RelayDelegate {
 
     func relayStateDidChange(_ relay: Relay, state: Relay.State) {
         if state == .connected {
-            if let publicKey {
-                guard let bootstrapFilter = Filter(
-                    authors: [publicKey.hex],
-                    kinds: [EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.dateBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue]
-                ) else {
-                    print("Unable to create the boostrap filter.")
-                    return
-                }
+            refresh(relay)
+        }
+    }
 
+    func refresh(_ relay: Relay? = nil) {
+        if let publicKey {
+            guard let bootstrapFilter = Filter(
+                authors: [publicKey.hex],
+                kinds: [EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.dateBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue]
+            ) else {
+                print("Unable to create the boostrap filter.")
+                return
+            }
+
+            if let relay {
                 do {
                     try relay.subscribe(with: bootstrapFilter)
                 } catch {
                     print("Could not subscribe to relay with the boostrap filter.")
                 }
+            } else {
+                _ = relayPool.subscribe(with: bootstrapFilter)
             }
+        }
 
-            guard let calendarFilter = Filter(
-                kinds: [EventKind.calendar.rawValue, EventKind.timeBasedCalendarEvent.rawValue]
-            ) else {
-                print("Unable to create the calendar filter.")
-                return
-            }
+        guard let calendarFilter = Filter(
+            kinds: [EventKind.calendar.rawValue, EventKind.timeBasedCalendarEvent.rawValue]
+        ) else {
+            print("Unable to create the calendar filter.")
+            return
+        }
 
+        if let relay {
             do {
                 try relay.subscribe(with: calendarFilter)
             } catch {
                 print("Could not subscribe to relay with the calendar filter.")
             }
+        } else {
+            _ = relayPool.subscribe(with: calendarFilter)
         }
     }
 
@@ -186,11 +197,7 @@ extension AppState: EventVerifying, RelayDelegate {
                 return
             }
 
-            do {
-                try relay.subscribe(with: metadataFilter)
-            } catch {
-                print("Could not subscribe to relay with metadata filter.")
-            }
+            _ = relayPool.subscribe(with: metadataFilter)
         }
     }
 
@@ -227,11 +234,7 @@ extension AppState: EventVerifying, RelayDelegate {
                 return
             }
 
-            do {
-                try relay.subscribe(with: metadataFilter)
-            } catch {
-                print("Could not subscribe to relay with metadata filter.")
-            }
+            _ = relayPool.subscribe(with: metadataFilter)
         }
     }
 
@@ -261,11 +264,7 @@ extension AppState: EventVerifying, RelayDelegate {
                 return
             }
 
-            do {
-                try relay.subscribe(with: metadataFilter)
-            } catch {
-                print("Could not subscribe to relay with metadata filter.")
-            }
+            _ = relayPool.subscribe(with: metadataFilter)
         }
 
         guard let replaceableEventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates() else {
@@ -283,11 +282,7 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        do {
-            try relay.subscribe(with: rsvpFilter)
-        } catch {
-            print("Could not subscribe to relay with calendar event RSVP filter.")
-        }
+        _ = relayPool.subscribe(with: rsvpFilter)
     }
 
     private func didReceiveCalendarEventRSVP(_ rsvp: CalendarEventRSVP, forRelay relay: Relay) {
@@ -329,11 +324,7 @@ extension AppState: EventVerifying, RelayDelegate {
                 return
             }
 
-            do {
-                try relay.subscribe(with: metadataFilter)
-            } catch {
-                print("Could not subscribe to relay with metadata filter.")
-            }
+            _ = relayPool.subscribe(with: metadataFilter)
         }
     }
 
