@@ -416,6 +416,35 @@ struct SessionView: View {
 
             appState.pullMissingMetadata(pubkeysToPullMetadata)
         }
+        .refreshable {
+            if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value {
+                guard let eventFilter = Filter(
+                    authors: [session.pubkey],
+                    kinds: [EventKind.timeBasedCalendarEvent.rawValue],
+                    tags: ["d": [calendarEventCoordinates]],
+                    since: Int(session.createdAt)
+                ) else {
+                    print("Unable to create time-based calendar event filter.")
+                    return
+                }
+                _ = appState.relayPool.subscribe(with: eventFilter)
+
+                var pubkeysToPullMetadata = [session.pubkey] + session.participants.compactMap { $0.pubkey?.hex }
+                if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                    pubkeysToPullMetadata += rsvps.map { $0.pubkey }
+                }
+                appState.pullMissingMetadata(pubkeysToPullMetadata)
+
+                guard let rsvpFilter = Filter(
+                    kinds: [EventKind.calendarEventRSVP.rawValue],
+                    tags: ["a": [calendarEventCoordinates]])
+                else {
+                    print("Unable to create calendar event RSVP filter.")
+                    return
+                }
+                _ = appState.relayPool.subscribe(with: rsvpFilter)
+            }
+        }
     }
 }
 
