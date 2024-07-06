@@ -56,8 +56,16 @@ struct CalendarEventListView: View {
                                                     .clipShape(.circle)
                                             }
 
-                                            Text(metadataEvent?.resolvedName ?? event.pubkey)
-                                                .font(.subheadline)
+                                            if let resolvedName = metadataEvent?.resolvedName {
+                                                Text(resolvedName)
+                                                    .font(.subheadline)
+                                            } else if let publicKey = PublicKey(hex: event.pubkey) {
+                                                Text(publicKey.npub)
+                                                    .font(.subheadline)
+                                            } else {
+                                                Text(event.pubkey)
+                                                    .font(.subheadline)
+                                            }
                                         }
 
                                         let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
