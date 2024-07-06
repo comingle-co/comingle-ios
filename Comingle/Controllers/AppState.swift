@@ -133,7 +133,7 @@ class AppState: ObservableObject {
     }
 }
 
-extension AppState: RelayDelegate {
+extension AppState: EventVerifying, RelayDelegate {
 
     func relayStateDidChange(_ relay: Relay, state: Relay.State) {
         if state == .connected {
@@ -340,6 +340,11 @@ extension AppState: RelayDelegate {
     func relay(_ relay: Relay, didReceive event: RelayEvent) {
         DispatchQueue.main.async {
             let nostrEvent = event.event
+
+            // Verify the id and signature of the event.
+            // If the verification throws an error, that means they are invalid and we should ignore the event.
+            try? self.verifyEvent(nostrEvent)
+
             switch nostrEvent {
             case let followListEvent as FollowListEvent:
                 self.didReceiveFollowListEvent(followListEvent, forRelay: relay)
