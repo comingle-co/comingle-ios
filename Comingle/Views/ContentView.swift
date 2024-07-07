@@ -31,13 +31,14 @@ struct ContentView: View {
                 Label(.localizable.explore, systemImage: "magnifyingglass")
             }
             .tag(HomeTabs.explore)
-        }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                NavigationLink(destination: SettingsView()) {
-                    Image(systemName: "gear")
-                }
+
+            NavigationStack {
+                SettingsView()
             }
+            .tabItem {
+                Label(.localizable.settings, systemImage: "gear")
+            }
+            .tag(HomeTabs.settings)
         }
         .task {
             guard let relayURL = URL(string: AppState.defaultRelayURLString), let relay = try? Relay(url: relayURL) else {
