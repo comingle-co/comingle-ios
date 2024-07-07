@@ -5,6 +5,7 @@
 //  Created by Terry Yiu on 5/9/23.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -16,5 +17,8 @@ struct ComingleApp: App {
             ContentView()
                 .environmentObject(appState)
         }
+        .modelContainer(
+            for: [AppSettings.self]
+        )
     }
 }

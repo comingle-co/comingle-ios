@@ -10,7 +10,7 @@ import NostrSDK
 import Combine
 
 class AppState: ObservableObject {
-    static let defaultRelayURLString = "wss://relay.primal.net"
+    static let defaultRelayURLString = "wss://relay.damus.io"
 
     @Published var loginMode: LoginMode = .none
     @Published var relayPool: RelayPool = RelayPool(relays: [])
@@ -340,4 +340,5 @@ extension AppState: EventVerifying, RelayDelegate {
 enum HomeTabs {
     case following
     case explore
+    case settings
 }

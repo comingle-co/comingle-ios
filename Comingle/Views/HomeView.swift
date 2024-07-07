@@ -11,12 +11,14 @@ import SwiftUI
 
 struct HomeView: View {
 
+    @Binding var appSettings: AppSettings
+
     @EnvironmentObject private var appState: AppState
 
     var body: some View {
         switch appState.loginMode {
         case .none:
-            LoginView()
+            LoginView(appSettings: $appSettings)
                 .environmentObject(appState)
         default:
             CalendarEventListView(showAllEvents: false)
@@ -28,7 +30,9 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
 
+    @State static var appSettings = AppSettings()
+
     static var previews: some View {
-        HomeView()
+        HomeView(appSettings: $appSettings)
     }
 }

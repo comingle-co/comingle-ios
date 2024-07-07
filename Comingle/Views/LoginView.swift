@@ -10,6 +10,7 @@ import Combine
 import NostrSDK
 
 struct LoginView: View, RelayURLValidating {
+    @Binding var appSettings: AppSettings
     @EnvironmentObject var appState: AppState
     @Environment(\.colorScheme) var colorScheme
 
@@ -40,6 +41,15 @@ struct LoginView: View, RelayURLValidating {
     private func login() {
         guard let publicKey else {
             return
+        }
+
+        if let existingProfile = appSettings.profiles.first(where: { $0.publicKeyHex == publicKey.hex }) {
+            print("Found existing profile settings for \(publicKey.npub)")
+        } else {
+            print("Creating new profile settings for \(publicKey.npub)")
+            let profile = Profile(publicKeyHex: publicKey.hex)
+            appSettings.profiles.append(profile)
+            appSettings.activeProfile = profile
         }
 
         appState.keypair = keypair
@@ -140,7 +150,9 @@ struct LoginView: View, RelayURLValidating {
 
 struct LoginView_Previews: PreviewProvider {
 
+    @State static var appSettings: AppSettings = AppSettings()
+
     static var previews: some View {
-        LoginView()
+        LoginView(appSettings: $appSettings)
     }
 }

@@ -5,11 +5,14 @@
 //  Created by Terry Yiu on 6/18/23.
 //
 
+import SwiftData
 import SwiftUI
 import NostrSDK
 import Combine
 
 struct SettingsView: View {
+
+    @Binding var appSettings: AppSettings
 
     @EnvironmentObject var appState: AppState
     @State var privateKey: String = ""
@@ -123,8 +126,10 @@ struct SettingsView_Previews: PreviewProvider {
         keypair: Keypair()
     )
 
+    @State static var appSettings = AppSettings()
+
     static var previews: some View {
-        SettingsView()
+        SettingsView(appSettings: $appSettings)
             .environmentObject(appState)
     }
 }

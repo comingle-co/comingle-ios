@@ -33,6 +33,11 @@
 		3A453E282A0C614900897303 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E212A0C614900897303 /* PersonView.swift */; };
 		3A453E292A0C614900897303 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E222A0C614900897303 /* DayView.swift */; };
 		3A453E2A2A0C614900897303 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E232A0C614900897303 /* CalendarView.swift */; };
+		3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FF32C3A2A0800AD4B09 /* AppearanceSettings.swift */; };
+		3A464FF62C3A2A5400AD4B09 /* TimeZonePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FF52C3A2A5400AD4B09 /* TimeZonePreference.swift */; };
+		3A464FF82C3A2C2000AD4B09 /* ProfileSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */; };
+		3A464FFC2C3A312200AD4B09 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FFB2C3A312200AD4B09 /* Profile.swift */; };
+		3A464FFE2C3A34BE00AD4B09 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */; };
 		3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB3C2C34E567007AE9A4 /* Kingfisher */; };
 		3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB452C34FD98007AE9A4 /* GeohashKit */; };
 		3A4FCB502C36333A007AE9A4 /* CalendarEventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB4F2C36333A007AE9A4 /* CalendarEventListView.swift */; };
@@ -86,6 +91,11 @@
 		3A453E212A0C614900897303 /* PersonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
 		3A453E222A0C614900897303 /* DayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		3A453E232A0C614900897303 /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		3A464FF32C3A2A0800AD4B09 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
+		3A464FF52C3A2A5400AD4B09 /* TimeZonePreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZonePreference.swift; sourceTree = "<group>"; };
+		3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettings.swift; sourceTree = "<group>"; };
+		3A464FFB2C3A312200AD4B09 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		3A4FCB4F2C36333A007AE9A4 /* CalendarEventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventListView.swift; sourceTree = "<group>"; };
 		3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBasedCalendarEventSortComparator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -205,9 +215,11 @@
 		3A453E152A0C611300897303 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3A464FF22C3A296400AD4B09 /* Settings */,
 				3A453E182A0C613600897303 /* Conference.swift */,
 				3A2FF97B2A3FA6E9009E1067 /* LoginMode.swift */,
 				3A453E172A0C613500897303 /* Person.swift */,
+				3A464FFB2C3A312200AD4B09 /* Profile.swift */,
 				3A453E192A0C613600897303 /* Session.swift */,
 				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
 				3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */,
@@ -219,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				3A34AAA82B491D9700C5F910 /* Extensions */,
+				3A464FED2C3A273000AD4B09 /* Settings */,
 				3A453E1F2A0C614800897303 /* CalendarsView.swift */,
 				3A453E232A0C614900897303 /* CalendarView.swift */,
 				3A453DDD2A0B348100897303 /* ContentView.swift */,
@@ -228,7 +241,6 @@
 				3A453E212A0C614900897303 /* PersonView.swift */,
 				3A453E1E2A0C614800897303 /* ScheduleView.swift */,
 				3A453E1D2A0C614800897303 /* SessionView.swift */,
-				3A2FF9812A3FD68B009E1067 /* SettingsView.swift */,
 				3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */,
 				3A4FCB4F2C36333A007AE9A4 /* CalendarEventListView.swift */,
 			);
@@ -241,6 +253,25 @@
 				3A2FF9832A40025B009E1067 /* AppState.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		3A464FED2C3A273000AD4B09 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				3A2FF9812A3FD68B009E1067 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		3A464FF22C3A296400AD4B09 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				3A464FF32C3A2A0800AD4B09 /* AppearanceSettings.swift */,
+				3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */,
+				3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */,
+				3A464FF52C3A2A5400AD4B09 /* TimeZonePreference.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -413,22 +444,27 @@
 				3A453E292A0C614900897303 /* DayView.swift in Sources */,
 				3A453E1C2A0C613600897303 /* Session.swift in Sources */,
 				3A453E242A0C614900897303 /* SessionView.swift in Sources */,
+				3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */,
 				3A453E1A2A0C613600897303 /* Person.swift in Sources */,
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
 				3A453E252A0C614900897303 /* ScheduleView.swift in Sources */,
 				3A34AAAA2B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift in Sources */,
+				3A464FF82C3A2C2000AD4B09 /* ProfileSettings.swift in Sources */,
 				3A2FF97C2A3FA6E9009E1067 /* LoginMode.swift in Sources */,
 				3A453E2A2A0C614900897303 /* CalendarView.swift in Sources */,
 				3A453E282A0C614900897303 /* PersonView.swift in Sources */,
 				3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */,
+				3A464FF62C3A2A5400AD4B09 /* TimeZonePreference.swift in Sources */,
 				3A4FCB542C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift in Sources */,
 				3A453DDE2A0B348100897303 /* ContentView.swift in Sources */,
 				3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */,
 				3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */,
+				3A464FFE2C3A34BE00AD4B09 /* AppSettings.swift in Sources */,
 				3A453E262A0C614900897303 /* CalendarsView.swift in Sources */,
 				3A453E1B2A0C613600897303 /* Conference.swift in Sources */,
 				3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */,
 				3A4FCB502C36333A007AE9A4 /* CalendarEventListView.swift in Sources */,
+				3A464FFC2C3A312200AD4B09 /* Profile.swift in Sources */,
 				3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -610,7 +646,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
@@ -654,7 +690,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
