@@ -44,29 +44,7 @@ struct CalendarEventListView: View {
 
                                         Divider()
 
-                                        HStack {
-                                            let metadataEvent = appState.metadataEvents[event.pubkey]
-
-                                            if let pictureURL = metadataEvent?.userMetadata?.pictureURL {
-                                                KFImage.url(pictureURL)
-                                                    .resizable()
-                                                    .placeholder { ProgressView() }
-                                                    .scaledToFit()
-                                                    .frame(width: 40)
-                                                    .clipShape(.circle)
-                                            }
-
-                                            if let resolvedName = metadataEvent?.resolvedName {
-                                                Text(resolvedName)
-                                                    .font(.subheadline)
-                                            } else if let publicKey = PublicKey(hex: event.pubkey) {
-                                                Text(publicKey.npub)
-                                                    .font(.subheadline)
-                                            } else {
-                                                Text(event.pubkey)
-                                                    .font(.subheadline)
-                                            }
-                                        }
+                                        ProfileSmallView(publicKeyHex: event.pubkey, appState: appState)
 
                                         let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
 

@@ -8,28 +8,37 @@
 import Foundation
 import NostrSDK
 import Combine
+import SwiftData
 
 class AppState: ObservableObject {
-    static let defaultRelayURLString = "wss://relay.damus.io"
+    static let defaultRelayURLString = "wss://relay.primal.net"
 
     @Published var loginMode: LoginMode = .none
     @Published var relayPool: RelayPool = RelayPool(relays: [])
     @Published var activeTab: HomeTabs = .following
 
-    @Published var publicKey: PublicKey?
     @Published var keypair: Keypair?
 
-    @Published var followList: FollowListEvent?
+    @Published var followListEvents: [String: FollowListEvent] = [:]
     @Published var metadataEvents: [String: MetadataEvent] = [:]
     @Published var calendarListEvents: [String: CalendarListEvent] = [:]
     @Published var timeBasedCalendarEvents: [String: TimeBasedCalendarEvent] = [:]
     @Published var rsvps: [String: CalendarEventRSVP] = [:]
     @Published var calendarEventsToRsvps: [String: [CalendarEventRSVP]] = [:]
 
-    init(loginMode: LoginMode = .none, publicKey: PublicKey? = nil, keypair: Keypair? = nil) {
+    @Published var appSettings: AppSettings?
+
+    init(loginMode: LoginMode = .none, keypair: Keypair? = nil) {
         self.loginMode = loginMode
-        self.publicKey = publicKey
         self.keypair = keypair
+    }
+
+    var publicKey: PublicKey? {
+        if let appSettings, let publicKeyHex = appSettings.activeProfile?.publicKeyHex {
+            PublicKey(hex: publicKeyHex)
+        } else {
+            nil
+        }
     }
 
     private var allEvents: [TimeBasedCalendarEvent] {
@@ -67,7 +76,9 @@ class AppState: ObservableObject {
     }
 
     private var followedRSVPCalendarEventCoordinates: Set<String> {
-        guard let followedPubkeys = followList?.followedPubkeys, !followedPubkeys.isEmpty else {
+        guard let publicKeyHex = publicKey?.hex,
+              let followedPubkeys = followListEvents[publicKeyHex]?.followedPubkeys,
+              !followedPubkeys.isEmpty else {
             return []
         }
 
@@ -81,7 +92,9 @@ class AppState: ObservableObject {
 
     /// Events that were created or RSVP'd by follow list.
     private var followedEvents: [TimeBasedCalendarEvent] {
-        guard let followedPubkeys = followList?.followedPubkeys, !followedPubkeys.isEmpty else {
+        guard let publicKeyHex = publicKey?.hex,
+              let followedPubkeys = followListEvents[publicKeyHex]?.followedPubkeys,
+              !followedPubkeys.isEmpty else {
             return []
         }
 
@@ -136,7 +149,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
     func relayStateDidChange(_ relay: Relay, state: Relay.State) {
         if state == .connected {
-            refresh(relay)
+            refresh(relay: relay)
         }
     }
 
@@ -155,15 +168,24 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    func refresh(_ relay: Relay? = nil) {
+    func refresh(publicKeyHex: String? = nil, relay: Relay? = nil) {
         guard relay == nil || relay?.state == .connected else {
             return
         }
 
-        if let publicKey {
+        let authors: [String]
+        if let publicKeyHex {
+            authors = [publicKeyHex]
+        } else if let publicKeys = appSettings?.profiles.compactMap({ $0.publicKeyHex }) {
+            authors = publicKeys
+        } else {
+            authors = []
+        }
+
+        if !authors.isEmpty {
             guard let bootstrapFilter = Filter(
-                authors: [publicKey.hex],
-                kinds: [EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.dateBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue]
+                authors: authors,
+                kinds: [EventKind.metadata.rawValue, EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.dateBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue]
             ) else {
                 print("Unable to create the boostrap filter.")
                 return
@@ -199,10 +221,12 @@ extension AppState: EventVerifying, RelayDelegate {
     }
 
     private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, forRelay relay: Relay) {
-        if self.followList == nil || self.followList!.createdAt < followListEvent.createdAt {
-            self.followList = followListEvent
-
-            pullMissingMetadata(followListEvent.followedPubkeys)
+        if let existingFollowList = self.followListEvents[followListEvent.pubkey] {
+            if existingFollowList.createdAt < followListEvent.createdAt {
+                self.followListEvents[followListEvent.pubkey] = followListEvent
+            }
+        } else {
+            self.followListEvents[followListEvent.pubkey] = followListEvent
         }
     }
 
@@ -340,5 +364,6 @@ extension AppState: EventVerifying, RelayDelegate {
 enum HomeTabs {
     case following
     case explore
+    case profile
     case settings
 }

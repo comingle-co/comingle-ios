@@ -12,8 +12,6 @@ import Combine
 
 struct SettingsView: View {
 
-    @Binding var appSettings: AppSettings
-
     @EnvironmentObject var appState: AppState
     @State var privateKey: String = ""
 
@@ -126,10 +124,8 @@ struct SettingsView_Previews: PreviewProvider {
         keypair: Keypair()
     )
 
-    @State static var appSettings = AppSettings()
-
     static var previews: some View {
-        SettingsView(appSettings: $appSettings)
+        SettingsView()
             .environmentObject(appState)
     }
 }

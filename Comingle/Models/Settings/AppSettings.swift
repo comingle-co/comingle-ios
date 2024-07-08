@@ -15,6 +15,13 @@ final class AppSettings {
 
     var profiles: [Profile] = []
 
-    init() {
+    init(activeProfile: Profile = Profile(), profiles: [Profile] = []) {
+        self.activeProfile = activeProfile
+
+        if profiles.contains(activeProfile) {
+            self.profiles = profiles
+        } else {
+            self.profiles = profiles + [activeProfile]
+        }
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Terry Yiu on 5/9/23.
 //
 
+import Kingfisher
 import NostrSDK
 import SwiftData
 import SwiftUI
@@ -16,21 +17,10 @@ struct ContentView: View {
 
     @EnvironmentObject var appState: AppState
 
-    var nonOptionalAppSettings: Binding<AppSettings> {
-        Binding(
-            get: {
-                self.appSettings ?? AppSettings()
-            },
-            set: {
-                self.appSettings = $0
-            }
-        )
-    }
-
     var body: some View {
         TabView(selection: $appState.activeTab) {
             NavigationStack {
-                HomeView(appSettings: nonOptionalAppSettings)
+                HomeView()
                     .environmentObject(appState)
             }
             .tabItem {
@@ -48,7 +38,15 @@ struct ContentView: View {
             .tag(HomeTabs.explore)
 
             NavigationStack {
-                SettingsView(appSettings: nonOptionalAppSettings)
+                MyProfileView()
+                    .navigationTitle(.localizable.profile)
+            }
+            .tabItem {
+                Label(.localizable.profile, systemImage: "person.crop.circle")
+            }
+
+            NavigationStack {
+                SettingsView()
             }
             .tabItem {
                 Label(.localizable.settings, systemImage: "gear")
@@ -57,12 +55,6 @@ struct ContentView: View {
         }
         .task {
             loadAppSettings()
-
-            guard let relayURL = URL(string: AppState.defaultRelayURLString), let relay = try? Relay(url: relayURL) else {
-                return
-            }
-            appState.relayPool.delegate = appState
-            appState.relayPool.add(relay: relay)
         }
     }
 
@@ -76,6 +68,15 @@ struct ContentView: View {
             modelContext.insert(newAppSettings)
             appSettings = newAppSettings
         }
+
+        appState.appSettings = appSettings
+
+        guard let relayURL = URL(string: AppState.defaultRelayURLString), let relay = try? Relay(url: relayURL) else {
+            return
+        }
+        appState.relayPool.delegate = appState
+        appState.relayPool.add(relay: relay)
+        appState.refresh()
     }
 }
 

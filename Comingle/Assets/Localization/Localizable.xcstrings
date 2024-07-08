@@ -169,6 +169,18 @@
         }
       }
     },
+    "guest" : {
+      "comment" : "Name of Guest account that is not logged in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guest"
+          }
+        }
+      }
+    },
     "home" : {
       "comment" : "Tab label for the home view.",
       "extractionState" : "manual",
@@ -453,6 +465,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Primary Nostr Relay (Required)"
+          }
+        }
+      }
+    },
+    "profile" : {
+      "comment" : "Label for Profile view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile"
           }
         }
       }
