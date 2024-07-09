@@ -52,16 +52,21 @@ struct ContentView: View {
                 }
             }
             .toolbar {
-                NavigationLink(
-                    destination: MyProfileView(),
-                    label: {
-                        if let publicKey = appState.publicKey {
+                if let publicKey = appState.publicKey {
+                    NavigationLink(
+                        destination: {
+                            MyProfileView()
+                        },
+                        label: {
                             ProfilePictureView(publicKeyHex: publicKey.hex)
-                        } else {
-                            GuestProfilePictureView()
                         }
-                    }
-                )
+                    )
+                } else {
+                    GuestProfilePictureView()
+                        .onTapGesture {
+                            appState.activeTab = .settings
+                        }
+                }
             }
         }
     }
