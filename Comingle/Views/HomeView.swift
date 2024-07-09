@@ -16,11 +16,9 @@ struct HomeView: View {
     var body: some View {
         if appState.appSettings?.activeProfile?.publicKeyHex == nil {
             LoginView()
-                .environmentObject(appState)
         } else {
             CalendarEventListView(calendarEventListType: .followed)
                 .navigationTitle(.localizable.yourNetwork)
-                .environmentObject(appState)
         }
     }
 }

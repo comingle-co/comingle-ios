@@ -23,7 +23,6 @@ struct ContentView: View {
                     if appState.publicKey != nil {
                         NavigationStack {
                             HomeView()
-                                .environmentObject(appState)
                         }
                         .tabItem {
                             Label(.localizable.home, systemImage: "house")
@@ -34,7 +33,6 @@ struct ContentView: View {
                     NavigationStack {
                         CalendarEventListView(calendarEventListType: .all)
                             .navigationTitle(.localizable.explore)
-                            .environmentObject(appState)
                     }
                     .tabItem {
                         Label(.localizable.explore, systemImage: "magnifyingglass")
@@ -43,7 +41,6 @@ struct ContentView: View {
 
                     NavigationStack {
                         SettingsView()
-                            .environmentObject(appState)
                     }
                     .tabItem {
                         Label(.localizable.settings, systemImage: "gear")
@@ -56,8 +53,7 @@ struct ContentView: View {
             }
             .toolbar {
                 NavigationLink(
-                    destination: MyProfileView()
-                        .environmentObject(appState),
+                    destination: MyProfileView(),
                     label: {
                         if let publicKey = appState.publicKey {
                             ProfilePictureView(publicKeyHex: publicKey.hex)

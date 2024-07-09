@@ -160,7 +160,6 @@ struct SessionView: View {
                 Divider()
 
                 ProfileSmallView(publicKeyHex: session.pubkey)
-                    .environmentObject(appState)
 
                 Divider()
 
@@ -212,11 +211,9 @@ struct SessionView: View {
                     Divider()
                     HStack {
                         ProfilePictureView(publicKeyHex: participant.pubkey?.hex)
-                            .environmentObject(appState)
 
                         VStack {
                             ProfileNameView(publicKeyHex: participant.pubkey?.hex)
-                                .environmentObject(appState)
 
                             if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
                                 Text(role)
@@ -236,7 +233,6 @@ struct SessionView: View {
                     ForEach(rsvps, id: \.self) { rsvp in
                         HStack {
                             ProfilePictureView(publicKeyHex: rsvp.pubkey)
-                                .environmentObject(appState)
                                 .overlay(
                                     rsvpStatusView(rsvp.status)
                                         .offset(x: 4, y: 4),

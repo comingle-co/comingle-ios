@@ -24,7 +24,6 @@ struct SettingsView: View {
                         if let appSettings = appState.appSettings {
                             ForEach(appSettings.profiles, id: \.self) { profile in
                                 ProfileSmallView(publicKeyHex: profile.publicKeyHex)
-                                    .environmentObject(appState)
                                     .tag(profile.publicKeyHex)
                                     .onTapGesture {
                                         appSettings.activeProfile = profile
