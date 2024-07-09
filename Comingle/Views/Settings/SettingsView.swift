@@ -55,6 +55,13 @@ struct SettingsView: View {
                                             }
                                         }
                                     }
+                                    NavigationLink(destination: LoginView()) {
+                                        Image(systemName: "plus.circle")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 40)
+                                        Text(.localizable.addProfile)
+                                    }
                                 }
                             },
                             label: {
@@ -69,7 +76,9 @@ struct SettingsView: View {
 
                 Section(
                     content: {
-
+                        Label(.localizable.settingsKeys, systemImage: "key")
+                        Label(.localizable.settingsRelays, systemImage: "server.rack")
+                        Label(.localizable.settingsAppearance, systemImage: "eye")
                     },
                     header: {
                         Text(.localizable.settingsForProfile(activeProfileName))

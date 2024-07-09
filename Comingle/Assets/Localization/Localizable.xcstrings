@@ -25,6 +25,18 @@
         }
       }
     },
+    "addProfile" : {
+      "comment" : "Button to add a profile.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Profile"
+          }
+        }
+      }
+    },
     "appDescription" : {
       "comment" : "Description of the app.",
       "extractionState" : "manual",
@@ -236,7 +248,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No events found."
+            "value" : "No events found"
           }
         }
       }
@@ -452,7 +464,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remove Profile"
+            "value" : "Remove"
           }
         }
       }
@@ -482,6 +494,7 @@
       }
     },
     "saved" : {
+      "comment" : "Label for view of saved events.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -528,6 +541,18 @@
         }
       }
     },
+    "settingsAppearance" : {
+      "comment" : "Settings section for appearance of the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        }
+      }
+    },
     "settingsEnterPrivateKey" : {
       "comment" : "Prompt in settings view asking user to enter a private key.",
       "extractionState" : "manual",
@@ -548,6 +573,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Settings for %@"
+          }
+        }
+      }
+    },
+    "settingsKeys" : {
+      "comment" : "Settings section for Nostr key management.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
           }
         }
       }
@@ -656,6 +693,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Not connected"
+          }
+        }
+      }
+    },
+    "settingsRelays" : {
+      "comment" : "Settings section for relay management.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relays"
           }
         }
       }

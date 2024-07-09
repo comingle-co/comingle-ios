@@ -28,7 +28,6 @@ struct ProfilePictureView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 40)
-                .clipShape(.circle)
         }
     }
 
