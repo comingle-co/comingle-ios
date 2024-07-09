@@ -24,47 +24,21 @@ struct MyProfileView: View {
                         let profiles = appSettings.profiles.filter { $0 != appState.appSettings?.activeProfile }
                         VStack(alignment: .leading) {
                             ForEach(profiles, id: \.self) { profile in
-                                HStack {
-                                    if let publicKeyHex = profile.publicKeyHex {
-                                        ProfileSmallView(publicKeyHex: publicKeyHex)
-                                            .environmentObject(appState)
-                                    } else {
-                                        Image(systemName: "person.crop.circle")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 40)
-                                            .clipShape(.circle)
-
-                                        Text(.localizable.guest)
-                                            .font(.subheadline)
+                                ProfileSmallView(publicKeyHex: profile.publicKeyHex)
+                                    .environmentObject(appState)
+                                    .onTapGesture {
+                                        appSettings.activeProfile = profile
+                                        showProfileSwitcher = false
                                     }
-                                }
-                                .onTapGesture {
-                                    appSettings.activeProfile = profile
-                                    showProfileSwitcher = false
-                                }
                             }
                         }
                     }
                 },
                 header: {
-                    HStack {
-                        if let publicKeyHex = appState.appSettings?.activeProfile?.publicKeyHex {
-                            ProfileSmallView(publicKeyHex: publicKeyHex)
-                        } else {
-                            Image(systemName: "person.crop.circle")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 40)
-                                .clipShape(.circle)
-
-                            Text(.localizable.guest)
-                                .font(.subheadline)
+                    ProfileSmallView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
+                        .onTapGesture {
+                            showProfileSwitcher.toggle()
                         }
-                    }
-                    .onTapGesture {
-                        showProfileSwitcher.toggle()
-                    }
                 }
             )
 

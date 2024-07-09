@@ -11,24 +11,31 @@ import SwiftUI
 
 struct ProfileSmallView: View {
 
-    var publicKeyHex: String
+    var publicKeyHex: String?
 
     @EnvironmentObject var appState: AppState
 
     var body: some View {
         HStack {
-            let metadataEvent = appState.metadataEvents[publicKeyHex]
+            if let publicKeyHex {
+                let metadataEvent = appState.metadataEvents[publicKeyHex]
 
-            ProfilePictureView(publicKeyHex: publicKeyHex)
+                ProfilePictureView(publicKeyHex: publicKeyHex)
 
-            if let resolvedName = metadataEvent?.resolvedName {
-                Text(resolvedName)
-                    .font(.subheadline)
-            } else if let publicKey = PublicKey(hex: publicKeyHex) {
-                Text(publicKey.npub)
-                    .font(.subheadline)
+                if let resolvedName = metadataEvent?.resolvedName {
+                    Text(resolvedName)
+                        .font(.subheadline)
+                } else if let publicKey = PublicKey(hex: publicKeyHex) {
+                    Text(publicKey.npub)
+                        .font(.subheadline)
+                } else {
+                    Text(publicKeyHex)
+                        .font(.subheadline)
+                }
             } else {
-                Text(publicKeyHex)
+                GuestProfilePictureView()
+
+                Text(.localizable.guest)
                     .font(.subheadline)
             }
         }

@@ -62,11 +62,7 @@ struct ContentView: View {
                         if let publicKey = appState.publicKey {
                             ProfilePictureView(publicKeyHex: publicKey.hex)
                         } else {
-                            Image(systemName: "person.crop.circle")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 40)
-                                .clipShape(.circle)
+                            GuestProfilePictureView()
                         }
                     }
                 )
