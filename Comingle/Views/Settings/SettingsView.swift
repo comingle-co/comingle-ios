@@ -14,42 +14,53 @@ struct SettingsView: View {
 
     @EnvironmentObject var appState: AppState
 
+    @State private var profilePickerExpanded: Bool = false
+
     var body: some View {
         NavigationStack {
             Form {
                 Section(
                     content: {
-                        if let appSettings = appState.appSettings {
-                            ForEach(appSettings.profiles, id: \.self) { profile in
-                                HStack {
-                                    if profile == appSettings.activeProfile {
-                                        ProfilePictureView(publicKeyHex: profile.publicKeyHex)
-                                            .overlay(
-                                                Image(systemName: "checkmark.circle.fill")
-                                                    .foregroundColor(.green)
-                                                    .frame(width: 16, height: 16)
-                                                    .offset(x: 4, y: 4),
-                                                alignment: .bottomTrailing
-                                            )
-                                    } else {
-                                        ProfilePictureView(publicKeyHex: profile.publicKeyHex)
-                                    }
-                                    ProfileNameView(publicKeyHex: profile.publicKeyHex)
-                                }
-                                .tag(profile.publicKeyHex)
-                                .onTapGesture {
-                                    appSettings.activeProfile = profile
-                                }
-                                .swipeActions {
-                                    if profile.publicKeyHex != nil {
-                                        Button(role: .destructive) {
-                                        } label: {
-                                            Label(.localizable.removeProfile, systemImage: "trash")
+                        DisclosureGroup(
+                            isExpanded: $profilePickerExpanded,
+                            content: {
+                                if let appSettings = appState.appSettings {
+                                    ForEach(appSettings.profiles, id: \.self) { profile in
+                                        HStack {
+                                            if profile == appSettings.activeProfile {
+                                                ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                                    .overlay(
+                                                        Image(systemName: "checkmark.circle.fill")
+                                                            .foregroundColor(.green)
+                                                            .frame(width: 16, height: 16)
+                                                            .offset(x: 4, y: 4),
+                                                        alignment: .bottomTrailing
+                                                    )
+                                            } else {
+                                                ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                            }
+                                            ProfileNameView(publicKeyHex: profile.publicKeyHex)
+                                        }
+                                        .tag(profile.publicKeyHex)
+                                        .onTapGesture {
+                                            appSettings.activeProfile = profile
+                                            profilePickerExpanded = false
+                                        }
+                                        .swipeActions {
+                                            if profile.publicKeyHex != nil {
+                                                Button(role: .destructive) {
+                                                } label: {
+                                                    Label(.localizable.removeProfile, systemImage: "trash")
+                                                }
+                                            }
                                         }
                                     }
                                 }
+                            },
+                            label: {
+                                ProfileSmallView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
                             }
-                        }
+                        )
                     },
                     header: {
                         Text(.localizable.profiles)

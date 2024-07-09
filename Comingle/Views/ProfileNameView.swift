@@ -14,19 +14,7 @@ struct ProfileNameView: View {
     @EnvironmentObject var appState: AppState
 
     var body: some View {
-        if let publicKeyHex {
-            let metadataEvent = appState.metadataEvents[publicKeyHex]
-
-            if let resolvedName = metadataEvent?.resolvedName {
-                Text(resolvedName)
-            } else if let publicKey = PublicKey(hex: publicKeyHex) {
-                Text(publicKey.npub)
-            } else {
-                Text(publicKeyHex)
-            }
-        } else {
-            Text(.localizable.guest)
-        }
+        Text(Utilities.shared.profileName(publicKeyHex: publicKeyHex, appState: appState))
     }
 }
 

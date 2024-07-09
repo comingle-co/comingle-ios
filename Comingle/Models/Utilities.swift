@@ -14,13 +14,19 @@ class Utilities {
         if let publicKeyHex {
             if let resolvedName = appState.metadataEvents[publicKeyHex]?.resolvedName {
                 return resolvedName
-            } else if let publicKey = PublicKey(hex: publicKeyHex) {
-                return publicKey.npub
             } else {
-                return publicKeyHex
+                return abbreviatedPublicKey(publicKeyHex)
             }
         } else {
             return String(localized: .localizable.guest)
+        }
+    }
+
+    func abbreviatedPublicKey(_ publicKeyHex: String) -> String {
+        if let publicKey = PublicKey(hex: publicKeyHex) {
+            return "\(publicKey.npub.prefix(8)):\(publicKey.npub.suffix(8))"
+        } else {
+            return publicKeyHex
         }
     }
 }
