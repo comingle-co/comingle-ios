@@ -22,7 +22,6 @@
 		3A453DEE2A0B348200897303 /* ComingleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DED2A0B348200897303 /* ComingleTests.swift */; };
 		3A453DF82A0B348200897303 /* ComingleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF72A0B348200897303 /* ComingleUITests.swift */; };
 		3A453DFA2A0B348200897303 /* ComingleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DF92A0B348200897303 /* ComingleUITestsLaunchTests.swift */; };
-		3A453E1C2A0C613600897303 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E192A0C613600897303 /* Session.swift */; };
 		3A453E242A0C614900897303 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453E1D2A0C614800897303 /* SessionView.swift */; };
 		3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FF32C3A2A0800AD4B09 /* AppearanceSettings.swift */; };
 		3A464FF62C3A2A5400AD4B09 /* TimeZonePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FF52C3A2A5400AD4B09 /* TimeZonePreference.swift */; };
@@ -77,7 +76,6 @@
 		3A453DF32A0B348200897303 /* ComingleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ComingleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A453DF72A0B348200897303 /* ComingleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleUITests.swift; sourceTree = "<group>"; };
 		3A453DF92A0B348200897303 /* ComingleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		3A453E192A0C613600897303 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		3A453E1D2A0C614800897303 /* SessionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		3A464FF32C3A2A0800AD4B09 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		3A464FF52C3A2A5400AD4B09 /* TimeZonePreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZonePreference.swift; sourceTree = "<group>"; };
@@ -212,7 +210,6 @@
 				3A464FF22C3A296400AD4B09 /* Settings */,
 				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
 				3A464FFB2C3A312200AD4B09 /* Profile.swift */,
-				3A453E192A0C613600897303 /* Session.swift */,
 				3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */,
 				3A4A899A2C3CF38D00238043 /* Utilities.swift */,
 			);
@@ -432,7 +429,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A4A89872C3B49EF00238043 /* MyProfileView.swift in Sources */,
-				3A453E1C2A0C613600897303 /* Session.swift in Sources */,
 				3A453E242A0C614900897303 /* SessionView.swift in Sources */,
 				3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */,
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
