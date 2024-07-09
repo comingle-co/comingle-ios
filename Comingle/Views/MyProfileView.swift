@@ -13,37 +13,49 @@ struct MyProfileView: View {
 
     @EnvironmentObject var appState: AppState
 
-    @State private var showProfileSwitcher: Bool = false
+//    @State private var showProfileSwitcher: Bool = false
 
     var body: some View {
         VStack {
-            Section(
-                isExpanded: $showProfileSwitcher,
-                content: {
-                    if let appSettings = appState.appSettings {
-                        let profiles = appSettings.profiles.filter { $0 != appState.appSettings?.activeProfile }
-                        VStack(alignment: .leading) {
-                            ForEach(profiles, id: \.self) { profile in
-                                ProfileSmallView(publicKeyHex: profile.publicKeyHex)
-                                    .environmentObject(appState)
-                                    .onTapGesture {
-                                        appSettings.activeProfile = profile
-                                        showProfileSwitcher = false
-                                    }
-                            }
-                        }
-                    }
-                },
-                header: {
-                    ProfileSmallView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
-                        .onTapGesture {
-                            showProfileSwitcher.toggle()
-                        }
-                }
-            )
+            if let publicKeyHex = appState.publicKey?.hex {
+                ProfileSmallView(publicKeyHex: publicKeyHex)
+                    .environmentObject(appState)
 
-            CalendarEventListView(calendarEventListType: .profile)
+                CalendarEventListView(calendarEventListType: .profile)
+            } else {
+                LoginView()
+                    .environmentObject(appState)
+            }
         }
+
+//        VStack {
+//            Section(
+//                isExpanded: $showProfileSwitcher,
+//                content: {
+//                    if let appSettings = appState.appSettings {
+//                        let profiles = appSettings.profiles.filter { $0 != appState.appSettings?.activeProfile }
+//                        VStack(alignment: .leading) {
+//                            ForEach(profiles, id: \.self) { profile in
+//                                ProfileSmallView(publicKeyHex: profile.publicKeyHex)
+//                                    .environmentObject(appState)
+//                                    .onTapGesture {
+//                                        appSettings.activeProfile = profile
+//                                        showProfileSwitcher = false
+//                                    }
+//                            }
+//                        }
+//                    }
+//                },
+//                header: {
+//                    ProfileSmallView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
+//                        .onTapGesture {
+//                            showProfileSwitcher.toggle()
+//                        }
+//                }
+//            )
+//
+//            CalendarEventListView(calendarEventListType: .profile)
+//        }
     }
 }
 

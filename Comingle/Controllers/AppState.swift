@@ -13,7 +13,6 @@ import SwiftData
 class AppState: ObservableObject {
     static let defaultRelayURLString = "wss://relay.primal.net"
 
-    @Published var loginMode: LoginMode = .none
     @Published var relayPool: RelayPool = RelayPool(relays: [])
     @Published var activeTab: HomeTabs = .following
 
@@ -28,8 +27,7 @@ class AppState: ObservableObject {
 
     @Published var appSettings: AppSettings?
 
-    init(loginMode: LoginMode = .none, keypair: Keypair? = nil) {
-        self.loginMode = loginMode
+    init(keypair: Keypair? = nil) {
         self.keypair = keypair
     }
 

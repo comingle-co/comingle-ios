@@ -11,6 +11,7 @@ import NostrSDK
 
 struct LoginView: View, RelayURLValidating {
     @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) private var dismiss
 
     @State private var nostrIdentifier: String = "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf"
     @State private var primaryRelay: String = AppState.defaultRelayURLString
@@ -41,8 +42,9 @@ struct LoginView: View, RelayURLValidating {
             return
         }
 
-        if appSettings.profiles.first(where: { $0.publicKeyHex == publicKey.hex }) != nil {
+        if let profile = appSettings.profiles.first(where: { $0.publicKeyHex == publicKey.hex }) {
             print("Found existing profile settings for \(publicKey.npub)")
+            appSettings.activeProfile = profile
         } else {
             print("Creating new profile settings for \(publicKey.npub)")
             let profile = Profile(publicKeyHex: publicKey.hex)
@@ -58,7 +60,8 @@ struct LoginView: View, RelayURLValidating {
 
         appState.relayPool.add(relay: relay)
         appState.refresh(publicKeyHex: publicKey.hex)
-        appState.loginMode = .guest
+
+        dismiss()
     }
 
     var body: some View {

@@ -11,7 +11,6 @@
 		3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */; };
 		3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 3A2FF9732A3F6CE2009E1067 /* NostrSDK */; };
 		3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9772A3F6DFD009E1067 /* LoginView.swift */; };
-		3A2FF97C2A3FA6E9009E1067 /* LoginMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF97B2A3FA6E9009E1067 /* LoginMode.swift */; };
 		3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9812A3FD68B009E1067 /* SettingsView.swift */; };
 		3A2FF9842A40025B009E1067 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9832A40025B009E1067 /* AppState.swift */; };
 		3A34AAA32B48FE1F00C5F910 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */; };
@@ -63,7 +62,6 @@
 		3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetadataEvent+Extensions.swift"; sourceTree = "<group>"; };
 		3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		3A2FF9772A3F6DFD009E1067 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		3A2FF97B2A3FA6E9009E1067 /* LoginMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginMode.swift; sourceTree = "<group>"; };
 		3A2FF9812A3FD68B009E1067 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A2FF9832A40025B009E1067 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -213,7 +211,6 @@
 			children = (
 				3A464FF22C3A296400AD4B09 /* Settings */,
 				3A453E182A0C613600897303 /* Conference.swift */,
-				3A2FF97B2A3FA6E9009E1067 /* LoginMode.swift */,
 				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
 				3A453E172A0C613500897303 /* Person.swift */,
 				3A464FFB2C3A312200AD4B09 /* Profile.swift */,
@@ -444,7 +441,6 @@
 				3A4A898A2C3C240C00238043 /* ProfileSmallView.swift in Sources */,
 				3A4A89942C3CE40A00238043 /* GuestProfilePictureView.swift in Sources */,
 				3A464FF82C3A2C2000AD4B09 /* ProfileSettings.swift in Sources */,
-				3A2FF97C2A3FA6E9009E1067 /* LoginMode.swift in Sources */,
 				3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */,
 				3A464FF62C3A2A5400AD4B09 /* TimeZonePreference.swift in Sources */,
 				3A4FCB542C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift in Sources */,

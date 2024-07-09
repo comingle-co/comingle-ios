@@ -217,54 +217,6 @@
         }
       }
     },
-    "loginModeAttendee" : {
-      "comment" : "Status when the user is logged in as a conference attendee.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Attendee"
-          }
-        }
-      }
-    },
-    "loginModeGuest" : {
-      "comment" : "Status when the user is logged in as a guest.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guest"
-          }
-        }
-      }
-    },
-    "loginModeNone" : {
-      "comment" : "Status when the user is not logged in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "None"
-          }
-        }
-      }
-    },
-    "loginModeOrganizer" : {
-      "comment" : "Status when the user is logged in as a conference organizer.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Organizer"
-          }
-        }
-      }
-    },
     "menu" : {
       "comment" : "Label for drop down menu in calendar event view.",
       "extractionState" : "manual",

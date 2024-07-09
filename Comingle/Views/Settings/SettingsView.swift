@@ -20,62 +20,6 @@ struct SettingsView: View {
             Form {
                 Section(
                     content: {
-                        Picker(.localizable.role, selection: $appState.loginMode) {
-
-                            Text(LoginMode.guest.description)
-                                .tag(LoginMode.guest.id)
-                            Text(LoginMode.attendee.description)
-                                .tag(LoginMode.attendee.id)
-                            Text(LoginMode.organizer.description)
-                                .tag(LoginMode.organizer.id)
-                        }
-                    },
-                    header: {
-                        Text(.localizable.role)
-                    }
-                )
-
-                if appState.loginMode == .attendee || appState.loginMode == .organizer {
-                    Section(
-                        content: {
-                            if let npub = appState.keypair?.publicKey.npub {
-                                Text(npub)
-                            } else {
-                                Text(.localizable.settingsEnterPrivateKey)
-                            }
-                        },
-                        header: {
-                            Text(.localizable.settingsPublicKey)
-                        }
-                    )
-
-                    Section(
-                        content: {
-                            TextField("nsec1...", text: $privateKey)
-                                .autocorrectionDisabled(false)
-                                .textContentType(.password)
-                                .textInputAutocapitalization(.never)
-                                .onReceive(Just(privateKey)) { newValue in
-                                    let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    guard privateKey != newValue else {
-                                        return
-                                    }
-
-                                    privateKey = filtered
-
-                                    if let keypair = Keypair(nsec: filtered) {
-                                        appState.keypair = keypair
-                                    }
-                                }
-                        },
-                        header: {
-                            Text(.localizable.settingsPrivateKeyHeader)
-                        }
-                    )
-                }
-
-                Section(
-                    content: {
                         HStack {
                             Text(.localizable.settingsRelayLabel)
                             Text(appState.relayPool.relays.first?.url.absoluteString ?? "")
@@ -106,7 +50,6 @@ struct SettingsView: View {
                 Button(.localizable.signOut) {
                     appState.keypair = nil
                     appState.relayPool.disconnect()
-                    appState.loginMode = .none
                 }
             }
         }
@@ -120,7 +63,6 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
 
     @State static var appState = AppState(
-        loginMode: .attendee,
         keypair: Keypair()
     )
 
