@@ -14,8 +14,6 @@ struct SettingsView: View {
 
     @EnvironmentObject var appState: AppState
 
-    @State var selectedProfile: String?
-
     var body: some View {
         NavigationStack {
             Form {
@@ -23,19 +21,33 @@ struct SettingsView: View {
                     content: {
                         if let appSettings = appState.appSettings {
                             ForEach(appSettings.profiles, id: \.self) { profile in
-                                ProfileSmallView(publicKeyHex: profile.publicKeyHex)
-                                    .tag(profile.publicKeyHex)
-                                    .onTapGesture {
-                                        appSettings.activeProfile = profile
+                                HStack {
+                                    if profile == appSettings.activeProfile {
+                                        ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                            .overlay(
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .foregroundColor(.green)
+                                                    .frame(width: 16, height: 16)
+                                                    .offset(x: 4, y: 4),
+                                                alignment: .bottomTrailing
+                                            )
+                                    } else {
+                                        ProfilePictureView(publicKeyHex: profile.publicKeyHex)
                                     }
-                                    .swipeActions {
-                                        if profile.publicKeyHex != nil {
-                                            Button(role: .destructive) {
-                                            } label: {
-                                                Label(.localizable.removeProfile, systemImage: "trash")
-                                            }
+                                    ProfileNameView(publicKeyHex: profile.publicKeyHex)
+                                }
+                                .tag(profile.publicKeyHex)
+                                .onTapGesture {
+                                    appSettings.activeProfile = profile
+                                }
+                                .swipeActions {
+                                    if profile.publicKeyHex != nil {
+                                        Button(role: .destructive) {
+                                        } label: {
+                                            Label(.localizable.removeProfile, systemImage: "trash")
                                         }
                                     }
+                                }
                             }
                         }
                     },

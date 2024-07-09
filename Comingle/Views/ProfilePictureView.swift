@@ -32,7 +32,7 @@ struct ProfilePictureView: View {
         }
     }
 
-    var roboHashURL: URL? {
+    private var roboHashURL: URL? {
         guard let publicKeyHex else {
             return nil
         }
