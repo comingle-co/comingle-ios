@@ -13,58 +13,69 @@ import Combine
 struct SettingsView: View {
 
     @EnvironmentObject var appState: AppState
-    @State var privateKey: String = ""
+
+    @State var selectedProfile: String?
 
     var body: some View {
         NavigationStack {
             Form {
                 Section(
                     content: {
-                        HStack {
-                            Text(.localizable.settingsRelayLabel)
-                            Text(appState.relayPool.relays.first?.url.absoluteString ?? "")
-                        }
-                        HStack {
-                            Text(.localizable.settingsRelayConnectionStatus)
-
-                            if let relayState = appState.relayPool.relays.first?.state {
-                                switch relayState {
-                                case .notConnected:
-                                    Text(.localizable.settingsRelayNotConnected)
-                                case .error(let error):
-                                    Text(.localizable.settingsRelayConnectionError(error.localizedDescription))
-                                case .connecting:
-                                    Text(.localizable.settingsRelayConnecting)
-                                case .connected:
-                                    Text(.localizable.settingsRelayConnected)
-                                }
-                            } else {
-                                Text(.localizable.settingsRelayNotConnected)
+                        if let appSettings = appState.appSettings {
+                            ForEach(appSettings.profiles, id: \.self) { profile in
+                                ProfileSmallView(publicKeyHex: profile.publicKeyHex)
+                                    .environmentObject(appState)
+                                    .tag(profile.publicKeyHex)
+                                    .onTapGesture {
+                                        appSettings.activeProfile = profile
+                                    }
+                                    .swipeActions {
+                                        if profile.publicKeyHex != nil {
+                                            Button(role: .destructive) {
+                                            } label: {
+                                                Label(.localizable.removeProfile, systemImage: "trash")
+                                            }
+                                        }
+                                    }
                             }
                         }
                     },
                     header: {
-                        Text(.localizable.settingsRelayConnectionHeader)
+                        Text(.localizable.profiles)
                     }
                 )
-                Button(.localizable.signOut) {
-                    appState.keypair = nil
-                    appState.relayPool.disconnect()
-                }
+
+                Section(
+                    content: {
+
+                    },
+                    header: {
+                        Text(.localizable.settingsForProfile(activeProfileName))
+                    }
+                )
             }
         }
         .navigationTitle(.localizable.settings)
-        .onAppear {
-            self.privateKey = appState.keypair?.privateKey.nsec ?? ""
+    }
+
+    var activeProfileName: String {
+        if let publicKeyHex = appState.appSettings?.activeProfile?.publicKeyHex {
+            if let resolvedName = appState.metadataEvents[publicKeyHex]?.resolvedName {
+                return resolvedName
+            } else if let publicKey = PublicKey(hex: publicKeyHex) {
+                return publicKey.npub
+            } else {
+                return publicKeyHex
+            }
+        } else {
+            return String(localized: .localizable.guest)
         }
     }
 }
 
 struct SettingsView_Previews: PreviewProvider {
 
-    @State static var appState = AppState(
-        keypair: Keypair()
-    )
+    @State static var appState = AppState()
 
     static var previews: some View {
         SettingsView()

@@ -433,6 +433,30 @@
         }
       }
     },
+    "profiles" : {
+      "comment" : "Section title for Profiles in settings.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profiles"
+          }
+        }
+      }
+    },
+    "removeProfile" : {
+      "comment" : "Label indicating that button removes profile.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Profile"
+          }
+        }
+      }
+    },
     "role" : {
       "comment" : "Text to indicate the view is showing the user's login role.",
       "extractionState" : "manual",
@@ -512,6 +536,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enter a private key"
+          }
+        }
+      }
+    },
+    "settingsForProfile" : {
+      "comment" : "Section title for settings for profile",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings for %@"
           }
         }
       }
@@ -620,18 +656,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Not connected"
-          }
-        }
-      }
-    },
-    "signOut" : {
-      "comment" : "Button to sign out.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign out"
           }
         }
       }
