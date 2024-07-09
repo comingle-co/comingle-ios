@@ -7,6 +7,7 @@
 
 import GeohashKit
 import Kingfisher
+import MapKit
 import NostrSDK
 import NaturalLanguage
 import SwiftUI
@@ -147,6 +148,11 @@ struct SessionView: View {
 
                 if let geohash {
                     Divider()
+
+                    Map(bounds: MapCameraBounds(centerCoordinateBounds: geohash.region)) {
+                        Marker(eventTitle, coordinate: geohash.region.center)
+                    }
+                    .frame(height: 250)
 
                     Button(action: {
                         selectedLocation = ""
