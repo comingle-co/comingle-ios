@@ -10,14 +10,13 @@ import SwiftUI
 
 struct ProfilePictureView: View {
 
-    var publicKeyHex: String
+    var publicKeyHex: String?
 
     @EnvironmentObject var appState: AppState
 
     var body: some View {
-        let metadataEvent = appState.metadataEvents[publicKeyHex]
-
-        if let pictureURL = metadataEvent?.userMetadata?.pictureURL ?? roboHashURL {
+        if let publicKeyHex,
+           let pictureURL = appState.metadataEvents[publicKeyHex]?.userMetadata?.pictureURL ?? roboHashURL {
             KFImage.url(pictureURL)
                 .resizable()
                 .placeholder { ProgressView() }
@@ -34,7 +33,11 @@ struct ProfilePictureView: View {
     }
 
     var roboHashURL: URL? {
-        URL(string: "https://robohash.org/\(publicKeyHex)?set=set4")
+        guard let publicKeyHex else {
+            return nil
+        }
+
+        return URL(string: "https://robohash.org/\(publicKeyHex)?set=set4")
     }
 }
 

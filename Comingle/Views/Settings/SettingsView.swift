@@ -59,17 +59,10 @@ struct SettingsView: View {
     }
 
     var activeProfileName: String {
-        if let publicKeyHex = appState.appSettings?.activeProfile?.publicKeyHex {
-            if let resolvedName = appState.metadataEvents[publicKeyHex]?.resolvedName {
-                return resolvedName
-            } else if let publicKey = PublicKey(hex: publicKeyHex) {
-                return publicKey.npub
-            } else {
-                return publicKeyHex
-            }
-        } else {
-            return String(localized: .localizable.guest)
-        }
+        Utilities.shared.profileName(
+            publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex,
+            appState: appState
+        )
     }
 }
 

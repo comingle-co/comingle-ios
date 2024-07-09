@@ -17,27 +17,9 @@ struct ProfileSmallView: View {
 
     var body: some View {
         HStack {
-            if let publicKeyHex {
-                let metadataEvent = appState.metadataEvents[publicKeyHex]
-
-                ProfilePictureView(publicKeyHex: publicKeyHex)
-
-                if let resolvedName = metadataEvent?.resolvedName {
-                    Text(resolvedName)
-                        .font(.subheadline)
-                } else if let publicKey = PublicKey(hex: publicKeyHex) {
-                    Text(publicKey.npub)
-                        .font(.subheadline)
-                } else {
-                    Text(publicKeyHex)
-                        .font(.subheadline)
-                }
-            } else {
-                GuestProfilePictureView()
-
-                Text(.localizable.guest)
-                    .font(.subheadline)
-            }
+            ProfilePictureView(publicKeyHex: publicKeyHex)
+            Text(Utilities.shared.profileName(publicKeyHex: publicKeyHex, appState: appState))
+                .font(.subheadline)
         }
     }
 }

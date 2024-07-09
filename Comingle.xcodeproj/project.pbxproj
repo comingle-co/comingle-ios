@@ -35,6 +35,8 @@
 		3A4A898A2C3C240C00238043 /* ProfileSmallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89892C3C240B00238043 /* ProfileSmallView.swift */; };
 		3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */; };
 		3A4A89942C3CE40A00238043 /* GuestProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */; };
+		3A4A89982C3CF24800238043 /* ProfileNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89972C3CF24800238043 /* ProfileNameView.swift */; };
+		3A4A899B2C3CF38D00238043 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A899A2C3CF38D00238043 /* Utilities.swift */; };
 		3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB3C2C34E567007AE9A4 /* Kingfisher */; };
 		3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB452C34FD98007AE9A4 /* GeohashKit */; };
 		3A4FCB502C36333A007AE9A4 /* CalendarEventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB4F2C36333A007AE9A4 /* CalendarEventListView.swift */; };
@@ -90,6 +92,8 @@
 		3A4A89892C3C240B00238043 /* ProfileSmallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSmallView.swift; sourceTree = "<group>"; };
 		3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureView.swift; sourceTree = "<group>"; };
 		3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestProfilePictureView.swift; sourceTree = "<group>"; };
+		3A4A89972C3CF24800238043 /* ProfileNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNameView.swift; sourceTree = "<group>"; };
+		3A4A899A2C3CF38D00238043 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		3A4FCB4F2C36333A007AE9A4 /* CalendarEventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventListView.swift; sourceTree = "<group>"; };
 		3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBasedCalendarEventSortComparator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -216,6 +220,7 @@
 				3A464FFB2C3A312200AD4B09 /* Profile.swift */,
 				3A453E192A0C613600897303 /* Session.swift */,
 				3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */,
+				3A4A899A2C3CF38D00238043 /* Utilities.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -234,6 +239,7 @@
 				3A4A89892C3C240B00238043 /* ProfileSmallView.swift */,
 				3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */,
 				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
+				3A4A89972C3CF24800238043 /* ProfileNameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -452,7 +458,9 @@
 				3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */,
 				3A4FCB502C36333A007AE9A4 /* CalendarEventListView.swift in Sources */,
 				3A464FFC2C3A312200AD4B09 /* Profile.swift in Sources */,
+				3A4A89982C3CF24800238043 /* ProfileNameView.swift in Sources */,
 				3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */,
+				3A4A899B2C3CF38D00238043 /* Utilities.swift in Sources */,
 				3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

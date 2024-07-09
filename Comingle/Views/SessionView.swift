@@ -159,21 +159,8 @@ struct SessionView: View {
 
                 Divider()
 
-                HStack {
-                    let metadataEvent = appState.metadataEvents[session.pubkey]
-
-                    ProfilePictureView(publicKeyHex: session.pubkey)
-
-                    if let publicKey = PublicKey(hex: session.pubkey) {
-                        if let nostrURI = URL(string: "nostr:\(publicKey.npub)") {
-                            Link(metadataEvent?.resolvedName ?? publicKey.npub, destination: nostrURI)
-                        } else {
-                            Text(metadataEvent?.resolvedName ?? publicKey.npub)
-                        }
-                    } else {
-                        Text(metadataEvent?.resolvedName ?? session.pubkey)
-                    }
-                }
+                ProfileSmallView(publicKeyHex: session.pubkey)
+                    .environmentObject(appState)
 
                 Divider()
 
@@ -224,34 +211,17 @@ struct SessionView: View {
                 ForEach(session.participants, id: \.self) { participant in
                     Divider()
                     HStack {
-                        if let publicKey = participant.pubkey {
-                            if let metadataEvent = appState.metadataEvents[publicKey.hex] {
-                                if let pictureURL = metadataEvent.userMetadata?.pictureURL {
-                                    KFImage.url(pictureURL)
-                                        .resizable()
-                                        .placeholder { ProgressView() }
-                                        .scaledToFit()
-                                        .frame(width: 40)
-                                        .clipShape(.circle)
-                                }
+                        ProfilePictureView(publicKeyHex: participant.pubkey?.hex)
+                            .environmentObject(appState)
 
-                                VStack {
-                                    if let nostrURI = URL(string: "nostr:\(publicKey.npub)") {
-                                        Link(metadataEvent.resolvedName, destination: nostrURI)
-                                    } else {
-                                        Text(metadataEvent.resolvedName)
-                                    }
+                        VStack {
+                            ProfileNameView(publicKeyHex: participant.pubkey?.hex)
+                                .environmentObject(appState)
 
-                                    if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
-                                        Text(role)
-                                            .font(.footnote)
-                                    }
-                                }
-                            } else {
-                                Text(publicKey.npub)
+                            if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
+                                Text(role)
+                                    .font(.footnote)
                             }
-                        } else {
-                            Text("No npub")
                         }
                     }
                 }
@@ -264,44 +234,16 @@ struct SessionView: View {
                         .font(.headline)
 
                     ForEach(rsvps, id: \.self) { rsvp in
-                        if let metadataEvent = appState.metadataEvents[rsvp.pubkey] {
-                            HStack {
-                                if let pictureURL = metadataEvent.userMetadata?.pictureURL {
-                                    KFImage.url(pictureURL)
-                                        .resizable()
-                                        .placeholder { ProgressView() }
-                                        .scaledToFit()
-                                        .frame(width: 40)
-                                        .clipShape(.circle)
-                                        .overlay(
-                                            rsvpStatusView(rsvp.status)
-                                                .offset(x: 4, y: 4),
-                                            alignment: .bottomTrailing
-                                        )
-                                } else {
-                                    missingProfilePictureSmallView(rsvp.status)
-                                }
+                        HStack {
+                            ProfilePictureView(publicKeyHex: rsvp.pubkey)
+                                .environmentObject(appState)
+                                .overlay(
+                                    rsvpStatusView(rsvp.status)
+                                        .offset(x: 4, y: 4),
+                                    alignment: .bottomTrailing
+                                )
 
-                                if let publicKey = PublicKey(hex: rsvp.pubkey) {
-                                    if let nostrURI = URL(string: "nostr:\(publicKey.npub)") {
-                                        Link(metadataEvent.resolvedName, destination: nostrURI)
-                                    } else {
-                                        Text(metadataEvent.resolvedName)
-                                    }
-                                } else {
-                                    Text(rsvp.pubkey)
-                                }
-                            }
-                        } else {
-                            if let publicKey = PublicKey(hex: rsvp.pubkey) {
-                                if let nostrURI = URL(string: "nostr:\(publicKey.npub)") {
-                                    Link(publicKey.npub, destination: nostrURI)
-                                } else {
-                                    Text(publicKey.npub)
-                                }
-                            } else {
-                                Text(rsvp.pubkey)
-                            }
+                            ProfileNameView(publicKeyHex: rsvp.pubkey)
                         }
                     }
                 }
