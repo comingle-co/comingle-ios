@@ -282,25 +282,35 @@ struct SessionView: View {
                     Text(.localizable.copyLocation)
                 })
             } else if !selectedLocation.isEmpty {
-                let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
-                Button(action: {
-                    if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
-                        UIApplication.shared.open(url)
-                    }
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.openInAppleMaps)
-                })
-                Button(action: {
-                    if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
-                        UIApplication.shared.open(url)
-                    }
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.openInGoogleMaps)
-                })
+                if let selectedLocationURL = URL(string: selectedLocation), selectedLocation.hasPrefix("https://") || selectedLocation.hasPrefix("http://") {
+                    Button(action: {
+                        UIApplication.shared.open(selectedLocationURL)
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openLink)
+                    })
+                } else {
+                    let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
+                    Button(action: {
+                        if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
+                            UIApplication.shared.open(url)
+                        }
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openInAppleMaps)
+                    })
+                    Button(action: {
+                        if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
+                            UIApplication.shared.open(url)
+                        }
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openInGoogleMaps)
+                    })
+                }
                 Button(action: {
                     UIPasteboard.general.string = selectedLocation
                     selectedGeohash = false

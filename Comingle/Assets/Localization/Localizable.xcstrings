@@ -349,6 +349,18 @@
         }
       }
     },
+    "openLink" : {
+      "comment" : "Button to open link.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Link"
+          }
+        }
+      }
+    },
     "organizer" : {
       "comment" : "Text that indicates who is the event organizer.",
       "extractionState" : "manual",
