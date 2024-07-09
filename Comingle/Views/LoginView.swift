@@ -11,7 +11,6 @@ import NostrSDK
 
 struct LoginView: View, RelayURLValidating {
     @EnvironmentObject var appState: AppState
-    @Environment(\.colorScheme) var colorScheme
 
     @State private var nostrIdentifier: String = "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf"
     @State private var primaryRelay: String = AppState.defaultRelayURLString
@@ -148,9 +147,10 @@ struct LoginView: View, RelayURLValidating {
 
 struct LoginView_Previews: PreviewProvider {
 
-    @State static var appSettings = AppSettings()
+    @State static var appState = AppState()
 
     static var previews: some View {
         LoginView()
+            .environmentObject(appState)
     }
 }

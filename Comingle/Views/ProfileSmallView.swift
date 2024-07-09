@@ -12,26 +12,14 @@ import SwiftUI
 struct ProfileSmallView: View {
 
     var publicKeyHex: String
-    @State var appState: AppState
+
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         HStack {
             let metadataEvent = appState.metadataEvents[publicKeyHex]
 
-            if let pictureURL = metadataEvent?.userMetadata?.pictureURL {
-                KFImage.url(pictureURL)
-                    .resizable()
-                    .placeholder { ProgressView() }
-                    .scaledToFit()
-                    .frame(width: 40)
-                    .clipShape(.circle)
-            } else {
-                Image(systemName: "person.crop.circle")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40)
-                    .clipShape(.circle)
-            }
+            ProfilePictureView(publicKeyHex: publicKeyHex)
 
             if let resolvedName = metadataEvent?.resolvedName {
                 Text(resolvedName)
@@ -52,6 +40,7 @@ struct ProfileSmallView_Previews: PreviewProvider {
     @State static var appState = AppState()
 
     static var previews: some View {
-        ProfileSmallView(publicKeyHex: "fake-pubkey", appState: appState)
+        ProfileSmallView(publicKeyHex: "fake-pubkey")
+            .environmentObject(appState)
     }
 }

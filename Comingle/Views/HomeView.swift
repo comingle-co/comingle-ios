@@ -11,23 +11,26 @@ import SwiftUI
 
 struct HomeView: View {
 
-    @EnvironmentObject private var appState: AppState
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         if appState.appSettings?.activeProfile?.publicKeyHex == nil {
             LoginView()
                 .environmentObject(appState)
         } else {
-            CalendarEventListView(showAllEvents: false)
-                .environmentObject(appState)
+            CalendarEventListView(calendarEventListType: .followed)
                 .navigationTitle(.localizable.yourNetwork)
+                .environmentObject(appState)
         }
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
 
+    @State static var appState = AppState()
+
     static var previews: some View {
         HomeView()
+            .environmentObject(appState)
     }
 }

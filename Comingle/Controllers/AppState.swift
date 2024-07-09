@@ -46,33 +46,11 @@ class AppState: ObservableObject {
     }
 
     var allUpcomingEvents: [TimeBasedCalendarEvent] {
-        allEvents.filter {
-            guard let startTimestamp = $0.startTimestamp else {
-                return false
-            }
-
-            guard let endTimestamp = $0.endTimestamp else {
-                return startTimestamp >= Date.now
-            }
-
-            return startTimestamp >= Date.now || endTimestamp >= Date.now
-        }
-        .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
+        upcomingEvents(allEvents)
     }
 
     var allPastEvents: [TimeBasedCalendarEvent] {
-        allEvents.filter {
-            guard let startTimestamp = $0.startTimestamp else {
-                return false
-            }
-
-            guard let endTimestamp = $0.endTimestamp else {
-                return startTimestamp < Date.now
-            }
-
-            return endTimestamp < Date.now
-        }
-        .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
+        pastEvents(allEvents)
     }
 
     private var followedRSVPCalendarEventCoordinates: Set<String> {
@@ -115,7 +93,51 @@ class AppState: ObservableObject {
     }
 
     var upcomingFollowedEvents: [TimeBasedCalendarEvent] {
-        followedEvents.filter {
+        upcomingEvents(followedEvents)
+    }
+
+    var pastFollowedEvents: [TimeBasedCalendarEvent] {
+        pastEvents(followedEvents)
+    }
+
+    private var profileRSVPCalendarEventCoordinates: Set<String> {
+        guard let publicKeyHex = publicKey?.hex else {
+            return []
+        }
+
+        return Set(
+            rsvps.values
+                .filter { $0.pubkey == publicKeyHex }
+                .compactMap { $0.calendarEventCoordinates?.tag.value })
+    }
+
+    /// Events that were created or RSVP'd by the active profile.
+    private var profileEvents: [TimeBasedCalendarEvent] {
+        guard let publicKeyHex = publicKey?.hex else {
+            return []
+        }
+
+        let profileRSVPCalendarEventCoordinates = profileRSVPCalendarEventCoordinates
+
+        return timeBasedCalendarEvents.values.filter {
+            $0.startTimestamp != nil
+            && ($0.pubkey == publicKeyHex
+                || profileRSVPCalendarEventCoordinates.contains($0.pubkey)
+                || $0.participants.contains(where: { $0.pubkey?.hex == publicKeyHex })
+            )
+        }
+    }
+
+    var upcomingProfileEvents: [TimeBasedCalendarEvent] {
+        upcomingEvents(profileEvents)
+    }
+
+    var pastProfileEvents: [TimeBasedCalendarEvent] {
+        pastEvents(profileEvents)
+    }
+
+    private func upcomingEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
+        events.filter {
             guard let startTimestamp = $0.startTimestamp else {
                 return false
             }
@@ -129,8 +151,8 @@ class AppState: ObservableObject {
         .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
     }
 
-    var pastFollowedEvents: [TimeBasedCalendarEvent] {
-        followedEvents.filter {
+    private func pastEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
+        events.filter {
             guard let startTimestamp = $0.startTimestamp else {
                 return false
             }
@@ -364,6 +386,5 @@ extension AppState: EventVerifying, RelayDelegate {
 enum HomeTabs {
     case following
     case explore
-    case profile
     case settings
 }

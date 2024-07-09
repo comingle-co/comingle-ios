@@ -162,13 +162,7 @@ struct SessionView: View {
                 HStack {
                     let metadataEvent = appState.metadataEvents[session.pubkey]
 
-                    if let pictureURL = metadataEvent?.userMetadata?.pictureURL {
-                        KFImage.url(pictureURL)
-                            .resizable()
-                            .placeholder { ProgressView() }
-                            .scaledToFit()
-                            .frame(width: 100)
-                    }
+                    ProfilePictureView(publicKeyHex: session.pubkey)
 
                     if let publicKey = PublicKey(hex: session.pubkey) {
                         if let nostrURI = URL(string: "nostr:\(publicKey.npub)") {

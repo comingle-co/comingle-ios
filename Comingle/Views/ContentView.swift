@@ -14,47 +14,63 @@ struct ContentView: View {
 
     @Environment(\.modelContext) var modelContext
     @State private var appSettings: AppSettings?
-
     @EnvironmentObject var appState: AppState
 
     var body: some View {
-        TabView(selection: $appState.activeTab) {
-            NavigationStack {
-                HomeView()
-                    .environmentObject(appState)
-            }
-            .tabItem {
-                Label(.localizable.home, systemImage: "house")
-            }
-            .tag(HomeTabs.following)
+        NavigationStack {
+            VStack {
+                TabView(selection: $appState.activeTab) {
+                    if appState.publicKey != nil {
+                        NavigationStack {
+                            HomeView()
+                                .environmentObject(appState)
+                        }
+                        .tabItem {
+                            Label(.localizable.home, systemImage: "house")
+                        }
+                        .tag(HomeTabs.following)
+                    }
 
-            NavigationStack {
-                CalendarEventListView(showAllEvents: true)
-                    .navigationTitle(.localizable.explore)
-            }
-            .tabItem {
-                Label(.localizable.explore, systemImage: "magnifyingglass")
-            }
-            .tag(HomeTabs.explore)
+                    NavigationStack {
+                        CalendarEventListView(calendarEventListType: .all)
+                            .navigationTitle(.localizable.explore)
+                            .environmentObject(appState)
+                    }
+                    .tabItem {
+                        Label(.localizable.explore, systemImage: "magnifyingglass")
+                    }
+                    .tag(HomeTabs.explore)
 
-            NavigationStack {
-                MyProfileView()
-                    .navigationTitle(.localizable.profile)
+                    NavigationStack {
+                        SettingsView()
+                            .environmentObject(appState)
+                    }
+                    .tabItem {
+                        Label(.localizable.settings, systemImage: "gear")
+                    }
+                    .tag(HomeTabs.settings)
+                }
+                .task {
+                    loadAppSettings()
+                }
             }
-            .tabItem {
-                Label(.localizable.profile, systemImage: "person.crop.circle")
+            .toolbar {
+                NavigationLink(
+                    destination: MyProfileView()
+                        .environmentObject(appState),
+                    label: {
+                        if let publicKey = appState.publicKey {
+                            ProfilePictureView(publicKeyHex: publicKey.hex)
+                        } else {
+                            Image(systemName: "person.crop.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40)
+                                .clipShape(.circle)
+                        }
+                    }
+                )
             }
-
-            NavigationStack {
-                SettingsView()
-            }
-            .tabItem {
-                Label(.localizable.settings, systemImage: "gear")
-            }
-            .tag(HomeTabs.settings)
-        }
-        .task {
-            loadAppSettings()
         }
     }
 
@@ -80,7 +96,13 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: [AppSettings.self])
+struct ContentView_Previews: PreviewProvider {
+
+    @State static var appState = AppState()
+
+    static var previews: some View {
+        ContentView()
+            .environmentObject(appState)
+            .modelContainer(for: [AppSettings.self])
+    }
 }

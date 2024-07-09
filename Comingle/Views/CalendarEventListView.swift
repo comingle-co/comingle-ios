@@ -11,16 +11,9 @@ import SwiftUI
 
 struct CalendarEventListView: View {
 
+    @State var calendarEventListType: CalendarEventListType
     @EnvironmentObject var appState: AppState
-
-    @State private var upcomingEventsFilter: UpcomingEventsFilter = .going
     @State private var timeTabFilter: TimeTabs = .upcoming
-
-    @State private var showAllEvents: Bool
-
-    init(showAllEvents: Bool) {
-        self.showAllEvents = showAllEvents
-    }
 
     var body: some View {
         VStack {
@@ -33,58 +26,63 @@ struct CalendarEventListView: View {
             .pickerStyle(.segmented)
 
             List {
-                ForEach(followingEvents(timeTabFilter), id: \.self) { event in
-                    Section(
-                        content: {
-                            NavigationLink(destination: SessionView(session: event, calendar: Calendar.current).environmentObject(appState)) {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
-                                            .font(.headline)
+                let filteredEvents = events(timeTabFilter)
+                if filteredEvents.isEmpty {
+                    Text(.localizable.noEvents)
+                } else {
+                    ForEach(filteredEvents, id: \.self) { event in
+                        Section(
+                            content: {
+                                NavigationLink(destination: SessionView(session: event, calendar: Calendar.current)) {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
+                                                .font(.headline)
 
-                                        Divider()
-
-                                        ProfileSmallView(publicKeyHex: event.pubkey, appState: appState)
-
-                                        let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
-
-                                        if !locations.isEmpty {
                                             Divider()
 
-                                            Text(event.locations.joined())
-                                                .font(.subheadline)
-                                        }
+                                            ProfileSmallView(publicKeyHex: event.pubkey)
 
-                                        if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
-                                            Divider()
+                                            let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
 
-                                            switch timeTabFilter {
-                                            case .past:
-                                                Text(.localizable.numAttended(rsvps.count))
-                                                    .font(.subheadline)
-                                            case .upcoming:
-                                                Text(.localizable.numGoing(rsvps.count))
+                                            if !locations.isEmpty {
+                                                Divider()
+
+                                                Text(event.locations.joined())
                                                     .font(.subheadline)
                                             }
+
+                                            if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
+                                                Divider()
+
+                                                switch timeTabFilter {
+                                                case .past:
+                                                    Text(.localizable.numAttended(rsvps.count))
+                                                        .font(.subheadline)
+                                                case .upcoming:
+                                                    Text(.localizable.numGoing(rsvps.count))
+                                                        .font(.subheadline)
+                                                }
+                                            }
+                                        }
+
+                                        if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
+                                            KFImage.url(calendarEventImageURL)
+                                                .resizable()
+                                                .placeholder { ProgressView() }
+                                                .scaledToFit()
+                                                .frame(maxWidth: 100, maxHeight: 200)
                                         }
                                     }
-
-                                    if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
-                                        KFImage.url(calendarEventImageURL)
-                                            .resizable()
-                                            .placeholder { ProgressView() }
-                                            .scaledToFit()
-                                            .frame(maxWidth: 100, maxHeight: 200)
-                                    }
+                                }
+                            }, header: {
+                                if let startTimestamp = event.startTimestamp {
+                                    Text(format(date: startTimestamp, timeZone: event.startTimeZone))
                                 }
                             }
-                        }, header: {
-                            if let startTimestamp = event.startTimestamp {
-                                Text(format(date: startTimestamp, timeZone: event.startTimeZone))
-                            }
-                        }
-                    )
-                    .padding(.vertical, 10)
+                        )
+                        .padding(.vertical, 10)
+                    }
                 }
             }
             .refreshable {
@@ -106,20 +104,28 @@ struct CalendarEventListView: View {
         }
     }
 
-    func followingEvents(_ timeTabFilter: TimeTabs) -> [TimeBasedCalendarEvent] {
-        if showAllEvents {
+    func events(_ timeTabFilter: TimeTabs) -> [TimeBasedCalendarEvent] {
+        switch calendarEventListType {
+        case .all:
             switch timeTabFilter {
             case .upcoming:
                 appState.allUpcomingEvents
             case .past:
                 appState.allPastEvents
             }
-        } else {
+        case .followed:
             switch timeTabFilter {
             case .upcoming:
                 appState.upcomingFollowedEvents
             case .past:
                 appState.pastFollowedEvents
+            }
+        case .profile:
+            switch timeTabFilter {
+            case .upcoming:
+                appState.upcomingProfileEvents
+            case .past:
+                appState.pastProfileEvents
             }
         }
     }
@@ -151,18 +157,10 @@ extension Date {
     }
 }
 
-enum UpcomingEventsFilter: CaseIterable {
-    case going
-    case saved
-
-    var localizedStringResource: LocalizedStringResource {
-        switch self {
-        case .going:
-                .localizable.going
-        case .saved:
-                .localizable.saved
-        }
-    }
+enum CalendarEventListType {
+    case all
+    case followed
+    case profile
 }
 
 enum TimeTabs: CaseIterable {
@@ -179,6 +177,11 @@ enum TimeTabs: CaseIterable {
     }
 }
 
-#Preview {
-    CalendarEventListView(showAllEvents: false)
+struct CalendarEventListView_Previews: PreviewProvider {
+
+    @State static var appState = AppState()
+
+    static var previews: some View {
+        CalendarEventListView(calendarEventListType: .all)
+    }
 }
