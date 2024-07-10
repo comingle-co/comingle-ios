@@ -61,6 +61,18 @@
         }
       }
     },
+    "copyCoordinates" : {
+      "comment" : "Button to copy the location coordinates of a calendar event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Coordinates"
+          }
+        }
+      }
+    },
     "copyEventDetails" : {
       "comment" : "Button to copy the details of a calendar event.",
       "extractionState" : "manual",
@@ -68,7 +80,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy event details"
+            "value" : "Copy Event Details"
           }
         }
       }
@@ -80,7 +92,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy event ID"
+            "value" : "Copy Event ID"
           }
         }
       }
@@ -152,7 +164,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Find me on Nostr"
+            "value" : "Find Me on Nostr"
           }
         }
       }

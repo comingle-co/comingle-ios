@@ -146,23 +146,6 @@ struct SessionView: View {
                     })
                 }
 
-                if let geohash {
-                    Divider()
-
-                    Map(bounds: MapCameraBounds(centerCoordinateBounds: geohash.region)) {
-                        Marker(eventTitle, coordinate: geohash.region.center)
-                    }
-                    .frame(height: 250)
-
-                    Button(action: {
-                        selectedLocation = ""
-                        selectedGeohash = true
-                        showLocationAlert = true
-                    }, label: {
-                        Text("\(geohash.latitude), \(geohash.longitude)")
-                    })
-                }
-
                 Divider()
 
                 ProfileSmallView(publicKeyHex: session.pubkey)
@@ -249,6 +232,20 @@ struct SessionView: View {
                         }
                     }
                 }
+
+                if let geohash {
+                    Divider()
+
+                    Map(bounds: MapCameraBounds(centerCoordinateBounds: geohash.region)) {
+                        Marker(eventTitle, coordinate: geohash.region.center)
+                    }
+                    .frame(height: 250)
+                    .onTapGesture {
+                        selectedLocation = ""
+                        selectedGeohash = true
+                        showLocationAlert = true
+                    }
+                }
             }
         }
         .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
@@ -279,7 +276,7 @@ struct SessionView: View {
                     selectedGeohash = false
                     selectedLocation = ""
                 }, label: {
-                    Text(.localizable.copyLocation)
+                    Text(.localizable.copyCoordinates)
                 })
             } else if !selectedLocation.isEmpty {
                 if let selectedLocationURL = URL(string: selectedLocation), selectedLocation.hasPrefix("https://") || selectedLocation.hasPrefix("http://") {
