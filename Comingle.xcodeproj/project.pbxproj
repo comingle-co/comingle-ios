@@ -37,6 +37,7 @@
 		3A4A89A22C3E3F6000238043 /* KeysSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89A12C3E3F6000238043 /* KeysSettingsView.swift */; };
 		3A4A89A52C3E3F6800238043 /* RelaysSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89A42C3E3F6800238043 /* RelaysSettingsView.swift */; };
 		3A4A89A72C3E3F7400238043 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89A62C3E3F7400238043 /* AppearanceSettingsView.swift */; };
+		3A4A89AB2C3E4ECC00238043 /* PrivateKeySecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */; };
 		3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB3C2C34E567007AE9A4 /* Kingfisher */; };
 		3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB452C34FD98007AE9A4 /* GeohashKit */; };
 		3A4FCB502C36333A007AE9A4 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */; };
@@ -94,6 +95,7 @@
 		3A4A89A12C3E3F6000238043 /* KeysSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysSettingsView.swift; sourceTree = "<group>"; };
 		3A4A89A42C3E3F6800238043 /* RelaysSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaysSettingsView.swift; sourceTree = "<group>"; };
 		3A4A89A62C3E3F7400238043 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKeySecureStorage.swift; sourceTree = "<group>"; };
 		3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
 		3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBasedCalendarEventSortComparator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -177,6 +179,7 @@
 				3A34AAA02B48FDA900C5F910 /* Assets */,
 				3A4647CD2A4113E800386AD8 /* Controllers */,
 				3A453E152A0C611300897303 /* Models */,
+				3A4A89A82C3E4E8F00238043 /* Utilities */,
 				3A453E162A0C611800897303 /* Views */,
 				3A453DDB2A0B348100897303 /* ComingleApp.swift */,
 				3A453DE12A0B348200897303 /* Comingle.entitlements */,
@@ -217,7 +220,6 @@
 				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
 				3A464FFB2C3A312200AD4B09 /* Profile.swift */,
 				3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */,
-				3A4A899A2C3CF38D00238043 /* Utilities.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -269,6 +271,15 @@
 				3A464FF52C3A2A5400AD4B09 /* TimeZonePreference.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		3A4A89A82C3E4E8F00238043 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */,
+				3A4A899A2C3CF38D00238043 /* Utilities.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -462,6 +473,7 @@
 				3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */,
 				3A4A899B2C3CF38D00238043 /* Utilities.swift in Sources */,
 				3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */,
+				3A4A89AB2C3E4ECC00238043 /* PrivateKeySecureStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,8 +726,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.ComingleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -737,8 +749,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.comingle.ComingleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -12,6 +12,8 @@ import SwiftData
 class AppState: ObservableObject {
     static let defaultRelayURLString = "wss://relay.primal.net"
 
+    private let privateKeySecureStorage = PrivateKeySecureStorage()
+
     @Published var relayPool: RelayPool = RelayPool(relays: [])
     @Published var activeTab: HomeTabs = .following
 
@@ -25,10 +27,6 @@ class AppState: ObservableObject {
     @Published var calendarEventsToRsvps: [String: [CalendarEventRSVP]] = [:]
 
     @Published var appSettings: AppSettings?
-
-    init(keypair: Keypair? = nil) {
-        self.keypair = keypair
-    }
 
     var publicKey: PublicKey? {
         if let appSettings, let publicKeyHex = appSettings.activeProfile?.publicKeyHex {
