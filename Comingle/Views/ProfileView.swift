@@ -19,7 +19,7 @@ struct ProfileView: View {
         VStack {
             if let publicKeyHex {
                 ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
-                CalendarEventListView(calendarEventListType: .profile)
+                CalendarEventListView(calendarEventListType: .profile(publicKeyHex))
             } else {
                 LoginView()
             }

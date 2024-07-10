@@ -120,12 +120,12 @@ struct CalendarEventListView: View {
             case .past:
                 appState.pastFollowedEvents
             }
-        case .profile:
+        case .profile(let publicKeyHex):
             switch timeTabFilter {
             case .upcoming:
-                appState.upcomingProfileEvents
+                appState.upcomingProfileEvents(publicKeyHex)
             case .past:
-                appState.pastProfileEvents
+                appState.pastProfileEvents(publicKeyHex)
             }
         }
     }
@@ -160,7 +160,7 @@ extension Date {
 enum CalendarEventListType {
     case all
     case followed
-    case profile
+    case profile(String)
 }
 
 enum TimeTabs: CaseIterable {

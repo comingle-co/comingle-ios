@@ -65,18 +65,6 @@ struct SessionView: View {
             .filter { !$0.isEmpty }
     }
 
-    private func missingProfilePictureSmallView(_ rsvpStatus: CalendarEventRSVPStatus?) -> some View {
-        Image(systemName: "person.crop.circle.fill")
-            .aspectRatio(contentMode: .fill)
-            .frame(width: 40, height: 40)
-            .clipShape(.circle)
-            .overlay(
-                rsvpStatusView(rsvpStatus)
-                    .offset(x: 4, y: 4),
-                alignment: .bottomTrailing
-            )
-    }
-
     private func rsvpStatusView(_ rsvpStatus: CalendarEventRSVPStatus?) -> some View {
         guard let rsvpStatus else {
             return Image(systemName: "questionmark.circle.fill")
@@ -148,7 +136,14 @@ struct SessionView: View {
 
                 Divider()
 
-                ProfilePictureAndNameView(publicKeyHex: session.pubkey)
+                NavigationLink(
+                    destination: {
+                        ProfileView(publicKeyHex: session.pubkey)
+                    },
+                    label: {
+                        ProfilePictureAndNameView(publicKeyHex: session.pubkey)
+                    }
+                )
 
                 Divider()
 
@@ -197,18 +192,27 @@ struct SessionView: View {
                     .font(.headline)
 
                 ForEach(session.participants, id: \.self) { participant in
-                    Divider()
-                    HStack {
-                        ProfilePictureView(publicKeyHex: participant.pubkey?.hex)
+                    if let publicKeyHex = participant.pubkey?.hex {
+                        Divider()
+                        NavigationLink(
+                            destination: {
+                                ProfileView(publicKeyHex: publicKeyHex)
+                            },
+                            label: {
+                                HStack {
+                                    ProfilePictureView(publicKeyHex: publicKeyHex)
 
-                        VStack {
-                            ProfileNameView(publicKeyHex: participant.pubkey?.hex)
+                                    VStack {
+                                        ProfileNameView(publicKeyHex: publicKeyHex)
 
-                            if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
-                                Text(role)
-                                    .font(.footnote)
+                                        if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
+                                            Text(role)
+                                                .font(.footnote)
+                                        }
+                                    }
+                                }
                             }
-                        }
+                        )
                     }
                 }
 
@@ -220,16 +224,23 @@ struct SessionView: View {
                         .font(.headline)
 
                     ForEach(rsvps, id: \.self) { rsvp in
-                        HStack {
-                            ProfilePictureView(publicKeyHex: rsvp.pubkey)
-                                .overlay(
-                                    rsvpStatusView(rsvp.status)
-                                        .offset(x: 4, y: 4),
-                                    alignment: .bottomTrailing
-                                )
+                        NavigationLink(
+                            destination: {
+                                ProfileView(publicKeyHex: rsvp.pubkey)
+                            },
+                            label: {
+                                HStack {
+                                    ProfilePictureView(publicKeyHex: rsvp.pubkey)
+                                        .overlay(
+                                            rsvpStatusView(rsvp.status)
+                                                .offset(x: 4, y: 4),
+                                            alignment: .bottomTrailing
+                                        )
 
-                            ProfileNameView(publicKeyHex: rsvp.pubkey)
-                        }
+                                    ProfileNameView(publicKeyHex: rsvp.pubkey)
+                                }
+                            }
+                        )
                     }
                 }
 

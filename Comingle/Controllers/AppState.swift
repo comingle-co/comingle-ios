@@ -110,11 +110,7 @@ class AppState: ObservableObject {
     }
 
     /// Events that were created or RSVP'd by the active profile.
-    private var profileEvents: [TimeBasedCalendarEvent] {
-        guard let publicKeyHex = publicKey?.hex else {
-            return []
-        }
-
+    private func profileEvents(_ publicKeyHex: String) -> [TimeBasedCalendarEvent] {
         let profileRSVPCalendarEventCoordinates = profileRSVPCalendarEventCoordinates
 
         return timeBasedCalendarEvents.values.filter {
@@ -126,12 +122,12 @@ class AppState: ObservableObject {
         }
     }
 
-    var upcomingProfileEvents: [TimeBasedCalendarEvent] {
-        upcomingEvents(profileEvents)
+    func upcomingProfileEvents(_ publicKeyHex: String) -> [TimeBasedCalendarEvent] {
+        upcomingEvents(profileEvents(publicKeyHex))
     }
 
-    var pastProfileEvents: [TimeBasedCalendarEvent] {
-        pastEvents(profileEvents)
+    func pastProfileEvents(_ publicKeyHex: String) -> [TimeBasedCalendarEvent] {
+        pastEvents(profileEvents(publicKeyHex))
     }
 
     private func upcomingEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
