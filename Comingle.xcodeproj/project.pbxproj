@@ -221,16 +221,16 @@
 			children = (
 				3A34AAA82B491D9700C5F910 /* Extensions */,
 				3A464FED2C3A273000AD4B09 /* Settings */,
-				3A453DDD2A0B348100897303 /* ContentView.swift */,
-				3A2FF9772A3F6DFD009E1067 /* LoginView.swift */,
-				3A453E1D2A0C614800897303 /* SessionView.swift */,
-				3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */,
 				3A4FCB4F2C36333A007AE9A4 /* CalendarEventListView.swift */,
-				3A4A89862C3B49EF00238043 /* ProfileView.swift */,
+				3A453DDD2A0B348100897303 /* ContentView.swift */,
+				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
+				3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */,
+				3A2FF9772A3F6DFD009E1067 /* LoginView.swift */,
+				3A4A89972C3CF24800238043 /* ProfileNameView.swift */,
 				3A4A89892C3C240B00238043 /* ProfilePictureAndNameView.swift */,
 				3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */,
-				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
-				3A4A89972C3CF24800238043 /* ProfileNameView.swift */,
+				3A4A89862C3B49EF00238043 /* ProfileView.swift */,
+				3A453E1D2A0C614800897303 /* SessionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
