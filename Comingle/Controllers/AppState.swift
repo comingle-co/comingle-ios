@@ -312,6 +312,24 @@ extension AppState: EventVerifying, RelayDelegate {
         _ = relayPool.subscribe(with: rsvpFilter)
     }
 
+    private func updateCalendarEventRSVP(_ rsvp: CalendarEventRSVP, rsvpEventCoordinates: String) {
+        rsvps[rsvpEventCoordinates] = rsvp
+
+        if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
+            if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventCoordinates] {
+                // It is possible that a pubkey RSVPs multiple times to the same calendar event using different d tags.
+                // Keep only the newest one.
+                if rsvpsForCalendarEvent.allSatisfy({ $0.pubkey != rsvp.pubkey || $0.createdAt < rsvp.createdAt }) {
+                    calendarEventsToRsvps[calendarEventCoordinates] = rsvpsForCalendarEvent.filter {
+                        $0.pubkey != rsvp.pubkey
+                    } + [rsvp]
+                }
+            } else {
+                calendarEventsToRsvps[calendarEventCoordinates] = [rsvp]
+            }
+        }
+    }
+
     private func didReceiveCalendarEventRSVP(_ rsvp: CalendarEventRSVP, forRelay relay: Relay) {
         guard let rsvpEventCoordinates = rsvp.replaceableEventCoordinates()?.tag.value else {
             return
@@ -319,26 +337,10 @@ extension AppState: EventVerifying, RelayDelegate {
 
         if let existingRsvp = self.rsvps[rsvpEventCoordinates] {
             if existingRsvp.createdAt < rsvp.createdAt {
-                rsvps[rsvpEventCoordinates] = rsvp
-
-                if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
-                    if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventCoordinates] {
-                        calendarEventsToRsvps[calendarEventCoordinates] = rsvpsForCalendarEvent.filter { $0.replaceableEventCoordinates()?.tag.value != rsvpEventCoordinates } + [rsvp]
-                    } else {
-                        calendarEventsToRsvps[calendarEventCoordinates] = [rsvp]
-                    }
-                }
+                updateCalendarEventRSVP(rsvp, rsvpEventCoordinates: rsvpEventCoordinates)
             }
         } else {
-            rsvps[rsvpEventCoordinates] = rsvp
-
-            if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
-                if let rsvpsForCalendarEvent = calendarEventsToRsvps[calendarEventCoordinates] {
-                    calendarEventsToRsvps[calendarEventCoordinates] = rsvpsForCalendarEvent.filter { $0.replaceableEventCoordinates()?.tag.value != rsvpEventCoordinates } + [rsvp]
-                } else {
-                    calendarEventsToRsvps[calendarEventCoordinates] = [rsvp]
-                }
-            }
+            updateCalendarEventRSVP(rsvp, rsvpEventCoordinates: rsvpEventCoordinates)
         }
 
         // Optimization: do not pull metadata of people who RSVP until we actually need to look at it. Lazy load.
