@@ -1,5 +1,5 @@
 //
-//  CalendarEventListView.swift
+//  EventListView.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 7/3/24.
@@ -9,9 +9,9 @@ import Kingfisher
 import NostrSDK
 import SwiftUI
 
-struct CalendarEventListView: View {
+struct EventListView: View {
 
-    @State var calendarEventListType: CalendarEventListType
+    @State var eventListType: EventListType
     @EnvironmentObject var appState: AppState
     @State private var timeTabFilter: TimeTabs = .upcoming
 
@@ -33,7 +33,7 @@ struct CalendarEventListView: View {
                     ForEach(filteredEvents, id: \.self) { event in
                         Section(
                             content: {
-                                NavigationLink(destination: SessionView(session: event, calendar: Calendar.current)) {
+                                NavigationLink(destination: EventView(session: event, calendar: Calendar.current)) {
                                     HStack {
                                         VStack(alignment: .leading) {
                                             Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
@@ -105,7 +105,7 @@ struct CalendarEventListView: View {
     }
 
     func events(_ timeTabFilter: TimeTabs) -> [TimeBasedCalendarEvent] {
-        switch calendarEventListType {
+        switch eventListType {
         case .all:
             switch timeTabFilter {
             case .upcoming:
@@ -157,7 +157,7 @@ extension Date {
     }
 }
 
-enum CalendarEventListType {
+enum EventListType {
     case all
     case followed
     case profile(String)
@@ -177,11 +177,11 @@ enum TimeTabs: CaseIterable {
     }
 }
 
-struct CalendarEventListView_Previews: PreviewProvider {
+struct EventListView_Previews: PreviewProvider {
 
     @State static var appState = AppState()
 
     static var previews: some View {
-        CalendarEventListView(calendarEventListType: .all)
+        EventListView(eventListType: .all)
     }
 }

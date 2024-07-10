@@ -1,5 +1,5 @@
 //
-//  SessionView.swift
+//  EventView.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 5/10/23.
@@ -13,7 +13,7 @@ import NaturalLanguage
 import SwiftUI
 import Translation
 
-struct SessionView: View {
+struct EventView: View {
 
     private let dateIntervalFormatter = DateIntervalFormatter()
     private let session: TimeBasedCalendarEvent
@@ -404,8 +404,8 @@ struct SessionView: View {
     }
 }
 
-//struct SessionView_Previews: PreviewProvider {
+//struct EventView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        SessionView(session: TimeBasedCalendarEvent(content: "description", signedBy: Keypair()!), calendar: Calendar.current)
+//        EventView(session: TimeBasedCalendarEvent(content: "description", signedBy: Keypair()!), calendar: Calendar.current)
 //    }
 //}

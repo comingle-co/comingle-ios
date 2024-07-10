@@ -31,7 +31,7 @@ struct ContentView: View {
                     }
 
                     NavigationStack {
-                        CalendarEventListView(calendarEventListType: .all)
+                        EventListView(eventListType: .all)
                             .navigationTitle(.localizable.explore)
                     }
                     .tabItem {

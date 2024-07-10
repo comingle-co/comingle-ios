@@ -18,7 +18,7 @@ struct ProfileView: View {
     var body: some View {
         VStack {
             ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
-            CalendarEventListView(calendarEventListType: .profile(publicKeyHex))
+            EventListView(eventListType: .profile(publicKeyHex))
         }
     }
 }
