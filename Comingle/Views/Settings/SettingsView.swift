@@ -75,9 +75,15 @@ struct SettingsView: View {
 
                 Section(
                     content: {
-                        Label(.localizable.settingsKeys, systemImage: "key")
-                        Label(.localizable.settingsRelays, systemImage: "server.rack")
-                        Label(.localizable.settingsAppearance, systemImage: "eye")
+                        NavigationLink(destination: KeysSettingsView(publicKey: appState.publicKey)) {
+                            Label(.localizable.settingsKeys, systemImage: "key")
+                        }
+                        NavigationLink(destination: RelaysSettingsView()) {
+                            Label(.localizable.settingsRelays, systemImage: "server.rack")
+                        }
+                        NavigationLink(destination: AppearanceSettingsView()) {
+                            Label(.localizable.settingsAppearance, systemImage: "eye")
+                        }
                     },
                     header: {
                         Text(.localizable.settingsForProfile(activeProfileName))
