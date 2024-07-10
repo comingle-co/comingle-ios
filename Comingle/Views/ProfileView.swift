@@ -1,5 +1,5 @@
 //
-//  MyProfileView.swift
+//  ProfileView.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 7/7/24.
@@ -9,14 +9,16 @@ import Kingfisher
 import NostrSDK
 import SwiftUI
 
-struct MyProfileView: View {
+struct ProfileView: View {
 
     @EnvironmentObject var appState: AppState
 
+    @State var publicKeyHex: String?
+
     var body: some View {
         VStack {
-            if let publicKeyHex = appState.publicKey?.hex {
-                ProfileSmallView(publicKeyHex: publicKeyHex)
+            if let publicKeyHex {
+                ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
                 CalendarEventListView(calendarEventListType: .profile)
             } else {
                 LoginView()
@@ -25,12 +27,12 @@ struct MyProfileView: View {
     }
 }
 
-struct MyProfileView_Previews: PreviewProvider {
+struct ProfileView_Previews: PreviewProvider {
 
     @State static var appState = AppState()
 
     static var previews: some View {
-        MyProfileView()
+        ProfileView()
             .environmentObject(appState)
     }
 }

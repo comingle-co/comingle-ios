@@ -65,7 +65,7 @@ struct SettingsView: View {
                                 }
                             },
                             label: {
-                                ProfileSmallView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
+                                ProfilePictureAndNameView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
                             }
                         )
                     },

@@ -41,7 +41,7 @@ struct CalendarEventListView: View {
 
                                             Divider()
 
-                                            ProfileSmallView(publicKeyHex: event.pubkey)
+                                            ProfilePictureAndNameView(publicKeyHex: event.pubkey)
 
                                             let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
 

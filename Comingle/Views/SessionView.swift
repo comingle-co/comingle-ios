@@ -148,7 +148,7 @@ struct SessionView: View {
 
                 Divider()
 
-                ProfileSmallView(publicKeyHex: session.pubkey)
+                ProfilePictureAndNameView(publicKeyHex: session.pubkey)
 
                 Divider()
 

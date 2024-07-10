@@ -28,8 +28,8 @@
 		3A464FF82C3A2C2000AD4B09 /* ProfileSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */; };
 		3A464FFC2C3A312200AD4B09 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FFB2C3A312200AD4B09 /* Profile.swift */; };
 		3A464FFE2C3A34BE00AD4B09 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */; };
-		3A4A89872C3B49EF00238043 /* MyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89862C3B49EF00238043 /* MyProfileView.swift */; };
-		3A4A898A2C3C240C00238043 /* ProfileSmallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89892C3C240B00238043 /* ProfileSmallView.swift */; };
+		3A4A89872C3B49EF00238043 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89862C3B49EF00238043 /* ProfileView.swift */; };
+		3A4A898A2C3C240C00238043 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89892C3C240B00238043 /* ProfilePictureAndNameView.swift */; };
 		3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */; };
 		3A4A89942C3CE40A00238043 /* GuestProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */; };
 		3A4A89982C3CF24800238043 /* ProfileNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89972C3CF24800238043 /* ProfileNameView.swift */; };
@@ -82,8 +82,8 @@
 		3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettings.swift; sourceTree = "<group>"; };
 		3A464FFB2C3A312200AD4B09 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
-		3A4A89862C3B49EF00238043 /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
-		3A4A89892C3C240B00238043 /* ProfileSmallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSmallView.swift; sourceTree = "<group>"; };
+		3A4A89862C3B49EF00238043 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		3A4A89892C3C240B00238043 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
 		3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureView.swift; sourceTree = "<group>"; };
 		3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestProfilePictureView.swift; sourceTree = "<group>"; };
 		3A4A89972C3CF24800238043 /* ProfileNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNameView.swift; sourceTree = "<group>"; };
@@ -226,8 +226,8 @@
 				3A453E1D2A0C614800897303 /* SessionView.swift */,
 				3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */,
 				3A4FCB4F2C36333A007AE9A4 /* CalendarEventListView.swift */,
-				3A4A89862C3B49EF00238043 /* MyProfileView.swift */,
-				3A4A89892C3C240B00238043 /* ProfileSmallView.swift */,
+				3A4A89862C3B49EF00238043 /* ProfileView.swift */,
+				3A4A89892C3C240B00238043 /* ProfilePictureAndNameView.swift */,
 				3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */,
 				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
 				3A4A89972C3CF24800238043 /* ProfileNameView.swift */,
@@ -428,12 +428,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A4A89872C3B49EF00238043 /* MyProfileView.swift in Sources */,
+				3A4A89872C3B49EF00238043 /* ProfileView.swift in Sources */,
 				3A453E242A0C614900897303 /* SessionView.swift in Sources */,
 				3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */,
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
 				3A34AAAA2B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift in Sources */,
-				3A4A898A2C3C240C00238043 /* ProfileSmallView.swift in Sources */,
+				3A4A898A2C3C240C00238043 /* ProfilePictureAndNameView.swift in Sources */,
 				3A4A89942C3CE40A00238043 /* GuestProfilePictureView.swift in Sources */,
 				3A464FF82C3A2C2000AD4B09 /* ProfileSettings.swift in Sources */,
 				3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */,

@@ -55,7 +55,7 @@ struct ContentView: View {
                 if let publicKey = appState.publicKey {
                     NavigationLink(
                         destination: {
-                            MyProfileView()
+                            ProfileView(publicKeyHex: publicKey.hex)
                         },
                         label: {
                             ProfilePictureView(publicKeyHex: publicKey.hex)
