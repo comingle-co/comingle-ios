@@ -5,8 +5,6 @@
 //  Created by Terry Yiu on 7/6/24.
 //
 
-import Foundation
-
 enum TimeZonePreference: Codable {
     /// Always use the system time zone.
     case system

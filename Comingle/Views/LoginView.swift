@@ -5,9 +5,9 @@
 //  Created by Terry Yiu on 6/18/23.
 //
 
-import SwiftUI
 import Combine
 import NostrSDK
+import SwiftUI
 
 struct LoginView: View, RelayURLValidating {
     @EnvironmentObject var appState: AppState

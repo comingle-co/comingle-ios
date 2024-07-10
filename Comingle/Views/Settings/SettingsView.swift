@@ -5,10 +5,9 @@
 //  Created by Terry Yiu on 6/18/23.
 //
 
+import NostrSDK
 import SwiftData
 import SwiftUI
-import NostrSDK
-import Combine
 
 struct SettingsView: View {
 

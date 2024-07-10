@@ -5,7 +5,6 @@
 //  Created by Terry Yiu on 6/29/24.
 //
 
-import Foundation
 import NostrSDK
 
 extension MetadataEvent {

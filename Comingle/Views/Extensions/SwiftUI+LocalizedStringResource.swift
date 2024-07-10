@@ -5,7 +5,6 @@
 //  Created by Terry Yiu on 1/6/24.
 //
 
-import Foundation
 import SwiftUI
 
 extension Button where Label == Text {

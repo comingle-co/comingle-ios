@@ -7,7 +7,6 @@
 
 import Foundation
 import NostrSDK
-import Combine
 import SwiftData
 
 class AppState: ObservableObject {
