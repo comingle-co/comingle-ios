@@ -75,8 +75,10 @@ struct SettingsView: View {
 
                 Section(
                     content: {
-                        NavigationLink(destination: KeysSettingsView(publicKey: appState.publicKey)) {
-                            Label(.localizable.settingsKeys, systemImage: "key")
+                        if let publicKey = appState.publicKey {
+                            NavigationLink(destination: KeysSettingsView(publicKey: publicKey)) {
+                                Label(.localizable.settingsKeys, systemImage: "key")
+                            }
                         }
                         NavigationLink(destination: RelaysSettingsView()) {
                             Label(.localizable.settingsRelays, systemImage: "server.rack")

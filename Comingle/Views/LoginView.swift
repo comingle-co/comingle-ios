@@ -52,7 +52,9 @@ struct LoginView: View, RelayURLValidating {
             appSettings.activeProfile = profile
         }
 
-        appState.keypair = keypair
+        if let keypair {
+            appState.privateKeySecureStorage.store(for: keypair)
+        }
 
         guard let relayURL = URL(string: primaryRelay), let relay = try? Relay(url: relayURL) else {
             return
@@ -103,7 +105,7 @@ struct LoginView: View, RelayURLValidating {
 
                 Section(
                     content: {
-                        SecureField("npub or nsec...", text: $nostrIdentifier)
+                        SecureField(.localizable.enterNostrKey, text: $nostrIdentifier)
                             .autocorrectionDisabled(false)
                             .textContentType(.password)
                             .textInputAutocapitalization(.never)

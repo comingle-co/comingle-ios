@@ -12,12 +12,10 @@ import SwiftData
 class AppState: ObservableObject {
     static let defaultRelayURLString = "wss://relay.primal.net"
 
-    private let privateKeySecureStorage = PrivateKeySecureStorage()
+    let privateKeySecureStorage = PrivateKeySecureStorage()
 
     @Published var relayPool: RelayPool = RelayPool(relays: [])
     @Published var activeTab: HomeTabs = .following
-
-    @Published var keypair: Keypair?
 
     @Published var followListEvents: [String: FollowListEvent] = [:]
     @Published var metadataEvents: [String: MetadataEvent] = [:]
@@ -34,6 +32,13 @@ class AppState: ObservableObject {
         } else {
             nil
         }
+    }
+
+    var keypair: Keypair? {
+        guard let publicKey else {
+            return nil
+        }
+        return privateKeySecureStorage.keypair(for: publicKey)
     }
 
     private var allEvents: [TimeBasedCalendarEvent] {

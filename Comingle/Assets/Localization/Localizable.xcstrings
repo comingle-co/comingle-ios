@@ -121,6 +121,18 @@
         }
       }
     },
+    "enterNostrKey" : {
+      "comment" : "Prompt asking user to enter in a Nostr key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a Nostr public key or private key"
+          }
+        }
+      }
+    },
     "exampleRelay" : {
       "comment" : "Example URL of a Nostr relay address.",
       "extractionState" : "manual",
@@ -457,6 +469,18 @@
         }
       }
     },
+    "privateKey" : {
+      "comment" : "Section header for private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Private Key"
+          }
+        }
+      }
+    },
     "profile" : {
       "comment" : "Label for Profile view.",
       "extractionState" : "manual",
@@ -477,6 +501,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profiles"
+          }
+        }
+      }
+    },
+    "publicKey" : {
+      "comment" : "Section header for public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Public Key"
           }
         }
       }
@@ -573,18 +609,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Appearance"
-          }
-        }
-      }
-    },
-    "settingsEnterPrivateKey" : {
-      "comment" : "Prompt in settings view asking user to enter a private key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter a private key"
           }
         }
       }
@@ -729,6 +753,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relays"
+          }
+        }
+      }
+    },
+    "tapToEnterPrivateKey" : {
+      "comment" : "Placeholder text to prompt user to enter private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to Enter Private Key"
           }
         }
       }
