@@ -13,16 +13,12 @@ struct ProfileView: View {
 
     @EnvironmentObject var appState: AppState
 
-    @State var publicKeyHex: String?
+    @State var publicKeyHex: String
 
     var body: some View {
         VStack {
-            if let publicKeyHex {
-                ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
-                CalendarEventListView(calendarEventListType: .profile(publicKeyHex))
-            } else {
-                LoginView()
-            }
+            ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
+            CalendarEventListView(calendarEventListType: .profile(publicKeyHex))
         }
     }
 }
@@ -32,7 +28,7 @@ struct ProfileView_Previews: PreviewProvider {
     @State static var appState = AppState()
 
     static var previews: some View {
-        ProfileView()
+        ProfileView(publicKeyHex: "fake-pubkey")
             .environmentObject(appState)
     }
 }
