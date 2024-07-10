@@ -77,15 +77,19 @@ class AppState: ObservableObject {
         let followedPubkeysSet = Set(followedPubkeys)
         let followedRSVPCalendarEventCoordinates = followedRSVPCalendarEventCoordinates
 
-        return timeBasedCalendarEvents.values.filter {
-            $0.startTimestamp != nil
-            && (followedPubkeysSet.contains($0.pubkey)
-                || followedRSVPCalendarEventCoordinates.contains($0.pubkey)
-                || $0.participants.contains(where: {
-                guard let pubkey = $0.pubkey else {
+        return timeBasedCalendarEvents.values.filter { event in
+            guard let coordinates = event.replaceableEventCoordinates() else {
+                return false
+            }
+
+            return event.startTimestamp != nil
+            && (followedPubkeysSet.contains(event.pubkey)
+                || followedRSVPCalendarEventCoordinates.contains(coordinates.tag.value)
+                || event.participants.contains(where: { participant in
+                guard let participantPubkey = participant.pubkey else {
                     return false
                 }
-                return followedPubkeysSet.contains(pubkey.hex)
+                return followedPubkeysSet.contains(participantPubkey.hex)
             }))
         }
     }
@@ -98,11 +102,7 @@ class AppState: ObservableObject {
         pastEvents(followedEvents)
     }
 
-    private var profileRSVPCalendarEventCoordinates: Set<String> {
-        guard let publicKeyHex = publicKey?.hex else {
-            return []
-        }
-
+    private func profileRSVPCalendarEventCoordinates(_ publicKeyHex: String) -> Set<String> {
         return Set(
             rsvps.values
                 .filter { $0.pubkey == publicKeyHex }
@@ -113,11 +113,15 @@ class AppState: ObservableObject {
     private func profileEvents(_ publicKeyHex: String) -> [TimeBasedCalendarEvent] {
         let profileRSVPCalendarEventCoordinates = profileRSVPCalendarEventCoordinates
 
-        return timeBasedCalendarEvents.values.filter {
-            $0.startTimestamp != nil
-            && ($0.pubkey == publicKeyHex
-                || profileRSVPCalendarEventCoordinates.contains($0.pubkey)
-                || $0.participants.contains(where: { $0.pubkey?.hex == publicKeyHex })
+        return timeBasedCalendarEvents.values.filter { event in
+            guard let coordinates = event.replaceableEventCoordinates() else {
+                return false
+            }
+
+            return event.startTimestamp != nil
+            && (event.pubkey == publicKeyHex
+                || profileRSVPCalendarEventCoordinates(publicKeyHex).contains(coordinates.tag.value)
+                || event.participants.contains(where: { participant in participant.pubkey?.hex == publicKeyHex })
             )
         }
     }
