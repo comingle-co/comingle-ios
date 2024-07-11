@@ -191,7 +191,7 @@ extension AppState: EventVerifying, RelayDelegate {
     }
 
     func refresh(publicKeyHex: String? = nil, relay: Relay? = nil) {
-        guard relay == nil || relay?.state == .connected else {
+        guard (relay == nil && !relayPool.relays.isEmpty) || relay?.state == .connected else {
             return
         }
 

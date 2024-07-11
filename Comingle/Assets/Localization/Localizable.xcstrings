@@ -133,6 +133,18 @@
         }
       }
     },
+    "delete" : {
+      "comment" : "Label indicating button will delete item.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        }
+      }
+    },
     "enterNostrKey" : {
       "comment" : "Prompt asking user to enter in a Nostr key.",
       "extractionState" : "manual",

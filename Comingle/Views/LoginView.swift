@@ -42,26 +42,25 @@ struct LoginView: View, RelayURLValidating {
             return
         }
 
+        if let keypair {
+            appState.privateKeySecureStorage.store(for: keypair)
+        }
+
         if let profile = appSettings.profiles.first(where: { $0.publicKeyHex == publicKey.hex }) {
             print("Found existing profile settings for \(publicKey.npub)")
+            if validRelay {
+                profile.profileSettings?.relaySettings?.relayURLStrings.append(primaryRelay)
+            }
             appSettings.activeProfile = profile
         } else {
             print("Creating new profile settings for \(publicKey.npub)")
             let profile = Profile(publicKeyHex: publicKey.hex)
             appSettings.profiles.append(profile)
+            if validRelay {
+                profile.profileSettings?.relaySettings?.relayURLStrings = [primaryRelay]
+            }
             appSettings.activeProfile = profile
         }
-
-        if let keypair {
-            appState.privateKeySecureStorage.store(for: keypair)
-        }
-
-        guard let relayURL = URL(string: primaryRelay), let relay = try? Relay(url: relayURL) else {
-            return
-        }
-
-        appState.relayPool.add(relay: relay)
-        appState.refresh(publicKeyHex: publicKey.hex)
 
         dismiss()
     }

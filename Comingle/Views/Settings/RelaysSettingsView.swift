@@ -8,8 +8,31 @@
 import SwiftUI
 
 struct RelaysSettingsView: View {
+    @EnvironmentObject var appState: AppState
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            Section(
+                content: {
+                    if let relaySettings = appState.appSettings?.activeProfile?.profileSettings?.relaySettings {
+                        let relayURLStrings = relaySettings.relayURLStrings
+                        ForEach(relaySettings.relayURLStrings, id: \.self) { relayURLString in
+                            Text(relayURLString)
+                                .swipeActions {
+                                    Button(role: .destructive) {
+                                        relaySettings.relayURLStrings = relayURLStrings.filter { $0 != relayURLString }
+                                    } label: {
+                                        Label(.localizable.delete, systemImage: "trash")
+                                    }
+                                }
+                        }
+                    }
+                },
+                header: {
+                    Text(.localizable.settingsRelays)
+                }
+            )
+        }
     }
 }
 

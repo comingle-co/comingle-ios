@@ -47,9 +47,9 @@ struct ContentView: View {
                     }
                     .tag(HomeTabs.settings)
                 }
-                .task {
-                    loadAppSettings()
-                }
+            }
+            .task {
+                loadAppSettings()
             }
             .toolbar {
                 if let publicKey = appState.publicKey {
@@ -83,13 +83,6 @@ struct ContentView: View {
         }
 
         appState.appSettings = appSettings
-
-        guard let relayURL = URL(string: AppState.defaultRelayURLString), let relay = try? Relay(url: relayURL) else {
-            return
-        }
-        appState.relayPool.delegate = appState
-        appState.relayPool.add(relay: relay)
-        appState.refresh()
     }
 }
 
