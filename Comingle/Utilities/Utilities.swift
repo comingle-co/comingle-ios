@@ -24,7 +24,7 @@ class Utilities {
 
     func abbreviatedPublicKey(_ publicKeyHex: String) -> String {
         if let publicKey = PublicKey(hex: publicKeyHex) {
-            return "\(publicKey.npub.prefix(16)):\(publicKey.npub.suffix(16))"
+            return "\(publicKey.npub.prefix(12)):\(publicKey.npub.suffix(12))"
         } else {
             return publicKeyHex
         }

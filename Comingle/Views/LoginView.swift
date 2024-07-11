@@ -133,7 +133,7 @@ struct LoginView: View, RelayURLValidating {
                     },
                     footer: {
                         if keypair != nil {
-                            Text(.localizable.nostrPrivateKeyFooter)
+                            Text(.localizable.nostrPrivateKeyEnteredFooter)
                         } else if publicKey != nil {
                             Text(.localizable.nostrPublicKeyFooter)
                         }

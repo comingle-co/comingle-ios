@@ -289,14 +289,38 @@
         }
       }
     },
-    "nostrPrivateKeyFooter" : {
-      "comment" : "Footer text indicating what it means to use a private key.",
+    "nostrPrivateKeyEnteredFooter" : {
+      "comment" : "Footer text indicating what it means to have a private key entered.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "You have entered a private key, which means you will be able to view, create, modify, and RSVP to events."
+          }
+        }
+      }
+    },
+    "nostrPrivateKeyIncorrectFooter" : {
+      "comment" : "Footer text indicating what it means to have an incorrect private key entered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have entered an incorrect private key, which means you will be not be able to create, modify, or RSVP to events."
+          }
+        }
+      }
+    },
+    "nostrPrivateKeyMissingFooter" : {
+      "comment" : "Footer text indicating what it means to not have a private key entered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have not entered a private key, which means you will be not be able to create, modify, or RSVP to events."
           }
         }
       }
@@ -345,6 +369,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%d going"
+          }
+        }
+      }
+    },
+    "ok" : {
+      "comment" : "Button to acknowledge and dismiss an alert.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
@@ -477,6 +513,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Private Key"
+          }
+        }
+      }
+    },
+    "privateKeyMismatch" : {
+      "comment" : "Alert message to tell user that the private key that they entered does not match the public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Private key does not match the public key."
+          }
+        }
+      }
+    },
+    "privateKeyPlaceholder" : {
+      "comment" : "Placeholder text to prompt user to enter private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nsec..."
           }
         }
       }
@@ -753,18 +813,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relays"
-          }
-        }
-      }
-    },
-    "tapToEnterPrivateKey" : {
-      "comment" : "Placeholder text to prompt user to enter private key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap to Enter Private Key"
           }
         }
       }

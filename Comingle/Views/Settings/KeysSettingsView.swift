@@ -17,11 +17,19 @@ struct KeysSettingsView: View {
 
     @EnvironmentObject var appState: AppState
 
+    @State private var validPrivateKey: Bool = false
+
+    @State private var incorrectPrivateKeyAlertPresented: Bool = false
+
     var body: some View {
         List {
             Section(
                 content: {
-                    Text(publicKey.npub)
+                    HStack {
+                        Text(publicKey.npub)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.1)
+                    }
                 },
                 header: {
                     Text(.localizable.publicKey)
@@ -30,16 +38,61 @@ struct KeysSettingsView: View {
 
             Section(
                 content: {
-                    SecureField(.localizable.tapToEnterPrivateKey, text: $privateKeyNsec)
-                        .disabled(true)
+                    HStack {
+                        SecureField(.localizable.privateKeyPlaceholder, text: $privateKeyNsec)
+                            .disabled(validPrivateKey)
+                            .autocorrectionDisabled(false)
+                            .textContentType(.password)
+                            .textInputAutocapitalization(.never)
+                            .onReceive(Just(privateKeyNsec)) { newValue in
+                                let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                                privateKeyNsec = filtered
+
+                                if let keypair = Keypair(nsec: filtered) {
+                                    if keypair.publicKey == publicKey {
+                                        appState.privateKeySecureStorage.store(for: keypair)
+                                        privateKeyNsec = keypair.privateKey.nsec
+                                        validPrivateKey = true
+                                    } else {
+                                        validPrivateKey = false
+                                        incorrectPrivateKeyAlertPresented = true
+                                    }
+                                } else {
+                                    validPrivateKey = false
+                                }
+                            }
+                    }
                 },
                 header: {
                     Text(.localizable.privateKey)
+                },
+                footer: {
+                    if validPrivateKey {
+                        Text(.localizable.nostrPrivateKeyEnteredFooter)
+                    } else if privateKeyNsec.isEmpty {
+                        Text(.localizable.nostrPrivateKeyMissingFooter)
+                    } else {
+                        Text(.localizable.nostrPrivateKeyIncorrectFooter)
+                    }
                 }
             )
         }
+        .alert(
+            Text(.localizable.privateKeyMismatch),
+            isPresented: $incorrectPrivateKeyAlertPresented
+        ) {
+            Button(.localizable.ok) {
+                privateKeyNsec = ""
+            }
+        }
         .task {
-            privateKeyNsec = appState.privateKeySecureStorage.keypair(for: publicKey)?.privateKey.nsec ?? ""
+            if let nsec = appState.privateKeySecureStorage.keypair(for: publicKey)?.privateKey.nsec {
+                privateKeyNsec = nsec
+                validPrivateKey = true
+            } else {
+                privateKeyNsec = ""
+                validPrivateKey = false
+            }
         }
     }
 }
