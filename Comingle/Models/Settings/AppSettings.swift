@@ -12,7 +12,7 @@ final class AppSettings {
 
     var activeProfile: Profile?
 
-    var profiles: [Profile] = []
+    var profiles: [Profile]
 
     init(activeProfile: Profile = Profile(), profiles: [Profile] = []) {
         self.activeProfile = activeProfile

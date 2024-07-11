@@ -10,6 +10,9 @@ import SwiftData
 @Model
 final class ProfileSettings {
 
+    var appearance: AppearanceSettings?
+
     init() {
+        appearance = AppearanceSettings()
     }
 }

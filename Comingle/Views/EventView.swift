@@ -15,9 +15,10 @@ import Translation
 
 struct EventView: View {
 
-    private let dateIntervalFormatter = DateIntervalFormatter()
     private let session: TimeBasedCalendarEvent
     private let calendar: Calendar
+
+    @State private var dateIntervalFormatter = DateIntervalFormatter()
 
     @State private var showLocationAlert: Bool = false
     @State private var selectedGeohash: Bool = false
@@ -38,11 +39,6 @@ struct EventView: View {
     init(session: TimeBasedCalendarEvent, calendar: Calendar) {
         self.session = session
         self.calendar = calendar
-
-        let timeZone = session.startTimeZone ?? calendar.timeZone
-
-        dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
-        dateIntervalFormatter.timeZone = timeZone
 
         if let geohashString = session.geohash {
             geohash = Geohash(geohash: geohashString)
@@ -364,6 +360,14 @@ struct EventView: View {
             }
         }
         .task {
+            dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
+            switch appState.appSettings?.activeProfile?.profileSettings?.appearance?.timeZonePreference {
+            case .event:
+                dateIntervalFormatter.timeZone = session.startTimeZone ?? calendar.timeZone
+            case .system, .none:
+                dateIntervalFormatter.timeZone = calendar.timeZone
+            }
+
             var pubkeysToPullMetadata = session.participants.compactMap { $0.pubkey?.hex }
 
             if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {

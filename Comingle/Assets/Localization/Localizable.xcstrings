@@ -145,6 +145,18 @@
         }
       }
     },
+    "eventTimeZone" : {
+      "comment" : "Picker option settings for using the event time zone if it exists.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event"
+          }
+        }
+      }
+    },
     "exampleRelay" : {
       "comment" : "Example URL of a Nostr relay address.",
       "extractionState" : "manual",
@@ -861,6 +873,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relays"
+          }
+        }
+      }
+    },
+    "systemTimeZone" : {
+      "comment" : "Picker option settings for using the system time zone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
+    },
+    "timeZone" : {
+      "comment" : "Label for time zone setting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time Zone"
           }
         }
       }

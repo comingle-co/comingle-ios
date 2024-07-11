@@ -91,9 +91,22 @@ struct EventListView: View {
         }
     }
 
+    private func resolveTimeZone(_ timeZone: TimeZone?) -> TimeZone {
+        guard let timeZone else {
+            return Calendar.current.timeZone
+        }
+
+        switch appState.appSettings?.activeProfile?.profileSettings?.appearance?.timeZonePreference {
+        case .event:
+            return timeZone
+        case .system, .none:
+            return Calendar.current.timeZone
+        }
+    }
+
     private func format(date: Date, timeZone: TimeZone?) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = timeZone ?? Calendar.current.timeZone
+        dateFormatter.timeZone = resolveTimeZone(timeZone)
 
         if date.isInCurrentYear {
             dateFormatter.setLocalizedDateFormatFromTemplate("EdMMMhmmz")

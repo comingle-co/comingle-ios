@@ -10,9 +10,8 @@ import SwiftData
 @Model
 final class AppearanceSettings {
 
-    var timeZonePreference: TimeZonePreference
+    var timeZonePreference: TimeZonePreference = TimeZonePreference.event
 
     init() {
-        timeZonePreference = .system
     }
 }

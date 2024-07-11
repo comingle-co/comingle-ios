@@ -16,5 +16,6 @@ final class Profile {
 
     init(publicKeyHex: String? = nil) {
         self.publicKeyHex = publicKeyHex
+        self.profileSettings = ProfileSettings()
     }
 }
