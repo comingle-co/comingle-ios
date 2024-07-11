@@ -30,12 +30,12 @@ struct AppearanceSettingsView: View {
             )
         }
         .onChange(of: timeZonePreference) { _, newValue in
-            if let appearance = appState.appSettings?.activeProfile?.profileSettings?.appearance {
+            if let appearance = appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings {
                 appearance.timeZonePreference = newValue
             }
         }
         .task {
-            if let appearance = appState.appSettings?.activeProfile?.profileSettings?.appearance {
+            if let appearance = appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings {
                 timeZonePreference = appearance.timeZonePreference
             }
         }

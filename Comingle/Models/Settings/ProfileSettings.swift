@@ -10,9 +10,11 @@ import SwiftData
 @Model
 final class ProfileSettings {
 
-    var appearance: AppearanceSettings?
+    var relaySettings: RelaySettings?
+    var appearanceSettings: AppearanceSettings?
 
     init() {
-        appearance = AppearanceSettings()
+        relaySettings = RelaySettings()
+        appearanceSettings = AppearanceSettings()
     }
 }

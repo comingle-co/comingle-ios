@@ -361,7 +361,7 @@ struct EventView: View {
         }
         .task {
             dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
-            switch appState.appSettings?.activeProfile?.profileSettings?.appearance?.timeZonePreference {
+            switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
             case .event:
                 dateIntervalFormatter.timeZone = session.startTimeZone ?? calendar.timeZone
             case .system, .none:
