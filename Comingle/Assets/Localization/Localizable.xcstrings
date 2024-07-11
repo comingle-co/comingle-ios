@@ -577,18 +577,6 @@
         }
       }
     },
-    "profileRemovalMessage" : {
-      "comment" : "Message to inform user about what will happen if they remove a profile.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your app settings will be deleted from this device. Your data on Nostr relays will not be affected."
-          }
-        }
-      }
-    },
     "profiles" : {
       "comment" : "Section title for Profiles in settings.",
       "extractionState" : "manual",
@@ -609,42 +597,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Public Key"
-          }
-        }
-      }
-    },
-    "remove" : {
-      "comment" : "Label indicating that the button removes the item.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove"
-          }
-        }
-      }
-    },
-    "removeProfile" : {
-      "comment" : "Button to remove a profile from the device.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove %@"
-          }
-        }
-      }
-    },
-    "removeProfileFromDevice" : {
-      "comment" : "Title of confirmation dialog when user initiates a profile removal.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove profile from this device?"
           }
         }
       }
@@ -873,6 +825,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relays"
+          }
+        }
+      }
+    },
+    "signOut" : {
+      "comment" : "Label indicating that the button signs out of a profile.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Out"
+          }
+        }
+      }
+    },
+    "signOutFromDevice" : {
+      "comment" : "Title of confirmation dialog when user initiates a profile sign out.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out of profile?"
+          }
+        }
+      }
+    },
+    "signOutMessage" : {
+      "comment" : "Message to inform user about what will happen if they sign out.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your app settings will be deleted from this device. Your data on Nostr relays will not be affected."
+          }
+        }
+      }
+    },
+    "signOutProfile" : {
+      "comment" : "Button to sign out of a profile from the device.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Out of %@"
           }
         }
       }

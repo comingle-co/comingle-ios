@@ -16,8 +16,8 @@ struct SettingsView: View {
 
     @State private var profilePickerExpanded: Bool = false
 
-    @State private var profileToRemove: Profile?
-    @State private var isShowingProfileRemovalConfirmation: Bool = false
+    @State private var profileToSignOut: Profile?
+    @State private var isShowingSignOutConfirmation: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -52,10 +52,10 @@ struct SettingsView: View {
                                         .swipeActions {
                                             if profile.publicKeyHex != nil {
                                                 Button(role: .destructive) {
-                                                    profileToRemove = profile
-                                                    isShowingProfileRemovalConfirmation = true
+                                                    profileToSignOut = profile
+                                                    isShowingSignOutConfirmation = true
                                                 } label: {
-                                                    Label(.localizable.remove, systemImage: "trash")
+                                                    Label(.localizable.signOut, systemImage: "door.left.hand.open")
                                                 }
                                             }
                                         }
@@ -102,13 +102,13 @@ struct SettingsView: View {
                     Section {
                         Button(
                             action: {
-                                profileToRemove = activeProfile
-                                isShowingProfileRemovalConfirmation = true
+                                profileToSignOut = activeProfile
+                                isShowingSignOutConfirmation = true
                             },
                             label: {
-                                Label(.localizable.removeProfile(
+                                Label(.localizable.signOutProfile(
                                     activeProfileName
-                                ), systemImage: "trash")
+                                ), systemImage: "door.left.hand.open")
                             }
                         )
                     }
@@ -117,31 +117,31 @@ struct SettingsView: View {
         }
         .navigationTitle(.localizable.settings)
         .confirmationDialog(
-            Text(.localizable.removeProfileFromDevice),
-            isPresented: $isShowingProfileRemovalConfirmation
+            Text(.localizable.signOutFromDevice),
+            isPresented: $isShowingSignOutConfirmation
         ) {
-            if let appSettings = appState.appSettings, let profileToRemove, profileToRemove.publicKeyHex != nil {
+            if let appSettings = appState.appSettings, let profileToSignOut, profileToSignOut.publicKeyHex != nil {
                 Button(role: .destructive) {
-                    if appSettings.activeProfile == profileToRemove {
-                        appSettings.activeProfile = appSettings.profiles.first(where: { $0 != profileToRemove })
+                    if appSettings.activeProfile == profileToSignOut {
+                        appSettings.activeProfile = appSettings.profiles.first(where: { $0 != profileToSignOut })
                     }
-                    appSettings.profiles.removeAll(where: { $0 == profileToRemove })
-                    self.profileToRemove = nil
-                    modelContext.delete(profileToRemove)
+                    appSettings.profiles.removeAll(where: { $0 == profileToSignOut })
+                    self.profileToSignOut = nil
+                    modelContext.delete(profileToSignOut)
                 } label: {
-                    Text(.localizable.removeProfile(
-                        Utilities.shared.profileName(publicKeyHex: profileToRemove.publicKeyHex, appState: appState)
+                    Text(.localizable.signOutProfile(
+                        Utilities.shared.profileName(publicKeyHex: profileToSignOut.publicKeyHex, appState: appState)
                     ))
                 }
             }
 
             Button(role: .cancel) {
-                profileToRemove = nil
+                profileToSignOut = nil
             } label: {
                 Text(.localizable.cancel)
             }
         } message: {
-            Text(.localizable.profileRemovalMessage)
+            Text(.localizable.signOutMessage)
         }
     }
 
