@@ -98,7 +98,7 @@ struct SettingsView: View {
                     }
                 )
 
-                if let activeProfile = appState.appSettings?.activeProfile {
+                if appState.publicKey != nil, let activeProfile = appState.appSettings?.activeProfile {
                     Section {
                         Button(
                             action: {
@@ -120,7 +120,7 @@ struct SettingsView: View {
             Text(.localizable.removeProfileFromDevice),
             isPresented: $isShowingProfileRemovalConfirmation
         ) {
-            if let appSettings = appState.appSettings, let profileToRemove {
+            if let appSettings = appState.appSettings, let profileToRemove, profileToRemove.publicKeyHex != nil {
                 Button(role: .destructive) {
                     if appSettings.activeProfile == profileToRemove {
                         appSettings.activeProfile = appSettings.profiles.first(where: { $0 != profileToRemove })
