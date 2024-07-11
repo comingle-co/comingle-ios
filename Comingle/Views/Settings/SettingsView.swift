@@ -11,9 +11,13 @@ import SwiftUI
 
 struct SettingsView: View {
 
+    @Environment(\.modelContext) var modelContext
     @EnvironmentObject var appState: AppState
 
     @State private var profilePickerExpanded: Bool = false
+
+    @State private var profileToRemove: Profile?
+    @State private var isShowingProfileRemovalConfirmation: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -48,8 +52,10 @@ struct SettingsView: View {
                                         .swipeActions {
                                             if profile.publicKeyHex != nil {
                                                 Button(role: .destructive) {
+                                                    profileToRemove = profile
+                                                    isShowingProfileRemovalConfirmation = true
                                                 } label: {
-                                                    Label(.localizable.removeProfile, systemImage: "trash")
+                                                    Label(.localizable.remove, systemImage: "trash")
                                                 }
                                             }
                                         }
@@ -94,6 +100,27 @@ struct SettingsView: View {
             }
         }
         .navigationTitle(.localizable.settings)
+        .confirmationDialog(
+            Text(.localizable.removeProfileFromDevice),
+            isPresented: $isShowingProfileRemovalConfirmation
+        ) {
+            if let appSettings = appState.appSettings, let profileToRemove {
+                Button(role: .destructive) {
+                    if appSettings.activeProfile == profileToRemove {
+                        appSettings.activeProfile = appSettings.profiles.first(where: { $0 != profileToRemove })
+                    }
+                    appSettings.profiles.removeAll(where: { $0 == profileToRemove })
+                    self.profileToRemove = nil
+                    modelContext.delete(profileToRemove)
+                } label: {
+                    Text(.localizable.removeProfile(
+                        Utilities.shared.profileName(publicKeyHex: profileToRemove.publicKeyHex, appState: appState)
+                    ))
+                }
+            }
+        } message: {
+            Text(.localizable.profileRemovalMessage)
+        }
     }
 
     var activeProfileName: String {
