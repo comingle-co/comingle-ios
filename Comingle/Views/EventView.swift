@@ -77,7 +77,7 @@ struct EventView: View {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.red)
                 .frame(width: 16, height: 16)
-        default:
+        case .tentative, .unknown:
             Image(systemName: "questionmark.circle.fill")
                 .foregroundColor(.yellow)
                 .frame(width: 16, height: 16)
