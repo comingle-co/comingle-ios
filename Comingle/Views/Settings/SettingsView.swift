@@ -97,6 +97,22 @@ struct SettingsView: View {
                         Text(.localizable.settingsForProfile(activeProfileName))
                     }
                 )
+
+                if let activeProfile = appState.appSettings?.activeProfile {
+                    Section {
+                        Button(
+                            action: {
+                                profileToRemove = activeProfile
+                                isShowingProfileRemovalConfirmation = true
+                            },
+                            label: {
+                                Label(.localizable.removeProfile(
+                                    activeProfileName
+                                ), systemImage: "trash")
+                            }
+                        )
+                    }
+                }
             }
         }
         .navigationTitle(.localizable.settings)
@@ -117,6 +133,12 @@ struct SettingsView: View {
                         Utilities.shared.profileName(publicKeyHex: profileToRemove.publicKeyHex, appState: appState)
                     ))
                 }
+            }
+
+            Button(role: .cancel) {
+                profileToRemove = nil
+            } label: {
+                Text(.localizable.cancel)
             }
         } message: {
             Text(.localizable.profileRemovalMessage)

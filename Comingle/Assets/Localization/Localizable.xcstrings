@@ -61,6 +61,18 @@
         }
       }
     },
+    "cancel" : {
+      "comment" : "Button to cancel out of dialog.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
     "copyCoordinates" : {
       "comment" : "Button to copy the location coordinates of a calendar event.",
       "extractionState" : "manual",
