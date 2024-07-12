@@ -33,7 +33,7 @@ struct EventListView: View {
                     ForEach(filteredEvents, id: \.self) { event in
                         Section(
                             content: {
-                                NavigationLink(destination: EventView(session: event, calendar: Calendar.current)) {
+                                NavigationLink(destination: EventView(event: event, calendar: Calendar.current)) {
                                     HStack {
                                         VStack(alignment: .leading) {
                                             Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")

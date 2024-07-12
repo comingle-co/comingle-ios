@@ -15,7 +15,7 @@ import Translation
 
 struct EventView: View {
 
-    private let session: TimeBasedCalendarEvent
+    private let event: TimeBasedCalendarEvent
     private let calendar: Calendar
 
     @State private var showLocationAlert: Bool = false
@@ -34,27 +34,27 @@ struct EventView: View {
 
     @EnvironmentObject private var appState: AppState
 
-    init(session: TimeBasedCalendarEvent, calendar: Calendar) {
-        self.session = session
+    init(event: TimeBasedCalendarEvent, calendar: Calendar) {
+        self.event = event
         self.calendar = calendar
 
-        if let geohashString = session.geohash {
+        if let geohashString = event.geohash {
             geohash = Geohash(geohash: geohashString)
         } else {
             geohash = nil
         }
 
-        if let eventTitle = session.title?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
+        if let eventTitle = event.title?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
             self.eventTitle = eventTitle
-        } else if let eventTitle = session.firstValueForRawTagName("name")?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
+        } else if let eventTitle = event.firstValueForRawTagName("name")?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
             self.eventTitle = eventTitle
         } else {
             self.eventTitle = String(localized: .localizable.unnamedEvent)
         }
 
-        contentText = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
+        contentText = event.content.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        filteredLocations = session.locations
+        filteredLocations = event.locations
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
     }
@@ -102,7 +102,7 @@ struct EventView: View {
         dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
         switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
         case .event:
-            dateIntervalFormatter.timeZone = session.startTimeZone ?? calendar.timeZone
+            dateIntervalFormatter.timeZone = event.startTimeZone ?? calendar.timeZone
         case .system, .none:
             dateIntervalFormatter.timeZone = calendar.timeZone
         }
@@ -112,7 +112,7 @@ struct EventView: View {
     var body: some View {
         ScrollView {
             VStack {
-                if let calendarEventImage = session.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
+                if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
                     KFImage.url(calendarEventImageURL)
                         .resizable()
                         .placeholder { ProgressView() }
@@ -126,7 +126,7 @@ struct EventView: View {
 
                 Divider()
 
-                Text(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))
+                Text(dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))
 
                 ForEach(filteredLocations, id: \.self) { location in
                     Divider()
@@ -144,10 +144,10 @@ struct EventView: View {
 
                 NavigationLink(
                     destination: {
-                        ProfileView(publicKeyHex: session.pubkey)
+                        ProfileView(publicKeyHex: event.pubkey)
                     },
                     label: {
-                        ProfilePictureAndNameView(publicKeyHex: session.pubkey)
+                        ProfilePictureAndNameView(publicKeyHex: event.pubkey)
                     }
                 )
 
@@ -171,7 +171,7 @@ struct EventView: View {
                         }
                         .onTapGesture {
                             if contentTranslationReplaced {
-                                contentText = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                                contentText = event.content.trimmingCharacters(in: .whitespacesAndNewlines)
                                 contentTranslationReplaced = false
                             } else {
                                 isContentTranslationPresented = true
@@ -179,7 +179,7 @@ struct EventView: View {
                         }
                         .onLongPressGesture {
                             if contentTranslationReplaced {
-                                contentText = session.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                                contentText = event.content.trimmingCharacters(in: .whitespacesAndNewlines)
                                 contentTranslationReplaced = false
                             } else {
                                 isContentTranslationPresented = true
@@ -193,11 +193,11 @@ struct EventView: View {
 
                 Divider()
 
-                Text(.localizable.invited(session.participants.count))
+                Text(.localizable.invited(event.participants.count))
                     .padding(.vertical, 2)
                     .font(.headline)
 
-                ForEach(session.participants, id: \.self) { participant in
+                ForEach(event.participants, id: \.self) { participant in
                     if let publicKeyHex = participant.pubkey?.hex {
                         Divider()
                         NavigationLink(
@@ -222,7 +222,7 @@ struct EventView: View {
                     }
                 }
 
-                if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
                     Divider()
 
                     Text(.localizable.rsvps(rsvps.count))
@@ -337,15 +337,15 @@ struct EventView: View {
         .toolbar {
             ToolbarItem {
                 Menu {
-                    let shareableEventCoordinates = try? session.shareableEventCoordinates()
+                    let shareableEventCoordinates = try? event.shareableEventCoordinates()
                     Button(action: {
-                        var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: session.startTimestamp!, to: session.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(contentText)\n\n"
+                        var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(contentText)\n\n"
 
-                        let metadataEvent = appState.metadataEvents[session.pubkey]
-                        if let publicKey = PublicKey(hex: session.pubkey) {
+                        let metadataEvent = appState.metadataEvents[event.pubkey]
+                        if let publicKey = PublicKey(hex: event.pubkey) {
                             stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? publicKey.npub))
                         } else {
-                            stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? session.pubkey))
+                            stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? event.pubkey))
                         }
 
                         if let shareableEventCoordinates {
@@ -370,29 +370,29 @@ struct EventView: View {
             }
         }
         .task {
-            var pubkeysToPullMetadata = session.participants.compactMap { $0.pubkey?.hex }
+            var pubkeysToPullMetadata = event.participants.compactMap { $0.pubkey?.hex }
 
-            if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+            if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
                 pubkeysToPullMetadata += rsvps.map { $0.pubkey }
             }
 
             appState.pullMissingMetadata(pubkeysToPullMetadata)
         }
         .refreshable {
-            if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value {
+            if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value {
                 guard let eventFilter = Filter(
-                    authors: [session.pubkey],
+                    authors: [event.pubkey],
                     kinds: [EventKind.timeBasedCalendarEvent.rawValue],
                     tags: ["d": [calendarEventCoordinates]],
-                    since: Int(session.createdAt)
+                    since: Int(event.createdAt)
                 ) else {
                     print("Unable to create time-based calendar event filter.")
                     return
                 }
                 _ = appState.relayPool.subscribe(with: eventFilter)
 
-                var pubkeysToPullMetadata = [session.pubkey] + session.participants.compactMap { $0.pubkey?.hex }
-                if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
+                if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
                     pubkeysToPullMetadata += rsvps.map { $0.pubkey }
                 }
                 appState.pullMissingMetadata(pubkeysToPullMetadata)
@@ -412,6 +412,6 @@ struct EventView: View {
 
 //struct EventView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        EventView(session: TimeBasedCalendarEvent(content: "description", signedBy: Keypair()!), calendar: Calendar.current)
+//        EventView(event: TimeBasedCalendarEvent(content: "description", signedBy: Keypair()!), calendar: Calendar.current)
 //    }
 //}
