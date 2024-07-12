@@ -18,8 +18,6 @@ struct EventView: View {
     private let session: TimeBasedCalendarEvent
     private let calendar: Calendar
 
-    @State private var dateIntervalFormatter = DateIntervalFormatter()
-
     @State private var showLocationAlert: Bool = false
     @State private var selectedGeohash: Bool = false
     @State private var selectedLocation: String = ""
@@ -97,6 +95,18 @@ struct EventView: View {
 
     private func localeToLanguage(_ locale: String) -> String? {
         return Locale.LanguageCode(stringLiteral: locale).identifier(.alpha2)
+    }
+
+    private var dateIntervalFormatter: DateIntervalFormatter {
+        let dateIntervalFormatter = DateIntervalFormatter()
+        dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
+        switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+        case .event:
+            dateIntervalFormatter.timeZone = session.startTimeZone ?? calendar.timeZone
+        case .system, .none:
+            dateIntervalFormatter.timeZone = calendar.timeZone
+        }
+        return dateIntervalFormatter
     }
 
     var body: some View {
@@ -360,14 +370,6 @@ struct EventView: View {
             }
         }
         .task {
-            dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
-            switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
-            case .event:
-                dateIntervalFormatter.timeZone = session.startTimeZone ?? calendar.timeZone
-            case .system, .none:
-                dateIntervalFormatter.timeZone = calendar.timeZone
-            }
-
             var pubkeysToPullMetadata = session.participants.compactMap { $0.pubkey?.hex }
 
             if let calendarEventCoordinates = session.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {

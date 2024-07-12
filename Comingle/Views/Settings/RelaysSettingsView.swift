@@ -16,7 +16,7 @@ struct RelaysSettingsView: View {
                 content: {
                     if let relaySettings = appState.appSettings?.activeProfile?.profileSettings?.relaySettings {
                         let relayURLStrings = relaySettings.relayURLStrings
-                        ForEach(relaySettings.relayURLStrings, id: \.self) { relayURLString in
+                        ForEach(relayURLStrings, id: \.self) { relayURLString in
                             Text(relayURLString)
                                 .swipeActions {
                                     Button(role: .destructive) {

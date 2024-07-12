@@ -10,7 +10,7 @@ import SwiftData
 @Model
 final class RelaySettings {
 
-    var relayURLStrings: [String] = []
+    var relayURLStrings: [String] = ["wss://relay.primal.net"]
 
     init() {
     }
