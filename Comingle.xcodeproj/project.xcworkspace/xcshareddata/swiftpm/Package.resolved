@@ -33,7 +33,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nostr-sdk/nostr-sdk-ios.git",
       "state" : {
-        "revision" : "44df75b38c1c3cfc0aaad8a4a437f45dd553b6f7"
+        "revision" : "4a9ff87be38724af1321cda15e11de961bbf097a"
       }
     },
     {
@@ -43,6 +43,15 @@
       "state" : {
         "revision" : "1a14e189def5eaa92f839afdd2faad8e43b61a6e",
         "version" : "0.12.2"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "revision" : "3d2dc41a01f9e49d84f0a3925fb858bed64f702d",
+        "version" : "1.1.2"
       }
     },
     {
