@@ -73,6 +73,12 @@ struct SettingsView: View {
                                 ProfilePictureAndNameView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
                             }
                         )
+
+                        if let publicKey = appState.publicKey {
+                            NavigationLink(destination: ProfileView(publicKeyHex: publicKey.hex)) {
+                                Text(.localizable.viewProfile)
+                            }
+                        }
                     },
                     header: {
                         Text(.localizable.profiles)

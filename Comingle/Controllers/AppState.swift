@@ -388,5 +388,4 @@ extension AppState: EventVerifying, RelayDelegate {
 enum HomeTabs {
     case following
     case explore
-    case settings
 }

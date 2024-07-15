@@ -973,6 +973,18 @@
         }
       }
     },
+    "viewProfile" : {
+      "comment" : "Button to view the active profile.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Profile"
+          }
+        }
+      }
+    },
     "welcome" : {
       "comment" : "Text welcoming the user to the app.",
       "extractionState" : "manual",

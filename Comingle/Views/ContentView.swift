@@ -38,35 +38,24 @@ struct ContentView: View {
                         Label(.localizable.explore, systemImage: "magnifyingglass")
                     }
                     .tag(HomeTabs.explore)
-
-                    NavigationStack {
-                        SettingsView()
-                    }
-                    .tabItem {
-                        Label(.localizable.settings, systemImage: "gear")
-                    }
-                    .tag(HomeTabs.settings)
                 }
             }
             .task {
                 loadAppSettings()
             }
             .toolbar {
-                if let publicKey = appState.publicKey {
-                    NavigationLink(
-                        destination: {
-                            ProfileView(publicKeyHex: publicKey.hex)
-                        },
-                        label: {
+                NavigationLink(
+                    destination: {
+                        SettingsView()
+                    },
+                    label: {
+                        if let publicKey = appState.publicKey {
                             ProfilePictureView(publicKeyHex: publicKey.hex)
+                        } else {
+                            GuestProfilePictureView()
                         }
-                    )
-                } else {
-                    GuestProfilePictureView()
-                        .onTapGesture {
-                            appState.activeTab = .settings
-                        }
-                }
+                    }
+                )
             }
         }
     }
