@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-final class Profile {
+final class Profile: Hashable {
 
     @Attribute(.unique) var publicKeyHex: String?
 
@@ -17,5 +17,9 @@ final class Profile {
     init(publicKeyHex: String? = nil) {
         self.publicKeyHex = publicKeyHex
         self.profileSettings = ProfileSettings()
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(publicKeyHex)
     }
 }

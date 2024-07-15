@@ -24,10 +24,7 @@ struct ProfilePictureView: View {
                 .frame(width: 40)
                 .clipShape(.circle)
         } else {
-            Image(systemName: "person.crop.circle")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40)
+            GuestProfilePictureView()
         }
     }
 

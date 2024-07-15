@@ -30,19 +30,27 @@ struct SettingsView: View {
                                 if let appSettings = appState.appSettings {
                                     ForEach(appSettings.profiles, id: \.self) { profile in
                                         HStack {
-                                            if profile == appSettings.activeProfile {
-                                                ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                            let publicKeyHex = profile.publicKeyHex
+                                            if let publicKeyHex,
+                                               let publicKey = PublicKey(hex: publicKeyHex),
+                                               appState.privateKeySecureStorage.keypair(for: publicKey) != nil {
+                                                ProfilePictureView(publicKeyHex: publicKeyHex)
+                                            } else {
+                                                ProfilePictureView(publicKeyHex: publicKeyHex)
                                                     .overlay(
-                                                        Image(systemName: "checkmark.circle.fill")
-                                                            .foregroundColor(.green)
+                                                        Image(systemName: "lock.fill")
+                                                            .foregroundColor(.secondary)
                                                             .frame(width: 16, height: 16)
                                                             .offset(x: 4, y: 4),
                                                         alignment: .bottomTrailing
                                                     )
-                                            } else {
-                                                ProfilePictureView(publicKeyHex: profile.publicKeyHex)
                                             }
-                                            ProfileNameView(publicKeyHex: profile.publicKeyHex)
+                                            if profile == appSettings.activeProfile {
+                                                ProfileNameView(publicKeyHex: publicKeyHex)
+                                                    .foregroundStyle(.accent)
+                                            } else {
+                                                ProfileNameView(publicKeyHex: publicKeyHex)
+                                            }
                                         }
                                         .tag(profile.publicKeyHex)
                                         .onTapGesture {
@@ -70,7 +78,22 @@ struct SettingsView: View {
                                 }
                             },
                             label: {
-                                ProfilePictureAndNameView(publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex)
+                                let publicKeyHex = appState.appSettings?.activeProfile?.publicKeyHex
+                                if let publicKeyHex,
+                                   let publicKey = PublicKey(hex: publicKeyHex),
+                                   appState.privateKeySecureStorage.keypair(for: publicKey) != nil {
+                                    ProfilePictureView(publicKeyHex: publicKeyHex)
+                                } else {
+                                    ProfilePictureView(publicKeyHex: publicKeyHex)
+                                        .overlay(
+                                            Image(systemName: "lock.fill")
+                                                .foregroundColor(.secondary)
+                                                .frame(width: 16, height: 16)
+                                                .offset(x: 4, y: 4),
+                                            alignment: .bottomTrailing
+                                        )
+                                }
+                                ProfileNameView(publicKeyHex: publicKeyHex)
                             }
                         )
 
@@ -126,8 +149,11 @@ struct SettingsView: View {
             Text(.localizable.signOutFromDevice),
             isPresented: $isShowingSignOutConfirmation
         ) {
-            if let appSettings = appState.appSettings, let profileToSignOut, profileToSignOut.publicKeyHex != nil {
+            if let appSettings = appState.appSettings, let profileToSignOut, let publicKeyHex = profileToSignOut.publicKeyHex {
                 Button(role: .destructive) {
+                    if let publicKey = PublicKey(hex: publicKeyHex) {
+                        appState.privateKeySecureStorage.delete(for: publicKey)
+                    }
                     if appSettings.activeProfile == profileToSignOut {
                         appSettings.activeProfile = appSettings.profiles.first(where: { $0 != profileToSignOut })
                     }

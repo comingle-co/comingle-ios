@@ -50,9 +50,27 @@ struct ContentView: View {
                     },
                     label: {
                         if let publicKey = appState.publicKey {
-                            ProfilePictureView(publicKeyHex: publicKey.hex)
+                            if appState.keypair != nil {
+                                ProfilePictureView(publicKeyHex: publicKey.hex)
+                            } else {
+                                ProfilePictureView(publicKeyHex: publicKey.hex)
+                                    .overlay(
+                                        Image(systemName: "lock.fill")
+                                            .foregroundColor(.secondary)
+                                            .frame(width: 16, height: 16)
+                                            .offset(x: 4, y: 4),
+                                        alignment: .bottomTrailing
+                                    )
+                            }
                         } else {
                             GuestProfilePictureView()
+                                .overlay(
+                                    Image(systemName: "lock.fill")
+                                        .foregroundColor(.secondary)
+                                        .frame(width: 16, height: 16)
+                                        .offset(x: 4, y: 4),
+                                    alignment: .bottomTrailing
+                                )
                         }
                     }
                 )
