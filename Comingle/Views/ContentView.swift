@@ -114,6 +114,7 @@ struct CustomTabBarItem: View {
                 .font(.caption)
         }
         .padding()
+        .contentShape(Rectangle())
         .onTapGesture {
             selectedTab = tab
             onTapAction()

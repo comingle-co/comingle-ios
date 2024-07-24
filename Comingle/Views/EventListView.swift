@@ -171,11 +171,13 @@ struct CustomSegmentedPickerItem: View {
 
     var body: some View {
         Text(title)
+            .font(.subheadline)
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity)
             .background(selectedTimeTab == timeTab ? .accent : Color.clear)
             .foregroundColor(selectedTimeTab == timeTab ? .primary : .secondary)
             .cornerRadius(8)
+            .contentShape(Rectangle())
             .onTapGesture {
                 selectedTimeTab = timeTab
                 onTapAction()
