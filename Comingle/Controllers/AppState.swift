@@ -192,7 +192,6 @@ class AppState: ObservableObject {
         }
         newRelays.forEach {
             relayPool.add(relay: $0)
-            refresh(relay: $0)
         }
     }
 }

@@ -31,11 +31,5 @@ struct ComingleApp: App {
                 .environmentObject(appState)
         }
         .modelContainer(container)
-        .onChange(of: appState.appSettings?.activeProfile) { _, _ in
-            appState.updateRelayPool()
-        }
-        .onChange(of: appState.appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList) { _, _ in
-            appState.updateRelayPool()
-        }
     }
 }

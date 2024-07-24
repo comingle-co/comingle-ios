@@ -49,6 +49,7 @@ struct ContentView: View {
                 loadProfiles()
                 loadNostrEvents()
                 appState.updateRelayPool()
+                appState.refresh()
             }
             .toolbar {
                 NavigationLink(

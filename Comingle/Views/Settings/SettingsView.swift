@@ -253,6 +253,9 @@ extension SettingsView {
             }
 
             appSettings.activeProfile = profile
+
+            appState.updateRelayPool()
+            appState.refresh()
         }
     }
 }

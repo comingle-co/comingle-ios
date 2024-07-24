@@ -185,6 +185,9 @@ extension LoginView {
                 }
                 appSettings.activeProfile = profile
             }
+
+            appState.updateRelayPool()
+            appState.refresh()
         }
     }
 }
