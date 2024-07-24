@@ -13,7 +13,6 @@ import SwiftUI
 struct ContentView: View {
 
     let modelContext: ModelContext
-    @State private var appSettings: AppSettings?
     @EnvironmentObject var appState: AppState
 
     init(modelContext: ModelContext) {
@@ -43,13 +42,6 @@ struct ContentView: View {
                     }
                     .tag(HomeTabs.explore)
                 }
-            }
-            .task {
-                loadAppSettings()
-                loadProfiles()
-                loadNostrEvents()
-                appState.updateRelayPool()
-                appState.refresh()
             }
             .toolbar {
                 NavigationLink(
@@ -84,38 +76,6 @@ struct ContentView: View {
                 )
             }
         }
-    }
-
-    private func loadAppSettings() {
-        let request = FetchDescriptor<AppSettings>()
-        let data = try? modelContext.fetch(request)
-        if let existingAppSettings = data?.first {
-            appSettings = existingAppSettings
-        } else {
-            let newAppSettings = AppSettings()
-            modelContext.insert(newAppSettings)
-            do {
-                try modelContext.save()
-                appSettings = newAppSettings
-                appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList.append(RelaySettings(relayURLString: AppState.defaultRelayURLString))
-            } catch {
-                fatalError("Unable to save initial AppSettings.")
-            }
-        }
-
-        appState.appSettings = appSettings
-    }
-
-    private func loadProfiles() {
-        let profileDescriptor = FetchDescriptor<Profile>()
-        let profiles = (try? modelContext.fetch(profileDescriptor)) ?? []
-        appState.profiles = profiles
-    }
-
-    private func loadNostrEvents() {
-        let descriptor = FetchDescriptor<PersistentNostrEvent>()
-        let persistentNostrEvents = (try? modelContext.fetch(descriptor)) ?? []
-        appState.loadPersistentNostrEvents(persistentNostrEvents)
     }
 }
 
