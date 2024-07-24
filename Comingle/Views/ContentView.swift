@@ -20,40 +20,48 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                TabView(selection: $appState.activeTab) {
-                    if appState.publicKey != nil {
+        ScrollViewReader { scrollViewProxy in
+            NavigationStack {
+                VStack {
+                    if appState.publicKey != nil && appState.activeTab == .following {
                         NavigationStack {
                             HomeView(modelContext: modelContext, appState: appState)
                         }
-                        .tabItem {
-                            Label(.localizable.home, systemImage: "house")
-                        }
-                        .tag(HomeTabs.following)
                     }
 
-                    NavigationStack {
-                        EventListView(eventListType: .all)
-                            .navigationTitle(.localizable.explore)
+                    if appState.activeTab == .explore {
+                        NavigationStack {
+                            EventListView(eventListType: .all)
+                                .navigationTitle(.localizable.explore)
+                        }
                     }
-                    .tabItem {
-                        Label(.localizable.explore, systemImage: "magnifyingglass")
+                    CustomTabBar(selectedTab: $appState.activeTab) {
+                        withAnimation {
+                            scrollViewProxy.scrollTo("event-list-view-top")
+                        }
                     }
-                    .tag(HomeTabs.explore)
                 }
-            }
-            .toolbar {
-                NavigationLink(
-                    destination: {
-                        SettingsView(modelContext: modelContext, appState: appState)
-                    },
-                    label: {
-                        if let publicKey = appState.publicKey {
-                            if appState.keypair != nil {
-                                ProfilePictureView(publicKeyHex: publicKey.hex)
+                .toolbar {
+                    NavigationLink(
+                        destination: {
+                            SettingsView(modelContext: modelContext, appState: appState)
+                        },
+                        label: {
+                            if let publicKey = appState.publicKey {
+                                if appState.keypair != nil {
+                                    ProfilePictureView(publicKeyHex: publicKey.hex)
+                                } else {
+                                    ProfilePictureView(publicKeyHex: publicKey.hex)
+                                        .overlay(
+                                            Image(systemName: "lock.fill")
+                                                .foregroundColor(.secondary)
+                                                .frame(width: 16, height: 16)
+                                                .offset(x: 4, y: 4),
+                                            alignment: .bottomTrailing
+                                        )
+                                }
                             } else {
-                                ProfilePictureView(publicKeyHex: publicKey.hex)
+                                GuestProfilePictureView()
                                     .overlay(
                                         Image(systemName: "lock.fill")
                                             .foregroundColor(.secondary)
@@ -62,20 +70,53 @@ struct ContentView: View {
                                         alignment: .bottomTrailing
                                     )
                             }
-                        } else {
-                            GuestProfilePictureView()
-                                .overlay(
-                                    Image(systemName: "lock.fill")
-                                        .foregroundColor(.secondary)
-                                        .frame(width: 16, height: 16)
-                                        .offset(x: 4, y: 4),
-                                    alignment: .bottomTrailing
-                                )
                         }
-                    }
-                )
+                    )
+                }
             }
         }
+    }
+}
+
+struct CustomTabBar: View {
+    @Binding var selectedTab: HomeTabs
+
+    let onTapAction: () -> Void
+
+    var body: some View {
+        HStack {
+            CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.following, selectedTab: $selectedTab, onTapAction: onTapAction)
+            CustomTabBarItem(iconName: "magnifyingglass", title: .localizable.explore, tab: HomeTabs.explore, selectedTab: $selectedTab, onTapAction: onTapAction)
+        }
+        .frame(height: 50)
+        .background(Color.gray.opacity(0.2))
+    }
+}
+
+struct CustomTabBarItem: View {
+    let iconName: String
+    let title: LocalizedStringResource
+    let tab: HomeTabs
+    @Binding var selectedTab: HomeTabs
+
+    let onTapAction: () -> Void
+
+    var body: some View {
+        VStack {
+            Image(systemName: iconName)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 20, height: 20)
+            Text(title)
+                .font(.caption)
+        }
+        .padding()
+        .onTapGesture {
+            selectedTab = tab
+            onTapAction()
+        }
+        .foregroundColor(selectedTab == tab ? .accent : .gray)
+        .frame(maxWidth: .infinity)
     }
 }
 

@@ -30,6 +30,8 @@ struct EventListView: View {
                 if filteredEvents.isEmpty {
                     Text(.localizable.noEvents)
                 } else {
+                    EmptyView().id("event-list-view-top")
+
                     ForEach(filteredEvents, id: \.self) { event in
                         Section(
                             content: {
