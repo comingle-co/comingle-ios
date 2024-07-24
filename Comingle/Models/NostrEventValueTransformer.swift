@@ -31,15 +31,31 @@ class NostrEventValueTransformer: ValueTransformer {
         }
 
         let jsonDecoder = JSONDecoder()
-        guard let nostrEvent = try? jsonDecoder.decode(NostrEvent.self, from: data) else {
+
+        guard let eventKindMapper = try? jsonDecoder.decode(EventKindMapper.self, from: data) else {
             return nil
         }
 
-        // FIXME: Figure out how to decode the JSON to the appropriate subclass of NostrEvent without needing to decode twice.
-        return try? jsonDecoder.decode(nostrEvent.kind.classForKind, from: data)
+        guard let nostrEvent = try? jsonDecoder.decode(eventKindMapper.classForKind, from: data) else {
+            return nil
+        }
+
+        return nostrEvent
     }
 
     static func register() {
         ValueTransformer.setValueTransformer(NostrEventValueTransformer(), forName: .init("NostrEventValueTransformer"))
+    }
+}
+
+private struct EventKindMapper: Decodable {
+    let kind: EventKind
+
+    enum CodingKeys: CodingKey {
+        case kind
+    }
+
+    var classForKind: NostrEvent.Type {
+        kind.classForKind
     }
 }
