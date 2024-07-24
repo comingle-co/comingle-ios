@@ -78,8 +78,7 @@ struct SettingsView: View {
                             },
                             label: {
                                 let publicKeyHex = viewModel.publicKeyHex
-                                if let publicKeyHex,
-                                   let publicKey = PublicKey(hex: publicKeyHex) {
+                                if let publicKeyHex, PublicKey(hex: publicKeyHex) != nil {
                                     if viewModel.isActiveProfileSignedInWithPrivateKey {
                                         ProfilePictureView(publicKeyHex: publicKeyHex)
                                     } else {
@@ -106,7 +105,7 @@ struct SettingsView: View {
                             }
                         )
 
-                        if let publicKeyHex = viewModel.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
+                        if let publicKeyHex = viewModel.publicKeyHex, PublicKey(hex: publicKeyHex) != nil {
                             NavigationLink(destination: ProfileView(publicKeyHex: publicKeyHex)) {
                                 Text(.localizable.viewProfile)
                             }
@@ -253,6 +252,10 @@ extension SettingsView {
             }
 
             appSettings.activeProfile = profile
+
+            if profile.publicKeyHex == nil {
+                appState.activeTab = .explore
+            }
 
             appState.updateRelayPool()
             appState.refresh()

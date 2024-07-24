@@ -60,6 +60,12 @@ struct ComingleApp: App {
         }
 
         appState.appSettings = appSettings
+
+        if appSettings.activeProfile?.publicKeyHex == nil {
+            appState.activeTab = .explore
+        } else {
+            appState.activeTab = .following
+        }
     }
 
     @MainActor

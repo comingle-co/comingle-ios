@@ -16,74 +16,74 @@ struct EventListView: View {
     @State private var timeTabFilter: TimeTabs = .upcoming
 
     var body: some View {
-        VStack {
-            Picker(selection: $timeTabFilter, label: Text(.localizable.following)) {
-                ForEach(TimeTabs.allCases, id: \.self) { filter in
-                    Text(filter.localizedStringResource)
-                        .tag(filter)
+        ScrollViewReader { scrollViewProxy in
+            VStack {
+                CustomSegmentedPicker(selectedTimeTab: $timeTabFilter) {
+                    withAnimation {
+                        scrollViewProxy.scrollTo("event-list-view-top")
+                    }
                 }
-            }
-            .pickerStyle(.segmented)
 
-            List {
-                let filteredEvents = events(timeTabFilter)
-                if filteredEvents.isEmpty {
-                    Text(.localizable.noEvents)
-                } else {
-                    EmptyView().id("event-list-view-top")
+                List {
+                    let filteredEvents = events(timeTabFilter)
+                    if filteredEvents.isEmpty {
+                        Text(.localizable.noEvents)
+                    } else {
+                        EmptyView().id("event-list-view-top")
 
-                    ForEach(filteredEvents, id: \.self) { event in
-                        Section(
-                            content: {
-                                NavigationLink(destination: EventView(event: event, calendar: Calendar.current)) {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
-                                                .font(.headline)
+                        ForEach(filteredEvents, id: \.self) { event in
+                            Section(
+                                content: {
+                                    NavigationLink(destination: EventView(event: event, calendar: Calendar.current)) {
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                                Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
+                                                    .font(.headline)
 
-                                            Divider()
-
-                                            ProfilePictureAndNameView(publicKeyHex: event.pubkey)
-
-                                            let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
-
-                                            if !locations.isEmpty {
                                                 Divider()
 
-                                                Text(event.locations.joined())
-                                                    .font(.subheadline)
-                                            }
+                                                ProfilePictureAndNameView(publicKeyHex: event.pubkey)
 
-                                            if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
-                                                Divider()
+                                                let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
 
-                                                switch timeTabFilter {
-                                                case .past:
-                                                    Text(.localizable.numAttended(rsvps.count))
-                                                        .font(.subheadline)
-                                                case .upcoming:
-                                                    Text(.localizable.numGoing(rsvps.count))
+                                                if !locations.isEmpty {
+                                                    Divider()
+
+                                                    Text(event.locations.joined())
                                                         .font(.subheadline)
                                                 }
+
+                                                if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
+                                                    Divider()
+
+                                                    switch timeTabFilter {
+                                                    case .past:
+                                                        Text(.localizable.numAttended(rsvps.count))
+                                                            .font(.subheadline)
+                                                    case .upcoming:
+                                                        Text(.localizable.numGoing(rsvps.count))
+                                                            .font(.subheadline)
+                                                    }
+                                                }
+                                            }
+
+                                            if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
+                                                KFImage.url(calendarEventImageURL)
+                                                    .resizable()
+                                                    .placeholder { ProgressView() }
+                                                    .scaledToFit()
+                                                    .frame(maxWidth: 100, maxHeight: 200)
                                             }
                                         }
-
-                                        if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
-                                            KFImage.url(calendarEventImageURL)
-                                                .resizable()
-                                                .placeholder { ProgressView() }
-                                                .scaledToFit()
-                                                .frame(maxWidth: 100, maxHeight: 200)
-                                        }
+                                    }
+                                }, header: {
+                                    if let startTimestamp = event.startTimestamp {
+                                        Text(format(date: startTimestamp, timeZone: event.startTimeZone))
                                     }
                                 }
-                            }, header: {
-                                if let startTimestamp = event.startTimestamp {
-                                    Text(format(date: startTimestamp, timeZone: event.startTimeZone))
-                                }
-                            }
-                        )
-                        .padding(.vertical, 10)
+                            )
+                            .padding(.vertical, 10)
+                        }
                     }
                 }
             }
@@ -146,6 +146,43 @@ struct EventListView: View {
     }
 }
 
+struct CustomSegmentedPicker: View {
+    @Binding var selectedTimeTab: TimeTabs
+
+    let onTapAction: () -> Void
+
+    var body: some View {
+        HStack {
+            ForEach(TimeTabs.allCases, id: \.self) { timeTab in
+                CustomSegmentedPickerItem(title: timeTab.localizedStringResource, timeTab: timeTab, selectedTimeTab: $selectedTimeTab, onTapAction: onTapAction)
+            }
+        }
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(8)
+    }
+}
+
+struct CustomSegmentedPickerItem: View {
+    let title: LocalizedStringResource
+    let timeTab: TimeTabs
+    @Binding var selectedTimeTab: TimeTabs
+
+    let onTapAction: () -> Void
+
+    var body: some View {
+        Text(title)
+            .padding(.vertical, 4)
+            .frame(maxWidth: .infinity)
+            .background(selectedTimeTab == timeTab ? .accent : Color.clear)
+            .foregroundColor(selectedTimeTab == timeTab ? .primary : .secondary)
+            .cornerRadius(8)
+            .onTapGesture {
+                selectedTimeTab = timeTab
+                onTapAction()
+            }
+    }
+}
+
 extension URL {
     private static var imageExtensions = Set([
         "bmp",
@@ -172,7 +209,7 @@ extension Date {
     }
 }
 
-enum EventListType {
+enum EventListType: Equatable {
     case all
     case followed
     case profile(String)

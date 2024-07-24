@@ -35,7 +35,7 @@ struct ContentView: View {
                                 .navigationTitle(.localizable.explore)
                         }
                     }
-                    CustomTabBar(selectedTab: $appState.activeTab) {
+                    CustomTabBar(selectedTab: $appState.activeTab, showFollowingTab: appState.publicKey != nil) {
                         withAnimation {
                             scrollViewProxy.scrollTo("event-list-view-top")
                         }
@@ -81,11 +81,14 @@ struct ContentView: View {
 struct CustomTabBar: View {
     @Binding var selectedTab: HomeTabs
 
+    let showFollowingTab: Bool
     let onTapAction: () -> Void
 
     var body: some View {
         HStack {
-            CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.following, selectedTab: $selectedTab, onTapAction: onTapAction)
+            if showFollowingTab {
+                CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.following, selectedTab: $selectedTab, onTapAction: onTapAction)
+            }
             CustomTabBarItem(iconName: "magnifyingglass", title: .localizable.explore, tab: HomeTabs.explore, selectedTab: $selectedTab, onTapAction: onTapAction)
         }
         .frame(height: 50)
