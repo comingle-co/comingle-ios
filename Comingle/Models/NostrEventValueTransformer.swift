@@ -36,11 +36,7 @@ class NostrEventValueTransformer: ValueTransformer {
             return nil
         }
 
-        guard let nostrEvent = try? jsonDecoder.decode(eventKindMapper.classForKind, from: data) else {
-            return nil
-        }
-
-        return nostrEvent
+        return try? jsonDecoder.decode(eventKindMapper.classForKind, from: data)
     }
 
     static func register() {
