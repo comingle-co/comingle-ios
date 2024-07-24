@@ -190,11 +190,11 @@ enum TimeTabs: CaseIterable {
     }
 }
 
-struct EventListView_Previews: PreviewProvider {
-
-    @State static var appState = AppState()
-
-    static var previews: some View {
-        EventListView(eventListType: .all)
-    }
-}
+//struct EventListView_Previews: PreviewProvider {
+//
+//    @State static var appState = AppState()
+//
+//    static var previews: some View {
+//        EventListView(eventListType: .all)
+//    }
+//}

@@ -23,12 +23,12 @@ struct ProfileView: View {
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
-
-    @State static var appState = AppState()
-
-    static var previews: some View {
-        ProfileView(publicKeyHex: "fake-pubkey")
-            .environmentObject(appState)
-    }
-}
+//struct ProfileView_Previews: PreviewProvider {
+//
+//    @State static var appState = AppState()
+//
+//    static var previews: some View {
+//        ProfileView(publicKeyHex: "fake-pubkey")
+//            .environmentObject(appState)
+//    }
+//}

@@ -24,12 +24,12 @@ struct ProfilePictureAndNameView: View {
     }
 }
 
-struct ProfilePictureAndNameView_Previews: PreviewProvider {
-
-    @State static var appState = AppState()
-
-    static var previews: some View {
-        ProfilePictureAndNameView(publicKeyHex: "fake-pubkey")
-            .environmentObject(appState)
-    }
-}
+//struct ProfilePictureAndNameView_Previews: PreviewProvider {
+//
+//    @State static var appState = AppState()
+//
+//    static var previews: some View {
+//        ProfilePictureAndNameView(publicKeyHex: "fake-pubkey")
+//            .environmentObject(appState)
+//    }
+//}

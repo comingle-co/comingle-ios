@@ -139,7 +139,7 @@ enum RelayOption: CaseIterable {
 extension RelaysSettingsView {
     class ViewModel: ObservableObject {
         let publicKeyHex: String?
-        var modelContext: ModelContext
+        let modelContext: ModelContext
         var relayPoolSettings: RelayPoolSettings?
 
         init(modelContext: ModelContext, publicKeyHex: String?) {

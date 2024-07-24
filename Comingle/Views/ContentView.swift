@@ -47,6 +47,8 @@ struct ContentView: View {
             .task {
                 loadAppSettings()
                 loadProfiles()
+                loadNostrEvents()
+                appState.updateRelayPool()
             }
             .toolbar {
                 NavigationLink(
@@ -104,9 +106,15 @@ struct ContentView: View {
     }
 
     private func loadProfiles() {
-        var profileDescriptor = FetchDescriptor<Profile>()
-        var profiles = (try? modelContext.fetch(profileDescriptor)) ?? []
+        let profileDescriptor = FetchDescriptor<Profile>()
+        let profiles = (try? modelContext.fetch(profileDescriptor)) ?? []
         appState.profiles = profiles
+    }
+
+    private func loadNostrEvents() {
+        let descriptor = FetchDescriptor<PersistentNostrEvent>()
+        let persistentNostrEvents = (try? modelContext.fetch(descriptor)) ?? []
+        appState.loadPersistentNostrEvents(persistentNostrEvents)
     }
 }
 

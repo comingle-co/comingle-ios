@@ -37,11 +37,11 @@ struct ProfilePictureView: View {
     }
 }
 
-struct ProfilePictureView_Previews: PreviewProvider {
-
-    @State static var appState = AppState()
-
-    static var previews: some View {
-        ProfilePictureView(publicKeyHex: "fake-pubkey")
-    }
-}
+//struct ProfilePictureView_Previews: PreviewProvider {
+//
+//    @State static var appState = AppState()
+//
+//    static var previews: some View {
+//        ProfilePictureView(publicKeyHex: "fake-pubkey")
+//    }
+//}

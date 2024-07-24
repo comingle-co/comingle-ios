@@ -13,6 +13,8 @@
 		3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9772A3F6DFD009E1067 /* LoginView.swift */; };
 		3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9812A3FD68B009E1067 /* SettingsView.swift */; };
 		3A2FF9842A40025B009E1067 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9832A40025B009E1067 /* AppState.swift */; };
+		3A34194A2C50A36B0039620B /* PersistentNostrEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3419492C50A36B0039620B /* PersistentNostrEvent.swift */; };
+		3A34194D2C50B2680039620B /* NostrEventValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */; };
 		3A34AAA32B48FE1F00C5F910 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */; };
 		3A34AAAA2B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34AAA92B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift */; };
 		3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDB2A0B348100897303 /* ComingleApp.swift */; };
@@ -39,7 +41,6 @@
 		3A4A89A72C3E3F7400238043 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89A62C3E3F7400238043 /* AppearanceSettingsView.swift */; };
 		3A4A89AB2C3E4ECC00238043 /* PrivateKeySecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */; };
 		3A4A89B12C3F9A4A00238043 /* RelayPoolSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89B02C3F9A4A00238043 /* RelayPoolSettings.swift */; };
-		3A4A89B42C40D0C700238043 /* NostrEventStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89B32C40D0C700238043 /* NostrEventStorage.swift */; };
 		3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB3C2C34E567007AE9A4 /* Kingfisher */; };
 		3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB452C34FD98007AE9A4 /* GeohashKit */; };
 		3A4FCB502C36333A007AE9A4 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */; };
@@ -70,6 +71,8 @@
 		3A2FF9772A3F6DFD009E1067 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		3A2FF9812A3FD68B009E1067 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A2FF9832A40025B009E1067 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		3A3419492C50A36B0039620B /* PersistentNostrEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentNostrEvent.swift; sourceTree = "<group>"; };
+		3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NostrEventValueTransformer.swift; sourceTree = "<group>"; };
 		3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		3A34AAA92B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI+LocalizedStringResource.swift"; sourceTree = "<group>"; };
 		3A453DD82A0B348100897303 /* Comingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,7 +103,6 @@
 		3A4A89A62C3E3F7400238043 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKeySecureStorage.swift; sourceTree = "<group>"; };
 		3A4A89B02C3F9A4A00238043 /* RelayPoolSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayPoolSettings.swift; sourceTree = "<group>"; };
-		3A4A89B32C40D0C700238043 /* NostrEventStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NostrEventStorage.swift; sourceTree = "<group>"; };
 		3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
 		3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBasedCalendarEventSortComparator.swift; sourceTree = "<group>"; };
 		3A6451842C44C879000DC75B /* RelaySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaySettings.swift; sourceTree = "<group>"; };
@@ -224,9 +226,10 @@
 			children = (
 				3A464FF22C3A296400AD4B09 /* Settings */,
 				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
-				3A4A89B32C40D0C700238043 /* NostrEventStorage.swift */,
+				3A3419492C50A36B0039620B /* PersistentNostrEvent.swift */,
 				3A464FFB2C3A312200AD4B09 /* Profile.swift */,
 				3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */,
+				3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -474,10 +477,12 @@
 				3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */,
 				3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */,
 				3A4A89A52C3E3F6800238043 /* RelaysSettingsView.swift in Sources */,
+				3A34194A2C50A36B0039620B /* PersistentNostrEvent.swift in Sources */,
 				3A464FFE2C3A34BE00AD4B09 /* AppSettings.swift in Sources */,
 				3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */,
 				3A4FCB502C36333A007AE9A4 /* EventListView.swift in Sources */,
 				3A4A89A72C3E3F7400238043 /* AppearanceSettingsView.swift in Sources */,
+				3A34194D2C50B2680039620B /* NostrEventValueTransformer.swift in Sources */,
 				3A464FFC2C3A312200AD4B09 /* Profile.swift in Sources */,
 				3A6451852C44C879000DC75B /* RelaySettings.swift in Sources */,
 				3A4A89982C3CF24800238043 /* ProfileNameView.swift in Sources */,
@@ -485,7 +490,6 @@
 				3A4A899B2C3CF38D00238043 /* Utilities.swift in Sources */,
 				3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */,
 				3A4A89AB2C3E4ECC00238043 /* PrivateKeySecureStorage.swift in Sources */,
-				3A4A89B42C40D0C700238043 /* NostrEventStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

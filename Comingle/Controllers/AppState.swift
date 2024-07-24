@@ -14,8 +14,12 @@ class AppState: ObservableObject {
 
     let privateKeySecureStorage = PrivateKeySecureStorage()
 
+    let modelContext: ModelContext
+
     @Published var relayPool: RelayPool = RelayPool(relays: [])
     @Published var activeTab: HomeTabs = .following
+
+    @Published var persistentNostrEvents: [String: PersistentNostrEvent] = [:]
 
     @Published var followListEvents: [String: FollowListEvent] = [:]
     @Published var metadataEvents: [String: MetadataEvent] = [:]
@@ -26,6 +30,10 @@ class AppState: ObservableObject {
 
     @Published var appSettings: AppSettings?
     @Published var profiles: [Profile] = []
+
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
 
     var publicKey: PublicKey? {
         if let appSettings, let publicKeyHex = appSettings.activeProfile?.publicKeyHex {
@@ -166,6 +174,27 @@ class AppState: ObservableObject {
         }
         .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
     }
+
+    func updateRelayPool() {
+        let profile = appSettings?.activeProfile
+        let relays = (profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? [])
+            .compactMap { URL(string: $0.relayURLString) }
+            .compactMap { try? Relay(url: $0) }
+        let relaySet = Set(relays)
+
+        let oldRelays = relayPool.relays.subtracting(relaySet)
+        let newRelays = relaySet.subtracting(relayPool.relays)
+
+        relayPool.delegate = self
+
+        oldRelays.forEach {
+            relayPool.remove(relay: $0)
+        }
+        newRelays.forEach {
+            relayPool.add(relay: $0)
+            refresh(relay: $0)
+        }
+    }
 }
 
 extension AppState: EventVerifying, RelayDelegate {
@@ -191,18 +220,12 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    func refresh(publicKeyHex: String? = nil, relay: Relay? = nil) {
+    func refresh(relay: Relay? = nil) {
         guard (relay == nil && !relayPool.relays.isEmpty) || relay?.state == .connected else {
             return
         }
 
-        let authors: [String]
-        if let publicKeyHex {
-            authors = [publicKeyHex]
-        } else {
-            authors = profiles.compactMap({ $0.publicKeyHex })
-        }
-
+        let authors = profiles.compactMap({ $0.publicKeyHex })
         if !authors.isEmpty {
             guard let bootstrapFilter = Filter(
                 authors: authors,
@@ -241,7 +264,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, forRelay relay: Relay) {
+    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent) {
         if let existingFollowList = self.followListEvents[followListEvent.pubkey] {
             if existingFollowList.createdAt < followListEvent.createdAt {
                 self.followListEvents[followListEvent.pubkey] = followListEvent
@@ -251,7 +274,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveMetadataEvent(_ metadataEvent: MetadataEvent, forRelay relay: Relay) {
+    private func didReceiveMetadataEvent(_ metadataEvent: MetadataEvent) {
         if let existingMetadataEvent = self.metadataEvents[metadataEvent.pubkey] {
             if existingMetadataEvent.createdAt < metadataEvent.createdAt {
                 self.metadataEvents[metadataEvent.pubkey] = metadataEvent
@@ -261,7 +284,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveCalendarListEvent(_ calendarListEvent: CalendarListEvent, forRelay relay: Relay) {
+    private func didReceiveCalendarListEvent(_ calendarListEvent: CalendarListEvent) {
         guard let calendarListEventCoordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value else {
             return
         }
@@ -277,7 +300,7 @@ extension AppState: EventVerifying, RelayDelegate {
         pullMissingMetadata([calendarListEvent.pubkey])
     }
 
-    private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent, forRelay relay: Relay) {
+    private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent) {
         guard let eventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates()?.tag.value,
               let startTimestamp = timeBasedCalendarEvent.startTimestamp,
               startTimestamp <= timeBasedCalendarEvent.endTimestamp ?? startTimestamp,
@@ -331,7 +354,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveCalendarEventRSVP(_ rsvp: CalendarEventRSVP, forRelay relay: Relay) {
+    private func didReceiveCalendarEventRSVP(_ rsvp: CalendarEventRSVP) {
         guard let rsvpEventCoordinates = rsvp.replaceableEventCoordinates()?.tag.value else {
             return
         }
@@ -357,19 +380,60 @@ extension AppState: EventVerifying, RelayDelegate {
             // If the verification throws an error, that means they are invalid and we should ignore the event.
             try? self.verifyEvent(nostrEvent)
 
+            if let existingEvent = self.persistentNostrEvents[nostrEvent.id] {
+                if !existingEvent.relays.contains(where: { $0 == relay.url }) {
+                    existingEvent.relays.append(relay.url)
+                }
+            } else {
+                let persistentNostrEvent = PersistentNostrEvent(nostrEvent: nostrEvent, relays: [relay.url])
+                self.persistentNostrEvents[persistentNostrEvent.nostrEvent.id] = persistentNostrEvent
+                self.modelContext.insert(persistentNostrEvent)
+                do {
+                    try self.modelContext.save()
+                } catch {
+                    print("Failed to save PersistentNostrEvent. id=\(nostrEvent.id)")
+                }
+            }
+
             switch nostrEvent {
             case let followListEvent as FollowListEvent:
-                self.didReceiveFollowListEvent(followListEvent, forRelay: relay)
+                self.didReceiveFollowListEvent(followListEvent)
             case let metadataEvent as MetadataEvent:
-                self.didReceiveMetadataEvent(metadataEvent, forRelay: relay)
+                self.didReceiveMetadataEvent(metadataEvent)
             case let calendarListEvent as CalendarListEvent:
-                self.didReceiveCalendarListEvent(calendarListEvent, forRelay: relay)
+                self.didReceiveCalendarListEvent(calendarListEvent)
             case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
-                self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent, forRelay: relay)
+                self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
             case let rsvpEvent as CalendarEventRSVP:
-                self.didReceiveCalendarEventRSVP(rsvpEvent, forRelay: relay)
+                self.didReceiveCalendarEventRSVP(rsvpEvent)
             default:
                 break
+            }
+        }
+    }
+
+    func loadPersistentNostrEvents(_ persistentNostrEvents: [PersistentNostrEvent]) {
+        for persistentNostrEvent in persistentNostrEvents {
+            if let existingEvent = self.persistentNostrEvents[persistentNostrEvent.nostrEvent.id] {
+                let missingRelays = Set(persistentNostrEvent.relays).subtracting(Set(existingEvent.relays))
+                existingEvent.relays.append(contentsOf: missingRelays)
+            } else {
+                self.persistentNostrEvents[persistentNostrEvent.nostrEvent.id] = persistentNostrEvent
+
+                switch persistentNostrEvent.nostrEvent {
+                case let followListEvent as FollowListEvent:
+                    self.didReceiveFollowListEvent(followListEvent)
+                case let metadataEvent as MetadataEvent:
+                    self.didReceiveMetadataEvent(metadataEvent)
+                case let calendarListEvent as CalendarListEvent:
+                    self.didReceiveCalendarListEvent(calendarListEvent)
+                case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
+                    self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
+                case let rsvpEvent as CalendarEventRSVP:
+                    self.didReceiveCalendarEventRSVP(rsvpEvent)
+                default:
+                    break
+                }
             }
         }
     }

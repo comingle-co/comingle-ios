@@ -13,13 +13,15 @@ import SwiftUI
 struct ComingleApp: App {
     let container: ModelContainer
 
-    @StateObject var appState = AppState()
+    @State var appState: AppState
 
     init() {
+        NostrEventValueTransformer.register()
         do {
-            container = try ModelContainer(for: AppSettings.self)
+            container = try ModelContainer(for: AppSettings.self, PersistentNostrEvent.self)
+            appState = AppState(modelContext: container.mainContext)
         } catch {
-            fatalError("Failed to create ModelContainer for AppSettings.")
+            fatalError("Failed to create ModelContainer for AppSettings and PersistentNostrEvent.")
         }
     }
 
@@ -29,31 +31,11 @@ struct ComingleApp: App {
                 .environmentObject(appState)
         }
         .modelContainer(container)
-        .onChange(of: appState.appSettings?.activeProfile) { _, activeProfile in
-            updateRelayPool(for: activeProfile)
+        .onChange(of: appState.appSettings?.activeProfile) { _, _ in
+            appState.updateRelayPool()
         }
-        .onChange(of: appState.appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList) { _, newRelaySettingsList in
-            updateRelayPool(for: appState.appSettings?.activeProfile, relaySettingsList: newRelaySettingsList)
-        }
-    }
-
-    private func updateRelayPool(for profile: Profile?, relaySettingsList: [RelaySettings]? = nil) {
-        let relays = (relaySettingsList ?? profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? [])
-            .compactMap { URL(string: $0.relayURLString) }
-            .compactMap { try? Relay(url: $0) }
-        let relaySet = Set(relays)
-
-        let oldRelays = appState.relayPool.relays.subtracting(relaySet)
-        let newRelays = relaySet.subtracting(appState.relayPool.relays)
-
-        appState.relayPool.delegate = appState
-
-        oldRelays.forEach {
-            appState.relayPool.remove(relay: $0)
-        }
-        newRelays.forEach {
-            appState.relayPool.add(relay: $0)
-            appState.refresh(relay: $0)
+        .onChange(of: appState.appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList) { _, _ in
+            appState.updateRelayPool()
         }
     }
 }

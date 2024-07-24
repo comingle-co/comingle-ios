@@ -1,0 +1,25 @@
+//
+//  PersistentNostrEvent.swift
+//  Comingle
+//
+//  Created by Terry Yiu on 7/23/24.
+//
+
+import Foundation
+import NostrSDK
+import SwiftData
+
+@Model
+class PersistentNostrEvent {
+    @Attribute(.unique) let id: String
+
+    @Attribute(.transformable(by: NostrEventValueTransformer.self)) let nostrEvent: NostrEvent
+
+    var relays: [URL]
+
+    init(nostrEvent: NostrEvent, relays: [URL] = []) {
+        self.id = nostrEvent.id
+        self.nostrEvent = nostrEvent
+        self.relays = relays
+    }
+}

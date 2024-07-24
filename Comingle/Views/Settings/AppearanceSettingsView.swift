@@ -41,7 +41,7 @@ struct AppearanceSettingsView: View {
 extension AppearanceSettingsView {
     class ViewModel: ObservableObject {
         let publicKeyHex: String?
-        var modelContext: ModelContext
+        let modelContext: ModelContext
         var appearanceSettings: AppearanceSettings?
 
         init(modelContext: ModelContext, publicKeyHex: String?) {
