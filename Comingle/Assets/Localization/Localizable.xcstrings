@@ -37,6 +37,18 @@
         }
       }
     },
+    "addRelay" : {
+      "comment" : "Button to add relay.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Relay"
+          }
+        }
+      }
+    },
     "appDescription" : {
       "comment" : "Description of the app.",
       "extractionState" : "manual",
@@ -609,6 +621,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Public Key"
+          }
+        }
+      }
+    },
+    "relayRead" : {
+      "comment" : "Picker label to specify preference of only reading from a relay.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read"
+          }
+        }
+      }
+    },
+    "relayReadAndWrite" : {
+      "comment" : "Picker label to specify preference of reading from and writing to a relay.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read and Write"
+          }
+        }
+      }
+    },
+    "relayWrite" : {
+      "comment" : "Picker label to specify preference of only writing to a relay.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write"
           }
         }
       }

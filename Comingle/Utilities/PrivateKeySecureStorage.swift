@@ -10,6 +10,9 @@ import NostrSDK
 import Security
 
 class PrivateKeySecureStorage {
+
+    static let shared = PrivateKeySecureStorage()
+
     private let service = "comingle-private-keys"
 
     func keypair(for publicKey: PublicKey) -> Keypair? {

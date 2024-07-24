@@ -11,27 +11,35 @@ import SwiftUI
 
 @main
 struct ComingleApp: App {
+    let container: ModelContainer
+
     @StateObject var appState = AppState()
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(appState)
-        }
-        .modelContainer(
-            for: [AppSettings.self]
-        )
-        .onChange(of: appState.appSettings?.activeProfile) { _, activeProfile in
-            updateRelayPool(for: activeProfile)
-        }
-        .onChange(of: appState.appSettings?.activeProfile?.profileSettings?.relaySettings?.relayURLStrings) { _, newRelayURLStrings in
-            updateRelayPool(for: appState.appSettings?.activeProfile, relayURLStrings: newRelayURLStrings)
+    init() {
+        do {
+            container = try ModelContainer(for: AppSettings.self)
+        } catch {
+            fatalError("Failed to create ModelContainer for AppSettings.")
         }
     }
 
-    private func updateRelayPool(for profile: Profile?, relayURLStrings: [String]? = nil) {
-        let relays = (relayURLStrings ?? profile?.profileSettings?.relaySettings?.relayURLStrings ?? [])
-            .compactMap { URL(string: $0) }
+    var body: some Scene {
+        WindowGroup {
+            ContentView(modelContext: container.mainContext)
+                .environmentObject(appState)
+        }
+        .modelContainer(container)
+        .onChange(of: appState.appSettings?.activeProfile) { _, activeProfile in
+            updateRelayPool(for: activeProfile)
+        }
+        .onChange(of: appState.appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList) { _, newRelaySettingsList in
+            updateRelayPool(for: appState.appSettings?.activeProfile, relaySettingsList: newRelaySettingsList)
+        }
+    }
+
+    private func updateRelayPool(for profile: Profile?, relaySettingsList: [RelaySettings]? = nil) {
+        let relays = (relaySettingsList ?? profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? [])
+            .compactMap { URL(string: $0.relayURLString) }
             .compactMap { try? Relay(url: $0) }
         let relaySet = Set(relays)
 

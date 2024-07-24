@@ -7,20 +7,27 @@
 
 import Combine
 import NostrSDK
+import SwiftData
 import SwiftUI
 
 struct LoginView: View, RelayURLValidating {
-    @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
+
+    @State private var viewModel: ViewModel
 
     @State private var nostrIdentifier: String = "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf"
     @State private var primaryRelay: String = AppState.defaultRelayURLString
 
     @State private var validKey: Bool = false
-    @State private var validRelay: Bool = false
+    @State private var validatedRelayURL: URL?
 
     @State private var keypair: Keypair?
     @State private var publicKey: PublicKey?
+
+    init(modelContext: ModelContext, appState: AppState) {
+        let viewModel = ViewModel(modelContext: modelContext, appState: appState)
+        _viewModel = State(initialValue: viewModel)
+    }
 
     private func relayFooter() -> AttributedString {
         var footer = AttributedString(localized: .localizable.tryDefaultRelay(AppState.defaultRelayURLString))
@@ -38,31 +45,17 @@ struct LoginView: View, RelayURLValidating {
 
     @MainActor
     private func login() {
-        guard let appSettings = appState.appSettings, let publicKey else {
+        guard let validatedRelayURL else {
             return
         }
 
         if let keypair {
-            appState.privateKeySecureStorage.store(for: keypair)
+            viewModel.login(keypair: keypair, relayURL: validatedRelayURL)
+            dismiss()
+        } else if let publicKey {
+            viewModel.login(publicKey: publicKey, relayURL: validatedRelayURL)
+            dismiss()
         }
-
-        if let profile = appSettings.profiles.first(where: { $0.publicKeyHex == publicKey.hex }) {
-            print("Found existing profile settings for \(publicKey.npub)")
-            if validRelay {
-                profile.profileSettings?.relaySettings?.relayURLStrings.append(primaryRelay)
-            }
-            appSettings.activeProfile = profile
-        } else {
-            print("Creating new profile settings for \(publicKey.npub)")
-            let profile = Profile(publicKeyHex: publicKey.hex)
-            appSettings.profiles.append(profile)
-            if validRelay {
-                profile.profileSettings?.relaySettings?.relayURLStrings = [primaryRelay]
-            }
-            appSettings.activeProfile = profile
-        }
-
-        dismiss()
     }
 
     var body: some View {
@@ -88,7 +81,7 @@ struct LoginView: View, RelayURLValidating {
                                     return
                                 }
 
-                                validRelay = isValidRelay(address: filtered)
+                                validatedRelayURL = try? validateRelayURLString(filtered)
                             }
                     },
                     header: {
@@ -144,17 +137,64 @@ struct LoginView: View, RelayURLValidating {
                 login()
             }
             .buttonStyle(.borderedProminent)
-            .disabled(!validKey || !validRelay)
+            .disabled(!validKey || validatedRelayURL == nil)
         }
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
+extension LoginView {
+    class ViewModel: ObservableObject, RelayURLValidating {
+        let modelContext: ModelContext
+        let appState: AppState
 
-    @State static var appState = AppState()
+        init(modelContext: ModelContext, appState: AppState) {
+            self.modelContext = modelContext
+            self.appState = appState
+        }
 
-    static var previews: some View {
-        LoginView()
-            .environmentObject(appState)
+        func login(keypair: Keypair, relayURL: URL) {
+            appState.privateKeySecureStorage.store(for: keypair)
+            login(publicKey: keypair.publicKey, relayURL: relayURL)
+        }
+
+        func login(publicKey: PublicKey, relayURL: URL) {
+            guard let appSettings = appState.appSettings, let validatedRelayURL = try? validateRelayURL(relayURL) else {
+                return
+            }
+
+            if let profile = appState.profiles.first(where: { $0.publicKeyHex == publicKey.hex }) {
+                print("Found existing profile settings for \(publicKey.npub)")
+                if let relayPoolSettings = profile.profileSettings?.relayPoolSettings,
+                   !relayPoolSettings.relaySettingsList.contains(where: { URL(string: $0.relayURLString) == validatedRelayURL }) {
+                    relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: validatedRelayURL.absoluteString))
+                }
+                appSettings.activeProfile = profile
+            } else {
+                print("Creating new profile settings for \(publicKey.npub)")
+                let profile = Profile(publicKeyHex: publicKey.hex)
+                modelContext.insert(profile)
+                do {
+                    try modelContext.save()
+                } catch {
+                    print("Unable to save new profile \(publicKey.npub)")
+                }
+                appState.profiles.append(profile)
+                if let relayPoolSettings = profile.profileSettings?.relayPoolSettings,
+                   !relayPoolSettings.relaySettingsList.contains(where: { URL(string: $0.relayURLString) == validatedRelayURL }) {
+                    relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: validatedRelayURL.absoluteString))
+                }
+                appSettings.activeProfile = profile
+            }
+        }
     }
 }
+
+//struct LoginView_Previews: PreviewProvider {
+//
+//    @State static var appState = AppState()
+//
+//    static var previews: some View {
+//        LoginView()
+//            .environmentObject(appState)
+//    }
+//}

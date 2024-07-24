@@ -38,12 +38,13 @@
 		3A4A89A52C3E3F6800238043 /* RelaysSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89A42C3E3F6800238043 /* RelaysSettingsView.swift */; };
 		3A4A89A72C3E3F7400238043 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89A62C3E3F7400238043 /* AppearanceSettingsView.swift */; };
 		3A4A89AB2C3E4ECC00238043 /* PrivateKeySecureStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */; };
-		3A4A89B12C3F9A4A00238043 /* RelaySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89B02C3F9A4A00238043 /* RelaySettings.swift */; };
+		3A4A89B12C3F9A4A00238043 /* RelayPoolSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89B02C3F9A4A00238043 /* RelayPoolSettings.swift */; };
 		3A4A89B42C40D0C700238043 /* NostrEventStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89B32C40D0C700238043 /* NostrEventStorage.swift */; };
 		3A4FCB3D2C34E567007AE9A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB3C2C34E567007AE9A4 /* Kingfisher */; };
 		3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB452C34FD98007AE9A4 /* GeohashKit */; };
 		3A4FCB502C36333A007AE9A4 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */; };
 		3A4FCB542C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */; };
+		3A6451852C44C879000DC75B /* RelaySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6451842C44C879000DC75B /* RelaySettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,10 +99,11 @@
 		3A4A89A42C3E3F6800238043 /* RelaysSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaysSettingsView.swift; sourceTree = "<group>"; };
 		3A4A89A62C3E3F7400238043 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKeySecureStorage.swift; sourceTree = "<group>"; };
-		3A4A89B02C3F9A4A00238043 /* RelaySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaySettings.swift; sourceTree = "<group>"; };
+		3A4A89B02C3F9A4A00238043 /* RelayPoolSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayPoolSettings.swift; sourceTree = "<group>"; };
 		3A4A89B32C40D0C700238043 /* NostrEventStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NostrEventStorage.swift; sourceTree = "<group>"; };
 		3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
 		3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBasedCalendarEventSortComparator.swift; sourceTree = "<group>"; };
+		3A6451842C44C879000DC75B /* RelaySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaySettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,7 +275,8 @@
 				3A464FF32C3A2A0800AD4B09 /* AppearanceSettings.swift */,
 				3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */,
 				3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */,
-				3A4A89B02C3F9A4A00238043 /* RelaySettings.swift */,
+				3A6451842C44C879000DC75B /* RelaySettings.swift */,
+				3A4A89B02C3F9A4A00238043 /* RelayPoolSettings.swift */,
 				3A464FF52C3A2A5400AD4B09 /* TimeZonePreference.swift */,
 			);
 			path = Settings;
@@ -463,7 +466,7 @@
 				3A4A898A2C3C240C00238043 /* ProfilePictureAndNameView.swift in Sources */,
 				3A4A89942C3CE40A00238043 /* GuestProfilePictureView.swift in Sources */,
 				3A464FF82C3A2C2000AD4B09 /* ProfileSettings.swift in Sources */,
-				3A4A89B12C3F9A4A00238043 /* RelaySettings.swift in Sources */,
+				3A4A89B12C3F9A4A00238043 /* RelayPoolSettings.swift in Sources */,
 				3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */,
 				3A464FF62C3A2A5400AD4B09 /* TimeZonePreference.swift in Sources */,
 				3A4FCB542C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift in Sources */,
@@ -476,6 +479,7 @@
 				3A4FCB502C36333A007AE9A4 /* EventListView.swift in Sources */,
 				3A4A89A72C3E3F7400238043 /* AppearanceSettingsView.swift in Sources */,
 				3A464FFC2C3A312200AD4B09 /* Profile.swift in Sources */,
+				3A6451852C44C879000DC75B /* RelaySettings.swift in Sources */,
 				3A4A89982C3CF24800238043 /* ProfileNameView.swift in Sources */,
 				3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */,
 				3A4A899B2C3CF38D00238043 /* Utilities.swift in Sources */,

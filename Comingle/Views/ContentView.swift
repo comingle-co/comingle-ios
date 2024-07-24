@@ -12,9 +12,13 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @Environment(\.modelContext) var modelContext
+    let modelContext: ModelContext
     @State private var appSettings: AppSettings?
     @EnvironmentObject var appState: AppState
+
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
 
     var body: some View {
         NavigationStack {
@@ -22,7 +26,7 @@ struct ContentView: View {
                 TabView(selection: $appState.activeTab) {
                     if appState.publicKey != nil {
                         NavigationStack {
-                            HomeView()
+                            HomeView(modelContext: modelContext, appState: appState)
                         }
                         .tabItem {
                             Label(.localizable.home, systemImage: "house")
@@ -42,11 +46,12 @@ struct ContentView: View {
             }
             .task {
                 loadAppSettings()
+                loadProfiles()
             }
             .toolbar {
                 NavigationLink(
                     destination: {
-                        SettingsView()
+                        SettingsView(modelContext: modelContext, appState: appState)
                     },
                     label: {
                         if let publicKey = appState.publicKey {
@@ -86,20 +91,32 @@ struct ContentView: View {
         } else {
             let newAppSettings = AppSettings()
             modelContext.insert(newAppSettings)
-            appSettings = newAppSettings
+            do {
+                try modelContext.save()
+                appSettings = newAppSettings
+                appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList.append(RelaySettings(relayURLString: AppState.defaultRelayURLString))
+            } catch {
+                fatalError("Unable to save initial AppSettings.")
+            }
         }
 
         appState.appSettings = appSettings
     }
-}
 
-struct ContentView_Previews: PreviewProvider {
-
-    @State static var appState = AppState()
-
-    static var previews: some View {
-        ContentView()
-            .environmentObject(appState)
-            .modelContainer(for: [AppSettings.self])
+    private func loadProfiles() {
+        var profileDescriptor = FetchDescriptor<Profile>()
+        var profiles = (try? modelContext.fetch(profileDescriptor)) ?? []
+        appState.profiles = profiles
     }
 }
+
+//struct ContentView_Previews: PreviewProvider {
+//
+//    @State static var appState = AppState()
+//
+//    static var previews: some View {
+//        ContentView()
+//            .environmentObject(appState)
+//            .modelContainer(for: [AppSettings.self])
+//    }
+//}

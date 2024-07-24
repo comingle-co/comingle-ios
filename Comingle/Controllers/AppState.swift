@@ -25,6 +25,7 @@ class AppState: ObservableObject {
     @Published var calendarEventsToRsvps: [String: [CalendarEventRSVP]] = [:]
 
     @Published var appSettings: AppSettings?
+    @Published var profiles: [Profile] = []
 
     var publicKey: PublicKey? {
         if let appSettings, let publicKeyHex = appSettings.activeProfile?.publicKeyHex {
@@ -198,10 +199,8 @@ extension AppState: EventVerifying, RelayDelegate {
         let authors: [String]
         if let publicKeyHex {
             authors = [publicKeyHex]
-        } else if let publicKeys = appSettings?.profiles.compactMap({ $0.publicKeyHex }) {
-            authors = publicKeys
         } else {
-            authors = []
+            authors = profiles.compactMap({ $0.publicKeyHex })
         }
 
         if !authors.isEmpty {

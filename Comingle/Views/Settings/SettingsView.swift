@@ -11,13 +11,17 @@ import SwiftUI
 
 struct SettingsView: View {
 
-    @Environment(\.modelContext) var modelContext
-    @EnvironmentObject var appState: AppState
+    @State private var viewModel: ViewModel
 
     @State private var profilePickerExpanded: Bool = false
 
     @State private var profileToSignOut: Profile?
     @State private var isShowingSignOutConfirmation: Bool = false
+
+    init(modelContext: ModelContext, appState: AppState) {
+        let viewModel = ViewModel(modelContext: modelContext, appState: appState)
+        _viewModel = State(initialValue: viewModel)
+    }
 
     var body: some View {
         NavigationStack {
@@ -27,64 +31,69 @@ struct SettingsView: View {
                         DisclosureGroup(
                             isExpanded: $profilePickerExpanded,
                             content: {
-                                if let appSettings = appState.appSettings {
-                                    ForEach(appSettings.profiles, id: \.self) { profile in
-                                        HStack {
-                                            let publicKeyHex = profile.publicKeyHex
-                                            if let publicKeyHex,
-                                               let publicKey = PublicKey(hex: publicKeyHex),
-                                               appState.privateKeySecureStorage.keypair(for: publicKey) != nil {
-                                                ProfilePictureView(publicKeyHex: publicKeyHex)
-                                            } else {
-                                                ProfilePictureView(publicKeyHex: publicKeyHex)
-                                                    .overlay(
-                                                        Image(systemName: "lock.fill")
-                                                            .foregroundColor(.secondary)
-                                                            .frame(width: 16, height: 16)
-                                                            .offset(x: 4, y: 4),
-                                                        alignment: .bottomTrailing
-                                                    )
-                                            }
-                                            if profile == appSettings.activeProfile {
-                                                ProfileNameView(publicKeyHex: publicKeyHex)
-                                                    .foregroundStyle(.accent)
-                                            } else {
-                                                ProfileNameView(publicKeyHex: publicKeyHex)
-                                            }
+                                ForEach(viewModel.profiles, id: \.self) { profile in
+                                    HStack {
+                                        if viewModel.isSignedInWithPrivateKey(profile) {
+                                            ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                        } else {
+                                            ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                                .overlay(
+                                                    Image(systemName: "lock.fill")
+                                                        .foregroundColor(.secondary)
+                                                        .frame(width: 16, height: 16)
+                                                        .offset(x: 4, y: 4),
+                                                    alignment: .bottomTrailing
+                                                )
                                         }
-                                        .tag(profile.publicKeyHex)
-                                        .onTapGesture {
-                                            appSettings.activeProfile = profile
-                                            profilePickerExpanded = false
+                                        if viewModel.isActiveProfile(profile) {
+                                            ProfileNameView(publicKeyHex: profile.publicKeyHex)
+                                                .foregroundStyle(.accent)
+                                        } else {
+                                            ProfileNameView(publicKeyHex: profile.publicKeyHex)
                                         }
-                                        .swipeActions {
-                                            if profile.publicKeyHex != nil {
-                                                Button(role: .destructive) {
-                                                    profileToSignOut = profile
-                                                    isShowingSignOutConfirmation = true
-                                                } label: {
-                                                    Label(.localizable.signOut, systemImage: "door.left.hand.open")
-                                                }
+                                    }
+                                    .tag(profile.publicKeyHex)
+                                    .onTapGesture {
+                                        viewModel.updateActiveProfile(profile)
+                                        profilePickerExpanded = false
+                                    }
+                                    .swipeActions {
+                                        if profile.publicKeyHex != nil {
+                                            Button(role: .destructive) {
+                                                profileToSignOut = profile
+                                                isShowingSignOutConfirmation = true
+                                            } label: {
+                                                Label(.localizable.signOut, systemImage: "door.left.hand.open")
                                             }
                                         }
                                     }
-                                    NavigationLink(destination: LoginView()) {
-                                        Image(systemName: "plus.circle")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 40)
-                                        Text(.localizable.addProfile)
-                                    }
+                                }
+                                NavigationLink(destination: LoginView(modelContext: viewModel.modelContext, appState: viewModel.appState)) {
+                                    Image(systemName: "plus.circle")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 40)
+                                    Text(.localizable.addProfile)
                                 }
                             },
                             label: {
-                                let publicKeyHex = appState.appSettings?.activeProfile?.publicKeyHex
+                                let publicKeyHex = viewModel.publicKeyHex
                                 if let publicKeyHex,
-                                   let publicKey = PublicKey(hex: publicKeyHex),
-                                   appState.privateKeySecureStorage.keypair(for: publicKey) != nil {
-                                    ProfilePictureView(publicKeyHex: publicKeyHex)
+                                   let publicKey = PublicKey(hex: publicKeyHex) {
+                                    if viewModel.isActiveProfileSignedInWithPrivateKey {
+                                        ProfilePictureView(publicKeyHex: publicKeyHex)
+                                    } else {
+                                        ProfilePictureView(publicKeyHex: publicKeyHex)
+                                            .overlay(
+                                                Image(systemName: "lock.fill")
+                                                    .foregroundColor(.secondary)
+                                                    .frame(width: 16, height: 16)
+                                                    .offset(x: 4, y: 4),
+                                                alignment: .bottomTrailing
+                                            )
+                                    }
                                 } else {
-                                    ProfilePictureView(publicKeyHex: publicKeyHex)
+                                    GuestProfilePictureView()
                                         .overlay(
                                             Image(systemName: "lock.fill")
                                                 .foregroundColor(.secondary)
@@ -97,8 +106,8 @@ struct SettingsView: View {
                             }
                         )
 
-                        if let publicKey = appState.publicKey {
-                            NavigationLink(destination: ProfileView(publicKeyHex: publicKey.hex)) {
+                        if let publicKeyHex = viewModel.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
+                            NavigationLink(destination: ProfileView(publicKeyHex: publicKeyHex)) {
                                 Text(.localizable.viewProfile)
                             }
                         }
@@ -110,24 +119,25 @@ struct SettingsView: View {
 
                 Section(
                     content: {
-                        if let publicKey = appState.publicKey {
+                        let publicKeyHex = viewModel.publicKeyHex
+                        if let publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
                             NavigationLink(destination: KeysSettingsView(publicKey: publicKey)) {
                                 Label(.localizable.settingsKeys, systemImage: "key")
                             }
                         }
-                        NavigationLink(destination: RelaysSettingsView()) {
+                        NavigationLink(destination: RelaysSettingsView(modelContext: viewModel.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
                             Label(.localizable.settingsRelays, systemImage: "server.rack")
                         }
-                        NavigationLink(destination: AppearanceSettingsView()) {
+                        NavigationLink(destination: AppearanceSettingsView(modelContext: viewModel.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
                             Label(.localizable.settingsAppearance, systemImage: "eye")
                         }
                     },
                     header: {
-                        Text(.localizable.settingsForProfile(activeProfileName))
+                        Text(.localizable.settingsForProfile(viewModel.activeProfileName))
                     }
                 )
 
-                if appState.publicKey != nil, let activeProfile = appState.appSettings?.activeProfile {
+                if let activeProfile = viewModel.activeProfile, activeProfile.publicKeyHex != nil {
                     Section {
                         Button(
                             action: {
@@ -136,7 +146,7 @@ struct SettingsView: View {
                             },
                             label: {
                                 Label(.localizable.signOutProfile(
-                                    activeProfileName
+                                    viewModel.activeProfileName
                                 ), systemImage: "door.left.hand.open")
                             }
                         )
@@ -149,20 +159,13 @@ struct SettingsView: View {
             Text(.localizable.signOutFromDevice),
             isPresented: $isShowingSignOutConfirmation
         ) {
-            if let appSettings = appState.appSettings, let profileToSignOut, let publicKeyHex = profileToSignOut.publicKeyHex {
+            if let profileToSignOut, let publicKeyHex = profileToSignOut.publicKeyHex {
                 Button(role: .destructive) {
-                    if let publicKey = PublicKey(hex: publicKeyHex) {
-                        appState.privateKeySecureStorage.delete(for: publicKey)
-                    }
-                    if appSettings.activeProfile == profileToSignOut {
-                        appSettings.activeProfile = appSettings.profiles.first(where: { $0 != profileToSignOut })
-                    }
-                    appSettings.profiles.removeAll(where: { $0 == profileToSignOut })
+                    viewModel.signOut(profileToSignOut)
                     self.profileToSignOut = nil
-                    modelContext.delete(profileToSignOut)
                 } label: {
                     Text(.localizable.signOutProfile(
-                        Utilities.shared.profileName(publicKeyHex: profileToSignOut.publicKeyHex, appState: appState)
+                        viewModel.profileName(publicKeyHex: profileToSignOut.publicKeyHex)
                     ))
                 }
             }
@@ -176,21 +179,90 @@ struct SettingsView: View {
             Text(.localizable.signOutMessage)
         }
     }
+}
 
-    var activeProfileName: String {
-        Utilities.shared.profileName(
-            publicKeyHex: appState.appSettings?.activeProfile?.publicKeyHex,
-            appState: appState
-        )
+extension SettingsView {
+    class ViewModel: ObservableObject {
+        let modelContext: ModelContext
+        let appState: AppState
+        var profilePickerExpanded: Bool = false
+
+        init(modelContext: ModelContext, appState: AppState) {
+            self.modelContext = modelContext
+            self.appState = appState
+        }
+
+        var publicKeyHex: String? {
+            appState.appSettings?.activeProfile?.publicKeyHex
+        }
+
+        var activeProfile: Profile? {
+            appState.appSettings?.activeProfile
+        }
+
+        var activeProfileName: String {
+            profileName(publicKeyHex: publicKeyHex)
+        }
+
+        var profiles: [Profile] {
+            appState.profiles
+        }
+
+        func profileName(publicKeyHex: String?) -> String {
+            Utilities.shared.profileName(
+                publicKeyHex: publicKeyHex,
+                appState: appState
+            )
+        }
+
+        var isActiveProfileSignedInWithPrivateKey: Bool {
+            guard let activeProfile = appState.appSettings?.activeProfile else {
+                return false
+            }
+            return isSignedInWithPrivateKey(activeProfile)
+        }
+
+        func isSignedInWithPrivateKey(_ profile: Profile) -> Bool {
+            guard let publicKeyHex = profile.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) else {
+                return false
+            }
+            return PrivateKeySecureStorage.shared.keypair(for: publicKey) != nil
+        }
+
+        func signOut(_ profile: Profile) {
+            if let publicKeyHex = profile.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
+                appState.privateKeySecureStorage.delete(for: publicKey)
+            }
+            if let appSettings = appState.appSettings, appSettings.activeProfile == profile {
+                appSettings.activeProfile = appState.profiles.first(where: { $0 != profile })
+            }
+            appState.profiles.removeAll(where: { $0 == profile })
+            modelContext.delete(profile)
+        }
+
+        func isActiveProfile(_ profile: Profile) -> Bool {
+            guard let appSettings = appState.appSettings else {
+                return false
+            }
+            return appSettings.activeProfile == profile
+        }
+
+        func updateActiveProfile(_ profile: Profile) {
+            guard let appSettings = appState.appSettings else {
+                return
+            }
+
+            appSettings.activeProfile = profile
+        }
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-
-    @State static var appState = AppState()
-
-    static var previews: some View {
-        SettingsView()
-            .environmentObject(appState)
-    }
-}
+//struct SettingsView_Previews: PreviewProvider {
+//
+//    @State static var appState = AppState()
+//
+//    static var previews: some View {
+//        SettingsView()
+//            .environmentObject(appState)
+//    }
+//}
