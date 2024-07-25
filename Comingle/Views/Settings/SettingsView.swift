@@ -166,7 +166,7 @@ struct SettingsView: View {
 }
 
 extension SettingsView {
-    class ViewModel: ObservableObject {
+    @Observable class ViewModel {
         let appState: AppState
         var profilePickerExpanded: Bool = false
 

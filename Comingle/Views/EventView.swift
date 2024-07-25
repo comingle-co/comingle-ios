@@ -372,7 +372,7 @@ struct EventView: View {
 }
 
 extension EventView {
-    class ViewModel: ObservableObject {
+    @Observable class ViewModel {
         let appState: AppState
         let event: TimeBasedCalendarEvent
 

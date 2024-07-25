@@ -137,7 +137,7 @@ enum RelayOption: CaseIterable {
 }
 
 extension RelaysSettingsView {
-    class ViewModel: ObservableObject {
+    @Observable class ViewModel {
         let publicKeyHex: String?
         let modelContext: ModelContext
         var relayPoolSettings: RelayPoolSettings?

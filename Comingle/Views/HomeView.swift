@@ -31,7 +31,7 @@ struct HomeView: View {
 }
 
 extension HomeView {
-    class ViewModel: ObservableObject {
+    @Observable class ViewModel {
         let appState: AppState
 
         init(appState: AppState) {

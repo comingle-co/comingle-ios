@@ -143,7 +143,7 @@ struct LoginView: View, RelayURLValidating {
 }
 
 extension LoginView {
-    class ViewModel: ObservableObject, RelayURLValidating {
+    @Observable class ViewModel: RelayURLValidating {
         let appState: AppState
 
         init(appState: AppState) {

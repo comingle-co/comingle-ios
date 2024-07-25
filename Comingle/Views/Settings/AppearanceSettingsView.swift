@@ -39,7 +39,7 @@ struct AppearanceSettingsView: View {
 }
 
 extension AppearanceSettingsView {
-    class ViewModel: ObservableObject {
+    @Observable class ViewModel {
         let publicKeyHex: String?
         let modelContext: ModelContext
         var appearanceSettings: AppearanceSettings?

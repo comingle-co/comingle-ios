@@ -13,7 +13,7 @@ import SwiftUI
 struct ComingleApp: App {
     let container: ModelContainer
 
-    @State var appState: AppState
+    @State private var appState: AppState
 
     init() {
         NostrEventValueTransformer.register()
