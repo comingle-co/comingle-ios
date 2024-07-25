@@ -20,6 +20,9 @@ struct ProfileView: View {
             ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
             if let publicKey = PublicKey(hex: publicKeyHex) {
                 Text(publicKey.npub)
+                    .font(.subheadline)
+                    .textSelection(.enabled)
+                    .padding()
             }
             EventListView(eventListType: .profile(publicKeyHex))
         }
