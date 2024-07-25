@@ -264,6 +264,7 @@ struct EventView: View {
                     }
                 }
             }
+            .padding()
         }
         .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
             if selectedGeohash, let geohash {
