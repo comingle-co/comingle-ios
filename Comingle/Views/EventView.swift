@@ -23,29 +23,6 @@ struct EventView: View {
         _viewModel = State(initialValue: viewModel)
     }
 
-    private func rsvpStatusView(_ rsvpStatus: CalendarEventRSVPStatus?) -> some View {
-        guard let rsvpStatus else {
-            return Image(systemName: "questionmark.circle.fill")
-                .foregroundColor(.yellow)
-                .frame(width: 16, height: 16)
-        }
-
-        return switch rsvpStatus {
-        case .accepted:
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundColor(.green)
-                .frame(width: 16, height: 16)
-        case .declined:
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundColor(.red)
-                .frame(width: 16, height: 16)
-        case .tentative, .unknown:
-            Image(systemName: "questionmark.circle.fill")
-                .foregroundColor(.yellow)
-                .frame(width: 16, height: 16)
-        }
-    }
-
     var contentView: some View {
         VStack {
             if viewModel.contentTranslationReplaced {
@@ -114,7 +91,7 @@ struct EventView: View {
     }
 
     var participantsView: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(.localizable.invited(viewModel.event.participants.count))
                 .padding(.vertical, 2)
                 .font(.headline)
@@ -159,12 +136,12 @@ struct EventView: View {
                         },
                         label: {
                             HStack {
-                                ProfilePictureView(publicKeyHex: rsvp.pubkey)
-                                    .overlay(
-                                        rsvpStatusView(rsvp.status)
-                                            .offset(x: 4, y: 4),
-                                        alignment: .bottomTrailing
-                                    )
+                                ImageOverlayView(
+                                    imageSystemName: viewModel.rsvpStatusSystemImage(rsvp.status),
+                                    overlayBackgroundColor: viewModel.rsvpStatusColor(rsvp.status)
+                                ) {
+                                    ProfilePictureView(publicKeyHex: rsvp.pubkey)
+                                }
 
                                 ProfileNameView(publicKeyHex: rsvp.pubkey)
                             }
@@ -466,6 +443,36 @@ extension EventView {
                 dateIntervalFormatter.timeZone = calendar.timeZone
             }
             return dateIntervalFormatter
+        }
+
+        func rsvpStatusColor(_ rsvpStatus: CalendarEventRSVPStatus?) -> Color {
+            guard let rsvpStatus else {
+                return .yellow
+            }
+
+            switch rsvpStatus {
+            case .accepted:
+                return .green
+            case .declined:
+                return .red
+            case .tentative, .unknown:
+                return .yellow
+            }
+        }
+
+        func rsvpStatusSystemImage(_ rsvpStatus: CalendarEventRSVPStatus?) -> String {
+            guard let rsvpStatus else {
+                return "questionmark"
+            }
+
+            switch rsvpStatus {
+            case .accepted:
+                return "checkmark"
+            case .declined:
+                return "xmark"
+            case .tentative, .unknown:
+                return "questionmark"
+            }
         }
     }
 }

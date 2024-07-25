@@ -36,14 +36,9 @@ struct SettingsView: View {
                                         if viewModel.isSignedInWithPrivateKey(profile) {
                                             ProfilePictureView(publicKeyHex: profile.publicKeyHex)
                                         } else {
-                                            ProfilePictureView(publicKeyHex: profile.publicKeyHex)
-                                                .overlay(
-                                                    Image(systemName: "lock.fill")
-                                                        .foregroundColor(.secondary)
-                                                        .frame(width: 16, height: 16)
-                                                        .offset(x: 4, y: 4),
-                                                    alignment: .bottomTrailing
-                                                )
+                                            ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                                ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                            }
                                         }
                                         if viewModel.isActiveProfile(profile) {
                                             ProfileNameView(publicKeyHex: profile.publicKeyHex)
@@ -82,24 +77,14 @@ struct SettingsView: View {
                                     if viewModel.isActiveProfileSignedInWithPrivateKey {
                                         ProfilePictureView(publicKeyHex: publicKeyHex)
                                     } else {
-                                        ProfilePictureView(publicKeyHex: publicKeyHex)
-                                            .overlay(
-                                                Image(systemName: "lock.fill")
-                                                    .foregroundColor(.secondary)
-                                                    .frame(width: 16, height: 16)
-                                                    .offset(x: 4, y: 4),
-                                                alignment: .bottomTrailing
-                                            )
+                                        ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                            ProfilePictureView(publicKeyHex: publicKeyHex)
+                                        }
                                     }
                                 } else {
-                                    GuestProfilePictureView()
-                                        .overlay(
-                                            Image(systemName: "lock.fill")
-                                                .foregroundColor(.secondary)
-                                                .frame(width: 16, height: 16)
-                                                .offset(x: 4, y: 4),
-                                            alignment: .bottomTrailing
-                                        )
+                                    ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                        GuestProfilePictureView()
+                                    }
                                 }
                                 ProfileNameView(publicKeyHex: publicKeyHex)
                             }

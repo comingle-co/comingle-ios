@@ -61,28 +61,16 @@ struct ContentView: View {
                                 SettingsView(appState: appState)
                             },
                             label: {
-                                if let publicKey = appState.publicKey {
-                                    if appState.keypair != nil {
-                                        ProfilePictureView(publicKeyHex: publicKey.hex)
+                                ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                    if let publicKey = appState.publicKey {
+                                        if appState.keypair != nil {
+                                            ProfilePictureView(publicKeyHex: publicKey.hex)
+                                        } else {
+                                            ProfilePictureView(publicKeyHex: publicKey.hex)
+                                        }
                                     } else {
-                                        ProfilePictureView(publicKeyHex: publicKey.hex)
-                                            .overlay(
-                                                Image(systemName: "lock.fill")
-                                                    .foregroundColor(.secondary)
-                                                    .frame(width: 16, height: 16)
-                                                    .offset(x: 4, y: 4),
-                                                alignment: .bottomTrailing
-                                            )
+                                        GuestProfilePictureView()
                                     }
-                                } else {
-                                    GuestProfilePictureView()
-                                        .overlay(
-                                            Image(systemName: "lock.fill")
-                                                .foregroundColor(.secondary)
-                                                .frame(width: 16, height: 16)
-                                                .offset(x: 4, y: 4),
-                                            alignment: .bottomTrailing
-                                        )
                                 }
                             }
                         )
