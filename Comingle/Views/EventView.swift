@@ -311,7 +311,7 @@ struct EventView: View {
             ToolbarItem(placement: .bottomBar) {
                 if viewModel.appState.keypair == nil {
                     NavigationLink(destination: LoginView(appState: viewModel.appState)) {
-                        Text("Sign In to RSVP")
+                        Text(.localizable.signInToRSVP)
                     }
                 } else {
                     Button {
@@ -320,9 +320,9 @@ struct EventView: View {
                         if let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value,
                            let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates],
                            let rsvp = rsvps.first(where: { $0.pubkey == viewModel.appState.publicKey?.hex }) {
-                            Text("Edit RSVP")
+                            Text(.localizable.changeRSVP)
                         } else {
-                            Text("RSVP")
+                            Text(.localizable.rsvp)
                         }
                     }
                 }

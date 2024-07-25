@@ -85,6 +85,18 @@
         }
       }
     },
+    "changeRSVP" : {
+      "comment" : "Button to change the user's RSVP to an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change RSVP"
+          }
+        }
+      }
+    },
     "copyCoordinates" : {
       "comment" : "Button to copy the location coordinates of a calendar event.",
       "extractionState" : "manual",
@@ -673,6 +685,18 @@
         }
       }
     },
+    "rsvp" : {
+      "comment" : "Button to RSVP to an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RSVP"
+          }
+        }
+      }
+    },
     "rsvps" : {
       "comment" : "Text for section for RSVPs to a calendar event and the number of RSVPs in parentheses.",
       "extractionState" : "manual",
@@ -885,6 +909,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relays"
+          }
+        }
+      }
+    },
+    "signInToRSVP" : {
+      "comment" : "Button to prompt user to sign in so that they can RSVP to an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign In to RSVP"
           }
         }
       }
