@@ -18,8 +18,12 @@ struct ProfileView: View {
     var body: some View {
         VStack {
             ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
+            if let publicKey = PublicKey(hex: publicKeyHex) {
+                Text(publicKey.npub)
+            }
             EventListView(eventListType: .profile(publicKeyHex))
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

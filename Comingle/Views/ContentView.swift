@@ -32,7 +32,7 @@ struct ContentView: View {
                     if appState.activeTab == .explore {
                         NavigationStack {
                             EventListView(eventListType: .all)
-                                .navigationTitle(.localizable.explore)
+                                .navigationBarTitleDisplayMode(.inline)
                         }
                     }
                     CustomTabBar(selectedTab: $appState.activeTab, showFollowingTab: appState.publicKey != nil) {
@@ -42,16 +42,40 @@ struct ContentView: View {
                     }
                 }
                 .toolbar {
-                    NavigationLink(
-                        destination: {
-                            SettingsView(modelContext: modelContext, appState: appState)
-                        },
-                        label: {
-                            if let publicKey = appState.publicKey {
-                                if appState.keypair != nil {
-                                    ProfilePictureView(publicKeyHex: publicKey.hex)
+                    ToolbarItem(placement: .topBarLeading) {
+                        // Dummy invisible image so that the logo can be aligned. Not sure how to fix the alignment issue properly.
+                        GuestProfilePictureView()
+                            .opacity(0)
+                    }
+
+                    ToolbarItem(placement: .principal) {
+                        Image("ComingleLogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxHeight: 20, alignment: .center)
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink(
+                            destination: {
+                                SettingsView(modelContext: modelContext, appState: appState)
+                            },
+                            label: {
+                                if let publicKey = appState.publicKey {
+                                    if appState.keypair != nil {
+                                        ProfilePictureView(publicKeyHex: publicKey.hex)
+                                    } else {
+                                        ProfilePictureView(publicKeyHex: publicKey.hex)
+                                            .overlay(
+                                                Image(systemName: "lock.fill")
+                                                    .foregroundColor(.secondary)
+                                                    .frame(width: 16, height: 16)
+                                                    .offset(x: 4, y: 4),
+                                                alignment: .bottomTrailing
+                                            )
+                                    }
                                 } else {
-                                    ProfilePictureView(publicKeyHex: publicKey.hex)
+                                    GuestProfilePictureView()
                                         .overlay(
                                             Image(systemName: "lock.fill")
                                                 .foregroundColor(.secondary)
@@ -60,18 +84,9 @@ struct ContentView: View {
                                             alignment: .bottomTrailing
                                         )
                                 }
-                            } else {
-                                GuestProfilePictureView()
-                                    .overlay(
-                                        Image(systemName: "lock.fill")
-                                            .foregroundColor(.secondary)
-                                            .frame(width: 16, height: 16)
-                                            .offset(x: 4, y: 4),
-                                        alignment: .bottomTrailing
-                                    )
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }

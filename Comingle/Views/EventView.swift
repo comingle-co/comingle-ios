@@ -266,6 +266,7 @@ struct EventView: View {
             }
             .padding()
         }
+        .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
             if selectedGeohash, let geohash {
                 let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"

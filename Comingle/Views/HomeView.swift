@@ -22,9 +22,10 @@ struct HomeView: View {
     var body: some View {
         if viewModel.publicKeyHex == nil {
             LoginView(modelContext: viewModel.modelContext, appState: viewModel.appState)
+                .navigationBarTitleDisplayMode(.inline)
         } else {
             EventListView(eventListType: .followed)
-                .navigationTitle(.localizable.yourNetwork)
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
