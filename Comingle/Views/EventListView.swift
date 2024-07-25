@@ -7,6 +7,7 @@
 
 import Kingfisher
 import NostrSDK
+import SwiftData
 import SwiftUI
 
 struct EventListView: View {
@@ -34,7 +35,7 @@ struct EventListView: View {
                         ForEach(filteredEvents, id: \.self) { event in
                             Section(
                                 content: {
-                                    NavigationLink(destination: EventView(event: event, calendar: Calendar.current)) {
+                                    NavigationLink(destination: EventView(appState: appState, event: event, calendar: Calendar.current)) {
                                         HStack {
                                             VStack(alignment: .leading) {
                                                 Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
@@ -175,7 +176,7 @@ struct CustomSegmentedPickerItem: View {
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity)
             .background(selectedTimeTab == timeTab ? .accent : Color.clear)
-            .foregroundColor(selectedTimeTab == timeTab ? .primary : .secondary)
+            .foregroundColor(selectedTimeTab == timeTab ? .white : .secondary)
             .cornerRadius(8)
             .contentShape(Rectangle())
             .onTapGesture {

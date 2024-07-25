@@ -18,8 +18,8 @@ struct SettingsView: View {
     @State private var profileToSignOut: Profile?
     @State private var isShowingSignOutConfirmation: Bool = false
 
-    init(modelContext: ModelContext, appState: AppState) {
-        let viewModel = ViewModel(modelContext: modelContext, appState: appState)
+    init(appState: AppState) {
+        let viewModel = ViewModel(appState: appState)
         _viewModel = State(initialValue: viewModel)
     }
 
@@ -68,7 +68,7 @@ struct SettingsView: View {
                                         }
                                     }
                                 }
-                                NavigationLink(destination: LoginView(modelContext: viewModel.modelContext, appState: viewModel.appState)) {
+                                NavigationLink(destination: LoginView(appState: viewModel.appState)) {
                                     Image(systemName: "plus.circle")
                                         .resizable()
                                         .scaledToFit()
@@ -124,10 +124,10 @@ struct SettingsView: View {
                                 Label(.localizable.settingsKeys, systemImage: "key")
                             }
                         }
-                        NavigationLink(destination: RelaysSettingsView(modelContext: viewModel.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
+                        NavigationLink(destination: RelaysSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
                             Label(.localizable.settingsRelays, systemImage: "server.rack")
                         }
-                        NavigationLink(destination: AppearanceSettingsView(modelContext: viewModel.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
+                        NavigationLink(destination: AppearanceSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
                             Label(.localizable.settingsAppearance, systemImage: "eye")
                         }
                     },
@@ -182,12 +182,10 @@ struct SettingsView: View {
 
 extension SettingsView {
     class ViewModel: ObservableObject {
-        let modelContext: ModelContext
         let appState: AppState
         var profilePickerExpanded: Bool = false
 
-        init(modelContext: ModelContext, appState: AppState) {
-            self.modelContext = modelContext
+        init(appState: AppState) {
             self.appState = appState
         }
 
@@ -236,7 +234,7 @@ extension SettingsView {
                 appSettings.activeProfile = appState.profiles.first(where: { $0 != profile })
             }
             appState.profiles.removeAll(where: { $0 == profile })
-            modelContext.delete(profile)
+            appState.modelContext.delete(profile)
         }
 
         func isActiveProfile(_ profile: Profile) -> Bool {

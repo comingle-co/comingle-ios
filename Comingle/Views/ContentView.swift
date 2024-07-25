@@ -25,7 +25,7 @@ struct ContentView: View {
                 VStack {
                     if appState.publicKey != nil && appState.activeTab == .following {
                         NavigationStack {
-                            HomeView(modelContext: modelContext, appState: appState)
+                            HomeView(appState: appState)
                         }
                     }
 
@@ -58,7 +58,7 @@ struct ContentView: View {
                     ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink(
                             destination: {
-                                SettingsView(modelContext: modelContext, appState: appState)
+                                SettingsView(appState: appState)
                             },
                             label: {
                                 if let publicKey = appState.publicKey {

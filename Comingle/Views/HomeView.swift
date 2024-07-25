@@ -14,14 +14,14 @@ struct HomeView: View {
 
     @State private var viewModel: ViewModel
 
-    init(modelContext: ModelContext, appState: AppState) {
-        let viewModel = ViewModel(modelContext: modelContext, appState: appState)
+    init(appState: AppState) {
+        let viewModel = ViewModel(appState: appState)
         _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
         if viewModel.publicKeyHex == nil {
-            LoginView(modelContext: viewModel.modelContext, appState: viewModel.appState)
+            LoginView(appState: viewModel.appState)
                 .navigationBarTitleDisplayMode(.inline)
         } else {
             EventListView(eventListType: .followed)
@@ -32,11 +32,9 @@ struct HomeView: View {
 
 extension HomeView {
     class ViewModel: ObservableObject {
-        let modelContext: ModelContext
         let appState: AppState
 
-        init(modelContext: ModelContext, appState: AppState) {
-            self.modelContext = modelContext
+        init(appState: AppState) {
             self.appState = appState
         }
 

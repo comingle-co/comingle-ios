@@ -24,8 +24,8 @@ struct LoginView: View, RelayURLValidating {
     @State private var keypair: Keypair?
     @State private var publicKey: PublicKey?
 
-    init(modelContext: ModelContext, appState: AppState) {
-        let viewModel = ViewModel(modelContext: modelContext, appState: appState)
+    init(appState: AppState) {
+        let viewModel = ViewModel(appState: appState)
         _viewModel = State(initialValue: viewModel)
     }
 
@@ -144,11 +144,9 @@ struct LoginView: View, RelayURLValidating {
 
 extension LoginView {
     class ViewModel: ObservableObject, RelayURLValidating {
-        let modelContext: ModelContext
         let appState: AppState
 
-        init(modelContext: ModelContext, appState: AppState) {
-            self.modelContext = modelContext
+        init(appState: AppState) {
             self.appState = appState
         }
 
@@ -172,9 +170,9 @@ extension LoginView {
             } else {
                 print("Creating new profile settings for \(publicKey.npub)")
                 let profile = Profile(publicKeyHex: publicKey.hex)
-                modelContext.insert(profile)
+                appState.modelContext.insert(profile)
                 do {
-                    try modelContext.save()
+                    try appState.modelContext.save()
                 } catch {
                     print("Unable to save new profile \(publicKey.npub)")
                 }
