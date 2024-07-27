@@ -335,7 +335,7 @@ extension AppState: EventVerifying, RelayDelegate {
         _ = relayPool.subscribe(with: rsvpFilter)
     }
 
-    private func updateCalendarEventRSVP(_ rsvp: CalendarEventRSVP, rsvpEventCoordinates: String) {
+    func updateCalendarEventRSVP(_ rsvp: CalendarEventRSVP, rsvpEventCoordinates: String) {
         rsvps[rsvpEventCoordinates] = rsvp
 
         if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {

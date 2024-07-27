@@ -204,6 +204,25 @@ struct EventView: View {
             .padding()
         }
         .navigationBarTitleDisplayMode(.inline)
+        .confirmationDialog(.localizable.rsvp, isPresented: $viewModel.isChangingRSVP) {
+            Button(action: {
+                viewModel.createOrUpdateRSVP(.accepted)
+            }, label: {
+                Text(.localizable.rsvpStatusGoing)
+            })
+
+            Button(action: {
+                viewModel.createOrUpdateRSVP(.tentative)
+            }, label: {
+                Text(.localizable.rsvpStatusMaybeGoing)
+            })
+
+            Button(action: {
+                viewModel.createOrUpdateRSVP(.declined)
+            }, label: {
+                Text(.localizable.rsvpStatusNotGoing)
+            })
+        }
         .confirmationDialog(.localizable.location, isPresented: $viewModel.showLocationAlert) {
             if viewModel.selectedGeohash, let geohash = viewModel.geohash {
                 let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
@@ -314,17 +333,41 @@ struct EventView: View {
                         Text(.localizable.signInToRSVP)
                     }
                 } else {
-                    Button {
-                        print()
-                    } label: {
-                        if let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value,
-                           let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates],
-                           let rsvp = rsvps.first(where: { $0.pubkey == viewModel.appState.publicKey?.hex }) {
-                            Text(.localizable.changeRSVP)
+                    Button(action: {
+                        viewModel.isChangingRSVP = true
+                    }, label: {
+                        if let rsvp = viewModel.currentUserRSVP {
+                            if let endTimestamp = viewModel.event.endTimestamp, endTimestamp >= Date.now {
+                                switch rsvp.status {
+                                case .accepted:
+                                    Text(.localizable.rsvpStatusGoing)
+                                case .declined:
+                                    Text(.localizable.rsvpStatusNotGoing)
+                                case .tentative:
+                                    Text(.localizable.rsvpStatusMaybeGoing)
+                                case .unknown(let value):
+                                    Text(value)
+                                case .none:
+                                    Text(.localizable.rsvp)
+                                }
+                            } else {
+                                switch rsvp.status {
+                                case .accepted:
+                                    Text(.localizable.attended)
+                                case .declined:
+                                    Text(.localizable.didNotAttend)
+                                case .tentative:
+                                    Text(.localizable.maybeAttended)
+                                case .unknown(let value):
+                                    Text(value)
+                                case .none:
+                                    Text(.localizable.didNotAttend)
+                                }
+                            }
                         } else {
                             Text(.localizable.rsvp)
                         }
-                    }
+                    })
                 }
             }
         }
@@ -372,7 +415,7 @@ struct EventView: View {
 }
 
 extension EventView {
-    @Observable class ViewModel {
+    @Observable class ViewModel: EventCreating {
         let appState: AppState
         let event: TimeBasedCalendarEvent
 
@@ -385,6 +428,8 @@ extension EventView {
         var isContentTranslationPresented: Bool = false
         var contentText: String
         var contentTranslationReplaced: Bool = false
+
+        var isChangingRSVP: Bool = false
 
         let eventTitle: String
 
@@ -443,6 +488,51 @@ extension EventView {
                 dateIntervalFormatter.timeZone = calendar.timeZone
             }
             return dateIntervalFormatter
+        }
+
+        var currentUserRSVP: CalendarEventRSVP? {
+            guard let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
+                  let publicKeyHex = appState.publicKey?.hex else {
+                return nil
+            }
+            return appState.calendarEventsToRsvps[calendarEventCoordinates]?.first(where: { $0.pubkey == publicKeyHex })
+        }
+
+        func createOrUpdateRSVP(_ status: CalendarEventRSVPStatus) -> CalendarEventRSVP? {
+            guard let keypair = appState.keypair, let eventCoordinates = event.replaceableEventCoordinates() else {
+                return nil
+            }
+
+            let createdRSVP: CalendarEventRSVP?
+
+            if let currentUserRSVP, let rsvpIdentifier = currentUserRSVP.identifier {
+                guard currentUserRSVP.status != status else {
+                    return nil
+                }
+
+                createdRSVP = try? calendarEventRSVP(withIdentifier: rsvpIdentifier, calendarEventCoordinates: eventCoordinates, status: status, signedBy: keypair)
+            } else {
+                createdRSVP = try? calendarEventRSVP(calendarEventCoordinates: eventCoordinates, status: status, signedBy: keypair)
+            }
+
+            if let createdRSVP {
+                let persistentNostrEvent = PersistentNostrEvent(nostrEvent: createdRSVP)
+                appState.modelContext.insert(persistentNostrEvent)
+
+                do {
+                    try appState.modelContext.save()
+                } catch {
+                    print("Unable to save RSVP to SwiftData. \(error)")
+                }
+
+                appState.relayPool.publishEvent(createdRSVP)
+
+                if let rsvpEventCoordinates = createdRSVP.replaceableEventCoordinates()?.tag.value {
+                    appState.updateCalendarEventRSVP(createdRSVP, rsvpEventCoordinates: rsvpEventCoordinates)
+                }
+            }
+
+            return createdRSVP
         }
 
         func rsvpStatusColor(_ rsvpStatus: CalendarEventRSVPStatus?) -> Color {

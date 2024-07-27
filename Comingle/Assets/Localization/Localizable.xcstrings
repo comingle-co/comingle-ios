@@ -61,6 +61,18 @@
         }
       }
     },
+    "attended" : {
+      "comment" : "Label indicating that the user attended the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attended"
+          }
+        }
+      }
+    },
     "calendars" : {
       "comment" : "Navigation title for the view showing the list of conferences.",
       "extractionState" : "manual",
@@ -81,18 +93,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancel"
-          }
-        }
-      }
-    },
-    "changeRSVP" : {
-      "comment" : "Button to change the user's RSVP to an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Change RSVP"
           }
         }
       }
@@ -165,6 +165,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete"
+          }
+        }
+      }
+    },
+    "didNotAttend" : {
+      "comment" : "Label indicating that the user did not attend the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Did Not Attend"
           }
         }
       }
@@ -309,6 +321,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Location"
+          }
+        }
+      }
+    },
+    "maybeAttended" : {
+      "comment" : "Label indicating that the user maybe attended the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maybe Attended"
           }
         }
       }
@@ -705,6 +729,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "RSVPs (%d)"
+          }
+        }
+      }
+    },
+    "rsvpStatusGoing" : {
+      "comment" : "Text to indicate that the current user is going to the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Going"
+          }
+        }
+      }
+    },
+    "rsvpStatusMaybeGoing" : {
+      "comment" : "Text to indicate that the current user might be going to the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maybe Going"
+          }
+        }
+      }
+    },
+    "rsvpStatusNotGoing" : {
+      "comment" : "Text to indicate that the current user is not going to the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Going"
           }
         }
       }
