@@ -63,13 +63,11 @@ class AppState: ObservableObject {
     }
 
     private var followedRSVPCalendarEventCoordinates: Set<String> {
-        guard let publicKeyHex = publicKey?.hex,
-              let followedPubkeys = followListEvents[publicKeyHex]?.followedPubkeys,
-              !followedPubkeys.isEmpty else {
+        guard let publicKeyHex = publicKey?.hex else {
             return []
         }
 
-        let followedPubkeysSet = Set(followedPubkeys)
+        let followedPubkeysSet = Set((followListEvents[publicKeyHex]?.followedPubkeys ?? []) + [publicKeyHex])
 
         return Set(
             rsvps.values
@@ -79,13 +77,11 @@ class AppState: ObservableObject {
 
     /// Events that were created or RSVP'd by follow list.
     private var followedEvents: [TimeBasedCalendarEvent] {
-        guard let publicKeyHex = publicKey?.hex,
-              let followedPubkeys = followListEvents[publicKeyHex]?.followedPubkeys,
-              !followedPubkeys.isEmpty else {
+        guard let publicKeyHex = publicKey?.hex else {
             return []
         }
 
-        let followedPubkeysSet = Set(followedPubkeys)
+        let followedPubkeysSet = Set((followListEvents[publicKeyHex]?.followedPubkeys ?? []) + [publicKeyHex])
         let followedRSVPCalendarEventCoordinates = followedRSVPCalendarEventCoordinates
 
         return timeBasedCalendarEvents.values.filter { event in
