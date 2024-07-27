@@ -61,15 +61,15 @@ struct ContentView: View {
                                 SettingsView(appState: appState)
                             },
                             label: {
-                                ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
-                                    if let publicKey = appState.publicKey {
-                                        if appState.keypair != nil {
+                                if let keypair = appState.keypair {
+                                    ProfilePictureView(publicKeyHex: keypair.publicKey.hex)
+                                } else {
+                                    ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                        if let publicKey = appState.publicKey {
                                             ProfilePictureView(publicKeyHex: publicKey.hex)
                                         } else {
-                                            ProfilePictureView(publicKeyHex: publicKey.hex)
+                                            GuestProfilePictureView()
                                         }
-                                    } else {
-                                        GuestProfilePictureView()
                                     }
                                 }
                             }
