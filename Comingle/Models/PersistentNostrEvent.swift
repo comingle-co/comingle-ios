@@ -11,14 +11,14 @@ import SwiftData
 
 @Model
 class PersistentNostrEvent {
-    @Attribute(.unique) let id: String
+    @Attribute(.unique) let eventId: String
 
     @Attribute(.transformable(by: NostrEventValueTransformer.self)) let nostrEvent: NostrEvent
 
     var relays: [URL]
 
     init(nostrEvent: NostrEvent, relays: [URL] = []) {
-        self.id = nostrEvent.id
+        self.eventId = nostrEvent.id
         self.nostrEvent = nostrEvent
         self.relays = relays
     }

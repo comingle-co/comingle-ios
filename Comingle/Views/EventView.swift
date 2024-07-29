@@ -222,6 +222,16 @@ struct EventView: View {
             }, label: {
                 Text(.localizable.rsvpStatusNotGoing)
             })
+
+            Button(
+                role: .destructive,
+                action: {
+                    viewModel.deleteRSVP()
+                },
+                label: {
+                    Text("Delete RSVP")
+                }
+            )
         }
         .confirmationDialog(.localizable.location, isPresented: $viewModel.showLocationAlert) {
             if viewModel.selectedGeohash, let geohash = viewModel.geohash {
@@ -498,16 +508,16 @@ extension EventView {
             return appState.calendarEventsToRsvps[calendarEventCoordinates]?.first(where: { $0.pubkey == publicKeyHex })
         }
 
-        func createOrUpdateRSVP(_ status: CalendarEventRSVPStatus) -> CalendarEventRSVP? {
+        func createOrUpdateRSVP(_ status: CalendarEventRSVPStatus) {
             guard let keypair = appState.keypair, let eventCoordinates = event.replaceableEventCoordinates() else {
-                return nil
+                return
             }
 
             let createdRSVP: CalendarEventRSVP?
 
             if let currentUserRSVP, let rsvpIdentifier = currentUserRSVP.identifier {
                 guard currentUserRSVP.status != status else {
-                    return nil
+                    return
                 }
 
                 createdRSVP = try? calendarEventRSVP(withIdentifier: rsvpIdentifier, calendarEventCoordinates: eventCoordinates, status: status, signedBy: keypair)
@@ -531,8 +541,47 @@ extension EventView {
                     appState.updateCalendarEventRSVP(createdRSVP, rsvpEventCoordinates: rsvpEventCoordinates)
                 }
             }
+        }
 
-            return createdRSVP
+        func deleteRSVP() {
+            guard let keypair = appState.keypair,
+                  let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value else {
+                return
+            }
+
+            let publicKeyHex = keypair.publicKey.hex
+
+            if let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates]?.filter({ $0.pubkey == publicKeyHex }),
+               !rsvps.isEmpty,
+               let deletionEvent = try? delete(events: rsvps, replaceableEvents: rsvps, signedBy: keypair) {
+
+                appState.calendarEventsToRsvps[calendarEventCoordinates]?.removeAll(where: { $0.pubkey == publicKeyHex })
+                rsvps.forEach { rsvp in
+                    let rsvpId = rsvp.id
+                    do {
+                        try appState.modelContext.delete(
+                            model: PersistentNostrEvent.self,
+                            where: #Predicate { persistentNostrEvent in persistentNostrEvent.eventId == rsvpId }
+                        )
+                    } catch {
+                        print("Unable to delete PersistentNostrEvent for calendar event RSVP. id=\(rsvpId) coordinates=\(calendarEventCoordinates) \(error)")
+                    }
+                }
+
+                let persistentNostrEvent = PersistentNostrEvent(nostrEvent: deletionEvent)
+                appState.modelContext.insert(persistentNostrEvent)
+
+                do {
+                    try appState.modelContext.save()
+                } catch {
+                    print("Unable to save RSVP to SwiftData. \(error)")
+                }
+
+                appState.relayPool.publishEvent(deletionEvent)
+
+
+            }
+
         }
 
         func rsvpStatusColor(_ rsvpStatus: CalendarEventRSVPStatus?) -> Color {
