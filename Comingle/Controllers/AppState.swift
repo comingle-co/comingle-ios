@@ -224,7 +224,7 @@ extension AppState: EventVerifying, RelayDelegate {
         if !authors.isEmpty {
             guard let bootstrapFilter = Filter(
                 authors: authors,
-                kinds: [EventKind.metadata.rawValue, EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.dateBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue]
+                kinds: [EventKind.metadata.rawValue, EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.dateBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue, EventKind.deletion.rawValue]
             ) else {
                 print("Unable to create the boostrap filter.")
                 return
@@ -367,6 +367,91 @@ extension AppState: EventVerifying, RelayDelegate {
         // pullMissingMetadata([rsvp.pubkey])
     }
 
+    private func deleteFromEventCoordinates(_ deletionEvent: DeletionEvent) {
+        let deletedEventCoordinates = deletionEvent.eventCoordinates.filter {
+            $0.pubkey?.hex == deletionEvent.pubkey
+        }
+
+        for deletedEventCoordinate in deletedEventCoordinates {
+            switch deletedEventCoordinate.kind {
+            case .calendar:
+                if let calendarListEvent = calendarListEvents[deletedEventCoordinate.tag.value], calendarListEvent.createdAt <= deletionEvent.createdAt {
+                    calendarListEvents.removeValue(forKey: deletedEventCoordinate.tag.value)
+                    persistentNostrEvents.removeValue(forKey: calendarListEvent.id)
+                }
+            case .timeBasedCalendarEvent:
+                if let timeBasedCalendarEvent = calendarListEvents[deletedEventCoordinate.tag.value], timeBasedCalendarEvent.createdAt <= deletionEvent.createdAt {
+                    timeBasedCalendarEvents.removeValue(forKey: deletedEventCoordinate.tag.value)
+                    calendarEventsToRsvps.removeValue(forKey: deletedEventCoordinate.tag.value)
+                    persistentNostrEvents.removeValue(forKey: timeBasedCalendarEvent.id)
+                }
+            case .calendarEventRSVP:
+                if let rsvp = rsvps[deletedEventCoordinate.tag.value], rsvp.createdAt <= deletionEvent.createdAt {
+                    rsvps.removeValue(forKey: deletedEventCoordinate.tag.value)
+                    if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
+                        calendarEventsToRsvps[calendarEventCoordinates]?.removeAll(where: { $0 == rsvp })
+                    }
+                    persistentNostrEvents.removeValue(forKey: rsvp.id)
+                }
+            default:
+                continue
+            }
+        }
+    }
+
+    private func deleteFromEventIds(_ deletionEvent: DeletionEvent) {
+        for deletedEventId in deletionEvent.deletedEventIds {
+            if let persistentNostrEvent = persistentNostrEvents[deletedEventId] {
+                let nostrEvent = persistentNostrEvent.nostrEvent
+
+                guard nostrEvent.pubkey == deletionEvent.pubkey else {
+                    continue
+                }
+
+                switch nostrEvent {
+                case _ as FollowListEvent:
+                    followListEvents.removeValue(forKey: nostrEvent.pubkey)
+                case _ as MetadataEvent:
+                    metadataEvents.removeValue(forKey: nostrEvent.pubkey)
+                case let calendarListEvent as CalendarListEvent:
+                    if let eventCoordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value, calendarListEvents[eventCoordinates]?.id == calendarListEvent.id {
+                        calendarListEvents.removeValue(forKey: eventCoordinates)
+                    }
+                case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
+                    if let eventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates()?.tag.value, timeBasedCalendarEvents[eventCoordinates]?.id == timeBasedCalendarEvent.id {
+                        timeBasedCalendarEvents.removeValue(forKey: eventCoordinates)
+                        calendarEventsToRsvps.removeValue(forKey: eventCoordinates)
+                    }
+                case let rsvp as CalendarEventRSVP:
+                    if let eventCoordinates = rsvp.replaceableEventCoordinates()?.tag.value, rsvps[eventCoordinates]?.id == rsvp.id {
+                        rsvps.removeValue(forKey: eventCoordinates)
+
+                        if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
+                            calendarEventsToRsvps[calendarEventCoordinates]?.removeAll(where: { $0.id == rsvp.id })
+                        }
+                    }
+
+                    rsvps.removeValue(forKey: nostrEvent.pubkey)
+                default:
+                    continue
+                }
+
+                persistentNostrEvents.removeValue(forKey: deletedEventId)
+                modelContext.delete(persistentNostrEvent)
+                do {
+                    try modelContext.save()
+                } catch {
+                    print("Unable to delete PersistentNostrEvent with id \(deletedEventId)")
+                }
+            }
+        }
+    }
+
+    private func didReceiveDeletionEvent(_ deletionEvent: DeletionEvent) {
+        deleteFromEventCoordinates(deletionEvent)
+        deleteFromEventIds(deletionEvent)
+    }
+
     func relay(_ relay: Relay, didReceive event: RelayEvent) {
         DispatchQueue.main.async {
             let nostrEvent = event.event
@@ -401,6 +486,8 @@ extension AppState: EventVerifying, RelayDelegate {
                 self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
             case let rsvpEvent as CalendarEventRSVP:
                 self.didReceiveCalendarEventRSVP(rsvpEvent)
+            case let deletionEvent as DeletionEvent:
+                self.didReceiveDeletionEvent(deletionEvent)
             default:
                 break
             }
@@ -426,6 +513,8 @@ extension AppState: EventVerifying, RelayDelegate {
                     self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
                 case let rsvpEvent as CalendarEventRSVP:
                     self.didReceiveCalendarEventRSVP(rsvpEvent)
+                case let deletionEvent as DeletionEvent:
+                    self.didReceiveDeletionEvent(deletionEvent)
                 default:
                     break
                 }
