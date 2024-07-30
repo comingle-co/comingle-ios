@@ -121,6 +121,15 @@ struct SettingsView: View {
                     }
                 )
 
+                Section(
+                    content: {
+                        LabeledContent("Version", value: viewModel.appVersion)
+                    },
+                    header: {
+                        Text("About")
+                    }
+                )
+
                 if let activeProfile = viewModel.activeProfile, activeProfile.publicKeyHex != nil {
                     Section {
                         Button(
@@ -149,7 +158,7 @@ struct SettingsView: View {
                     self.profileToSignOut = nil
                 } label: {
                     Text(.localizable.signOutProfile(
-                        viewModel.profileName(publicKeyHex: profileToSignOut.publicKeyHex)
+                        viewModel.profileName(publicKeyHex: publicKeyHex)
                     ))
                 }
             }
@@ -242,6 +251,16 @@ extension SettingsView {
 
             appState.updateRelayPool()
             appState.refresh()
+        }
+
+        var appVersion: String {
+            guard let shortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"],
+                  let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"]
+            else {
+                return String(localized: .localizable.appVersionUnknown)
+            }
+
+            return String(localized: .localizable.appVersion(String(describing: shortVersion), String(describing: bundleVersion)))
         }
     }
 }

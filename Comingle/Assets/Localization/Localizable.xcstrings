@@ -61,6 +61,30 @@
         }
       }
     },
+    "appVersion" : {
+      "comment" : "Text indicating the version of the app that is running. The first argument is the version number, and the second argument is the build number.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (%@)"
+          }
+        }
+      }
+    },
+    "appVersionUnknown" : {
+      "comment" : "Text indicating that the version of the app that is running is unknown.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        }
+      }
+    },
     "attended" : {
       "comment" : "Label indicating that the user attended the event.",
       "extractionState" : "manual",
