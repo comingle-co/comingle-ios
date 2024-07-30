@@ -43,9 +43,15 @@ struct ContentView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        // Dummy invisible image so that the logo can be aligned. Not sure how to fix the alignment issue properly.
-                        GuestProfilePictureView()
-                            .opacity(0)
+                        NavigationLink(
+                            destination: {
+                                EventCreationView(appState: appState)
+                            },
+                            label: {
+                                Image(systemName: "plus.circle")
+                                    .opacity(appState.keypair != nil ? 1 : 0)
+                            }
+                        )
                     }
 
                     ToolbarItem(placement: .principal) {

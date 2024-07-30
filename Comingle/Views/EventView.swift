@@ -578,8 +578,6 @@ extension EventView {
                 }
 
                 appState.relayPool.publishEvent(deletionEvent)
-
-
             }
 
         }
@@ -618,6 +616,6 @@ extension EventView {
 
 //struct EventView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        EventView(event: TimeBasedCalendarEvent(content: "description", signedBy: Keypair()!), calendar: Calendar.current)
+//        EventView(event: TimeBasedCalendarEvent(content: "description", signedBy: Keypair()!), calendar: Calendar.autoupdatingCurrent)
 //    }
 //}

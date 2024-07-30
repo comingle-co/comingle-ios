@@ -145,6 +145,18 @@
         }
       }
     },
+    "createEvent" : {
+      "comment" : "Navigation title for the view to create an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create an Event"
+          }
+        }
+      }
+    },
     "currentCalendars" : {
       "comment" : "Section header for list of current conferences.",
       "extractionState" : "manual",
@@ -193,7 +205,31 @@
         }
       }
     },
-    "eventTimeZone" : {
+    "eventEnd" : {
+      "comment" : "Text indicating that the form field is for setting the event end date and time.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ends"
+          }
+        }
+      }
+    },
+    "eventStart" : {
+      "comment" : "Text indicating that the form field is for setting the event start date and time.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts"
+          }
+        }
+      }
+    },
+    "eventTimeZonePreference" : {
       "comment" : "Picker option settings for using the event time zone if it exists.",
       "extractionState" : "manual",
       "localizations" : {
@@ -201,6 +237,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Event"
+          }
+        }
+      }
+    },
+    "eventTitle" : {
+      "comment" : "Text indicating that the field is for entering an event title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
           }
         }
       }
@@ -805,6 +853,18 @@
         }
       }
     },
+    "searchForTimeZone" : {
+      "comment" : "Placeholder text to prompt user to search for a time zone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for time zone"
+          }
+        }
+      }
+    },
     "settings" : {
       "comment" : "Navigation title for the settings view.",
       "extractionState" : "manual",
@@ -1033,7 +1093,7 @@
         }
       }
     },
-    "systemTimeZone" : {
+    "systemTimeZonePreference" : {
       "comment" : "Picker option settings for using the system time zone.",
       "extractionState" : "manual",
       "localizations" : {

@@ -1,5 +1,5 @@
 {
-  "originHash" : "a4a7bfa0d9cf3e7e519258f899b349783ad6cd48c02daf016918cd75851c1f98",
+  "originHash" : "ee22f5cbcbff09ebe5e8ead08b368e5af1025548f3cd6cd8214e35d441e21600",
   "pins" : [
     {
       "identity" : "cryptoswift",
@@ -52,6 +52,15 @@
       "state" : {
         "revision" : "3d2dc41a01f9e49d84f0a3925fb858bed64f702d",
         "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "swift-trie",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tyiu/swift-trie.git",
+      "state" : {
+        "revision" : "4c50bff6c168f74425f70476be62a072980d2da7",
+        "version" : "0.1.2"
       }
     },
     {

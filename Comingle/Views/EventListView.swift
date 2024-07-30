@@ -25,65 +25,67 @@ struct EventListView: View {
                     }
                 }
 
-                List {
-                    let filteredEvents = events(timeTabFilter)
-                    if filteredEvents.isEmpty {
-                        Text(.localizable.noEvents)
-                    } else {
-                        EmptyView().id("event-list-view-top")
+                ZStack {
+                    List {
+                        let filteredEvents = events(timeTabFilter)
+                        if filteredEvents.isEmpty {
+                            Text(.localizable.noEvents)
+                        } else {
+                            EmptyView().id("event-list-view-top")
 
-                        ForEach(filteredEvents, id: \.self) { event in
-                            Section(
-                                content: {
-                                    NavigationLink(destination: EventView(appState: appState, event: event, calendar: Calendar.current)) {
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
-                                                    .font(.headline)
+                            ForEach(filteredEvents, id: \.self) { event in
+                                Section(
+                                    content: {
+                                        NavigationLink(destination: EventView(appState: appState, event: event, calendar: Calendar.autoupdatingCurrent)) {
+                                            HStack {
+                                                VStack(alignment: .leading) {
+                                                    Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
+                                                        .font(.headline)
 
-                                                Divider()
-
-                                                ProfilePictureAndNameView(publicKeyHex: event.pubkey)
-
-                                                let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
-
-                                                if !locations.isEmpty {
                                                     Divider()
 
-                                                    Text(event.locations.joined())
-                                                        .font(.subheadline)
-                                                }
+                                                    ProfilePictureAndNameView(publicKeyHex: event.pubkey)
 
-                                                if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
-                                                    Divider()
+                                                    let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
 
-                                                    switch timeTabFilter {
-                                                    case .past:
-                                                        Text(.localizable.numAttended(rsvps.count))
-                                                            .font(.subheadline)
-                                                    case .upcoming:
-                                                        Text(.localizable.numGoing(rsvps.count))
+                                                    if !locations.isEmpty {
+                                                        Divider()
+
+                                                        Text(event.locations.joined())
                                                             .font(.subheadline)
                                                     }
+
+                                                    if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
+                                                        Divider()
+
+                                                        switch timeTabFilter {
+                                                        case .past:
+                                                            Text(.localizable.numAttended(rsvps.count))
+                                                                .font(.subheadline)
+                                                        case .upcoming:
+                                                            Text(.localizable.numGoing(rsvps.count))
+                                                                .font(.subheadline)
+                                                        }
+                                                    }
+                                                }
+
+                                                if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
+                                                    KFImage.url(calendarEventImageURL)
+                                                        .resizable()
+                                                        .placeholder { ProgressView() }
+                                                        .scaledToFit()
+                                                        .frame(maxWidth: 100, maxHeight: 200)
                                                 }
                                             }
-
-                                            if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
-                                                KFImage.url(calendarEventImageURL)
-                                                    .resizable()
-                                                    .placeholder { ProgressView() }
-                                                    .scaledToFit()
-                                                    .frame(maxWidth: 100, maxHeight: 200)
-                                            }
+                                        }
+                                    }, header: {
+                                        if let startTimestamp = event.startTimestamp {
+                                            Text(format(date: startTimestamp, timeZone: event.startTimeZone))
                                         }
                                     }
-                                }, header: {
-                                    if let startTimestamp = event.startTimestamp {
-                                        Text(format(date: startTimestamp, timeZone: event.startTimeZone))
-                                    }
-                                }
-                            )
-                            .padding(.vertical, 10)
+                                )
+                                .padding(.vertical, 10)
+                            }
                         }
                     }
                 }
@@ -96,14 +98,14 @@ struct EventListView: View {
 
     private func resolveTimeZone(_ timeZone: TimeZone?) -> TimeZone {
         guard let timeZone else {
-            return Calendar.current.timeZone
+            return Calendar.autoupdatingCurrent.timeZone
         }
 
         switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
         case .event:
             return timeZone
         case .system, .none:
-            return Calendar.current.timeZone
+            return Calendar.autoupdatingCurrent.timeZone
         }
     }
 
@@ -207,7 +209,7 @@ extension URL {
 
 extension Date {
     var isInCurrentYear: Bool {
-        let calendar = Calendar.current
+        let calendar = Calendar.autoupdatingCurrent
         return calendar.component(.year, from: .now) == calendar.component(.year, from: self)
     }
 }

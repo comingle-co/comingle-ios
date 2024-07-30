@@ -18,9 +18,9 @@ enum TimeZonePreference: CaseIterable, Codable {
     var localizedStringResource: LocalizedStringResource {
         switch self {
         case .event:
-                .localizable.eventTimeZone
+                .localizable.eventTimeZonePreference
         case .system:
-                .localizable.systemTimeZone
+                .localizable.systemTimeZonePreference
         }
     }
 }
