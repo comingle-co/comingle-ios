@@ -21,6 +21,6 @@ extension TimeZone {
     }
 
     func displayName(for date: Date) -> String {
-        "(\(gmtOffset(for: date))) \(identifier)"
+        "(\(gmtOffset(for: date))) \(identifier.replacingOccurrences(of: "_", with: " "))"
     }
 }

@@ -18,12 +18,17 @@ struct TimeZoneSelectionView: View {
 
     private let trie = Trie<TimeZone>()
 
+    private let knownTimeZones: [TimeZone]
+
     init(date: Date, timeZone: Binding<TimeZone?>) {
         self.date = date
         self._timeZone = timeZone
 
-        TimeZone.knownTimeZoneIdentifiers
+        self.knownTimeZones = TimeZone.knownTimeZoneIdentifiers
             .compactMap { TimeZone(identifier: $0) }
+            .sorted(using: TimeZoneSortComparator(order: .forward, date: date))
+
+        self.knownTimeZones
             .forEach { timeZone in
                 _ = trie.insert(
                     key: timeZone.displayName(for: date),
@@ -34,22 +39,28 @@ struct TimeZoneSelectionView: View {
     }
 
     var searchResults: [TimeZone] {
-        trie.find(key: search)
-            .sorted(using: TimeZoneSortComparator(order: .forward, date: date))
+        if search.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            knownTimeZones
+        } else {
+            trie.find(key: search)
+                .sorted(using: TimeZoneSortComparator(order: .forward, date: date))
+        }
     }
 
     var body: some View {
-        List(searchResults, id: \.self, selection: $timeZone) { timeZone in
-            Text(timeZone.displayName(for: date))
-                .bold(self.timeZone?.identifier == timeZone.identifier)
-        }
-        .searchable(
-            text: $search,
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: String(localized: .localizable.searchForTimeZone)
-        )
-        .onChange(of: timeZone) {
-            dismiss()
+        NavigationStack {
+            List(searchResults, id: \.self, selection: $timeZone) { timeZone in
+                Text(timeZone.displayName(for: date))
+                    .bold(self.timeZone?.identifier == timeZone.identifier)
+            }
+            .searchable(
+                text: $search,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: String(localized: .localizable.searchForTimeZone)
+            )
+            .onChange(of: timeZone) {
+                dismiss()
+            }
         }
     }
 }
