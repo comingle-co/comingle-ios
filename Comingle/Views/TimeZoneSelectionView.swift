@@ -42,7 +42,7 @@ struct TimeZoneSelectionView: View {
         if search.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             knownTimeZones
         } else {
-            trie.find(key: search)
+            trie.find(key: search.localizedLowercase)
                 .sorted(using: TimeZoneSortComparator(order: .forward, date: date))
         }
     }

@@ -8,9 +8,20 @@
 import Foundation
 import NostrSDK
 import SwiftData
+import SwiftTrie
 
-class AppState: ObservableObject {
+class AppState: ObservableObject, Hashable {
+    static func == (lhs: AppState, rhs: AppState) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
     static let defaultRelayURLString = "wss://relay.primal.net"
+
+    let id = UUID()
 
     let privateKeySecureStorage = PrivateKeySecureStorage()
 
@@ -30,6 +41,8 @@ class AppState: ObservableObject {
 
     @Published var appSettings: AppSettings?
     @Published var profiles: [Profile] = []
+
+    @Published var metadataTrie = Trie<MetadataEvent>()
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -262,20 +275,41 @@ extension AppState: EventVerifying, RelayDelegate {
     private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent) {
         if let existingFollowList = self.followListEvents[followListEvent.pubkey] {
             if existingFollowList.createdAt < followListEvent.createdAt {
-                self.followListEvents[followListEvent.pubkey] = followListEvent
+                cache(followListEvent)
             }
         } else {
-            self.followListEvents[followListEvent.pubkey] = followListEvent
+            cache(followListEvent)
         }
+    }
+
+    private func cache(_ followListEvent: FollowListEvent) {
+        self.followListEvents[followListEvent.pubkey] = followListEvent
     }
 
     private func didReceiveMetadataEvent(_ metadataEvent: MetadataEvent) {
         if let existingMetadataEvent = self.metadataEvents[metadataEvent.pubkey] {
             if existingMetadataEvent.createdAt < metadataEvent.createdAt {
-                self.metadataEvents[metadataEvent.pubkey] = metadataEvent
+                cache(metadataEvent)
             }
         } else {
-            self.metadataEvents[metadataEvent.pubkey] = metadataEvent
+            cache(metadataEvent)
+        }
+    }
+
+    private func cache(_ metadataEvent: MetadataEvent) {
+        self.metadataEvents[metadataEvent.pubkey] = metadataEvent
+
+        if let userMetadata = metadataEvent.userMetadata {
+            if let name = userMetadata.name?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                _ = metadataTrie.insert(key: name, value: metadataEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+            }
+            if let displayName = userMetadata.displayName?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                _ = metadataTrie.insert(key: displayName, value: metadataEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+            }
+        }
+
+        if let publicKey = PublicKey(hex: metadataEvent.pubkey) {
+            _ = metadataTrie.insert(key: publicKey.npub, value: metadataEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
     }
 

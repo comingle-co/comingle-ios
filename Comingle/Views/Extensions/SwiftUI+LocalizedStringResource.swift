@@ -104,6 +104,27 @@ extension TextField where Label == Text {
     }
 }
 
+extension Toggle where Label == Text {
+
+    /// Creates a toggle that generates its label from a localized string key.
+    ///
+    /// This initializer creates a ``Text`` view on your behalf, and treats the
+    /// localized key similar to ``Text/init(_:tableName:bundle:comment:)``. See
+    /// `Text` for more information about localizing strings.
+    ///
+    /// To initialize a toggle with a string variable, use
+    /// ``Toggle/init(_:isOn:)-2qurm`` instead.
+    ///
+    /// - Parameters:
+    ///   - localized: The string resource for the toggle's localized title, that describes
+    ///     the purpose of the toggle.
+    ///   - isOn: A binding to a property that indicates whether the toggle is
+    ///    on or off.
+    init(_ localized: LocalizedStringResource, isOn: Binding<Bool>) {
+        self.init(String(localized: localized), isOn: isOn)
+    }
+}
+
 extension View {
 
     /// Configures the view's title for purposes of navigation,

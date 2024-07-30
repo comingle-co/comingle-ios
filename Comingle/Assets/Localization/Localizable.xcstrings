@@ -229,6 +229,18 @@
         }
       }
     },
+    "eventDescription" : {
+      "comment" : "Section title for event description.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event Description"
+          }
+        }
+      }
+    },
     "eventEnd" : {
       "comment" : "Text indicating that the form field is for setting the event end date and time.",
       "extractionState" : "manual",
@@ -613,6 +625,42 @@
         }
       }
     },
+    "participants" : {
+      "comment" : "Section title for participants in event creation view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participants"
+          }
+        }
+      }
+    },
+    "participantsCount" : {
+      "comment" : "Number of invited participants",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d participant"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%d participants"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "past" : {
       "comment" : "Picker label to filter down past calendar events.",
       "extractionState" : "manual",
@@ -889,6 +937,18 @@
         }
       }
     },
+    "searchForParticipant" : {
+      "comment" : "Placeholder text to prompt user to search for a participant to invite to an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for participant"
+          }
+        }
+      }
+    },
     "searchForTimeZone" : {
       "comment" : "Placeholder text to prompt user to search for a time zone.",
       "extractionState" : "manual",
@@ -897,6 +957,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search for time zone"
+          }
+        }
+      }
+    },
+    "setTimeZone" : {
+      "comment" : "Text for toggle for setting time zone on an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Time Zone"
           }
         }
       }
@@ -1149,6 +1221,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Time Zone"
+          }
+        }
+      }
+    },
+    "timeZoneFooter" : {
+      "comment" : "Footer text to explain when a time zone should be entered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a time zone if this is primarily an in-person event."
           }
         }
       }

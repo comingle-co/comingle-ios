@@ -43,7 +43,7 @@ struct EventCreationView: View {
                 }
 
                 Section {
-                    Toggle("Set Time Zone", isOn: $viewModel.isSettingTimeZone)
+                    Toggle(.localizable.setTimeZone, isOn: $viewModel.isSettingTimeZone)
 
                     if viewModel.isSettingTimeZone {
                         Button(action: {
@@ -53,19 +53,21 @@ struct EventCreationView: View {
                         })
                     }
                 } footer: {
-                    Text("Enter a time zone if this is primarily an in-person event.")
+                    Text(.localizable.timeZoneFooter)
                 }
 
                 Section {
-
+                    NavigationLink(destination: ParticipantSearchView(appState: viewModel.appState, participants: $viewModel.participants)) {
+                        Text(.localizable.participantsCount(viewModel.participants.count))
+                    }
                 } header: {
-                    Text("Participants")
+                    Text(.localizable.participants)
                 }
 
                 Section {
                     TextEditor(text: $viewModel.description)
                 } header: {
-                    Text("Event description")
+                    Text(.localizable.eventDescription)
                 }
             }
             .navigationTitle(.localizable.createEvent)
@@ -92,6 +94,24 @@ struct EventCreationView: View {
     }
 }
 
+class EventCreationParticipant: Equatable, Hashable {
+    static func == (lhs: EventCreationParticipant, rhs: EventCreationParticipant) -> Bool {
+        lhs.publicKeyHex == rhs.publicKeyHex && lhs.role == rhs.role
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(publicKeyHex)
+        hasher.combine(role)
+    }
+
+    let publicKeyHex: String
+    var role: String = ""
+
+    init(publicKeyHex: String) {
+        self.publicKeyHex = publicKeyHex
+    }
+}
+
 extension EventCreationView {
     @Observable class ViewModel: EventCreating {
         let appState: AppState
@@ -104,6 +124,8 @@ extension EventCreationView {
         var isSettingTimeZone: Bool = false
         var timeZone: TimeZone? = TimeZone.autoupdatingCurrent
         var isShowingTimeZoneSelector: Bool = false
+
+        var participants = Set<EventCreationParticipant>()
 
         init(appState: AppState) {
             self.appState = appState
@@ -123,12 +145,26 @@ extension EventCreationView {
             }
 
             do {
+                let calendarEventParticipants = participants.compactMap {
+                    if let publicKey = PublicKey(hex: $0.publicKeyHex) {
+                        let trimmedRole = $0.role.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if trimmedRole.isEmpty {
+                            return CalendarEventParticipant(pubkey: publicKey)
+                        } else {
+                            return CalendarEventParticipant(pubkey: publicKey, role: $0.role)
+                        }
+                    } else {
+                        return nil
+                    }
+                }
+
                 let event = try timeBasedCalendarEvent(
                     title: trimmedTitle,
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
                     startTimestamp: start,
                     endTimestamp: end,
                     startTimeZone: timeZone,
+                    participants: calendarEventParticipants,
                     signedBy: keypair
                 )
 

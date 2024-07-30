@@ -19,6 +19,8 @@
 		3A317C002C57FDAC004DA56B /* TimeZoneSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */; };
 		3A317C032C58002E004DA56B /* TimeZoneExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C022C58002E004DA56B /* TimeZoneExtensions.swift */; };
 		3A317C072C588D04004DA56B /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C062C588D04004DA56B /* LicensesView.swift */; };
+		3A317C0C2C58A282004DA56B /* ParticipantSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C0B2C58A282004DA56B /* ParticipantSearchView.swift */; };
+		3A317C0F2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C0E2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift */; };
 		3A34194A2C50A36B0039620B /* PersistentNostrEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3419492C50A36B0039620B /* PersistentNostrEvent.swift */; };
 		3A34194D2C50B2680039620B /* NostrEventValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */; };
 		3A34AAA32B48FE1F00C5F910 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */; };
@@ -83,6 +85,8 @@
 		3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneSortComparator.swift; sourceTree = "<group>"; };
 		3A317C022C58002E004DA56B /* TimeZoneExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneExtensions.swift; sourceTree = "<group>"; };
 		3A317C062C588D04004DA56B /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
+		3A317C0B2C58A282004DA56B /* ParticipantSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantSearchView.swift; sourceTree = "<group>"; };
+		3A317C0E2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationParticipantSortComparator.swift; sourceTree = "<group>"; };
 		3A3419492C50A36B0039620B /* PersistentNostrEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentNostrEvent.swift; sourceTree = "<group>"; };
 		3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NostrEventValueTransformer.swift; sourceTree = "<group>"; };
 		3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -239,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				3A464FF22C3A296400AD4B09 /* Settings */,
+				3A317C0E2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift */,
 				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
 				3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */,
 				3A3419492C50A36B0039620B /* PersistentNostrEvent.swift */,
@@ -267,6 +272,7 @@
 				3A4A89972C3CF24800238043 /* ProfileNameView.swift */,
 				3A4A89892C3C240B00238043 /* ProfilePictureAndNameView.swift */,
 				3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */,
+				3A317C0B2C58A282004DA56B /* ParticipantSearchView.swift */,
 				3A4A89862C3B49EF00238043 /* ProfileView.swift */,
 				3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */,
 			);
@@ -483,6 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A4A89872C3B49EF00238043 /* ProfileView.swift in Sources */,
+				3A317C0C2C58A282004DA56B /* ParticipantSearchView.swift in Sources */,
 				3A453E242A0C614900897303 /* EventView.swift in Sources */,
 				3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */,
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
@@ -505,6 +512,7 @@
 				3A4B466F2C52094600307F23 /* ImageOverlayView.swift in Sources */,
 				3A317C002C57FDAC004DA56B /* TimeZoneSortComparator.swift in Sources */,
 				3A34194A2C50A36B0039620B /* PersistentNostrEvent.swift in Sources */,
+				3A317C0F2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift in Sources */,
 				3A464FFE2C3A34BE00AD4B09 /* AppSettings.swift in Sources */,
 				3A317C032C58002E004DA56B /* TimeZoneExtensions.swift in Sources */,
 				3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */,
