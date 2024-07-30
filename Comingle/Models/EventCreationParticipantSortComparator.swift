@@ -52,9 +52,9 @@ struct EventCreationParticipantSortComparator: SortComparator {
         }
 
         guard let lhsMetadataEvent, let rhsMetadataEvent else {
-            return lhs.publicKeyHex.compare(rhs.publicKeyHex)
+            return lhs.publicKeyHex.caseInsensitiveCompare(rhs.publicKeyHex)
         }
 
-        return lhsMetadataEvent.resolvedName.compare(rhsMetadataEvent.resolvedName)
+        return lhsMetadataEvent.resolvedName.localizedCaseInsensitiveCompare(rhsMetadataEvent.resolvedName)
     }
 }

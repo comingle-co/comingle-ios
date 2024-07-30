@@ -51,9 +51,10 @@ struct ParticipantSearchView: View {
         } else {
             let searchResults = appState.metadataTrie.find(key: trimmedParticipantSearch.localizedLowercase)
                 .map { EventCreationParticipant(publicKeyHex: $0.pubkey) }
+                .sorted(using: eventCreationParticipantSortComparator)
 
             if !searchResults.isEmpty {
-                return OrderedSet(searchResults.sorted(using: eventCreationParticipantSortComparator))
+                return OrderedSet(searchResults)
             }
 
             if let publicKey = PublicKey(npub: trimmedParticipantSearch) {
