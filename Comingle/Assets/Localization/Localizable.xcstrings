@@ -385,6 +385,18 @@
         }
       }
     },
+    "licenses" : {
+      "comment" : "View for seeing the open source licenses that were used in building the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Licenses"
+          }
+        }
+      }
+    },
     "location" : {
       "comment" : "Confirmation dialog for taking action on the location of a calendar event.",
       "extractionState" : "manual",

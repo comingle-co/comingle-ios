@@ -124,6 +124,10 @@ struct SettingsView: View {
                 Section(
                     content: {
                         LabeledContent("Version", value: viewModel.appVersion)
+
+                        NavigationLink(destination: LicensesView()) {
+                            Text(.localizable.licenses)
+                        }
                     },
                     header: {
                         Text("About")
