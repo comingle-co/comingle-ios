@@ -348,7 +348,8 @@ struct EventView: View {
             ToolbarItem {
                 Menu {
                     if let event = viewModel.event {
-                        let shareableEventCoordinates = try? event.shareableEventCoordinates()
+                        let relays = viewModel.appState.persistentNostrEvents[event.id]?.relays ?? []
+                        let shareableEventCoordinates = try? event.shareableEventCoordinates(relayURLStrings: relays.map { $0.absoluteString })
 
                         NavigationLink(destination: EventCreationOrModificationView(appState: viewModel.appState, existingEvent: event)) {
                             Text(.localizable.modifyEvent)
