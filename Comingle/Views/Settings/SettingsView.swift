@@ -23,116 +23,128 @@ struct SettingsView: View {
         _viewModel = State(initialValue: viewModel)
     }
 
+    var profilesSection: some View {
+        Section(
+            content: {
+                DisclosureGroup(
+                    isExpanded: $profilePickerExpanded,
+                    content: {
+                        ForEach(viewModel.profiles, id: \.self) { profile in
+                            HStack {
+                                if viewModel.isSignedInWithPrivateKey(profile) {
+                                    ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                } else {
+                                    ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                        ProfilePictureView(publicKeyHex: profile.publicKeyHex)
+                                    }
+                                }
+                                if viewModel.isActiveProfile(profile) {
+                                    ProfileNameView(publicKeyHex: profile.publicKeyHex)
+                                        .foregroundStyle(.accent)
+                                } else {
+                                    ProfileNameView(publicKeyHex: profile.publicKeyHex)
+                                }
+                            }
+                            .tag(profile.publicKeyHex)
+                            .onTapGesture {
+                                viewModel.updateActiveProfile(profile)
+                                profilePickerExpanded = false
+                            }
+                            .swipeActions {
+                                if profile.publicKeyHex != nil {
+                                    Button(role: .destructive) {
+                                        profileToSignOut = profile
+                                        isShowingSignOutConfirmation = true
+                                    } label: {
+                                        Label(.localizable.signOut, systemImage: "door.left.hand.open")
+                                    }
+                                }
+                            }
+                        }
+                        NavigationLink(destination: LoginView(appState: viewModel.appState)) {
+                            Image(systemName: "plus.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40)
+                            Text(.localizable.addProfile)
+                        }
+                    },
+                    label: {
+                        let publicKeyHex = viewModel.publicKeyHex
+                        if let publicKeyHex, PublicKey(hex: publicKeyHex) != nil {
+                            if viewModel.isActiveProfileSignedInWithPrivateKey {
+                                ProfilePictureView(publicKeyHex: publicKeyHex)
+                            } else {
+                                ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                    ProfilePictureView(publicKeyHex: publicKeyHex)
+                                }
+                            }
+                        } else {
+                            ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
+                                GuestProfilePictureView()
+                            }
+                        }
+                        ProfileNameView(publicKeyHex: publicKeyHex)
+                    }
+                )
+
+                if let publicKeyHex = viewModel.publicKeyHex, PublicKey(hex: publicKeyHex) != nil {
+                    NavigationLink(destination: ProfileView(publicKeyHex: publicKeyHex)) {
+                        Text(.localizable.viewProfile)
+                    }
+                }
+            },
+            header: {
+                Text(.localizable.profiles)
+            }
+        )
+    }
+
+    var profileSettingsSection: some View {
+        Section(
+            content: {
+                let publicKeyHex = viewModel.publicKeyHex
+                if let publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
+                    NavigationLink(destination: KeysSettingsView(publicKey: publicKey)) {
+                        Label(.localizable.settingsKeys, systemImage: "key")
+                    }
+                }
+                NavigationLink(destination: RelaysSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
+                    Label(.localizable.settingsRelays, systemImage: "server.rack")
+                }
+                NavigationLink(destination: AppearanceSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
+                    Label(.localizable.settingsAppearance, systemImage: "eye")
+                }
+            },
+            header: {
+                Text(.localizable.settingsForProfile(viewModel.activeProfileName))
+            }
+        )
+    }
+
+    var aboutSection: some View {
+        Section(
+            content: {
+                LabeledContent("Version", value: viewModel.appVersion)
+
+                NavigationLink(destination: LicensesView()) {
+                    Text(.localizable.licenses)
+                }
+            },
+            header: {
+                Text("About")
+            }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             Form {
-                Section(
-                    content: {
-                        DisclosureGroup(
-                            isExpanded: $profilePickerExpanded,
-                            content: {
-                                ForEach(viewModel.profiles, id: \.self) { profile in
-                                    HStack {
-                                        if viewModel.isSignedInWithPrivateKey(profile) {
-                                            ProfilePictureView(publicKeyHex: profile.publicKeyHex)
-                                        } else {
-                                            ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
-                                                ProfilePictureView(publicKeyHex: profile.publicKeyHex)
-                                            }
-                                        }
-                                        if viewModel.isActiveProfile(profile) {
-                                            ProfileNameView(publicKeyHex: profile.publicKeyHex)
-                                                .foregroundStyle(.accent)
-                                        } else {
-                                            ProfileNameView(publicKeyHex: profile.publicKeyHex)
-                                        }
-                                    }
-                                    .tag(profile.publicKeyHex)
-                                    .onTapGesture {
-                                        viewModel.updateActiveProfile(profile)
-                                        profilePickerExpanded = false
-                                    }
-                                    .swipeActions {
-                                        if profile.publicKeyHex != nil {
-                                            Button(role: .destructive) {
-                                                profileToSignOut = profile
-                                                isShowingSignOutConfirmation = true
-                                            } label: {
-                                                Label(.localizable.signOut, systemImage: "door.left.hand.open")
-                                            }
-                                        }
-                                    }
-                                }
-                                NavigationLink(destination: LoginView(appState: viewModel.appState)) {
-                                    Image(systemName: "plus.circle")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 40)
-                                    Text(.localizable.addProfile)
-                                }
-                            },
-                            label: {
-                                let publicKeyHex = viewModel.publicKeyHex
-                                if let publicKeyHex, PublicKey(hex: publicKeyHex) != nil {
-                                    if viewModel.isActiveProfileSignedInWithPrivateKey {
-                                        ProfilePictureView(publicKeyHex: publicKeyHex)
-                                    } else {
-                                        ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
-                                            ProfilePictureView(publicKeyHex: publicKeyHex)
-                                        }
-                                    }
-                                } else {
-                                    ImageOverlayView(imageSystemName: "lock.fill", overlayBackgroundColor: .accent) {
-                                        GuestProfilePictureView()
-                                    }
-                                }
-                                ProfileNameView(publicKeyHex: publicKeyHex)
-                            }
-                        )
+                profilesSection
 
-                        if let publicKeyHex = viewModel.publicKeyHex, PublicKey(hex: publicKeyHex) != nil {
-                            NavigationLink(destination: ProfileView(publicKeyHex: publicKeyHex)) {
-                                Text(.localizable.viewProfile)
-                            }
-                        }
-                    },
-                    header: {
-                        Text(.localizable.profiles)
-                    }
-                )
+                profileSettingsSection
 
-                Section(
-                    content: {
-                        let publicKeyHex = viewModel.publicKeyHex
-                        if let publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
-                            NavigationLink(destination: KeysSettingsView(publicKey: publicKey)) {
-                                Label(.localizable.settingsKeys, systemImage: "key")
-                            }
-                        }
-                        NavigationLink(destination: RelaysSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
-                            Label(.localizable.settingsRelays, systemImage: "server.rack")
-                        }
-                        NavigationLink(destination: AppearanceSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
-                            Label(.localizable.settingsAppearance, systemImage: "eye")
-                        }
-                    },
-                    header: {
-                        Text(.localizable.settingsForProfile(viewModel.activeProfileName))
-                    }
-                )
-
-                Section(
-                    content: {
-                        LabeledContent("Version", value: viewModel.appVersion)
-
-                        NavigationLink(destination: LicensesView()) {
-                            Text(.localizable.licenses)
-                        }
-                    },
-                    header: {
-                        Text("About")
-                    }
-                )
+                aboutSection
 
                 if let activeProfile = viewModel.activeProfile, activeProfile.publicKeyHex != nil {
                     Section {
