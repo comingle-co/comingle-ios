@@ -13,7 +13,7 @@
 		3A2FF9782A3F6DFD009E1067 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9772A3F6DFD009E1067 /* LoginView.swift */; };
 		3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9812A3FD68B009E1067 /* SettingsView.swift */; };
 		3A2FF9842A40025B009E1067 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9832A40025B009E1067 /* AppState.swift */; };
-		3A317BF62C5750B3004DA56B /* EventCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BF52C5750B3004DA56B /* EventCreationView.swift */; };
+		3A317BF62C5750B3004DA56B /* EventCreationOrModificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BF52C5750B3004DA56B /* EventCreationOrModificationView.swift */; };
 		3A317BF92C57F507004DA56B /* TimeZoneSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */; };
 		3A317BFD2C57FC2B004DA56B /* SwiftTrie in Frameworks */ = {isa = PBXBuildFile; productRef = 3A317BFC2C57FC2B004DA56B /* SwiftTrie */; };
 		3A317C002C57FDAC004DA56B /* TimeZoneSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */; };
@@ -85,7 +85,7 @@
 		3A2FF9772A3F6DFD009E1067 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		3A2FF9812A3FD68B009E1067 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A2FF9832A40025B009E1067 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		3A317BF52C5750B3004DA56B /* EventCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationView.swift; sourceTree = "<group>"; };
+		3A317BF52C5750B3004DA56B /* EventCreationOrModificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationOrModificationView.swift; sourceTree = "<group>"; };
 		3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneSelectionView.swift; sourceTree = "<group>"; };
 		3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneSortComparator.swift; sourceTree = "<group>"; };
 		3A317C022C58002E004DA56B /* TimeZone+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Extensions.swift"; sourceTree = "<group>"; };
@@ -276,7 +276,7 @@
 				3A34AAA82B491D9700C5F910 /* Extensions */,
 				3A464FED2C3A273000AD4B09 /* Settings */,
 				3A453DDD2A0B348100897303 /* ContentView.swift */,
-				3A317BF52C5750B3004DA56B /* EventCreationView.swift */,
+				3A317BF52C5750B3004DA56B /* EventCreationOrModificationView.swift */,
 				3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */,
 				3A453E1D2A0C614800897303 /* EventView.swift */,
 				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
@@ -508,7 +508,7 @@
 				3A453E242A0C614900897303 /* EventView.swift in Sources */,
 				3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */,
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
-				3A317BF62C5750B3004DA56B /* EventCreationView.swift in Sources */,
+				3A317BF62C5750B3004DA56B /* EventCreationOrModificationView.swift in Sources */,
 				3A317BF92C57F507004DA56B /* TimeZoneSelectionView.swift in Sources */,
 				3A317C072C588D04004DA56B /* LicensesView.swift in Sources */,
 				3A4A89A22C3E3F6000238043 /* KeysSettingsView.swift in Sources */,

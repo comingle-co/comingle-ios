@@ -45,7 +45,7 @@ struct ContentView: View {
                     ToolbarItem(placement: .topBarLeading) {
                         NavigationLink(
                             destination: {
-                                EventCreationView(appState: appState)
+                                EventCreationOrModificationView(appState: appState)
                             },
                             label: {
                                 Image(systemName: "plus.circle")

@@ -457,6 +457,18 @@
         }
       }
     },
+    "modifyEvent" : {
+      "comment" : "Button to modify event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modify Event"
+          }
+        }
+      }
+    },
     "noEvents" : {
       "comment" : "Text indicating that there are no calendar events.",
       "extractionState" : "manual",

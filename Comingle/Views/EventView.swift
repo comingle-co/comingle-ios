@@ -22,7 +22,7 @@ struct EventView: View {
     let calendarEventParticipantSortComparator: CalendarEventParticipantSortComparator
 
     init(appState: AppState, event: TimeBasedCalendarEvent, calendar: Calendar) {
-        let viewModel = ViewModel(appState: appState, event: event, calendar: calendar)
+        let viewModel = ViewModel(appState: appState, eventCoordinates: event.replaceableEventCoordinates()!, calendar: calendar)
         _viewModel = State(initialValue: viewModel)
 
         rsvpSortComparator = RSVPSortComparator(order: .forward, appState: appState)
@@ -44,12 +44,11 @@ struct EventView: View {
                     .padding(.vertical, 2)
                     .font(.subheadline)
                     .translationPresentation(isPresented: $viewModel.isContentTranslationPresented, text: viewModel.contentText) { translatedString in
-                        viewModel.contentText = translatedString
+                        viewModel.contentTextTranslation = translatedString
                         viewModel.contentTranslationReplaced = true
                     }
                     .onTapGesture {
                         if viewModel.contentTranslationReplaced {
-                            viewModel.contentText = viewModel.event.content.trimmingCharacters(in: .whitespacesAndNewlines)
                             viewModel.contentTranslationReplaced = false
                         } else {
                             viewModel.isContentTranslationPresented = true
@@ -57,7 +56,6 @@ struct EventView: View {
                     }
                     .onLongPressGesture {
                         if viewModel.contentTranslationReplaced {
-                            viewModel.contentText = viewModel.event.content.trimmingCharacters(in: .whitespacesAndNewlines)
                             viewModel.contentTranslationReplaced = false
                         } else {
                             viewModel.isContentTranslationPresented = true
@@ -88,83 +86,89 @@ struct EventView: View {
     var profileView: some View {
         NavigationLink(
             destination: {
-                ProfileView(publicKeyHex: viewModel.event.pubkey)
+                if let event = viewModel.event {
+                    ProfileView(publicKeyHex: event.pubkey)
+                }
             },
             label: {
-                ProfilePictureAndNameView(publicKeyHex: viewModel.event.pubkey)
+                if let event = viewModel.event {
+                    ProfilePictureAndNameView(publicKeyHex: event.pubkey)
+                }
             }
         )
     }
 
     var participantsView: some View {
         VStack(alignment: .leading) {
-            Text(.localizable.invited(viewModel.event.participants.count))
-                .padding(.vertical, 2)
-                .font(.headline)
-
-            ForEach(viewModel.event.participants.sorted(using: calendarEventParticipantSortComparator), id: \.self) { participant in
-                if let publicKeyHex = participant.pubkey?.hex {
-                    Divider()
-                    NavigationLink(
-                        destination: {
-                            ProfileView(publicKeyHex: publicKeyHex)
-                        },
-                        label: {
-                            HStack {
-                                ProfilePictureView(publicKeyHex: publicKeyHex)
-
-                                VStack(alignment: .leading) {
-                                    ProfileNameView(publicKeyHex: publicKeyHex)
-
-                                    if viewModel.appState.followedPubkeys.contains(publicKeyHex) {
-                                        Image(systemName: "figure.stand.line.dotted.figure.stand")
-                                            .font(.footnote)
-                                    }
-
-                                    if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
-                                        Text(role)
-                                            .font(.footnote)
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
-            }
-
-            if let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value,
-               let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates] {
-                Divider()
-
-                Text(.localizable.rsvps(rsvps.count))
+            if let event = viewModel.event {
+                Text(.localizable.invited(event.participants.count))
                     .padding(.vertical, 2)
                     .font(.headline)
 
-                ForEach(rsvps.sorted(using: rsvpSortComparator), id: \.self) { rsvp in
-                    NavigationLink(
-                        destination: {
-                            ProfileView(publicKeyHex: rsvp.pubkey)
-                        },
-                        label: {
-                            HStack {
-                                ImageOverlayView(
-                                    imageSystemName: viewModel.rsvpStatusSystemImage(rsvp.status),
-                                    overlayBackgroundColor: viewModel.rsvpStatusColor(rsvp.status)
-                                ) {
-                                    ProfilePictureView(publicKeyHex: rsvp.pubkey)
-                                }
+                ForEach(event.participants.sorted(using: calendarEventParticipantSortComparator), id: \.self) { participant in
+                    if let publicKeyHex = participant.pubkey?.hex {
+                        Divider()
+                        NavigationLink(
+                            destination: {
+                                ProfileView(publicKeyHex: publicKeyHex)
+                            },
+                            label: {
+                                HStack {
+                                    ProfilePictureView(publicKeyHex: publicKeyHex)
 
-                                VStack(alignment: .leading) {
-                                    ProfileNameView(publicKeyHex: rsvp.pubkey)
+                                    VStack(alignment: .leading) {
+                                        ProfileNameView(publicKeyHex: publicKeyHex)
 
-                                    if viewModel.appState.followedPubkeys.contains(rsvp.pubkey) {
-                                        Image(systemName: "figure.stand.line.dotted.figure.stand")
-                                            .font(.footnote)
+                                        if viewModel.appState.followedPubkeys.contains(publicKeyHex) {
+                                            Image(systemName: "figure.stand.line.dotted.figure.stand")
+                                                .font(.footnote)
+                                        }
+
+                                        if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
+                                            Text(role)
+                                                .font(.footnote)
+                                        }
                                     }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
+                }
+
+                if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
+                   let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                    Divider()
+
+                    Text(.localizable.rsvps(rsvps.count))
+                        .padding(.vertical, 2)
+                        .font(.headline)
+
+                    ForEach(rsvps.sorted(using: rsvpSortComparator), id: \.self) { rsvp in
+                        NavigationLink(
+                            destination: {
+                                ProfileView(publicKeyHex: rsvp.pubkey)
+                            },
+                            label: {
+                                HStack {
+                                    ImageOverlayView(
+                                        imageSystemName: viewModel.rsvpStatusSystemImage(rsvp.status),
+                                        overlayBackgroundColor: viewModel.rsvpStatusColor(rsvp.status)
+                                    ) {
+                                        ProfilePictureView(publicKeyHex: rsvp.pubkey)
+                                    }
+
+                                    VStack(alignment: .leading) {
+                                        ProfileNameView(publicKeyHex: rsvp.pubkey)
+
+                                        if viewModel.appState.followedPubkeys.contains(rsvp.pubkey) {
+                                            Image(systemName: "figure.stand.line.dotted.figure.stand")
+                                                .font(.footnote)
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -173,49 +177,51 @@ struct EventView: View {
     var body: some View {
         ScrollView {
             VStack {
-                if let calendarEventImage = viewModel.event.firstValueForRawTagName("image"),
-                   let calendarEventImageURL = URL(string: calendarEventImage),
-                   calendarEventImageURL.isImage {
-                    KFImage.url(calendarEventImageURL)
-                        .resizable()
-                        .placeholder { ProgressView() }
-                        .scaledToFit()
-                        .frame(maxWidth: 500, maxHeight: 200)
-                }
+                if let event = viewModel.event {
+                    if let calendarEventImage = event.firstValueForRawTagName("image"),
+                       let calendarEventImageURL = URL(string: calendarEventImage),
+                       calendarEventImageURL.isImage {
+                        KFImage.url(calendarEventImageURL)
+                            .resizable()
+                            .placeholder { ProgressView() }
+                            .scaledToFit()
+                            .frame(maxWidth: 500, maxHeight: 200)
+                    }
 
-                Text(viewModel.eventTitle)
-                    .padding(.vertical, 2)
-                    .font(.largeTitle)
+                    Text(viewModel.eventTitle)
+                        .padding(.vertical, 2)
+                        .font(.largeTitle)
 
-                Divider()
-
-                Text(viewModel.dateIntervalFormatter.string(from: viewModel.event.startTimestamp!, to: viewModel.event.endTimestamp!))
-
-                locationsView
-
-                Divider()
-
-                profileView
-
-                Divider()
-
-                contentView
-
-                Divider()
-
-                participantsView
-
-                if let geohash = viewModel.geohash {
                     Divider()
 
-                    Map(bounds: MapCameraBounds(centerCoordinateBounds: geohash.region)) {
-                        Marker(viewModel.eventTitle, coordinate: geohash.region.center)
-                    }
-                    .frame(height: 250)
-                    .onTapGesture {
-                        viewModel.selectedLocation = ""
-                        viewModel.selectedGeohash = true
-                        viewModel.showLocationAlert = true
+                    Text(viewModel.dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))
+
+                    locationsView
+
+                    Divider()
+
+                    profileView
+
+                    Divider()
+
+                    contentView
+
+                    Divider()
+
+                    participantsView
+
+                    if let geohash = viewModel.geohash {
+                        Divider()
+
+                        Map(bounds: MapCameraBounds(centerCoordinateBounds: geohash.region)) {
+                            Marker(viewModel.eventTitle, coordinate: geohash.region.center)
+                        }
+                        .frame(height: 250)
+                        .onTapGesture {
+                            viewModel.selectedLocation = ""
+                            viewModel.selectedGeohash = true
+                            viewModel.showLocationAlert = true
+                        }
                     }
                 }
             }
@@ -223,49 +229,50 @@ struct EventView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog(.localizable.rsvp, isPresented: $viewModel.isChangingRSVP) {
-            Button(action: {
-                viewModel.createOrUpdateRSVP(.accepted)
-            }, label: {
-                if viewModel.event.isUpcoming {
-                    Text(.localizable.rsvpStatusGoing)
-                } else {
-                    Text(.localizable.attended)
-                }
-            })
-
-            Button(action: {
-                viewModel.createOrUpdateRSVP(.tentative)
-            }, label: {
-                if viewModel.event.isUpcoming {
-                    Text(.localizable.rsvpStatusMaybeGoing)
-                } else {
-                    Text(.localizable.maybeAttended)
-                }
-            })
-
-            Button(action: {
-                viewModel.createOrUpdateRSVP(.declined)
-            }, label: {
-                if viewModel.event.isUpcoming {
-                    Text(.localizable.rsvpStatusNotGoing)
-                } else {
-                    Text(.localizable.didNotAttend)
-                }
-            })
-
-            if let keypair = viewModel.appState.keypair,
-               let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value,
-               let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates],
-               rsvps.contains(where: { $0.pubkey == keypair.publicKey.hex }) {
-                Button(
-                    role: .destructive,
-                    action: {
-                        viewModel.deleteRSVP()
-                    },
-                    label: {
-                        Text("Delete RSVP")
+            if let event = viewModel.event {
+                Button(action: {
+                    viewModel.createOrUpdateRSVP(.accepted)
+                }, label: {
+                    if event.isUpcoming {
+                        Text(.localizable.rsvpStatusGoing)
+                    } else {
+                        Text(.localizable.attended)
                     }
-                )
+                })
+
+                Button(action: {
+                    viewModel.createOrUpdateRSVP(.tentative)
+                }, label: {
+                    if event.isUpcoming {
+                        Text(.localizable.rsvpStatusMaybeGoing)
+                    } else {
+                        Text(.localizable.maybeAttended)
+                    }
+                })
+
+                Button(action: {
+                    viewModel.createOrUpdateRSVP(.declined)
+                }, label: {
+                    if event.isUpcoming {
+                        Text(.localizable.rsvpStatusNotGoing)
+                    } else {
+                        Text(.localizable.didNotAttend)
+                    }
+                })
+
+                if let keypair = viewModel.appState.keypair,
+                   let rsvps = viewModel.appState.calendarEventsToRsvps[viewModel.eventCoordinates.tag.value],
+                   rsvps.contains(where: { $0.pubkey == keypair.publicKey.hex }) {
+                    Button(
+                        role: .destructive,
+                        action: {
+                            viewModel.deleteRSVP()
+                        },
+                        label: {
+                            Text("Delete RSVP")
+                        }
+                    )
+                }
             }
         }
         .confirmationDialog(.localizable.location, isPresented: $viewModel.showLocationAlert) {
@@ -340,32 +347,41 @@ struct EventView: View {
         .toolbar {
             ToolbarItem {
                 Menu {
-                    let shareableEventCoordinates = try? viewModel.event.shareableEventCoordinates()
-                    Button(action: {
-                        var stringToCopy = "\(viewModel.eventTitle)\n\(viewModel.dateIntervalFormatter.string(from: viewModel.event.startTimestamp!, to: viewModel.event.endTimestamp!))\n\n\(viewModel.filteredLocations.joined(separator: "\n"))\n\n\(viewModel.contentText)\n\n"
+                    if let event = viewModel.event {
+                        let shareableEventCoordinates = try? event.shareableEventCoordinates()
 
-                        let metadataEvent = viewModel.appState.metadataEvents[viewModel.event.pubkey]
-                        if let publicKey = PublicKey(hex: viewModel.event.pubkey) {
-                            stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? publicKey.npub))
-                        } else {
-                            stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? viewModel.event.pubkey))
+                        NavigationLink(destination: EventCreationOrModificationView(appState: viewModel.appState, existingEvent: event)) {
+                            Text(.localizable.modifyEvent)
                         }
 
-                        if let shareableEventCoordinates {
-                            // TODO Change to a Comingle URL once the website is set up.
-                            stringToCopy += "\n\nhttps://njump.me/\(shareableEventCoordinates)"
-                        }
-
-                        UIPasteboard.general.string = stringToCopy
-                    }, label: {
-                        Text(.localizable.copyEventDetails)
-                    })
-                    if let shareableEventCoordinates {
                         Button(action: {
-                            UIPasteboard.general.string = shareableEventCoordinates
+                            var stringToCopy = "\(viewModel.eventTitle)\n\(viewModel.dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))\n\n\(viewModel.filteredLocations.joined(separator: "\n"))\n\n\(viewModel.contentText)\n\n"
+
+                            let metadataEvent = viewModel.appState.metadataEvents[event.pubkey]
+                            if let publicKey = PublicKey(hex: event.pubkey) {
+                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? publicKey.npub))
+                            } else {
+                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? event.pubkey))
+                            }
+
+                            if let shareableEventCoordinates {
+                                // TODO Change to a Comingle URL once the website is set up.
+                                stringToCopy += "\n\nhttps://njump.me/\(shareableEventCoordinates)"
+                            }
+
+                            UIPasteboard.general.string = stringToCopy
                         }, label: {
-                            Text(.localizable.copyEventID)
+                            Text(.localizable.copyEventDetails)
                         })
+                        if let shareableEventCoordinates {
+                            Button(action: {
+                                UIPasteboard.general.string = shareableEventCoordinates
+                            }, label: {
+                                Text(.localizable.copyEventID)
+                            })
+                        }
+                    } else {
+                        Text(verbatim: "")
                     }
                 } label: {
                     Label(.localizable.menu, systemImage: "ellipsis.circle")
@@ -381,8 +397,8 @@ struct EventView: View {
                     Button(action: {
                         viewModel.isChangingRSVP = true
                     }, label: {
-                        if let rsvp = viewModel.currentUserRSVP {
-                            if viewModel.event.isUpcoming {
+                        if let event = viewModel.event, let rsvp = viewModel.currentUserRSVP {
+                            if event.isUpcoming {
                                 switch rsvp.status {
                                 case .accepted:
                                     Text(.localizable.rsvpStatusGoing)
@@ -417,30 +433,30 @@ struct EventView: View {
             }
         }
         .task {
-            var pubkeysToPullMetadata = viewModel.event.participants.compactMap { $0.pubkey?.hex }
+            var pubkeysToPullMetadata = viewModel.event?.participants.compactMap { $0.pubkey?.hex } ?? []
 
-            if let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value,
-               let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates] {
+            if let rsvps = viewModel.appState.calendarEventsToRsvps[viewModel.eventCoordinates.tag.value] {
                 pubkeysToPullMetadata += rsvps.map { $0.pubkey }
             }
 
             viewModel.appState.pullMissingMetadata(pubkeysToPullMetadata)
         }
         .refreshable {
-            if let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value {
+            if let event = viewModel.event {
+                let calendarEventCoordinates = viewModel.eventCoordinates.tag.value
                 guard let eventFilter = Filter(
-                    authors: [viewModel.event.pubkey],
+                    authors: [event.pubkey],
                     kinds: [EventKind.timeBasedCalendarEvent.rawValue],
                     tags: ["d": [calendarEventCoordinates]],
-                    since: Int(viewModel.event.createdAt)
+                    since: Int(event.createdAt)
                 ) else {
                     print("Unable to create time-based calendar event filter.")
                     return
                 }
                 _ = viewModel.appState.relayPool.subscribe(with: eventFilter)
 
-                var pubkeysToPullMetadata = [viewModel.event.pubkey] + viewModel.event.participants.compactMap { $0.pubkey?.hex }
-                if let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value,
+                var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
+                if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
                    let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates] {
                     pubkeysToPullMetadata += rsvps.map { $0.pubkey }
                 }
@@ -462,7 +478,8 @@ struct EventView: View {
 extension EventView {
     @Observable class ViewModel: EventCreating {
         let appState: AppState
-        let event: TimeBasedCalendarEvent
+        let eventCoordinates: EventCoordinates
+        let originalEvent: TimeBasedCalendarEvent?
 
         let calendar: Calendar
 
@@ -471,41 +488,58 @@ extension EventView {
         var selectedLocation: String = ""
 
         var isContentTranslationPresented: Bool = false
-        var contentText: String
         var contentTranslationReplaced: Bool = false
+        var contentTextTranslation: String = ""
 
         var isChangingRSVP: Bool = false
 
-        let eventTitle: String
-
-        let filteredLocations: [String]
-
-        let geohash: Geohash?
-
-        init(appState: AppState, event: TimeBasedCalendarEvent, calendar: Calendar) {
+        init(appState: AppState, eventCoordinates: EventCoordinates, calendar: Calendar) {
             self.appState = appState
-            self.event = event
+            self.eventCoordinates = eventCoordinates
             self.calendar = calendar
 
-            if let geohashString = event.geohash {
-                geohash = Geohash(geohash: geohashString)
+            originalEvent = appState.timeBasedCalendarEvents[eventCoordinates.tag.value]
+        }
+
+        var event: TimeBasedCalendarEvent? {
+            let newEvent = appState.timeBasedCalendarEvents[eventCoordinates.tag.value]
+            if originalEvent != newEvent {
+                return newEvent
             } else {
-                geohash = nil
+                return originalEvent
             }
+        }
 
-            if let eventTitle = event.title?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
-                self.eventTitle = eventTitle
-            } else if let eventTitle = event.firstValueForRawTagName("name")?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
-                self.eventTitle = eventTitle
+        var eventTitle: String {
+            if let eventTitle = event?.title?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
+                return eventTitle
+            } else if let eventTitle = event?.firstValueForRawTagName("name")?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
+                return eventTitle
             } else {
-                self.eventTitle = String(localized: .localizable.unnamedEvent)
+                return String(localized: .localizable.unnamedEvent)
             }
+        }
 
-            contentText = event.content.trimmingCharacters(in: .whitespacesAndNewlines)
+        var contentText: String {
+            if contentTranslationReplaced {
+                contentTextTranslation
+            } else {
+                event?.content.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            }
+        }
 
-            filteredLocations = event.locations
+        var geohash: Geohash? {
+            if let geohashString = event?.geohash {
+                return Geohash(geohash: geohashString)
+            } else {
+                return nil
+            }
+        }
+
+        var filteredLocations: [String] {
+            event?.locations
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .filter { !$0.isEmpty }
+                .filter { !$0.isEmpty } ?? []
         }
 
         func shouldAllowTranslation(_ string: String) -> Bool {
@@ -528,7 +562,7 @@ extension EventView {
             dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
             switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
             case .event:
-                dateIntervalFormatter.timeZone = event.startTimeZone ?? calendar.timeZone
+                dateIntervalFormatter.timeZone = event?.startTimeZone ?? calendar.timeZone
             case .system, .none:
                 dateIntervalFormatter.timeZone = calendar.timeZone
             }
@@ -536,15 +570,14 @@ extension EventView {
         }
 
         var currentUserRSVP: CalendarEventRSVP? {
-            guard let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
-                  let publicKeyHex = appState.publicKey?.hex else {
+            guard let publicKeyHex = appState.publicKey?.hex else {
                 return nil
             }
-            return appState.calendarEventsToRsvps[calendarEventCoordinates]?.first(where: { $0.pubkey == publicKeyHex })
+            return appState.calendarEventsToRsvps[eventCoordinates.tag.value]?.first(where: { $0.pubkey == publicKeyHex })
         }
 
         func createOrUpdateRSVP(_ status: CalendarEventRSVPStatus) {
-            guard let keypair = appState.keypair, let eventCoordinates = event.replaceableEventCoordinates() else {
+            guard let keypair = appState.keypair else {
                 return
             }
 
@@ -579,11 +612,11 @@ extension EventView {
         }
 
         func deleteRSVP() {
-            guard let keypair = appState.keypair,
-                  let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value else {
+            guard let keypair = appState.keypair else {
                 return
             }
 
+            let calendarEventCoordinates = eventCoordinates.tag.value
             let publicKeyHex = keypair.publicKey.hex
 
             if let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates]?.filter({ $0.pubkey == publicKeyHex }),

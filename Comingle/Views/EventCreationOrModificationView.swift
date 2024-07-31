@@ -1,5 +1,5 @@
 //
-//  EventCreationView.swift
+//  EventCreationOrModificationView.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 7/29/24.
@@ -9,13 +9,13 @@ import NostrSDK
 import SwiftData
 import SwiftUI
 
-struct EventCreationView: View {
+struct EventCreationOrModificationView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: ViewModel
 
-    init(appState: AppState) {
-        let viewModel = ViewModel(appState: appState)
+    init(appState: AppState, existingEvent: TimeBasedCalendarEvent? = nil) {
+        let viewModel = ViewModel(appState: appState, existingEvent: existingEvent)
         _viewModel = State(initialValue: viewModel)
     }
 
@@ -49,7 +49,7 @@ struct EventCreationView: View {
                         Button(action: {
                             viewModel.isShowingTimeZoneSelector = true
                         }, label: {
-                            Text(viewModel.timeZone?.displayName(for: viewModel.start) ?? "")
+                            Text(viewModel.startTimeZone?.displayName(for: viewModel.start) ?? "")
                         })
                     }
                 } footer: {
@@ -72,9 +72,9 @@ struct EventCreationView: View {
                     Text(.localizable.eventDescription)
                 }
             }
-            .navigationTitle(.localizable.createEvent)
+            .navigationTitle(viewModel.navigationTitle)
             .sheet(isPresented: $viewModel.isShowingTimeZoneSelector) {
-                TimeZoneSelectionView(date: viewModel.start, timeZone: $viewModel.timeZone)
+                TimeZoneSelectionView(date: viewModel.start, timeZone: $viewModel.startTimeZone)
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -107,38 +107,81 @@ class EventCreationParticipant: Equatable, Hashable {
     }
 
     let publicKeyHex: String
+    var relayURL: URL?
     var role: String = ""
 
-    init(publicKeyHex: String) {
+    init(publicKeyHex: String, relayURL: URL? = nil, role: String = "") {
         self.publicKeyHex = publicKeyHex
     }
 }
 
-extension EventCreationView {
+extension EventCreationOrModificationView {
     @Observable class ViewModel: EventCreating {
         let appState: AppState
 
-        var title: String = ""
-        var start: Date = Date()
-        var end: Date = Date()
-        var description: String = ""
+        let existingEvent: TimeBasedCalendarEvent?
+
+        var title: String
+        var start: Date
+        var end: Date
+        var description: String
+        var locations: [String]
+        var geohash: String
+        var hashtags: [String]
+        var references: [URL]
 
         var isSettingTimeZone: Bool = false
-        var timeZone: TimeZone? = TimeZone.autoupdatingCurrent
+        var startTimeZone: TimeZone?
+        var endTimeZone: TimeZone?
         var isShowingTimeZoneSelector: Bool = false
 
         var participants = Set<EventCreationParticipant>()
 
-        init(appState: AppState) {
+        init(appState: AppState, existingEvent: TimeBasedCalendarEvent?) {
             self.appState = appState
+
+            self.existingEvent = existingEvent
+            title = existingEvent?.title ?? ""
+            description = existingEvent?.content ?? ""
+            let now = Date.now
+            start = existingEvent?.startTimestamp ?? now
+            end = existingEvent?.endTimestamp ?? existingEvent?.startTimestamp ?? now
+            startTimeZone = existingEvent?.startTimeZone
+            endTimeZone = existingEvent?.endTimeZone
+
+            if existingEvent?.startTimeZone != nil {
+                isSettingTimeZone = true
+            }
+
+            locations = existingEvent?.locations ?? []
+            geohash = existingEvent?.geohash ?? ""
+            hashtags = existingEvent?.hashtags ?? []
+            references = existingEvent?.references ?? []
+
+            startTimeZone = existingEvent?.startTimeZone
+            endTimeZone = existingEvent?.endTimeZone
+
+            existingEvent?.participants.forEach {
+                if let pubkey = $0.pubkey {
+                    participants.insert(EventCreationParticipant(publicKeyHex: pubkey.hex, relayURL: $0.relayURL, role: $0.role ?? ""))
+                }
+            }
         }
 
         var trimmedTitle: String {
             title.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
+        var navigationTitle: LocalizedStringResource {
+            if existingEvent != nil {
+                .localizable.modifyEvent
+            } else {
+                .localizable.createEvent
+            }
+        }
+
         var canSave: Bool {
-            appState.keypair != nil && start <= end && end >= Date.now && !trimmedTitle.isEmpty
+            appState.keypair != nil && start <= end && !trimmedTitle.isEmpty
         }
 
         func saveEvent() -> Bool {
@@ -160,13 +203,68 @@ extension EventCreationView {
                     }
                 }
 
+                let endOrNil: Date?
+                if end == start {
+                    endOrNil = nil
+                } else {
+                    endOrNil = end
+                }
+
+                let startTimeZoneOrNil: TimeZone?
+                if !isSettingTimeZone {
+                    startTimeZoneOrNil = nil
+                } else {
+                    startTimeZoneOrNil = startTimeZone
+                }
+
+                let endTimeZoneOrNil: TimeZone?
+                if !isSettingTimeZone || endTimeZone == startTimeZone {
+                    endTimeZoneOrNil = nil
+                } else {
+                    endTimeZoneOrNil = endTimeZone
+                }
+
+                let locationsOrNil: [String]?
+                if locations.isEmpty {
+                    locationsOrNil = nil
+                } else {
+                    locationsOrNil = locations
+                }
+
+                let geohashOrNil: String?
+                if geohash.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    geohashOrNil = nil
+                } else {
+                    geohashOrNil = geohash.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+
+                let hashtagsOrNil: [String]?
+                if hashtags.isEmpty {
+                    hashtagsOrNil = nil
+                } else {
+                    hashtagsOrNil = hashtags
+                }
+
+                let referencesOrNil: [URL]?
+                if references.isEmpty {
+                    referencesOrNil = nil
+                } else {
+                    referencesOrNil = references
+                }
+
                 let event = try timeBasedCalendarEvent(
+                    withIdentifier: existingEvent?.identifier ?? UUID().uuidString,
                     title: trimmedTitle,
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
                     startTimestamp: start,
-                    endTimestamp: end,
-                    startTimeZone: timeZone,
+                    endTimestamp: endOrNil,
+                    startTimeZone: startTimeZoneOrNil,
+                    endTimeZone: endTimeZoneOrNil,
+                    locations: locationsOrNil,
+                    geohash: geohashOrNil,
                     participants: calendarEventParticipants,
+                    hashtags: hashtagsOrNil,
+                    references: referencesOrNil,
                     signedBy: keypair
                 )
 
@@ -191,5 +289,5 @@ extension EventCreationView {
 }
 
 //#Preview {
-//    EventCreationView()
+//    EventCreationOrModificationView()
 //}
