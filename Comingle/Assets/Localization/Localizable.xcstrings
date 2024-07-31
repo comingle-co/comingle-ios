@@ -169,6 +169,18 @@
         }
       }
     },
+    "copyPublicKey" : {
+      "comment" : "Button to copy a user's public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Public Key"
+          }
+        }
+      }
+    },
     "createEvent" : {
       "comment" : "Navigation title for the view to create an event.",
       "extractionState" : "manual",
@@ -597,6 +609,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Link"
+          }
+        }
+      }
+    },
+    "openProfileInDefaultApp" : {
+      "comment" : "Button to open profile in default Nostr app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Profile in Default Nostr App"
           }
         }
       }

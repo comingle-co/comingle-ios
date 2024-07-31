@@ -15,6 +15,20 @@ struct ProfileView: View {
 
     @State var publicKeyHex: String
 
+    private var nostrProfileURL: URL? {
+        guard let publicKey = PublicKey(hex: publicKeyHex) else {
+            return nil
+        }
+
+        if let nostrURL = URL(string: "nostr:\(publicKey.npub)"), UIApplication.shared.canOpenURL(nostrURL) {
+            return nostrURL
+        }
+        if let njumpURL = URL(string: "https://njump.me/\(publicKey.npub)"), UIApplication.shared.canOpenURL(njumpURL) {
+            return njumpURL
+        }
+        return nil
+    }
+
     var body: some View {
         VStack {
             ProfilePictureAndNameView(publicKeyHex: publicKeyHex)
@@ -27,6 +41,29 @@ struct ProfileView: View {
             EventListView(eventListType: .profile(publicKeyHex))
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem {
+                Menu {
+                    if let publicKey = PublicKey(hex: publicKeyHex) {
+                        Button(action: {
+                            UIPasteboard.general.string = publicKey.npub
+                        }, label: {
+                            Label(.localizable.copyPublicKey, systemImage: "key")
+                        })
+
+                        if let nostrProfileURL {
+                            Button(action: {
+                                UIApplication.shared.open(nostrProfileURL)
+                            }, label: {
+                                Label(.localizable.openProfileInDefaultApp, systemImage: "link")
+                            })
+                        }
+                    }
+                } label: {
+                    Label(.localizable.menu, systemImage: "ellipsis.circle")
+                }
+            }
+        }
     }
 }
 
