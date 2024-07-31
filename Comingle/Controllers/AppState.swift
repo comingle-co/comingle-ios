@@ -94,7 +94,7 @@ class AppState: ObservableObject, Hashable {
     }
 
     private var followedRSVPCalendarEventCoordinates: Set<String> {
-        guard let publicKeyHex = publicKey?.hex else {
+        guard publicKey != nil else {
             return []
         }
 
@@ -106,7 +106,7 @@ class AppState: ObservableObject, Hashable {
 
     /// Events that were created or RSVP'd by follow list.
     private var followedEvents: [TimeBasedCalendarEvent] {
-        guard let publicKeyHex = publicKey?.hex else {
+        guard publicKey != nil else {
             return []
         }
 
