@@ -62,6 +62,8 @@ struct EventCreationView: View {
                     }
                 } header: {
                     Text(.localizable.participants)
+                } footer: {
+                    Text(.localizable.participantsFooter)
                 }
 
                 Section {

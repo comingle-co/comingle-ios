@@ -272,13 +272,17 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent) {
+    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingMetadata: Bool = false) {
         if let existingFollowList = self.followListEvents[followListEvent.pubkey] {
             if existingFollowList.createdAt < followListEvent.createdAt {
                 cache(followListEvent)
             }
         } else {
             cache(followListEvent)
+        }
+
+        if shouldPullMissingMetadata {
+            pullMissingMetadata(followListEvent.followedPubkeys)
         }
     }
 
@@ -313,7 +317,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveCalendarListEvent(_ calendarListEvent: CalendarListEvent) {
+    private func didReceiveCalendarListEvent(_ calendarListEvent: CalendarListEvent, shouldPullMissingMetadata: Bool = false) {
         guard let calendarListEventCoordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value else {
             return
         }
@@ -326,10 +330,12 @@ extension AppState: EventVerifying, RelayDelegate {
             calendarListEvents[calendarListEventCoordinates] = calendarListEvent
         }
 
-        pullMissingMetadata([calendarListEvent.pubkey])
+        if shouldPullMissingMetadata {
+            pullMissingMetadata([calendarListEvent.pubkey])
+        }
     }
 
-    private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent) {
+    private func didReceiveTimeBasedCalendarEvent(_ timeBasedCalendarEvent: TimeBasedCalendarEvent, shouldPullMissingMetadata: Bool = false) {
         guard let eventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates()?.tag.value,
               let startTimestamp = timeBasedCalendarEvent.startTimestamp,
               startTimestamp <= timeBasedCalendarEvent.endTimestamp ?? startTimestamp,
@@ -345,7 +351,9 @@ extension AppState: EventVerifying, RelayDelegate {
             timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
         }
 
-        pullMissingMetadata([timeBasedCalendarEvent.pubkey])
+        if shouldPullMissingMetadata {
+            pullMissingMetadata([timeBasedCalendarEvent.pubkey])
+        }
 
         guard let replaceableEventCoordinates = timeBasedCalendarEvent.replaceableEventCoordinates() else {
             print("Unable to get replaceable event coordinates for time-based calendar event.")
@@ -511,13 +519,13 @@ extension AppState: EventVerifying, RelayDelegate {
 
             switch nostrEvent {
             case let followListEvent as FollowListEvent:
-                self.didReceiveFollowListEvent(followListEvent)
+                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingMetadata: true)
             case let metadataEvent as MetadataEvent:
                 self.didReceiveMetadataEvent(metadataEvent)
             case let calendarListEvent as CalendarListEvent:
-                self.didReceiveCalendarListEvent(calendarListEvent)
+                self.didReceiveCalendarListEvent(calendarListEvent, shouldPullMissingMetadata: true)
             case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
-                self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
+                self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent, shouldPullMissingMetadata: true)
             case let rsvpEvent as CalendarEventRSVP:
                 self.didReceiveCalendarEventRSVP(rsvpEvent)
             case let deletionEvent as DeletionEvent:
@@ -553,6 +561,10 @@ extension AppState: EventVerifying, RelayDelegate {
                     break
                 }
             }
+        }
+
+        if let publicKey, let followListEvent = followListEvents[publicKey.hex] {
+            pullMissingMetadata(followListEvent.followedPubkeys)
         }
     }
 

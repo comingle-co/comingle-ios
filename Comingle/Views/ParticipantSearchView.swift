@@ -15,7 +15,7 @@ struct ParticipantSearchView: View {
     @State var appState: AppState
     @Binding private var participants: Set<EventCreationParticipant>
 
-    @State private var participantSearch: String = ""
+    @StateObject private var searchViewModel = SearchViewModel()
 
     @State private var roleText: String = ""
 
@@ -29,7 +29,7 @@ struct ParticipantSearchView: View {
     }
 
     var trimmedParticipantSearch: String {
-        participantSearch.trimmingCharacters(in: .whitespacesAndNewlines)
+        searchViewModel.debouncedSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     var participantSearchResults: OrderedSet<EventCreationParticipant> {
@@ -66,44 +66,49 @@ struct ParticipantSearchView: View {
     }
 
     var body: some View {
-        List {
-            ForEach(participantSearchResults, id: \.self) { participant in
-                Button {
-                    if participants.contains(participant) {
-                        participants.remove(participant)
-                    } else {
-                        participants.insert(participant)
-                    }
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            ProfilePictureAndNameView(publicKeyHex: participant.publicKeyHex)
-                                .environmentObject(appState)
-
+        ScrollView {
+            LazyVStack {
+                ForEach(participantSearchResults, id: \.self) { participant in
+                    VStack {
+                        Button {
                             if participants.contains(participant) {
-                                let roleBinding = Binding<String>(
-                                    get: {
-                                        participant.role
-                                    },
-                                    set: {
-                                        participant.role = $0
-                                    }
-                                )
-                                TextField(localized: .localizable.role, text: roleBinding)
+                                participants.remove(participant)
+                            } else {
+                                participants.insert(participant)
                             }
-                        }
+                        } label: {
+                            HStack {
+                                ProfilePictureAndNameView(publicKeyHex: participant.publicKeyHex)
+                                    .environmentObject(appState)
 
-                        Spacer()
+                                Spacer()
+
+                                if participants.contains(participant) {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                            .foregroundStyle(participants.contains(participant) ? .accent : .primary)
+                        }
 
                         if participants.contains(participant) {
-                            Image(systemName: "checkmark")
+                            let roleBinding = Binding<String>(
+                                get: {
+                                    participant.role
+                                },
+                                set: {
+                                    participant.role = $0
+                                }
+                            )
+                            TextField(localized: .localizable.role, text: roleBinding)
                         }
                     }
-                    .foregroundStyle(participants.contains(participant) ? .accent : .primary)
+
+                    Divider()
                 }
             }
+            .padding()
+            .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.searchForParticipant))
         }
-        .searchable(text: $participantSearch, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.searchForParticipant))
     }
 }
 

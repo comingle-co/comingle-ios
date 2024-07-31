@@ -661,6 +661,18 @@
         }
       }
     },
+    "participantsFooter" : {
+      "comment" : "Footer text explaining what it means to invite a participant.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anyone who is not invited can still RSVP to public events. It is up to you to decide if you want to explicitly invite a participant or who can attend the event."
+          }
+        }
+      }
+    },
     "past" : {
       "comment" : "Picker label to filter down past calendar events.",
       "extractionState" : "manual",
