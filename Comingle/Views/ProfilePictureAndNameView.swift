@@ -18,8 +18,16 @@ struct ProfilePictureAndNameView: View {
     var body: some View {
         HStack {
             ProfilePictureView(publicKeyHex: publicKeyHex)
-            Text(Utilities.shared.profileName(publicKeyHex: publicKeyHex, appState: appState))
-                .font(.subheadline)
+
+            VStack(alignment: .leading) {
+                Text(Utilities.shared.profileName(publicKeyHex: publicKeyHex, appState: appState))
+                    .font(.subheadline)
+
+                if let publicKeyHex, appState.followedPubkeys.contains(publicKeyHex) {
+                    Image(systemName: "figure.stand.line.dotted.figure.stand")
+                        .font(.footnote)
+                }
+            }
         }
     }
 }

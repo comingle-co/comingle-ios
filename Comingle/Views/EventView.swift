@@ -113,8 +113,13 @@ struct EventView: View {
                             HStack {
                                 ProfilePictureView(publicKeyHex: publicKeyHex)
 
-                                VStack {
+                                VStack(alignment: .leading) {
                                     ProfileNameView(publicKeyHex: publicKeyHex)
+
+                                    if viewModel.appState.followedPubkeys.contains(publicKeyHex) {
+                                        Image(systemName: "figure.stand.line.dotted.figure.stand")
+                                            .font(.footnote)
+                                    }
 
                                     if let role = participant.role?.trimmingCharacters(in: .whitespacesAndNewlines), !role.isEmpty {
                                         Text(role)
@@ -149,7 +154,14 @@ struct EventView: View {
                                     ProfilePictureView(publicKeyHex: rsvp.pubkey)
                                 }
 
-                                ProfileNameView(publicKeyHex: rsvp.pubkey)
+                                VStack(alignment: .leading) {
+                                    ProfileNameView(publicKeyHex: rsvp.pubkey)
+
+                                    if viewModel.appState.followedPubkeys.contains(rsvp.pubkey) {
+                                        Image(systemName: "figure.stand.line.dotted.figure.stand")
+                                            .font(.footnote)
+                                    }
+                                }
                             }
                         }
                     )
@@ -229,15 +241,20 @@ struct EventView: View {
                 Text(.localizable.rsvpStatusNotGoing)
             })
 
-            Button(
-                role: .destructive,
-                action: {
-                    viewModel.deleteRSVP()
-                },
-                label: {
-                    Text("Delete RSVP")
-                }
-            )
+            if let keypair = viewModel.appState.keypair,
+               let calendarEventCoordinates = viewModel.event.replaceableEventCoordinates()?.tag.value,
+               let rsvps = viewModel.appState.calendarEventsToRsvps[calendarEventCoordinates],
+               rsvps.contains(where: { $0.pubkey == keypair.publicKey.hex }) {
+                Button(
+                    role: .destructive,
+                    action: {
+                        viewModel.deleteRSVP()
+                    },
+                    label: {
+                        Text("Delete RSVP")
+                    }
+                )
+            }
         }
         .confirmationDialog(.localizable.location, isPresented: $viewModel.showLocationAlert) {
             if viewModel.selectedGeohash, let geohash = viewModel.geohash {
