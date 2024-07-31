@@ -87,9 +87,11 @@ class AppState: ObservableObject, Hashable {
 
     func refreshFollowedPubkeys() {
         followedPubkeys.removeAll()
-        if let publicKey, let activeFollowList {
-            followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+        if let publicKey {
             followedPubkeys.insert(publicKey.hex)
+            if let activeFollowList {
+                followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+            }
         }
     }
 
@@ -170,33 +172,13 @@ class AppState: ObservableObject, Hashable {
     }
 
     private func upcomingEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
-        events.filter {
-            guard let startTimestamp = $0.startTimestamp else {
-                return false
-            }
-
-            guard let endTimestamp = $0.endTimestamp else {
-                return startTimestamp >= Date.now
-            }
-
-            return startTimestamp >= Date.now || endTimestamp >= Date.now
-        }
-        .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
+        events.filter { $0.isUpcoming }
+            .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
     }
 
     private func pastEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
-        events.filter {
-            guard let startTimestamp = $0.startTimestamp else {
-                return false
-            }
-
-            guard let endTimestamp = $0.endTimestamp else {
-                return startTimestamp < Date.now
-            }
-
-            return endTimestamp < Date.now
-        }
-        .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
+        events.filter { $0.isPast }
+            .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
     }
 
     func updateRelayPool() {

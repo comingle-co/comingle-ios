@@ -226,19 +226,31 @@ struct EventView: View {
             Button(action: {
                 viewModel.createOrUpdateRSVP(.accepted)
             }, label: {
-                Text(.localizable.rsvpStatusGoing)
+                if viewModel.event.isUpcoming {
+                    Text(.localizable.rsvpStatusGoing)
+                } else {
+                    Text(.localizable.attended)
+                }
             })
 
             Button(action: {
                 viewModel.createOrUpdateRSVP(.tentative)
             }, label: {
-                Text(.localizable.rsvpStatusMaybeGoing)
+                if viewModel.event.isUpcoming {
+                    Text(.localizable.rsvpStatusMaybeGoing)
+                } else {
+                    Text(.localizable.maybeAttended)
+                }
             })
 
             Button(action: {
                 viewModel.createOrUpdateRSVP(.declined)
             }, label: {
-                Text(.localizable.rsvpStatusNotGoing)
+                if viewModel.event.isUpcoming {
+                    Text(.localizable.rsvpStatusNotGoing)
+                } else {
+                    Text(.localizable.didNotAttend)
+                }
             })
 
             if let keypair = viewModel.appState.keypair,
@@ -370,7 +382,7 @@ struct EventView: View {
                         viewModel.isChangingRSVP = true
                     }, label: {
                         if let rsvp = viewModel.currentUserRSVP {
-                            if let endTimestamp = viewModel.event.endTimestamp, endTimestamp >= Date.now {
+                            if viewModel.event.isUpcoming {
                                 switch rsvp.status {
                                 case .accepted:
                                     Text(.localizable.rsvpStatusGoing)
