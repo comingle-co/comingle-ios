@@ -156,7 +156,7 @@ extension LoginView {
         }
 
         func login(publicKey: PublicKey, relayURL: URL) {
-            guard let appSettings = appState.appSettings, let validatedRelayURL = try? validateRelayURL(relayURL) else {
+            guard let appSettings = appState.appSettings, appSettings.activeProfile?.publicKeyHex != publicKey.hex, let validatedRelayURL = try? validateRelayURL(relayURL) else {
                 return
             }
 
@@ -167,6 +167,13 @@ extension LoginView {
                     relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: validatedRelayURL.absoluteString))
                 }
                 appSettings.activeProfile = profile
+
+                appState.followedPubkeys.removeAll()
+
+                if let publicKey = appState.publicKey, let activeFollowList = appState.activeFollowList {
+                    appState.followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+                    appState.followedPubkeys.insert(publicKey.hex)
+                }
             } else {
                 print("Creating new profile settings for \(publicKey.npub)")
                 let profile = Profile(publicKeyHex: publicKey.hex)
@@ -182,6 +189,13 @@ extension LoginView {
                     relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: validatedRelayURL.absoluteString))
                 }
                 appSettings.activeProfile = profile
+
+                appState.followedPubkeys.removeAll()
+
+                if let publicKey = appState.publicKey, let activeFollowList = appState.activeFollowList {
+                    appState.followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+                    appState.followedPubkeys.insert(publicKey.hex)
+                }
             }
 
             appState.updateRelayPool()

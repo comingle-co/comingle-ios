@@ -38,9 +38,9 @@ struct ParticipantSearchView: View {
         if trimmedParticipantSearch.isEmpty {
             let sortedParticipants = OrderedSet(participants.sorted(using: eventCreationParticipantSortComparator))
 
-            if let publicKey = appState.publicKey, let followListEvent = appState.followListEvents[publicKey.hex] {
+            if !appState.followedPubkeys.isEmpty {
                 return sortedParticipants.union(
-                    followListEvent.followedPubkeys
+                    appState.followedPubkeys
                         .filter { appState.metadataEvents[$0] != nil }
                         .map { EventCreationParticipant(publicKeyHex: $0) }
                         .sorted(using: eventCreationParticipantSortComparator)

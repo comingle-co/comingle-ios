@@ -61,10 +61,10 @@ struct ComingleApp: App {
 
         appState.appSettings = appSettings
 
-        if appSettings.activeProfile?.publicKeyHex == nil {
-            appState.activeTab = .explore
-        } else {
+        if appState.publicKey != nil {
             appState.activeTab = .following
+        } else {
+            appState.activeTab = .explore
         }
     }
 
@@ -80,5 +80,10 @@ struct ComingleApp: App {
         let descriptor = FetchDescriptor<PersistentNostrEvent>()
         let persistentNostrEvents = (try? container.mainContext.fetch(descriptor)) ?? []
         appState.loadPersistentNostrEvents(persistentNostrEvents)
+
+        if let publicKey = appState.publicKey, let activeFollowList = appState.activeFollowList {
+            appState.followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+            appState.followedPubkeys.insert(publicKey.hex)
+        }
     }
 }

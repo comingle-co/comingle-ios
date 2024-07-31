@@ -39,6 +39,8 @@ class AppState: ObservableObject, Hashable {
     @Published var rsvps: [String: CalendarEventRSVP] = [:]
     @Published var calendarEventsToRsvps: [String: [CalendarEventRSVP]] = [:]
 
+    @Published var followedPubkeys = Set<String>()
+
     @Published var appSettings: AppSettings?
     @Published var profiles: [Profile] = []
 
@@ -75,16 +77,22 @@ class AppState: ObservableObject, Hashable {
         pastEvents(allEvents)
     }
 
+    var activeFollowList: FollowListEvent? {
+        guard let publicKeyHex = publicKey?.hex else {
+            return nil
+        }
+
+        return followListEvents[publicKeyHex]
+    }
+
     private var followedRSVPCalendarEventCoordinates: Set<String> {
         guard let publicKeyHex = publicKey?.hex else {
             return []
         }
 
-        let followedPubkeysSet = Set((followListEvents[publicKeyHex]?.followedPubkeys ?? []) + [publicKeyHex])
-
         return Set(
             rsvps.values
-                .filter { followedPubkeysSet.contains($0.pubkey) }
+                .filter { followedPubkeys.contains($0.pubkey) }
                 .compactMap { $0.calendarEventCoordinates?.tag.value })
     }
 
@@ -94,7 +102,6 @@ class AppState: ObservableObject, Hashable {
             return []
         }
 
-        let followedPubkeysSet = Set((followListEvents[publicKeyHex]?.followedPubkeys ?? []) + [publicKeyHex])
         let followedRSVPCalendarEventCoordinates = followedRSVPCalendarEventCoordinates
 
         return timeBasedCalendarEvents.values.filter { event in
@@ -103,13 +110,13 @@ class AppState: ObservableObject, Hashable {
             }
 
             return event.startTimestamp != nil
-            && (followedPubkeysSet.contains(event.pubkey)
+            && (followedPubkeys.contains(event.pubkey)
                 || followedRSVPCalendarEventCoordinates.contains(coordinates.tag.value)
                 || event.participants.contains(where: { participant in
                 guard let participantPubkey = participant.pubkey else {
                     return false
                 }
-                return followedPubkeysSet.contains(participantPubkey.hex)
+                return followedPubkeys.contains(participantPubkey.hex)
             }))
         }
     }

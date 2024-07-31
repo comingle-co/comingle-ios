@@ -18,9 +18,15 @@ struct EventView: View {
 
     @State private var viewModel: ViewModel
 
+    let rsvpSortComparator: RSVPSortComparator
+    let calendarEventParticipantSortComparator: CalendarEventParticipantSortComparator
+
     init(appState: AppState, event: TimeBasedCalendarEvent, calendar: Calendar) {
         let viewModel = ViewModel(appState: appState, event: event, calendar: calendar)
         _viewModel = State(initialValue: viewModel)
+
+        rsvpSortComparator = RSVPSortComparator(order: .forward, appState: appState)
+        calendarEventParticipantSortComparator = CalendarEventParticipantSortComparator(order: .forward, appState: appState)
     }
 
     var contentView: some View {
@@ -96,7 +102,7 @@ struct EventView: View {
                 .padding(.vertical, 2)
                 .font(.headline)
 
-            ForEach(viewModel.event.participants, id: \.self) { participant in
+            ForEach(viewModel.event.participants.sorted(using: calendarEventParticipantSortComparator), id: \.self) { participant in
                 if let publicKeyHex = participant.pubkey?.hex {
                     Divider()
                     NavigationLink(
@@ -129,7 +135,7 @@ struct EventView: View {
                     .padding(.vertical, 2)
                     .font(.headline)
 
-                ForEach(rsvps, id: \.self) { rsvp in
+                ForEach(rsvps.sorted(using: rsvpSortComparator), id: \.self) { rsvp in
                     NavigationLink(
                         destination: {
                             ProfileView(publicKeyHex: rsvp.pubkey)

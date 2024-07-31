@@ -242,6 +242,12 @@ extension SettingsView {
             }
             if let appSettings = appState.appSettings, appSettings.activeProfile == profile {
                 appSettings.activeProfile = appState.profiles.first(where: { $0 != profile })
+                appState.followedPubkeys.removeAll()
+
+                if let publicKey = appState.publicKey, let activeFollowList = appState.activeFollowList {
+                    appState.followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+                    appState.followedPubkeys.insert(publicKey.hex)
+                }
             }
             appState.profiles.removeAll(where: { $0 == profile })
             appState.modelContext.delete(profile)
@@ -255,14 +261,19 @@ extension SettingsView {
         }
 
         func updateActiveProfile(_ profile: Profile) {
-            guard let appSettings = appState.appSettings else {
+            guard let appSettings = appState.appSettings, appSettings.activeProfile != profile else {
                 return
             }
 
             appSettings.activeProfile = profile
 
+            appState.followedPubkeys.removeAll()
+
             if profile.publicKeyHex == nil {
                 appState.activeTab = .explore
+            } else if let publicKey = appState.publicKey, let activeFollowList = appState.activeFollowList {
+                appState.followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+                appState.followedPubkeys.insert(publicKey.hex)
             }
 
             appState.updateRelayPool()
