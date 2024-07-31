@@ -85,6 +85,14 @@ class AppState: ObservableObject, Hashable {
         return followListEvents[publicKeyHex]
     }
 
+    func refreshFollowedPubkeys() {
+        followedPubkeys.removeAll()
+        if let publicKey, let activeFollowList {
+            followedPubkeys.formUnion(activeFollowList.followedPubkeys)
+            followedPubkeys.insert(publicKey.hex)
+        }
+    }
+
     private var followedRSVPCalendarEventCoordinates: Set<String> {
         guard let publicKeyHex = publicKey?.hex else {
             return []

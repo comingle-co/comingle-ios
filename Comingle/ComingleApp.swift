@@ -81,9 +81,6 @@ struct ComingleApp: App {
         let persistentNostrEvents = (try? container.mainContext.fetch(descriptor)) ?? []
         appState.loadPersistentNostrEvents(persistentNostrEvents)
 
-        if let publicKey = appState.publicKey, let activeFollowList = appState.activeFollowList {
-            appState.followedPubkeys.formUnion(activeFollowList.followedPubkeys)
-            appState.followedPubkeys.insert(publicKey.hex)
-        }
+        appState.refreshFollowedPubkeys()
     }
 }
