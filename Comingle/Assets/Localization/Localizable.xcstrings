@@ -877,6 +877,30 @@
         }
       }
     },
+    "resetAllFields" : {
+      "comment" : "Button to reset all fields to the starting point of a fresh event creation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset All Fields"
+          }
+        }
+      }
+    },
+    "restoreOriginalEvent" : {
+      "comment" : "Button to restore event modification fields back to what the original event started with.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore Original Event"
+          }
+        }
+      }
+    },
     "role" : {
       "comment" : "Text to indicate the view is showing the user's login role.",
       "extractionState" : "manual",

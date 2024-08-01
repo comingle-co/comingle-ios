@@ -113,6 +113,22 @@ struct EventCreationOrModificationView: View {
                 } header: {
                     Text(.localizable.eventDescription)
                 }
+
+                Section {
+                    Button(
+                        role: .destructive,
+                        action: {
+                            viewModel.reset()
+                        },
+                        label: {
+                            if viewModel.existingEvent != nil {
+                                Text(.localizable.restoreOriginalEvent)
+                            } else {
+                                Text(.localizable.resetAllFields)
+                            }
+                        }
+                    )
+                }
             }
             .navigationTitle(viewModel.navigationTitle)
             .sheet(isPresented: $viewModel.isShowingTimeZoneSelector) {
@@ -163,14 +179,14 @@ extension EventCreationOrModificationView {
 
         let existingEvent: TimeBasedCalendarEvent?
 
-        var title: String
-        var start: Date
-        var end: Date
-        var description: String
-        var locations: [String]
-        var geohash: String
-        var hashtags: [String]
-        var references: OrderedSet<URL>
+        var title: String = ""
+        var start: Date = Date.now
+        var end: Date = Date.now
+        var description: String = ""
+        var locations: [String] = []
+        var geohash: String = ""
+        var hashtags: [String] = []
+        var references = OrderedSet<URL>()
         var referenceToAdd: String = ""
 
         var isSettingTimeZone: Bool = false
@@ -182,8 +198,11 @@ extension EventCreationOrModificationView {
 
         init(appState: AppState, existingEvent: TimeBasedCalendarEvent?) {
             self.appState = appState
-
             self.existingEvent = existingEvent
+            reset()
+        }
+
+        func reset() {
             title = existingEvent?.title ?? ""
             description = existingEvent?.content ?? ""
             let now = Date.now
