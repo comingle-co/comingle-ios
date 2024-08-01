@@ -433,6 +433,18 @@
         }
       }
     },
+    "links" : {
+      "comment" : "Section title for reference links on an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
+          }
+        }
+      }
+    },
     "location" : {
       "comment" : "Confirmation dialog for taking action on the location of a calendar event.",
       "extractionState" : "manual",

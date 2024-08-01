@@ -71,8 +71,13 @@ struct EventView: View {
 
     var referencesView: some View {
         VStack {
-            ForEach(viewModel.event?.references ?? [], id: \.self) { reference in
-                Text(.init(reference.absoluteString))
+            if !(viewModel.event?.references ?? []).isEmpty {
+                Text(.localizable.links)
+                    .font(.headline)
+
+                ForEach(viewModel.event?.references ?? [], id: \.self) { reference in
+                    Text(.init(reference.absoluteString))
+                }
             }
         }
     }
