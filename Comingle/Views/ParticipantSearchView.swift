@@ -66,49 +66,44 @@ struct ParticipantSearchView: View {
     }
 
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(participantSearchResults, id: \.self) { participant in
-                    VStack {
-                        Button {
-                            if participants.contains(participant) {
-                                participants.remove(participant)
-                            } else {
-                                participants.insert(participant)
-                            }
-                        } label: {
-                            HStack {
-                                ProfilePictureAndNameView(publicKeyHex: participant.publicKeyHex)
-                                    .environmentObject(appState)
-
-                                Spacer()
-
-                                if participants.contains(participant) {
-                                    Image(systemName: "checkmark")
-                                }
-                            }
-                            .foregroundStyle(participants.contains(participant) ? .accent : .primary)
-                        }
-
+        List {
+            ForEach(participantSearchResults, id: \.self) { participant in
+                VStack {
+                    Button {
                         if participants.contains(participant) {
-                            let roleBinding = Binding<String>(
-                                get: {
-                                    participant.role
-                                },
-                                set: {
-                                    participant.role = $0
-                                }
-                            )
-                            TextField(localized: .localizable.role, text: roleBinding)
+                            participants.remove(participant)
+                        } else {
+                            participants.insert(participant)
                         }
+                    } label: {
+                        HStack {
+                            ProfilePictureAndNameView(publicKeyHex: participant.publicKeyHex)
+                                .environmentObject(appState)
+
+                            Spacer()
+
+                            if participants.contains(participant) {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                        .foregroundStyle(participants.contains(participant) ? .accent : .primary)
                     }
 
-                    Divider()
+                    if participants.contains(participant) {
+                        let roleBinding = Binding<String>(
+                            get: {
+                                participant.role
+                            },
+                            set: {
+                                participant.role = $0
+                            }
+                        )
+                        TextField(localized: .localizable.role, text: roleBinding)
+                    }
                 }
             }
-            .padding()
-            .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.searchForParticipant))
         }
+        .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.searchForParticipant))
     }
 }
 

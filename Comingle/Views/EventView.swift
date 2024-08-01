@@ -351,8 +351,10 @@ struct EventView: View {
                         let relays = viewModel.appState.persistentNostrEvents[event.id]?.relays ?? []
                         let shareableEventCoordinates = try? event.shareableEventCoordinates(relayURLStrings: relays.map { $0.absoluteString })
 
-                        NavigationLink(destination: EventCreationOrModificationView(appState: viewModel.appState, existingEvent: event)) {
-                            Text(.localizable.modifyEvent)
+                        if viewModel.appState.keypair != nil && (viewModel.event == nil || viewModel.appState.publicKey?.hex == viewModel.event?.pubkey) {
+                            NavigationLink(destination: EventCreationOrModificationView(appState: viewModel.appState, existingEvent: event)) {
+                                Text(.localizable.modifyEvent)
+                            }
                         }
 
                         Button(action: {

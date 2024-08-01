@@ -20,7 +20,7 @@ struct EventCreationOrModificationView: View {
     }
 
     var body: some View {
-        if viewModel.appState.keypair != nil {
+        if viewModel.appState.keypair != nil && (viewModel.existingEvent == nil || viewModel.appState.publicKey?.hex == viewModel.existingEvent?.pubkey) {
             Form {
                 Section {
                     TextField(localized: .localizable.eventTitle, text: $viewModel.title)

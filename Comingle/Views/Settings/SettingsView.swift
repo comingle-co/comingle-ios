@@ -266,7 +266,7 @@ extension SettingsView {
 
             if profile.publicKeyHex == nil {
                 appState.activeTab = .explore
-            } else if let publicKey = appState.publicKey, let activeFollowList = appState.activeFollowList {
+            } else if let publicKey = appState.publicKey {
                 appState.refreshFollowedPubkeys()
             }
 
