@@ -5,6 +5,8 @@
 //  Created by Terry Yiu on 7/29/24.
 //
 
+import GeohashKit
+import MapKit
 import NostrSDK
 import OrderedCollections
 import SwiftData
@@ -28,6 +30,29 @@ struct EventCreationOrModificationView: View {
                 }
 
                 Section {
+                    Button(action: {
+                        viewModel.isShowingLocationSelector = true
+                    }, label: {
+                        let trimmedLocation = viewModel.location.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if trimmedLocation.isEmpty {
+                            Text("Add a location")
+                        } else {
+                            Text(trimmedLocation)
+                        }
+                    })
+
+                    let trimmedGeohash = viewModel.trimmedGeohash
+                    if !trimmedGeohash.isEmpty, let geohash = Geohash(geohash: trimmedGeohash) {
+                        Map(bounds: MapCameraBounds(centerCoordinateBounds: geohash.region)) {
+                            Marker(viewModel.trimmedTitle, coordinate: geohash.region.center)
+                        }
+                        .frame(height: 250)
+                    }
+                } header: {
+                    Text(.localizable.location)
+                }
+
+                Section {
                     DatePicker(
                         String(localized: .localizable.eventStart),
                         selection: $viewModel.start,
@@ -47,10 +72,11 @@ struct EventCreationOrModificationView: View {
                     Toggle(.localizable.setTimeZone, isOn: $viewModel.isSettingTimeZone)
 
                     if viewModel.isSettingTimeZone {
+                        let timeZone = viewModel.startTimeZone ?? TimeZone.autoupdatingCurrent
                         Button(action: {
                             viewModel.isShowingTimeZoneSelector = true
                         }, label: {
-                            Text(viewModel.startTimeZone?.displayName(for: viewModel.start) ?? "")
+                            Text(timeZone.displayName(for: viewModel.start))
                         })
                     }
                 } footer: {
@@ -58,9 +84,11 @@ struct EventCreationOrModificationView: View {
                 }
 
                 Section {
-                    NavigationLink(destination: ParticipantSearchView(appState: viewModel.appState, participants: $viewModel.participants)) {
+                    Button(action: {
+                        viewModel.isShowingParticipantSelector = true
+                    }, label: {
                         Text(.localizable.participantsCount(viewModel.participants.count))
-                    }
+                    })
                 } header: {
                     Text(.localizable.participants)
                 } footer: {
@@ -131,8 +159,23 @@ struct EventCreationOrModificationView: View {
                 }
             }
             .navigationTitle(viewModel.navigationTitle)
+            .sheet(isPresented: $viewModel.isShowingLocationSelector) {
+                NavigationStack {
+                    LocationSearchView(location: $viewModel.location, geohash: $viewModel.geohash)
+                }
+                .presentationDragIndicator(.visible)
+            }
             .sheet(isPresented: $viewModel.isShowingTimeZoneSelector) {
-                TimeZoneSelectionView(date: viewModel.start, timeZone: $viewModel.startTimeZone)
+                NavigationStack {
+                    TimeZoneSelectionView(date: viewModel.start, timeZone: $viewModel.startTimeZone)
+                }
+                .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $viewModel.isShowingParticipantSelector) {
+                NavigationStack {
+                    ParticipantSearchView(appState: viewModel.appState, participants: $viewModel.participants)
+                }
+                .presentationDragIndicator(.visible)
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -183,9 +226,13 @@ extension EventCreationOrModificationView {
         var start: Date = Date.now
         var end: Date = Date.now
         var description: String = ""
-        var locations: [String] = []
+
+        var location: String = ""
+        var isShowingLocationSelector: Bool = false
         var geohash: String = ""
+
         var hashtags: [String] = []
+
         var references = OrderedSet<URL>()
         var referenceToAdd: String = ""
 
@@ -193,6 +240,7 @@ extension EventCreationOrModificationView {
         var startTimeZone: TimeZone?
         var endTimeZone: TimeZone?
         var isShowingTimeZoneSelector: Bool = false
+        var isShowingParticipantSelector: Bool = false
 
         var participants = Set<EventCreationParticipant>()
 
@@ -215,10 +263,12 @@ extension EventCreationOrModificationView {
                 isSettingTimeZone = true
             }
 
-            locations = existingEvent?.locations ?? []
+            location = ""
+            isShowingLocationSelector = false
             geohash = existingEvent?.geohash ?? ""
             hashtags = existingEvent?.hashtags ?? []
             references = OrderedSet(existingEvent?.references ?? [])
+            referenceToAdd = ""
 
             startTimeZone = existingEvent?.startTimeZone
             endTimeZone = existingEvent?.endTimeZone
@@ -228,10 +278,17 @@ extension EventCreationOrModificationView {
                     participants.insert(EventCreationParticipant(publicKeyHex: pubkey.hex, relayURL: $0.relayURL, role: $0.role ?? ""))
                 }
             }
+
+            isShowingTimeZoneSelector = false
+            isShowingParticipantSelector = false
         }
 
         var trimmedTitle: String {
             title.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        var trimmedGeohash: String {
+            geohash.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
         var navigationTitle: LocalizedStringResource {
@@ -291,10 +348,11 @@ extension EventCreationOrModificationView {
                 }
 
                 let locationsOrNil: [String]?
-                if locations.isEmpty {
+                let trimmedLocation = location.trimmingCharacters(in: .whitespacesAndNewlines)
+                if trimmedLocation.isEmpty {
                     locationsOrNil = nil
                 } else {
-                    locationsOrNil = locations
+                    locationsOrNil = [trimmedLocation]
                 }
 
                 let geohashOrNil: String?

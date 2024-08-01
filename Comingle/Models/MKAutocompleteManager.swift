@@ -1,5 +1,5 @@
 //
-//  MapKitAutocompleteManager.swift
+//  MKAutocompleteManager.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 7/31/24.
@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-class AutocompleteManager: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
+class MKAutocompleteManager: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     @Published var searchText = ""
     @Published var completions: [MKLocalSearchCompletion] = []
 

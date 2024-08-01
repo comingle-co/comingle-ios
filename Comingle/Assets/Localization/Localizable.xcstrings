@@ -25,6 +25,18 @@
         }
       }
     },
+    "addLocation" : {
+      "comment" : "Button to add location to event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Location"
+          }
+        }
+      }
+    },
     "addProfile" : {
       "comment" : "Button to add a profile.",
       "extractionState" : "manual",
@@ -877,6 +889,18 @@
         }
       }
     },
+    "removeRSVP" : {
+      "comment" : "Button to remove the user's existing RSVP.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove RSVP"
+          }
+        }
+      }
+    },
     "resetAllFields" : {
       "comment" : "Button to reset all fields to the starting point of a fresh event creation.",
       "extractionState" : "manual",
@@ -1005,6 +1029,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Date"
+          }
+        }
+      }
+    },
+    "searchForLocation" : {
+      "comment" : "Placeholder text to prompt user to search for a location for the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for location"
           }
         }
       }

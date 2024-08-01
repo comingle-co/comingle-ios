@@ -266,10 +266,10 @@ struct EventView: View {
                     Button(
                         role: .destructive,
                         action: {
-                            viewModel.deleteRSVP()
+                            viewModel.removeRSVP()
                         },
                         label: {
-                            Text("Delete RSVP")
+                            Text(.localizable.removeRSVP)
                         }
                     )
                 }
@@ -614,7 +614,7 @@ extension EventView {
             }
         }
 
-        func deleteRSVP() {
+        func removeRSVP() {
             guard let keypair = appState.keypair else {
                 return
             }
