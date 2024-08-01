@@ -123,13 +123,7 @@ class AppState: ObservableObject, Hashable {
 
             return event.startTimestamp != nil
             && (followedPubkeys.contains(event.pubkey)
-                || followedRSVPCalendarEventCoordinates.contains(coordinates.tag.value)
-                || event.participants.contains(where: { participant in
-                guard let participantPubkey = participant.pubkey else {
-                    return false
-                }
-                return followedPubkeys.contains(participantPubkey.hex)
-            }))
+                || followedRSVPCalendarEventCoordinates.contains(coordinates.tag.value))
         }
     }
 
@@ -160,7 +154,6 @@ class AppState: ObservableObject, Hashable {
             return event.startTimestamp != nil
             && (event.pubkey == publicKeyHex
                 || profileRSVPCalendarEventCoordinates(publicKeyHex).contains(coordinates.tag.value)
-                || event.participants.contains(where: { participant in participant.pubkey?.hex == publicKeyHex })
             )
         }
     }
