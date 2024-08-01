@@ -69,6 +69,14 @@ struct EventView: View {
         }
     }
 
+    var referencesView: some View {
+        VStack {
+            ForEach(viewModel.event?.references ?? [], id: \.self) { reference in
+                Text(.init(reference.absoluteString))
+            }
+        }
+    }
+
     var locationsView: some View {
         ForEach(viewModel.filteredLocations, id: \.self) { location in
             Divider()
@@ -192,9 +200,15 @@ struct EventView: View {
                         .padding(.vertical, 2)
                         .font(.largeTitle)
 
-                    Divider()
+                    if let startTimestamp = event.startTimestamp {
+                        Divider()
 
-                    Text(viewModel.dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))
+                        if let endTimestamp = event.endTimestamp {
+                            Text(viewModel.dateIntervalFormatter.string(from: startTimestamp, to: endTimestamp))
+                        } else {
+                            Text(viewModel.dateFormatter.string(from: startTimestamp))
+                        }
+                    }
 
                     locationsView
 
@@ -205,6 +219,10 @@ struct EventView: View {
                     Divider()
 
                     contentView
+
+                    Divider()
+
+                    referencesView
 
                     Divider()
 
@@ -558,6 +576,18 @@ extension EventView {
 
         func localeToLanguage(_ locale: String) -> String? {
             return Locale.LanguageCode(stringLiteral: locale).identifier(.alpha2)
+        }
+
+        var dateFormatter: DateFormatter {
+            let dateFormatter = DateFormatter()
+            dateFormatter.setLocalizedDateFormatFromTemplate("EdMMMyyyyhmmz")
+            switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+            case .event:
+                dateFormatter.timeZone = event?.startTimeZone ?? calendar.timeZone
+            case .system, .none:
+                dateFormatter.timeZone = calendar.timeZone
+            }
+            return dateFormatter
         }
 
         var dateIntervalFormatter: DateIntervalFormatter {

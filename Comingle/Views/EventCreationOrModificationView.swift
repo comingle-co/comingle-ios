@@ -97,20 +97,14 @@ struct EventCreationOrModificationView: View {
 
                 Section {
                     ForEach(viewModel.references, id: \.self) { reference in
-                        HStack {
-                            Text(reference.absoluteString)
-
-                            Spacer()
-
-                            Button(
-                                action: {
+                        Text(reference.absoluteString)
+                            .swipeActions {
+                                Button(role: .destructive) {
                                     viewModel.references.remove(reference)
-                                },
-                                label: {
+                                } label: {
                                     Image(systemName: "minus.circle")
                                 }
-                            )
-                        }
+                            }
                     }
 
                     HStack {
