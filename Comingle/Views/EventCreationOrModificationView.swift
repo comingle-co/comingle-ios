@@ -393,7 +393,7 @@ extension EventCreationOrModificationView {
                     appState.modelContext.insert(persistentNostrEvent)
                     try appState.modelContext.save()
 
-                    appState.relayPool.publishEvent(event)
+                    appState.relayWritePool.publishEvent(event)
 
                     return true
                 }

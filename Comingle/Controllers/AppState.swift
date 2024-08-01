@@ -27,7 +27,9 @@ class AppState: ObservableObject, Hashable {
 
     let modelContext: ModelContext
 
-    @Published var relayPool: RelayPool = RelayPool(relays: [])
+    @Published var relayReadPool: RelayPool = RelayPool(relays: [])
+    @Published var relayWritePool: RelayPool = RelayPool(relays: [])
+
     @Published var activeTab: HomeTabs = .following
 
     @Published var persistentNostrEvents: [String: PersistentNostrEvent] = [:]
@@ -183,21 +185,44 @@ class AppState: ObservableObject, Hashable {
 
     func updateRelayPool() {
         let profile = appSettings?.activeProfile
-        let relays = (profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? [])
+
+        let relaySettings = profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? []
+
+        let readRelays = relaySettings
+            .filter { $0.read }
             .compactMap { URL(string: $0.relayURLString) }
             .compactMap { try? Relay(url: $0) }
-        let relaySet = Set(relays)
 
-        let oldRelays = relayPool.relays.subtracting(relaySet)
-        let newRelays = relaySet.subtracting(relayPool.relays)
+        let writeRelays = relaySettings
+            .filter { $0.read }
+            .compactMap { URL(string: $0.relayURLString) }
+            .compactMap { try? Relay(url: $0) }
 
-        relayPool.delegate = self
+        let readRelaySet = Set(readRelays)
+        let writeRelaySet = Set(writeRelays)
 
-        oldRelays.forEach {
-            relayPool.remove(relay: $0)
+        let oldReadRelays = relayReadPool.relays.subtracting(readRelaySet)
+        let newReadRelays = readRelaySet.subtracting(relayReadPool.relays)
+
+        relayReadPool.delegate = self
+
+        oldReadRelays.forEach {
+            relayReadPool.remove(relay: $0)
         }
-        newRelays.forEach {
-            relayPool.add(relay: $0)
+        newReadRelays.forEach {
+            relayReadPool.add(relay: $0)
+        }
+
+        let oldWriteRelays = relayWritePool.relays.subtracting(writeRelaySet)
+        let newWriteRelays = writeRelaySet.subtracting(relayWritePool.relays)
+
+        relayWritePool.delegate = self
+
+        oldWriteRelays.forEach {
+            relayWritePool.remove(relay: $0)
+        }
+        newWriteRelays.forEach {
+            relayWritePool.add(relay: $0)
         }
     }
 }
@@ -221,12 +246,12 @@ extension AppState: EventVerifying, RelayDelegate {
                 return
             }
 
-            _ = relayPool.subscribe(with: metadataFilter)
+            _ = relayReadPool.subscribe(with: metadataFilter)
         }
     }
 
     func refresh(relay: Relay? = nil) {
-        guard (relay == nil && !relayPool.relays.isEmpty) || relay?.state == .connected else {
+        guard (relay == nil && !relayReadPool.relays.isEmpty) || relay?.state == .connected else {
             return
         }
 
@@ -247,7 +272,7 @@ extension AppState: EventVerifying, RelayDelegate {
                     print("Could not subscribe to relay with the boostrap filter.")
                 }
             } else {
-                _ = relayPool.subscribe(with: bootstrapFilter)
+                _ = relayReadPool.subscribe(with: bootstrapFilter)
             }
         }
 
@@ -265,7 +290,7 @@ extension AppState: EventVerifying, RelayDelegate {
                 print("Could not subscribe to relay with the calendar filter.")
             }
         } else {
-            _ = relayPool.subscribe(with: calendarFilter)
+            _ = relayReadPool.subscribe(with: calendarFilter)
         }
     }
 
@@ -367,7 +392,7 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        _ = relayPool.subscribe(with: rsvpFilter)
+        _ = relayReadPool.subscribe(with: rsvpFilter)
     }
 
     func updateCalendarEventRSVP(_ rsvp: CalendarEventRSVP, rsvpEventCoordinates: String) {

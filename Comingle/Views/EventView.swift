@@ -479,7 +479,7 @@ struct EventView: View {
                     print("Unable to create time-based calendar event filter.")
                     return
                 }
-                _ = viewModel.appState.relayPool.subscribe(with: eventFilter)
+                _ = viewModel.appState.relayReadPool.subscribe(with: eventFilter)
 
                 var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
                 if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
@@ -495,7 +495,7 @@ struct EventView: View {
                     print("Unable to create calendar event RSVP filter.")
                     return
                 }
-                _ = viewModel.appState.relayPool.subscribe(with: rsvpFilter)
+                _ = viewModel.appState.relayReadPool.subscribe(with: rsvpFilter)
             }
         }
     }
@@ -641,7 +641,7 @@ extension EventView {
                     print("Unable to save RSVP to SwiftData. \(error)")
                 }
 
-                appState.relayPool.publishEvent(createdRSVP)
+                appState.relayWritePool.publishEvent(createdRSVP)
 
                 if let rsvpEventCoordinates = createdRSVP.replaceableEventCoordinates()?.tag.value {
                     appState.updateCalendarEventRSVP(createdRSVP, rsvpEventCoordinates: rsvpEventCoordinates)
@@ -683,7 +683,7 @@ extension EventView {
                     print("Unable to save RSVP to SwiftData. \(error)")
                 }
 
-                appState.relayPool.publishEvent(deletionEvent)
+                appState.relayWritePool.publishEvent(deletionEvent)
             }
 
         }
