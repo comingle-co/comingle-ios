@@ -6,6 +6,7 @@
 //
 
 import NostrSDK
+import OrderedCollections
 import SwiftData
 import SwiftUI
 
@@ -64,6 +65,47 @@ struct EventCreationOrModificationView: View {
                     Text(.localizable.participants)
                 } footer: {
                     Text(.localizable.participantsFooter)
+                }
+
+                Section {
+                    ForEach(viewModel.references, id: \.self) { reference in
+                        HStack {
+                            Text(reference.absoluteString)
+
+                            Spacer()
+
+                            Button(
+                                action: {
+                                    viewModel.references.remove(reference)
+                                },
+                                label: {
+                                    Image(systemName: "minus.circle")
+                                }
+                            )
+                        }
+                    }
+
+                    HStack {
+                        TextField(localized: .localizable.url, text: $viewModel.referenceToAdd)
+                            .textContentType(.URL)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+
+                        Spacer()
+
+                        Button(
+                            action: {
+                                if let validatedReferenceURL = viewModel.validatedReferenceURL {
+                                    viewModel.references.append(validatedReferenceURL)
+                                    viewModel.referenceToAdd = ""
+                                }
+                            },
+                            label: {
+                                Image(systemName: "plus.circle")
+                            }
+                        )
+                        .disabled(viewModel.validatedReferenceURL == nil)
+                    }
                 }
 
                 Section {
@@ -128,7 +170,8 @@ extension EventCreationOrModificationView {
         var locations: [String]
         var geohash: String
         var hashtags: [String]
-        var references: [URL]
+        var references: OrderedSet<URL>
+        var referenceToAdd: String = ""
 
         var isSettingTimeZone: Bool = false
         var startTimeZone: TimeZone?
@@ -156,7 +199,7 @@ extension EventCreationOrModificationView {
             locations = existingEvent?.locations ?? []
             geohash = existingEvent?.geohash ?? ""
             hashtags = existingEvent?.hashtags ?? []
-            references = existingEvent?.references ?? []
+            references = OrderedSet(existingEvent?.references ?? [])
 
             startTimeZone = existingEvent?.startTimeZone
             endTimeZone = existingEvent?.endTimeZone
@@ -178,6 +221,10 @@ extension EventCreationOrModificationView {
             } else {
                 .localizable.createEvent
             }
+        }
+
+        var validatedReferenceURL: URL? {
+            URL(string: referenceToAdd)
         }
 
         var canSave: Bool {
@@ -249,7 +296,7 @@ extension EventCreationOrModificationView {
                 if references.isEmpty {
                     referencesOrNil = nil
                 } else {
-                    referencesOrNil = references
+                    referencesOrNil = Array(references)
                 }
 
                 let event = try timeBasedCalendarEvent(

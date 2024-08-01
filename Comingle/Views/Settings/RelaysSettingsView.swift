@@ -81,7 +81,6 @@ struct RelaysSettingsView: View, RelayURLValidating {
 
             Section {
                 TextField(localized: .localizable.exampleRelay, text: $newRelay)
-                    .autocorrectionDisabled(false)
                     .textContentType(.URL)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()

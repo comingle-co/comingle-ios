@@ -1345,6 +1345,18 @@
         }
       }
     },
+    "url" : {
+      "comment" : "Placeholder text for text field for entering event URL.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL"
+          }
+        }
+      }
+    },
     "viewProfile" : {
       "comment" : "Button to view the active profile.",
       "extractionState" : "manual",
