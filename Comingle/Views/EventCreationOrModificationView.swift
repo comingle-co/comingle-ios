@@ -35,7 +35,7 @@ struct EventCreationOrModificationView: View {
                     }, label: {
                         let trimmedLocation = viewModel.location.trimmingCharacters(in: .whitespacesAndNewlines)
                         if trimmedLocation.isEmpty {
-                            Text("Add a location")
+                            Text(.localizable.addALocation)
                         } else {
                             Text(trimmedLocation)
                         }

@@ -25,6 +25,18 @@
         }
       }
     },
+    "addALocation" : {
+      "comment" : "Button to navigate to event location picker sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a location"
+          }
+        }
+      }
+    },
     "addLocation" : {
       "comment" : "Button to add location to event.",
       "extractionState" : "manual",
