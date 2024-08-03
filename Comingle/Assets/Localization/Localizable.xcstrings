@@ -73,18 +73,6 @@
         }
       }
     },
-    "addRelay" : {
-      "comment" : "Button to add relay.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Relay"
-          }
-        }
-      }
-    },
     "appDescription" : {
       "comment" : "Description of the app.",
       "extractionState" : "manual",
@@ -1233,6 +1221,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connection Status:"
+          }
+        }
+      }
+    },
+    "settingsRelayFooter" : {
+      "comment" : "Relay settings footer text explaining where relay settings are stored.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relay settings are saved locally to this device. Publishing relay lists is not yet supported."
           }
         }
       }

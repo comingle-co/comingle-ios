@@ -72,41 +72,44 @@ struct RelaysSettingsView: View, RelayURLValidating {
                                 }
                             }
                         }
+
+                        HStack {
+                            TextField(localized: .localizable.exampleRelay, text: $newRelay)
+                                .textContentType(.URL)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .onReceive(Just(newRelay)) { newValue in
+                                    let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                                    newRelay = filtered
+
+                                    if filtered.isEmpty {
+                                        return
+                                    }
+
+                                    validatedRelayURL = try? validateRelayURLString(filtered)
+                                }
+
+                            Button(
+                                action: {
+                                    if let validatedRelayURL, canAddRelay {
+                                        viewModel.addRelay(relayURL: validatedRelayURL)
+                                    }
+                                },
+                                label: {
+                                    Image(systemName: "plus.circle")
+                                }
+                            )
+                            .disabled(!canAddRelay)
+                        }
                     }
                 },
                 header: {
                     Text(.localizable.settingsRelays)
+                },
+                footer: {
+                    Text(.localizable.settingsRelayFooter)
                 }
             )
-
-            Section {
-                TextField(localized: .localizable.exampleRelay, text: $newRelay)
-                    .textContentType(.URL)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .onReceive(Just(newRelay)) { newValue in
-                        let filtered = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                        newRelay = filtered
-
-                        if filtered.isEmpty {
-                            return
-                        }
-
-                        validatedRelayURL = try? validateRelayURLString(filtered)
-                    }
-
-                Button(
-                    action: {
-                        if let validatedRelayURL, canAddRelay {
-                            viewModel.addRelay(relayURL: validatedRelayURL)
-                        }
-                    },
-                    label: {
-                        Text(.localizable.addRelay)
-                    }
-                )
-                .disabled(!canAddRelay)
-            }
         }
     }
 
