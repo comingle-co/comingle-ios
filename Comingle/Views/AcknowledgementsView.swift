@@ -1,5 +1,5 @@
 //
-//  LicensesView.swift
+//  AcknowledgementsView.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 7/29/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LicensesView: View {
+struct AcknowledgementsView: View {
     private var dependenciesManager = DependenciesManager()
 
     var body: some View {
@@ -22,7 +22,7 @@ struct LicensesView: View {
                 })
             }
         }
-        .navigationTitle(.localizable.licenses)
+        .navigationTitle(.localizable.acknowledgements)
     }
 }
 
@@ -46,7 +46,8 @@ struct Dependency: Identifiable {
             Dependency(name: "CryptoSwift", version: "1.8.2", url: "https://github.com/krzyzanowskim/CryptoSwift"),
             Dependency(name: "GeohashKit", version: "3.0.0", url: "https://github.com/ualch9/GeohashKit"),
             Dependency(name: "Kingfisher", version: "7.12.0", url: "https://github.com/onevcat/Kingfisher"),
-            Dependency(name: "Nostr SDK for Apple Platforms", version: "4a9ff87", url: "https://github.com/nostr-sdk/nostr-sdk-ios"),
+            Dependency(name: "Nostr SDK for Apple Platforms", version: "21c46c5", url: "https://github.com/nostr-sdk/nostr-sdk-ios"),
+            Dependency(name: "Robohash", version: "Cats - David Revoy", url: "https://robohash.org/"),
             Dependency(name: "secp256k1", version: "0.12.2", url: "https://github.com/21-DOT-DEV/swift-secp256k1"),
             Dependency(name: "swift-collections", version: "1.1.2", url: "https://github.com/apple/swift-collections"),
             Dependency(name: "SwiftTrie", version: "0.1.2", url: "https://github.com/tyiu/swift-trie"),
@@ -56,5 +57,5 @@ struct Dependency: Identifiable {
 }
 
 #Preview {
-    LicensesView()
+    AcknowledgementsView()
 }

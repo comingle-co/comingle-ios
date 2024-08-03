@@ -25,6 +25,18 @@
         }
       }
     },
+    "acknowledgements" : {
+      "comment" : "View for seeing the acknowledgements of projects that this app depends on.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acknowledgements"
+          }
+        }
+      }
+    },
     "addALocation" : {
       "comment" : "Button to navigate to event location picker sheet.",
       "extractionState" : "manual",
@@ -429,18 +441,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invited (%d)"
-          }
-        }
-      }
-    },
-    "licenses" : {
-      "comment" : "View for seeing the open source licenses that were used in building the app.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Licenses"
           }
         }
       }

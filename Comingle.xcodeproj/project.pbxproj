@@ -18,7 +18,7 @@
 		3A317BFD2C57FC2B004DA56B /* SwiftTrie in Frameworks */ = {isa = PBXBuildFile; productRef = 3A317BFC2C57FC2B004DA56B /* SwiftTrie */; };
 		3A317C002C57FDAC004DA56B /* TimeZoneSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */; };
 		3A317C032C58002E004DA56B /* TimeZone+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C022C58002E004DA56B /* TimeZone+Extensions.swift */; };
-		3A317C072C588D04004DA56B /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C062C588D04004DA56B /* LicensesView.swift */; };
+		3A317C072C588D04004DA56B /* AcknowledgementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C062C588D04004DA56B /* AcknowledgementsView.swift */; };
 		3A317C0C2C58A282004DA56B /* ParticipantSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C0B2C58A282004DA56B /* ParticipantSearchView.swift */; };
 		3A317C0F2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C0E2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift */; };
 		3A317C132C594AFE004DA56B /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317C122C594AFE004DA56B /* SearchViewModel.swift */; };
@@ -92,7 +92,7 @@
 		3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneSelectionView.swift; sourceTree = "<group>"; };
 		3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneSortComparator.swift; sourceTree = "<group>"; };
 		3A317C022C58002E004DA56B /* TimeZone+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Extensions.swift"; sourceTree = "<group>"; };
-		3A317C062C588D04004DA56B /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
+		3A317C062C588D04004DA56B /* AcknowledgementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsView.swift; sourceTree = "<group>"; };
 		3A317C0B2C58A282004DA56B /* ParticipantSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantSearchView.swift; sourceTree = "<group>"; };
 		3A317C0E2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationParticipantSortComparator.swift; sourceTree = "<group>"; };
 		3A317C122C594AFE004DA56B /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
@@ -292,7 +292,7 @@
 				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
 				3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */,
 				3A4B466E2C52094600307F23 /* ImageOverlayView.swift */,
-				3A317C062C588D04004DA56B /* LicensesView.swift */,
+				3A317C062C588D04004DA56B /* AcknowledgementsView.swift */,
 				3A317C262C5B4260004DA56B /* LocationSearchView.swift */,
 				3A2FF9772A3F6DFD009E1067 /* LoginView.swift */,
 				3A4A89972C3CF24800238043 /* ProfileNameView.swift */,
@@ -522,7 +522,7 @@
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
 				3A317BF62C5750B3004DA56B /* EventCreationOrModificationView.swift in Sources */,
 				3A317BF92C57F507004DA56B /* TimeZoneSelectionView.swift in Sources */,
-				3A317C072C588D04004DA56B /* LicensesView.swift in Sources */,
+				3A317C072C588D04004DA56B /* AcknowledgementsView.swift in Sources */,
 				3A4A89A22C3E3F6000238043 /* KeysSettingsView.swift in Sources */,
 				3A317C242C5A71E9004DA56B /* MKAutocompleteManager.swift in Sources */,
 				3A34AAAA2B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift in Sources */,
@@ -948,7 +948,7 @@
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
 			requirement = {
 				kind = revision;
-				revision = 4a9ff87be38724af1321cda15e11de961bbf097a;
+				revision = 21c46c56c6165f8f70a6776991b4e501db83dd96;
 			};
 		};
 		3A317BFB2C57FC2B004DA56B /* XCRemoteSwiftPackageReference "swift-trie" */ = {

@@ -127,8 +127,8 @@ struct SettingsView: View {
             content: {
                 LabeledContent("Version", value: viewModel.appVersion)
 
-                NavigationLink(destination: LicensesView()) {
-                    Text(.localizable.licenses)
+                NavigationLink(destination: AcknowledgementsView()) {
+                    Text(.localizable.acknowledgements)
                 }
             },
             header: {
