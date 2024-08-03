@@ -20,12 +20,11 @@ struct HomeView: View {
     }
 
     var body: some View {
-        if viewModel.publicKeyHex == nil {
-            LoginView(appState: viewModel.appState)
-                .navigationBarTitleDisplayMode(.inline)
-        } else {
+        if viewModel.publicKeyHex != nil {
             EventListView(eventListType: .followed)
                 .navigationBarTitleDisplayMode(.inline)
+        } else {
+            EmptyView()
         }
     }
 }

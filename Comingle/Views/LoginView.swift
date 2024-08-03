@@ -15,8 +15,8 @@ struct LoginView: View, RelayURLValidating {
 
     @State private var viewModel: ViewModel
 
-    @State private var nostrIdentifier: String = "npub1yaul8k059377u9lsu67de7y637w4jtgeuwcmh5n7788l6xnlnrgs3tvjmf"
-    @State private var primaryRelay: String = AppState.defaultRelayURLString
+    @State private var nostrIdentifier: String = ""
+    @State private var primaryRelay: String = ""
 
     @State private var validKey: Bool = false
     @State private var validatedRelayURL: URL?
@@ -60,11 +60,6 @@ struct LoginView: View, RelayURLValidating {
 
     var body: some View {
         NavigationStack {
-            Image("ComingleLogo")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 300, maxHeight: 300)
-
             Form {
                 Section(
                     content: {

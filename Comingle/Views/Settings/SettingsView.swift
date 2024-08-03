@@ -61,13 +61,18 @@ struct SettingsView: View {
                                 }
                             }
                         }
-                        NavigationLink(destination: LoginView(appState: viewModel.appState)) {
-                            Image(systemName: "plus.circle")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 40)
-                            Text(.localizable.addProfile)
-                        }
+
+                        Button(action: {
+                            viewModel.isLoginViewPresented = true
+                        }, label: {
+                            HStack {
+                                Image(systemName: "plus.circle")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 40)
+                                Text(.localizable.addProfile)
+                            }
+                        })
                     },
                     label: {
                         let publicKeyHex = viewModel.publicKeyHex
@@ -164,6 +169,13 @@ struct SettingsView: View {
             }
         }
         .navigationTitle(.localizable.settings)
+        .sheet(isPresented: $viewModel.isLoginViewPresented) {
+            NavigationStack {
+                LoginView(appState: viewModel.appState)
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
         .confirmationDialog(
             Text(.localizable.signOutFromDevice),
             isPresented: $isShowingSignOutConfirmation
@@ -194,6 +206,7 @@ extension SettingsView {
     @Observable class ViewModel {
         let appState: AppState
         var profilePickerExpanded: Bool = false
+        var isLoginViewPresented: Bool = false
 
         init(appState: AppState) {
             self.appState = appState

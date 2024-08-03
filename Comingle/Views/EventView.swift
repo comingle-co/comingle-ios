@@ -416,9 +416,11 @@ struct EventView: View {
 
             ToolbarItem(placement: .bottomBar) {
                 if viewModel.appState.keypair == nil {
-                    NavigationLink(destination: LoginView(appState: viewModel.appState)) {
+                    Button(action: {
+                        viewModel.isLoginViewPresented = true
+                    }, label: {
                         Text(.localizable.signInToRSVP)
-                    }
+                    })
                 } else {
                     Button(action: {
                         viewModel.isChangingRSVP = true
@@ -457,6 +459,13 @@ struct EventView: View {
                     })
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.isLoginViewPresented) {
+            NavigationStack {
+                LoginView(appState: viewModel.appState)
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
         .task {
             var pubkeysToPullMetadata = viewModel.event?.participants.compactMap { $0.pubkey?.hex } ?? []
@@ -518,6 +527,8 @@ extension EventView {
         var contentTextTranslation: String = ""
 
         var isChangingRSVP: Bool = false
+
+        var isLoginViewPresented: Bool = false
 
         init(appState: AppState, eventCoordinates: EventCoordinates, calendar: Calendar) {
             self.appState = appState
