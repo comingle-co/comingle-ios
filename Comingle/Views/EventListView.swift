@@ -67,9 +67,16 @@ struct EventListView: View {
                                                                 .font(.subheadline)
                                                         }
                                                     }
+
+                                                    if let summary = event.summary?.trimmingCharacters(in: .whitespacesAndNewlines), !summary.isEmpty {
+                                                        Divider()
+
+                                                        Text(summary)
+                                                            .font(.subheadline)
+                                                    }
                                                 }
 
-                                                if let calendarEventImage = event.firstValueForRawTagName("image"), let calendarEventImageURL = URL(string: calendarEventImage), calendarEventImageURL.isImage {
+                                                if let calendarEventImageURL = event.imageURL, calendarEventImageURL.isImage {
                                                     KFImage.url(calendarEventImageURL)
                                                         .resizable()
                                                         .placeholder { ProgressView() }

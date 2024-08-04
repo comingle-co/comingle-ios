@@ -6,6 +6,7 @@
 //
 
 import GeohashKit
+import Kingfisher
 import MapKit
 import NostrSDK
 import OrderedCollections
@@ -27,6 +28,34 @@ struct EventCreationOrModificationView: View {
             Form {
                 Section {
                     TextField(localized: .localizable.eventTitle, text: $viewModel.title)
+                } header: {
+                    Text(.localizable.eventTitle)
+                }
+
+                Section {
+                    TextField(localized: .localizable.eventSummary, text: $viewModel.summary)
+                } header: {
+                    Text(.localizable.eventSummary)
+                }
+
+                Section {
+                    TextEditor(text: $viewModel.description)
+                } header: {
+                    Text(.localizable.eventDescription)
+                }
+
+                Section {
+                    TextField(localized: .localizable.image, text: $viewModel.imageString)
+
+                    if let validatedImageURL = viewModel.validatedImageURL {
+                        KFImage.url(viewModel.validatedImageURL)
+                            .resizable()
+                            .placeholder { ProgressView() }
+                            .scaledToFit()
+                            .frame(maxWidth: 100, maxHeight: 200)
+                    }
+                } header: {
+                    Text(.localizable.image)
                 }
 
                 Section {
@@ -66,9 +95,7 @@ struct EventCreationOrModificationView: View {
                         displayedComponents: [.date, .hourAndMinute]
                     )
                     .datePickerStyle(.compact)
-                }
 
-                Section {
                     Toggle(.localizable.setTimeZone, isOn: $viewModel.isSettingTimeZone)
 
                     if viewModel.isSettingTimeZone {
@@ -79,6 +106,8 @@ struct EventCreationOrModificationView: View {
                             Text(timeZone.displayName(for: viewModel.start))
                         })
                     }
+                } header: {
+                    Text(.localizable.eventTime)
                 } footer: {
                     Text(.localizable.timeZoneFooter)
                 }
@@ -128,12 +157,8 @@ struct EventCreationOrModificationView: View {
                         )
                         .disabled(viewModel.validatedReferenceURL == nil)
                     }
-                }
-
-                Section {
-                    TextEditor(text: $viewModel.description)
                 } header: {
-                    Text(.localizable.eventDescription)
+                    Text(.localizable.links)
                 }
 
                 Section {
@@ -217,6 +242,8 @@ extension EventCreationOrModificationView {
         let existingEvent: TimeBasedCalendarEvent?
 
         var title: String = ""
+        var summary: String = ""
+        var imageString: String = ""
         var start: Date = Date.now
         var end: Date = Date.now
         var description: String = ""
@@ -245,6 +272,8 @@ extension EventCreationOrModificationView {
 
         func reset() {
             title = existingEvent?.title ?? ""
+            summary = existingEvent?.summary ?? ""
+            imageString = existingEvent?.imageURL?.absoluteString ?? ""
             description = existingEvent?.content ?? ""
             let now = Date.now
             start = existingEvent?.startTimestamp ?? now
@@ -278,6 +307,14 @@ extension EventCreationOrModificationView {
             title.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
+        var trimmedImageString: String {
+            imageString.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        var trimmedSummary: String {
+            summary.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
         var trimmedGeohash: String {
             geohash.trimmingCharacters(in: .whitespacesAndNewlines)
         }
@@ -290,12 +327,20 @@ extension EventCreationOrModificationView {
             }
         }
 
+        var validatedImageURL: URL? {
+            if let url = URL(string: trimmedImageString), url.isImage {
+                url
+            } else {
+                nil
+            }
+        }
+
         var validatedReferenceURL: URL? {
             URL(string: referenceToAdd)
         }
 
         var canSave: Bool {
-            appState.keypair != nil && start <= end && !trimmedTitle.isEmpty
+            appState.keypair != nil && start <= end && !trimmedTitle.isEmpty && validatedImageURL != nil
         }
 
         func saveEvent() -> Bool {
@@ -339,13 +384,6 @@ extension EventCreationOrModificationView {
                     locationsOrNil = [trimmedLocation]
                 }
 
-                let geohashOrNil: String?
-                if geohash.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    geohashOrNil = nil
-                } else {
-                    geohashOrNil = geohash.trimmingCharacters(in: .whitespacesAndNewlines)
-                }
-
                 let hashtagsOrNil: [String]?
                 if hashtags.isEmpty {
                     hashtagsOrNil = nil
@@ -363,12 +401,14 @@ extension EventCreationOrModificationView {
                 let event = try timeBasedCalendarEvent(
                     withIdentifier: existingEvent?.identifier ?? UUID().uuidString,
                     title: trimmedTitle,
+                    summary: summary.trimmedOrNilIfEmpty,
+                    imageURL: validatedImageURL,
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
                     startTimestamp: start,
                     endTimestamp: endOrNil,
                     startTimeZone: startTimeZoneOrNil,
                     locations: locationsOrNil,
-                    geohash: geohashOrNil,
+                    geohash: geohash.trimmedOrNilIfEmpty,
                     participants: calendarEventParticipants,
                     hashtags: hashtagsOrNil,
                     references: referencesOrNil,

@@ -956,7 +956,7 @@
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
 			requirement = {
 				kind = revision;
-				revision = 0a3e979fe0b24f83fe0d215ed3f6082a16e2fdaa;
+				revision = ad382664ba61113f41965f22e1e5b45aed35805e;
 			};
 		};
 		3A317BFB2C57FC2B004DA56B /* XCRemoteSwiftPackageReference "swift-trie" */ = {

@@ -57,6 +57,10 @@ struct EventView: View, EventCreating {
         }
     }
 
+    var summary: String? {
+        event?.summary?.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     var contentText: String {
         if contentTranslationReplaced {
             contentTextTranslation
@@ -230,7 +234,17 @@ struct EventView: View, EventCreating {
     }
 
     var contentView: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            if let summary {
+                Text(.localizable.eventSummary)
+                    .font(.headline)
+
+                Text(.init(summary))
+                    .padding(.vertical, 2)
+
+                Divider()
+            }
+
             if contentTranslationReplaced {
                 Text(.localizable.aboutTranslated)
                     .font(.headline)
@@ -242,7 +256,6 @@ struct EventView: View, EventCreating {
             if #available(iOS 17.4, macOS 14.4, *), contentTranslationReplaced || shouldAllowTranslation(contentText) {
                 Text(.init(contentText))
                     .padding(.vertical, 2)
-                    .font(.subheadline)
                     .translationPresentation(isPresented: $isContentTranslationPresented, text: contentText) { translatedString in
                         contentTextTranslation = translatedString
                         contentTranslationReplaced = true
@@ -264,20 +277,24 @@ struct EventView: View, EventCreating {
             } else {
                 Text(.init(contentText))
                     .padding(.vertical, 2)
-                    .font(.subheadline)
             }
         }
     }
 
     var referencesView: some View {
         VStack {
-            if !(event?.references ?? []).isEmpty {
+            if let references = event?.references, !references.isEmpty {
                 Text(.localizable.links)
                     .font(.headline)
+                    .padding(.bottom, 2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                ForEach(event?.references ?? [], id: \.self) { reference in
+                ForEach(references, id: \.self) { reference in
                     Text(.init(reference.absoluteString))
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
+            } else {
+                EmptyView()
             }
         }
     }
@@ -391,8 +408,7 @@ struct EventView: View, EventCreating {
         ScrollView {
             VStack {
                 if let event = event {
-                    if let calendarEventImage = event.firstValueForRawTagName("image"),
-                       let calendarEventImageURL = URL(string: calendarEventImage),
+                    if let calendarEventImageURL = event.imageURL,
                        calendarEventImageURL.isImage {
                         KFImage.url(calendarEventImageURL)
                             .resizable()

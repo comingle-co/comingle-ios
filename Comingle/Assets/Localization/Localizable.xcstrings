@@ -301,6 +301,30 @@
         }
       }
     },
+    "eventSummary" : {
+      "comment" : "Section title for summary section that summarizes the calendar event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
+    "eventTime" : {
+      "comment" : "Section title for the event time section.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time"
+          }
+        }
+      }
+    },
     "eventTimeZonePreference" : {
       "comment" : "Picker option settings for using the event time zone if it exists.",
       "extractionState" : "manual",
@@ -429,6 +453,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Home"
+          }
+        }
+      }
+    },
+    "image" : {
+      "comment" : "Section title for image of the event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image"
           }
         }
       }
