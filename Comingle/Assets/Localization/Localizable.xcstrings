@@ -1238,13 +1238,13 @@
       }
     },
     "settingsRelayFooter" : {
-      "comment" : "Relay settings footer text explaining where relay settings are stored.",
+      "comment" : "Relay settings footer text explaining where relay settings are stored and the limitations of relay connections.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Relay settings are saved locally to this device. Publishing relay lists is not yet supported."
+            "value" : "Relay settings are saved locally to this device. Authenticated relays and publishing relay lists are not yet supported."
           }
         }
       }
@@ -1382,13 +1382,13 @@
       }
     },
     "tryDefaultRelay" : {
-      "comment" : "Text prompting user to try connecting to the default relay.",
+      "comment" : "Text prompting user to try connecting to the default relay and a note mentioning that authenticated relays are not yet supported.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Try %@"
+            "value" : "Try %@. Note: authenticated relays are not yet supported."
           }
         }
       }
