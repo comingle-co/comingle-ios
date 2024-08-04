@@ -18,7 +18,7 @@ struct ComingleApp: App {
     init() {
         NostrEventValueTransformer.register()
         do {
-            container = try ModelContainer(for: AppSettings.self, PersistentNostrEvent.self)
+            container = try ModelContainer(for: RelaySubscriptionMetadata.self, AppSettings.self, PersistentNostrEvent.self)
             appState = AppState(modelContext: container.mainContext)
         } catch {
             fatalError("Failed to create ModelContainer for AppSettings and PersistentNostrEvent.")

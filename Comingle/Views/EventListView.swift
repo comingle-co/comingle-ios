@@ -85,6 +85,14 @@ struct EventListView: View {
                                     }
                                 )
                                 .padding(.vertical, 10)
+                                .onAppear {
+                                    var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
+                                    if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
+                                       let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                                        pubkeysToPullMetadata += rsvps.map { $0.pubkey }
+                                    }
+                                    appState.pullMissingMetadata(pubkeysToPullMetadata)
+                                }
                             }
                         }
                     }

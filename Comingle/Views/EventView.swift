@@ -681,44 +681,42 @@ struct EventView: View, EventCreating {
             .presentationDragIndicator(.visible)
         }
         .task {
-            var pubkeysToPullMetadata = event?.participants.compactMap { $0.pubkey?.hex } ?? []
-
-            if let rsvps = appState.calendarEventsToRsvps[eventCoordinates.tag.value] {
-                pubkeysToPullMetadata += rsvps.map { $0.pubkey }
-            }
-
-            appState.pullMissingMetadata(pubkeysToPullMetadata)
+            refresh()
         }
         .refreshable {
-            if let event = event {
-                let calendarEventCoordinates = eventCoordinates.tag.value
-                guard let eventFilter = Filter(
-                    authors: [event.pubkey],
-                    kinds: [EventKind.timeBasedCalendarEvent.rawValue],
-                    tags: ["d": [calendarEventCoordinates]],
-                    since: Int(event.createdAt)
-                ) else {
-                    print("Unable to create time-based calendar event filter.")
-                    return
-                }
-                _ = appState.relayReadPool.subscribe(with: eventFilter)
+            refresh()
+        }
+    }
 
-                var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
-                if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
-                   let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
-                    pubkeysToPullMetadata += rsvps.map { $0.pubkey }
-                }
-                appState.pullMissingMetadata(pubkeysToPullMetadata)
-
-                guard let rsvpFilter = Filter(
-                    kinds: [EventKind.calendarEventRSVP.rawValue],
-                    tags: ["a": [calendarEventCoordinates]])
-                else {
-                    print("Unable to create calendar event RSVP filter.")
-                    return
-                }
-                _ = appState.relayReadPool.subscribe(with: rsvpFilter)
+    func refresh() {
+        if let event {
+            let calendarEventCoordinates = eventCoordinates.tag.value
+            guard let eventFilter = Filter(
+                authors: [event.pubkey],
+                kinds: [EventKind.timeBasedCalendarEvent.rawValue],
+                tags: ["d": [calendarEventCoordinates]],
+                since: Int(event.createdAt)
+            ) else {
+                print("Unable to create time-based calendar event filter.")
+                return
             }
+            _ = appState.relayReadPool.subscribe(with: eventFilter)
+
+            var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
+            if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
+               let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+                pubkeysToPullMetadata += rsvps.map { $0.pubkey }
+            }
+            appState.pullMissingMetadata(pubkeysToPullMetadata)
+
+            guard let rsvpFilter = Filter(
+                kinds: [EventKind.calendarEventRSVP.rawValue],
+                tags: ["a": [calendarEventCoordinates]])
+            else {
+                print("Unable to create calendar event RSVP filter.")
+                return
+            }
+            _ = appState.relayReadPool.subscribe(with: rsvpFilter)
         }
     }
 }

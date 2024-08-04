@@ -64,6 +64,7 @@
 		3A6451852C44C879000DC75B /* RelaySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6451842C44C879000DC75B /* RelaySettings.swift */; };
 		3A7D25DE2C5D12AE001C1714 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A7D25DD2C5D12AE001C1714 /* Launch Screen.storyboard */; };
 		3ABD0C0D2C5EF6A9004A15C7 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C0C2C5EF6A9004A15C7 /* String+Extensions.swift */; };
+		3ABD0C152C5F2508004A15C7 /* RelaySubscriptionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C142C5F2508004A15C7 /* RelaySubscriptionMetadata.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +143,7 @@
 		3A7D25D12C5D0CAA001C1714 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A7D25DD2C5D12AE001C1714 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		3ABD0C0C2C5EF6A9004A15C7 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		3ABD0C142C5F2508004A15C7 /* RelaySubscriptionMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaySubscriptionMetadata.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +274,7 @@
 				3A3419492C50A36B0039620B /* PersistentNostrEvent.swift */,
 				3A464FFB2C3A312200AD4B09 /* Profile.swift */,
 				3A317C182C59C130004DA56B /* PublicKeySortComparator.swift */,
+				3ABD0C142C5F2508004A15C7 /* RelaySubscriptionMetadata.swift */,
 				3A317C1B2C59C5EA004DA56B /* RSVPSortComparator.swift */,
 				3A317C122C594AFE004DA56B /* SearchViewModel.swift */,
 				3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */,
@@ -530,6 +533,7 @@
 				3A317C242C5A71E9004DA56B /* MKAutocompleteManager.swift in Sources */,
 				3A34AAAA2B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift in Sources */,
 				3A317C172C59BFAE004DA56B /* CalendarEventParticipantSortComparator.swift in Sources */,
+				3ABD0C152C5F2508004A15C7 /* RelaySubscriptionMetadata.swift in Sources */,
 				3A4A898A2C3C240C00238043 /* ProfilePictureAndNameView.swift in Sources */,
 				3A317C272C5B4260004DA56B /* LocationSearchView.swift in Sources */,
 				3A4A89942C3CE40A00238043 /* GuestProfilePictureView.swift in Sources */,
