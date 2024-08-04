@@ -93,6 +93,7 @@ struct RelaysSettingsView: View, RelayURLValidating {
                                 action: {
                                     if let validatedRelayURL, canAddRelay {
                                         viewModel.addRelay(relayURL: validatedRelayURL)
+                                        newRelay = ""
                                     }
                                 },
                                 label: {

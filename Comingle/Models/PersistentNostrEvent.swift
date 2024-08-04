@@ -15,7 +15,7 @@ class PersistentNostrEvent {
 
     @Attribute(.transformable(by: NostrEventValueTransformer.self)) let nostrEvent: NostrEvent
 
-    var relays: [URL]
+    var relays: [URL] = []
 
     init(nostrEvent: NostrEvent, relays: [URL] = []) {
         self.eventId = nostrEvent.id
