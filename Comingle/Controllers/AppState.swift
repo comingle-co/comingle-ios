@@ -257,7 +257,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    func pullMissingEventsFromFollows(_ pubkeys: [String]) {
+    func pullMissingEventsFromPubkeysAndFollows(_ pubkeys: [String]) {
         // There has to be at least one connected relay to be able to pull metadata.
         guard !relayReadPool.relays.isEmpty && relayReadPool.relays.contains(where: { $0.state == .connected }) else {
             return
@@ -392,21 +392,21 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromFollows: Bool = false) {
+    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromPubkeysAndFollows: Bool = false) {
         if let existingFollowList = self.followListEvents[followListEvent.pubkey] {
             if existingFollowList.createdAt < followListEvent.createdAt {
-                cache(followListEvent, shouldPullMissingEventsFromFollows: shouldPullMissingEventsFromFollows)
+                cache(followListEvent, shouldPullMissingEventsFromPubkeysAndFollows: shouldPullMissingEventsFromPubkeysAndFollows)
             }
         } else {
-            cache(followListEvent, shouldPullMissingEventsFromFollows: shouldPullMissingEventsFromFollows)
+            cache(followListEvent, shouldPullMissingEventsFromPubkeysAndFollows: shouldPullMissingEventsFromPubkeysAndFollows)
         }
     }
 
-    private func cache(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromFollows: Bool) {
+    private func cache(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromPubkeysAndFollows: Bool) {
         self.followListEvents[followListEvent.pubkey] = followListEvent
 
-        if shouldPullMissingEventsFromFollows {
-            pullMissingEventsFromFollows(followListEvent.followedPubkeys)
+        if shouldPullMissingEventsFromPubkeysAndFollows {
+            pullMissingEventsFromPubkeysAndFollows(followListEvent.followedPubkeys)
         }
 
         if followListEvent.pubkey == publicKey?.hex {
@@ -491,7 +491,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
         // Optimization: do not pull metadata of people who RSVP until we actually need to look at it. Lazy load.
         // Perhaps reconsider if UX suffers because of this decision..
-        // shouldPullMissingEventsFromFollows([rsvp.pubkey])
+        // pullMissingEventsFromPubkeysAndFollows([rsvp.pubkey])
     }
 
     private func deleteFromEventCoordinates(_ deletionEvent: DeletionEvent) {
@@ -591,7 +591,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
             switch nostrEvent {
             case let followListEvent as FollowListEvent:
-                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingEventsFromFollows: true)
+                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingEventsFromPubkeysAndFollows: true)
             case let metadataEvent as MetadataEvent:
                 self.didReceiveMetadataEvent(metadataEvent)
             case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
@@ -625,7 +625,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
 
         if let publicKey, let followListEvent = followListEvents[publicKey.hex] {
-            pullMissingEventsFromFollows(followListEvent.followedPubkeys)
+            pullMissingEventsFromPubkeysAndFollows(followListEvent.followedPubkeys)
         }
     }
 
@@ -674,7 +674,7 @@ extension AppState: EventVerifying, RelayDelegate {
                 timeBasedCalendarEventSubscriptionCounts.removeValue(forKey: closedSubscriptionId)
 
                 // Wait until we have fetched all the time-based calendar events before fetching metadata in bulk.
-                pullMissingEventsFromFollows(timeBasedCalendarEvents.values.map { $0.pubkey })
+                pullMissingEventsFromPubkeysAndFollows(timeBasedCalendarEvents.values.map { $0.pubkey })
             } else {
                 timeBasedCalendarEventSubscriptionCounts[closedSubscriptionId] = timeBasedCalendarEventSubscriptionCount - 1
             }
