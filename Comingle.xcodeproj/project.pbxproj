@@ -63,6 +63,7 @@
 		3A4FCB542C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */; };
 		3A6451852C44C879000DC75B /* RelaySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6451842C44C879000DC75B /* RelaySettings.swift */; };
 		3A7D25DE2C5D12AE001C1714 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A7D25DD2C5D12AE001C1714 /* Launch Screen.storyboard */; };
+		3ABD0C0D2C5EF6A9004A15C7 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C0C2C5EF6A9004A15C7 /* String+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +141,7 @@
 		3A6451842C44C879000DC75B /* RelaySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaySettings.swift; sourceTree = "<group>"; };
 		3A7D25D12C5D0CAA001C1714 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A7D25DD2C5D12AE001C1714 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		3ABD0C0C2C5EF6A9004A15C7 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -342,6 +344,7 @@
 			children = (
 				3A4A89AA2C3E4ECC00238043 /* PrivateKeySecureStorage.swift */,
 				3A4A899A2C3CF38D00238043 /* Utilities.swift */,
+				3ABD0C0C2C5EF6A9004A15C7 /* String+Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -557,6 +560,7 @@
 				3A4A89982C3CF24800238043 /* ProfileNameView.swift in Sources */,
 				3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */,
 				3A4A899B2C3CF38D00238043 /* Utilities.swift in Sources */,
+				3ABD0C0D2C5EF6A9004A15C7 /* String+Extensions.swift in Sources */,
 				3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */,
 				3A317C1C2C59C5EA004DA56B /* RSVPSortComparator.swift in Sources */,
 				3A4A89AB2C3E4ECC00238043 /* PrivateKeySecureStorage.swift in Sources */,

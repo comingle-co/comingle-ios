@@ -409,6 +409,18 @@
         }
       }
     },
+    "hashtag" : {
+      "comment" : "Placeholder text for hashtag.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hashtag"
+          }
+        }
+      }
+    },
     "home" : {
       "comment" : "Tab label for the home view.",
       "extractionState" : "manual",

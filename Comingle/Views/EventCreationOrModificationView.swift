@@ -131,6 +131,41 @@ struct EventCreationOrModificationView: View {
                 }
 
                 Section {
+                    ForEach(viewModel.hashtags, id: \.self) { hashtag in
+                        Text(hashtag)
+                            .swipeActions {
+                                Button(role: .destructive) {
+                                    viewModel.hashtags.remove(hashtag)
+                                } label: {
+                                    Image(systemName: "minus.circle")
+                                }
+                            }
+                    }
+
+                    HStack {
+                        TextField(localized: .localizable.hashtag, text: $viewModel.hashtagToAdd)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+
+                        Spacer()
+
+                        Button(
+                            action: {
+                                let hashtag = viewModel.trimmedHashtagToAdd
+                                if !hashtag.isEmpty {
+                                    viewModel.hashtags.append(hashtag)
+                                    viewModel.hashtagToAdd = ""
+                                }
+                            },
+                            label: {
+                                Image(systemName: "plus.circle")
+                            }
+                        )
+                        .disabled(viewModel.trimmedHashtagToAdd.isEmpty)
+                    }
+                }
+
+                Section {
                     TextEditor(text: $viewModel.description)
                 } header: {
                     Text(.localizable.eventDescription)
@@ -225,7 +260,8 @@ extension EventCreationOrModificationView {
         var isShowingLocationSelector: Bool = false
         var geohash: String = ""
 
-        var hashtags: [String] = []
+        var hashtags = OrderedSet<String>()
+        var hashtagToAdd: String = ""
 
         var references = OrderedSet<URL>()
         var referenceToAdd: String = ""
@@ -260,7 +296,8 @@ extension EventCreationOrModificationView {
             location = ""
             isShowingLocationSelector = false
             geohash = existingEvent?.geohash ?? ""
-            hashtags = existingEvent?.hashtags ?? []
+            hashtags = OrderedSet(existingEvent?.hashtags ?? [])
+            hashtagToAdd = ""
             references = OrderedSet(existingEvent?.references ?? [])
             referenceToAdd = ""
 
@@ -283,6 +320,10 @@ extension EventCreationOrModificationView {
 
         var trimmedGeohash: String {
             geohash.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        var trimmedHashtagToAdd: String {
+            hashtagToAdd.trimmingCharacters(in: .whitespacesAndNewlines).trimmingPrefix("#")
         }
 
         var navigationTitle: LocalizedStringResource {
@@ -360,7 +401,7 @@ extension EventCreationOrModificationView {
                 if hashtags.isEmpty {
                     hashtagsOrNil = nil
                 } else {
-                    hashtagsOrNil = hashtags
+                    hashtagsOrNil = Array(hashtags)
                 }
 
                 let referencesOrNil: [URL]?
