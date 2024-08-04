@@ -44,11 +44,8 @@ class AppState: ObservableObject, Hashable {
 
     // Keep track of relay pool active subscriptions and the until filter so that we can limit the scope of how much we query from the relay pools.
     var metadataSubscriptionCounts = [String: Int]()
-    var metadataSubscriptionDates = [String: Date]()
     var bootstrapSubscriptionCounts = [String: Int]()
-    var bootstrapSubscriptionDates = [String: Date]()
     var timeBasedCalendarEventSubscriptionCounts = [String: Int]()
-    var timeBasedCalendarEventSubscriptionDates = [String: Date]()
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -317,7 +314,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
 
         let since: Int?
-        if let lastPulledEventsFromFollows = relaySubscriptionMetadata?.lastPulledEventsFromFollows {
+        if let lastPulledEventsFromFollows = relaySubscriptionMetadata?.lastPulledEventsFromFollows.values.min() {
             since = Int(lastPulledEventsFromFollows.timeIntervalSince1970) + 1
         } else {
             since = nil
@@ -334,7 +331,9 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        relaySubscriptionMetadata?.lastPulledEventsFromFollows = until
+        relayReadPool.relays.forEach {
+            relaySubscriptionMetadata?.lastPulledEventsFromFollows[$0.url] = until
+        }
         _ = relayReadPool.subscribe(with: metadataRefreshFilter)
 
     }
@@ -353,7 +352,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    func refresh(relay: Relay? = nil) {
+    func refresh(relay: Relay? = nil, hardRefresh: Bool = false) {
         guard (relay == nil && !relayReadPool.relays.isEmpty && relayReadPool.relays.contains(where: { $0.state == .connected })) || relay?.state == .connected else {
             return
         }
@@ -365,8 +364,14 @@ extension AppState: EventVerifying, RelayDelegate {
             let authors = profiles.compactMap({ $0.publicKeyHex })
             if !authors.isEmpty {
                 let since: Int?
-                if let lastBootstrapped = relaySubscriptionMetadata?.lastBootstrapped {
-                    since = Int(lastBootstrapped.timeIntervalSince1970) + 1
+                if let relaySubscriptionMetadata, !hardRefresh {
+                    if let relayURL = relay?.url, let lastBootstrapped = relaySubscriptionMetadata.lastBootstrapped[relayURL] {
+                        since = Int(lastBootstrapped.timeIntervalSince1970) + 1
+                    } else if let lastBootstrapped = relaySubscriptionMetadata.lastBootstrapped.values.min() {
+                        since = Int(lastBootstrapped.timeIntervalSince1970) + 1
+                    } else {
+                        since = nil
+                    }
                 } else {
                     since = nil
                 }
@@ -397,8 +402,14 @@ extension AppState: EventVerifying, RelayDelegate {
 
         if timeBasedCalendarEventSubscriptionCounts.isEmpty {
             let since: Int?
-            if let lastPulledAllTimeBasedCalendarEvents = relaySubscriptionMetadata?.lastPulledAllTimeBasedCalendarEvents {
-                since = Int(lastPulledAllTimeBasedCalendarEvents.timeIntervalSince1970) + 1
+            if let relaySubscriptionMetadata, !hardRefresh {
+                if let relayURL = relay?.url, let lastPulledAllTimeBasedCalendarEvents = relaySubscriptionMetadata.lastPulledAllTimeBasedCalendarEvents[relayURL] {
+                    since = Int(lastPulledAllTimeBasedCalendarEvents.timeIntervalSince1970) + 1
+                } else if let lastPulledAllTimeBasedCalendarEvents = relaySubscriptionMetadata.lastBootstrapped.values.min() {
+                    since = Int(lastPulledAllTimeBasedCalendarEvents.timeIntervalSince1970) + 1
+                } else {
+                    since = nil
+                }
             } else {
                 since = nil
             }
@@ -413,7 +424,7 @@ extension AppState: EventVerifying, RelayDelegate {
             }
 
             do {
-                if let timeBasedCalendarEventSubscriptionId = try subscribe(filter: timeBasedCalendarEventFilter, relay: relay), relay == nil {
+                if let timeBasedCalendarEventSubscriptionId = try subscribe(filter: timeBasedCalendarEventFilter, relay: relay) {
                     if let timeBasedCalendarEventSubscriptionCount = timeBasedCalendarEventSubscriptionCounts[timeBasedCalendarEventSubscriptionId] {
                         timeBasedCalendarEventSubscriptionCounts[timeBasedCalendarEventSubscriptionId] = timeBasedCalendarEventSubscriptionCount + 1
                     } else {
@@ -669,7 +680,6 @@ extension AppState: EventVerifying, RelayDelegate {
             // Live new events are not strictly needed for this app for now.
             // In the future, we could keep subscriptions open for updates.
             try? relay.closeSubscription(with: subscriptionId)
-            updateRelaySubscriptionMetadataTimestamps(with: subscriptionId)
             updateRelaySubscriptionCounts(closedSubscriptionId: subscriptionId)
         case let .closed(subscriptionId, _):
             updateRelaySubscriptionCounts(closedSubscriptionId: subscriptionId)
@@ -712,37 +722,6 @@ extension AppState: EventVerifying, RelayDelegate {
             } else {
                 timeBasedCalendarEventSubscriptionCounts[closedSubscriptionId] = timeBasedCalendarEventSubscriptionCount - 1
             }
-        }
-    }
-
-    func updateRelaySubscriptionMetadataTimestamps(with subscriptionId: String) {
-        let relaySubscriptionMetadata = relaySubscriptionMetadata
-
-        if let relaySubscriptionMetadata,
-           let lastPulledEventsFromFollows = relaySubscriptionMetadata.lastPulledEventsFromFollows,
-           let metadataSubscriptionDate = metadataSubscriptionDates[subscriptionId] {
-            if lastPulledEventsFromFollows < metadataSubscriptionDate {
-                relaySubscriptionMetadata.lastPulledEventsFromFollows = metadataSubscriptionDate
-            }
-            metadataSubscriptionDates.removeValue(forKey: subscriptionId)
-        }
-
-        if let relaySubscriptionMetadata,
-           let lastBootstrapped = relaySubscriptionMetadata.lastBootstrapped,
-           let bootstrapSubscriptionDate = bootstrapSubscriptionDates[subscriptionId] {
-            if lastBootstrapped < bootstrapSubscriptionDate {
-                relaySubscriptionMetadata.lastBootstrapped = bootstrapSubscriptionDate
-            }
-            bootstrapSubscriptionDates.removeValue(forKey: subscriptionId)
-        }
-
-        if let relaySubscriptionMetadata,
-           let lastPulledAllTimeBasedCalendarEvents = relaySubscriptionMetadata.lastPulledAllTimeBasedCalendarEvents,
-           let timeBasedCalendarEventSubscriptionDate = timeBasedCalendarEventSubscriptionDates[subscriptionId] {
-            if lastPulledAllTimeBasedCalendarEvents < timeBasedCalendarEventSubscriptionDate {
-                relaySubscriptionMetadata.lastPulledAllTimeBasedCalendarEvents = timeBasedCalendarEventSubscriptionDate
-            }
-            timeBasedCalendarEventSubscriptionDates.removeValue(forKey: subscriptionId)
         }
     }
 

@@ -151,8 +151,7 @@ extension LoginView {
         }
 
         func login(publicKey: PublicKey, relayURL: URL) {
-            let appSettings = appState.appSettings
-            guard appSettings.activeProfile?.publicKeyHex != publicKey.hex, let validatedRelayURL = try? validateRelayURL(relayURL) else {
+            guard let appSettings = appState.appSettings, appSettings.activeProfile?.publicKeyHex != publicKey.hex, let validatedRelayURL = try? validateRelayURL(relayURL) else {
                 return
             }
 

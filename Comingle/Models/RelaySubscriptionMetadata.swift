@@ -13,9 +13,9 @@ final class RelaySubscriptionMetadata {
 
     @Attribute(.unique) var publicKeyHex: String?
 
-    var lastBootstrapped: Date?
-    var lastPulledAllTimeBasedCalendarEvents: Date?
-    var lastPulledEventsFromFollows: Date?
+    var lastBootstrapped = [URL: Date]()
+    var lastPulledAllTimeBasedCalendarEvents = [URL: Date]()
+    var lastPulledEventsFromFollows = [URL: Date]()
 
     init(publicKeyHex: String? = nil) {
         self.publicKeyHex = publicKeyHex

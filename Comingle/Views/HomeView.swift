@@ -38,7 +38,7 @@ extension HomeView {
         }
 
         var publicKeyHex: String? {
-            appState.appSettings.activeProfile?.publicKeyHex
+            appState.appSettings?.activeProfile?.publicKeyHex
         }
     }
 }

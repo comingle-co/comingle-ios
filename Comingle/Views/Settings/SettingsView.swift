@@ -281,7 +281,7 @@ extension SettingsView {
             }
 
             appState.updateRelayPool()
-            appState.refresh()
+            appState.refresh(hardRefresh: true)
         }
 
         var appVersion: String {
