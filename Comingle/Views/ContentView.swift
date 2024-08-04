@@ -75,7 +75,7 @@ struct ContentView: View {
                                             ProfilePictureView(publicKeyHex: publicKey.hex)
                                         } else {
                                             GuestProfilePictureView()
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.primary)
                                         }
                                     }
                                 }
