@@ -705,13 +705,16 @@ struct EventView: View, EventCreating {
     }
 
     func refresh() {
+        let until = Date.now
+
         if let event {
             let calendarEventCoordinates = eventCoordinates.tag.value
             guard let eventFilter = Filter(
                 authors: [event.pubkey],
                 kinds: [EventKind.timeBasedCalendarEvent.rawValue],
                 tags: ["d": [calendarEventCoordinates]],
-                since: Int(event.createdAt)
+                since: Int(event.createdAt),
+                until: Int(until.timeIntervalSince1970)
             ) else {
                 print("Unable to create time-based calendar event filter.")
                 return
@@ -727,7 +730,9 @@ struct EventView: View, EventCreating {
 
             guard let rsvpFilter = Filter(
                 kinds: [EventKind.calendarEventRSVP.rawValue],
-                tags: ["a": [calendarEventCoordinates]])
+                tags: ["a": [calendarEventCoordinates]],
+                until: Int(until.timeIntervalSince1970)
+            )
             else {
                 print("Unable to create calendar event RSVP filter.")
                 return

@@ -300,12 +300,6 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        let since: Int?
-        if let lastPulledEventsFromFollows = relaySubscriptionMetadata?.lastPulledEventsFromFollows {
-            since = Int(lastPulledEventsFromFollows.timeIntervalSince1970) + 1
-        } else {
-            since = nil
-        }
         let until = Date.now
 
         let allPubkeysSet = Set(pubkeys)
@@ -313,7 +307,8 @@ extension AppState: EventVerifying, RelayDelegate {
         if !pubkeysToFetchMetadata.isEmpty {
             guard let missingMetadataFilter = Filter(
                 authors: Array(pubkeysToFetchMetadata),
-                kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue]
+                kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue],
+                until: Int(until.timeIntervalSince1970)
             ) else {
                 print("Unable to create missing metadata filter for \(pubkeysToFetchMetadata).")
                 return
@@ -327,11 +322,19 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
+        let since: Int?
+        if let lastPulledEventsFromFollows = relaySubscriptionMetadata?.lastPulledEventsFromFollows {
+            since = Int(lastPulledEventsFromFollows.timeIntervalSince1970) + 1
+        } else {
+            since = nil
+        }
+
         let pubkeysToRefresh = allPubkeysSet.subtracting(pubkeysToFetchMetadata)
         guard let metadataRefreshFilter = Filter(
             authors: Array(pubkeysToRefresh),
             kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue],
-            since: since
+            since: since,
+            until: Int(until.timeIntervalSince1970)
         ) else {
             print("Unable to create refresh metadata filter for \(pubkeysToRefresh).")
             return
@@ -377,7 +380,8 @@ extension AppState: EventVerifying, RelayDelegate {
                 guard let bootstrapFilter = Filter(
                     authors: authors,
                     kinds: [EventKind.metadata.rawValue, EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.deletion.rawValue],
-                    since: since
+                    since: since,
+                    until: Int(until.timeIntervalSince1970)
                 ) else {
                     print("Unable to create the boostrap filter.")
                     return
@@ -407,7 +411,8 @@ extension AppState: EventVerifying, RelayDelegate {
 
             guard let timeBasedCalendarEventFilter = Filter(
                 kinds: [EventKind.timeBasedCalendarEvent.rawValue],
-                since: since
+                since: since,
+                until: Int(until.timeIntervalSince1970)
             ) else {
                 print("Unable to create the time-based calendar event filter.")
                 return
