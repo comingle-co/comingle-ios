@@ -46,6 +46,9 @@ struct EventCreationOrModificationView: View {
 
                 Section {
                     TextField(localized: .localizable.exampleImage, text: $viewModel.imageString)
+                        .textContentType(.URL)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
 
                     if let validatedImageURL = viewModel.validatedImageURL {
                         KFImage.url(viewModel.validatedImageURL)
@@ -340,7 +343,7 @@ extension EventCreationOrModificationView {
         }
 
         var canSave: Bool {
-            appState.keypair != nil && start <= end && !trimmedTitle.isEmpty && validatedImageURL != nil
+            appState.keypair != nil && start <= end && !trimmedTitle.isEmpty && (trimmedImageString.isEmpty || validatedImageURL != nil)
         }
 
         func saveEvent() -> Bool {
