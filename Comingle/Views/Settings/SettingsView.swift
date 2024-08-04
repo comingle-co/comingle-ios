@@ -221,11 +221,11 @@ extension SettingsView {
         }
 
         var publicKeyHex: String? {
-            appState.appSettings?.activeProfile?.publicKeyHex
+            appState.appSettings.activeProfile?.publicKeyHex
         }
 
         var activeProfile: Profile? {
-            appState.appSettings?.activeProfile
+            appState.appSettings.activeProfile
         }
 
         var activeProfileName: String {
@@ -244,7 +244,7 @@ extension SettingsView {
         }
 
         var isActiveProfileSignedInWithPrivateKey: Bool {
-            guard let activeProfile = appState.appSettings?.activeProfile else {
+            guard let activeProfile = appState.appSettings.activeProfile else {
                 return false
             }
             return isSignedInWithPrivateKey(activeProfile)
@@ -258,26 +258,16 @@ extension SettingsView {
         }
 
         func signOut(_ profile: Profile) {
-            if let publicKeyHex = profile.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
-                appState.privateKeySecureStorage.delete(for: publicKey)
-            }
-            if let appSettings = appState.appSettings, appSettings.activeProfile == profile {
-                appSettings.activeProfile = appState.profiles.first(where: { $0 != profile })
-                appState.refreshFollowedPubkeys()
-            }
-            appState.profiles.removeAll(where: { $0 == profile })
-            appState.modelContext.delete(profile)
+            appState.deleteProfile(profile)
         }
 
         func isActiveProfile(_ profile: Profile) -> Bool {
-            guard let appSettings = appState.appSettings else {
-                return false
-            }
-            return appSettings.activeProfile == profile
+            return appState.appSettings.activeProfile == profile
         }
 
         func updateActiveProfile(_ profile: Profile) {
-            guard let appSettings = appState.appSettings, appSettings.activeProfile != profile else {
+            let appSettings = appState.appSettings
+            guard appSettings.activeProfile != profile else {
                 return
             }
 
@@ -287,7 +277,7 @@ extension SettingsView {
 
             if profile.publicKeyHex == nil {
                 appState.activeTab = .explore
-            } else if let publicKey = appState.publicKey {
+            } else if appState.publicKey != nil {
                 appState.refreshFollowedPubkeys()
             }
 

@@ -101,7 +101,7 @@ struct EventView: View, EventCreating {
     var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.setLocalizedDateFormatFromTemplate("EdMMMyyyyhmmz")
-        switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+        switch appState.appSettings.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
         case .event:
             dateFormatter.timeZone = event?.startTimeZone ?? calendar.timeZone
         case .system, .none:
@@ -113,7 +113,7 @@ struct EventView: View, EventCreating {
     var dateIntervalFormatter: DateIntervalFormatter {
         let dateIntervalFormatter = DateIntervalFormatter()
         dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
-        switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+        switch appState.appSettings.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
         case .event:
             dateIntervalFormatter.timeZone = event?.startTimeZone ?? calendar.timeZone
         case .system, .none:

@@ -118,7 +118,7 @@ struct EventListView: View {
             return Calendar.autoupdatingCurrent.timeZone
         }
 
-        switch appState.appSettings?.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+        switch appState.appSettings.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
         case .event:
             return timeZone
         case .system, .none:

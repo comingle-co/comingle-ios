@@ -40,9 +40,6 @@ class AppState: ObservableObject, Hashable {
 
     @Published var followedPubkeys = Set<String>()
 
-    @Published var appSettings: AppSettings?
-    @Published var profiles: [Profile] = []
-
     @Published var metadataTrie = Trie<MetadataEvent>()
 
     // Keep track of relay pool active subscriptions and the until filter so that we can limit the scope of how much we query from the relay pools.
@@ -58,7 +55,7 @@ class AppState: ObservableObject, Hashable {
     }
 
     var publicKey: PublicKey? {
-        if let appSettings, let publicKeyHex = appSettings.activeProfile?.publicKeyHex {
+        if let publicKeyHex = appSettings.activeProfile?.publicKeyHex {
             PublicKey(hex: publicKeyHex)
         } else {
             nil
@@ -182,7 +179,7 @@ class AppState: ObservableObject, Hashable {
     }
 
     func updateRelayPool() {
-        let profile = appSettings?.activeProfile
+        let profile = appSettings.activeProfile
 
         let relaySettings = profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? []
 
@@ -225,26 +222,66 @@ class AppState: ObservableObject, Hashable {
     }
 
     func persistentNostrEvent(_ eventId: String) -> PersistentNostrEvent? {
-        let descriptor = FetchDescriptor<PersistentNostrEvent>(
+        var descriptor = FetchDescriptor<PersistentNostrEvent>(
             predicate: #Predicate { $0.eventId == eventId }
         )
+        descriptor.fetchLimit = 1
         return try? modelContext.fetch(descriptor).first
     }
 
     var relaySubscriptionMetadata: RelaySubscriptionMetadata? {
-        let descriptor = FetchDescriptor<RelaySubscriptionMetadata>()
+        let publicKeyHex = publicKey?.hex
+        var descriptor = FetchDescriptor<RelaySubscriptionMetadata>(
+            predicate: #Predicate { $0.publicKeyHex == publicKeyHex }
+        )
+        descriptor.fetchLimit = 1
+        return try? modelContext.fetch(descriptor).first
+    }
 
-        if let result = try? modelContext.fetch(descriptor).first {
-            return result
+    func addProfile(_ profile: Profile) {
+        guard !profiles.contains(profile) else {
+            return
+        }
+
+        modelContext.insert(profile)
+        do {
+            try modelContext.save()
+        } catch {
+            fatalError("Unable to add profile publicKey=\(profile.publicKeyHex ?? "")")
+        }
+    }
+
+    func deleteProfile(_ profile: Profile) {
+        if let publicKeyHex = profile.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
+            privateKeySecureStorage.delete(for: publicKey)
+        }
+        if appSettings.activeProfile == profile {
+            appSettings.activeProfile = profiles.first(where: { $0 != profile })
+            refreshFollowedPubkeys()
+        }
+        modelContext.delete(profile)
+    }
+
+    var profiles: [Profile] {
+        let profileDescriptor = FetchDescriptor<Profile>()
+        return (try? modelContext.fetch(profileDescriptor)) ?? []
+    }
+
+    var appSettings: AppSettings {
+        let request = FetchDescriptor<AppSettings>()
+        let data = try? modelContext.fetch(request)
+        if let existingAppSettings = data?.first {
+            return existingAppSettings
         } else {
-            let result = RelaySubscriptionMetadata()
-            modelContext.insert(result)
+            let newAppSettings = AppSettings()
+            modelContext.insert(newAppSettings)
             do {
                 try modelContext.save()
+                newAppSettings.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList.append(RelaySettings(relayURLString: AppState.defaultRelayURLString))
+                return newAppSettings
             } catch {
-                print("Unable to save initial RelaySubscriptionMetadata object.")
+                fatalError("Unable to save initial AppSettings.")
             }
-            return result
         }
     }
 }
@@ -262,8 +299,6 @@ extension AppState: EventVerifying, RelayDelegate {
         guard !relayReadPool.relays.isEmpty && relayReadPool.relays.contains(where: { $0.state == .connected }) else {
             return
         }
-
-        let relaySubscriptionMetadata = relaySubscriptionMetadata
 
         let since: Int?
         if let lastPulledEventsFromFollows = relaySubscriptionMetadata?.lastPulledEventsFromFollows {
@@ -392,20 +427,20 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromPubkeysAndFollows: Bool = false) {
+    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingEvents: Bool = false) {
         if let existingFollowList = self.followListEvents[followListEvent.pubkey] {
             if existingFollowList.createdAt < followListEvent.createdAt {
-                cache(followListEvent, shouldPullMissingEventsFromPubkeysAndFollows: shouldPullMissingEventsFromPubkeysAndFollows)
+                cache(followListEvent, shouldPullMissingEvents: shouldPullMissingEvents)
             }
         } else {
-            cache(followListEvent, shouldPullMissingEventsFromPubkeysAndFollows: shouldPullMissingEventsFromPubkeysAndFollows)
+            cache(followListEvent, shouldPullMissingEvents: shouldPullMissingEvents)
         }
     }
 
-    private func cache(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromPubkeysAndFollows: Bool) {
+    private func cache(_ followListEvent: FollowListEvent, shouldPullMissingEvents: Bool) {
         self.followListEvents[followListEvent.pubkey] = followListEvent
 
-        if shouldPullMissingEventsFromPubkeysAndFollows {
+        if shouldPullMissingEvents {
             pullMissingEventsFromPubkeysAndFollows(followListEvent.followedPubkeys)
         }
 
@@ -591,7 +626,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
             switch nostrEvent {
             case let followListEvent as FollowListEvent:
-                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingEventsFromPubkeysAndFollows: true)
+                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingEvents: true)
             case let metadataEvent as MetadataEvent:
                 self.didReceiveMetadataEvent(metadataEvent)
             case let timeBasedCalendarEvent as TimeBasedCalendarEvent:

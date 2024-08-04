@@ -14,9 +14,12 @@ final class Profile: Hashable {
 
     @Relationship(deleteRule: .cascade) var profileSettings: ProfileSettings?
 
+    @Relationship(deleteRule: .cascade) var relaySubscriptionMetadata: RelaySubscriptionMetadata?
+
     init(publicKeyHex: String? = nil) {
         self.publicKeyHex = publicKeyHex
-        self.profileSettings = ProfileSettings()
+        self.profileSettings = ProfileSettings(publicKeyHex: publicKeyHex)
+        self.relaySubscriptionMetadata = RelaySubscriptionMetadata(publicKeyHex: publicKeyHex)
     }
 
     func hash(into hasher: inout Hasher) {

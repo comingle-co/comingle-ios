@@ -151,7 +151,8 @@ extension LoginView {
         }
 
         func login(publicKey: PublicKey, relayURL: URL) {
-            guard let appSettings = appState.appSettings, appSettings.activeProfile?.publicKeyHex != publicKey.hex, let validatedRelayURL = try? validateRelayURL(relayURL) else {
+            let appSettings = appState.appSettings
+            guard appSettings.activeProfile?.publicKeyHex != publicKey.hex, let validatedRelayURL = try? validateRelayURL(relayURL) else {
                 return
             }
 
@@ -171,7 +172,7 @@ extension LoginView {
                 } catch {
                     print("Unable to save new profile \(publicKey.npub)")
                 }
-                appState.profiles.append(profile)
+                appState.addProfile(profile)
                 if let relayPoolSettings = profile.profileSettings?.relayPoolSettings,
                    !relayPoolSettings.relaySettingsList.contains(where: { URL(string: $0.relayURLString) == validatedRelayURL }) {
                     relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: validatedRelayURL.absoluteString))

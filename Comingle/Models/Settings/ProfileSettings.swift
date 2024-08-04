@@ -10,11 +10,14 @@ import SwiftData
 @Model
 final class ProfileSettings {
 
-    var relayPoolSettings: RelayPoolSettings?
-    var appearanceSettings: AppearanceSettings?
+    @Attribute(.unique) var publicKeyHex: String?
 
-    init() {
-        relayPoolSettings = RelayPoolSettings()
-        appearanceSettings = AppearanceSettings()
+    @Relationship(deleteRule: .cascade) var relayPoolSettings: RelayPoolSettings?
+    @Relationship(deleteRule: .cascade) var appearanceSettings: AppearanceSettings?
+
+    init(publicKeyHex: String? = nil) {
+        self.publicKeyHex = publicKeyHex
+        relayPoolSettings = RelayPoolSettings(publicKeyHex: publicKeyHex)
+        appearanceSettings = AppearanceSettings(publicKeyHex: publicKeyHex)
     }
 }

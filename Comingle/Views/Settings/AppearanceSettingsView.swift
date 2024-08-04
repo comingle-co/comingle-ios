@@ -63,21 +63,12 @@ extension AppearanceSettingsView {
 
         func fetchData() {
             do {
-                var descriptor = FetchDescriptor<Profile>(
+                var descriptor = FetchDescriptor<AppearanceSettings>(
                     predicate: #Predicate { $0.publicKeyHex == publicKeyHex }
                 )
                 descriptor.fetchLimit = 1
 
-                if let profile = try modelContext.fetch(descriptor).first {
-                    // FIXME
-                    if let appearanceSettings = profile.profileSettings?.appearanceSettings {
-                        self.appearanceSettings = appearanceSettings
-                    }
-                } else {
-                    let newProfile = Profile()
-                    modelContext.insert(newProfile)
-                    try modelContext.save()
-                }
+                self.appearanceSettings = try modelContext.fetch(descriptor).first
             } catch {
                 print("Appearance settings fetch failed for publicKeyHex=\(publicKeyHex ?? "nil")")
             }

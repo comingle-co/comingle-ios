@@ -10,9 +10,11 @@ import SwiftData
 @Model
 final class RelayPoolSettings {
 
+    @Attribute(.unique) var publicKeyHex: String?
+
     var relaySettingsList: [RelaySettings]
 
-    init() {
+    init(publicKeyHex: String?) {
         self.relaySettingsList = []
     }
 }

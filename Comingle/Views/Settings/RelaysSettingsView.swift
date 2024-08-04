@@ -115,7 +115,7 @@ struct RelaysSettingsView: View, RelayURLValidating {
     }
 
     var canAddRelay: Bool {
-        guard let validatedRelayURL, let relaySettingsList = appState.appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList, !relaySettingsList.contains(where: { $0.relayURLString == validatedRelayURL.absoluteString }) else {
+        guard let validatedRelayURL, let relaySettingsList = appState.appSettings.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList, !relaySettingsList.contains(where: { $0.relayURLString == validatedRelayURL.absoluteString }) else {
             return false
         }
         return true
@@ -164,15 +164,13 @@ extension RelaysSettingsView {
         }
 
         func fetchData() {
+            var descriptor = FetchDescriptor<RelayPoolSettings>(
+                predicate: #Predicate { $0.publicKeyHex == publicKeyHex }
+            )
+            descriptor.fetchLimit = 1
+
             do {
-                var descriptor = FetchDescriptor<Profile>(
-                    predicate: #Predicate { $0.publicKeyHex == publicKeyHex }
-                )
-                descriptor.fetchLimit = 1
-
-                let profile = try modelContext.fetch(descriptor).first
-                relayPoolSettings = profile?.profileSettings?.relayPoolSettings
-
+                relayPoolSettings = try modelContext.fetch(descriptor).first
             } catch {
                 print("Relay settings fetch failed for publicKeyHex=\(publicKeyHex ?? "nil")")
             }

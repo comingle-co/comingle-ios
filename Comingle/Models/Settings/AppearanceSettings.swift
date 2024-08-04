@@ -10,8 +10,11 @@ import SwiftData
 @Model
 final class AppearanceSettings {
 
+    @Attribute(.unique) var publicKeyHex: String?
+
     var timeZonePreference: TimeZonePreference = TimeZonePreference.event
 
-    init() {
+    init(publicKeyHex: String?) {
+        self.publicKeyHex = publicKeyHex
     }
 }

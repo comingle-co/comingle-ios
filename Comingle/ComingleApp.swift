@@ -18,14 +18,14 @@ struct ComingleApp: App {
     init() {
         NostrEventValueTransformer.register()
         do {
-            container = try ModelContainer(for: RelaySubscriptionMetadata.self, AppSettings.self, PersistentNostrEvent.self)
+            container = try ModelContainer(for: AppSettings.self, PersistentNostrEvent.self)
             appState = AppState(modelContext: container.mainContext)
         } catch {
             fatalError("Failed to create ModelContainer for AppSettings and PersistentNostrEvent.")
         }
 
         loadAppSettings()
-        loadProfiles()
+        updateActiveTab()
         loadNostrEvents()
         appState.updateRelayPool()
         appState.refresh()
@@ -40,27 +40,7 @@ struct ComingleApp: App {
     }
 
     @MainActor
-    private func loadAppSettings() {
-        let context = container.mainContext
-        let request = FetchDescriptor<AppSettings>()
-        let data = try? context.fetch(request)
-        let appSettings: AppSettings
-        if let existingAppSettings = data?.first {
-            appSettings = existingAppSettings
-        } else {
-            let newAppSettings = AppSettings()
-            context.insert(newAppSettings)
-            do {
-                try context.save()
-                appSettings = newAppSettings
-                appSettings.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList.append(RelaySettings(relayURLString: AppState.defaultRelayURLString))
-            } catch {
-                fatalError("Unable to save initial AppSettings.")
-            }
-        }
-
-        appState.appSettings = appSettings
-
+    private func updateActiveTab() {
         if appState.publicKey != nil {
             appState.activeTab = .following
         } else {
@@ -69,10 +49,21 @@ struct ComingleApp: App {
     }
 
     @MainActor
-    private func loadProfiles() {
-        let profileDescriptor = FetchDescriptor<Profile>()
-        let profiles = (try? container.mainContext.fetch(profileDescriptor)) ?? []
-        appState.profiles = profiles
+    private func loadAppSettings() {
+        var descriptor = FetchDescriptor<AppSettings>()
+        descriptor.fetchLimit = 1
+
+        let existingAppSettings = (try? container.mainContext.fetch(descriptor))?.first
+        if existingAppSettings == nil {
+            let newAppSettings = AppSettings()
+            container.mainContext.insert(newAppSettings)
+            do {
+                try container.mainContext.save()
+                newAppSettings.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList.append(RelaySettings(relayURLString: AppState.defaultRelayURLString))
+            } catch {
+                fatalError("Unable to save initial AppSettings.")
+            }
+        }
     }
 
     @MainActor

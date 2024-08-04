@@ -10,11 +10,14 @@ import SwiftData
 
 @Model
 final class RelaySubscriptionMetadata {
+
+    @Attribute(.unique) var publicKeyHex: String?
+
     var lastBootstrapped: Date?
     var lastPulledAllTimeBasedCalendarEvents: Date?
     var lastPulledEventsFromFollows: Date?
 
-    init() {
-
+    init(publicKeyHex: String? = nil) {
+        self.publicKeyHex = publicKeyHex
     }
 }
