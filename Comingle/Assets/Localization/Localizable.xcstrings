@@ -937,6 +937,18 @@
         }
       }
     },
+    "reportIssue" : {
+      "comment" : "Button to report an issue about the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report an Issue"
+          }
+        }
+      }
+    },
     "resetAllFields" : {
       "comment" : "Button to reset all fields to the starting point of a fresh event creation.",
       "extractionState" : "manual",
@@ -1125,6 +1137,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Settings"
+          }
+        }
+      }
+    },
+    "settingsAbout" : {
+      "comment" : "Settings about section title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
           }
         }
       }
@@ -1461,6 +1485,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "URL"
+          }
+        }
+      }
+    },
+    "version" : {
+      "comment" : "Label for the app version in the settings view.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         }
       }

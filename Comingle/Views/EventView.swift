@@ -447,7 +447,7 @@ struct EventView: View, EventCreating {
                         }
                     }
 
-                    if let persistentNostrEvent = appState.persistentNostrEvents[event.id] {
+                    if let persistentNostrEvent = appState.persistentNostrEvent(event.id) {
                         Divider()
 
                         VStack {
@@ -584,7 +584,7 @@ struct EventView: View, EventCreating {
             ToolbarItem {
                 Menu {
                     if let event = event {
-                        let relays = appState.persistentNostrEvents[event.id]?.relays ?? []
+                        let relays = appState.persistentNostrEvent(event.id)?.relays ?? []
                         let shareableEventCoordinates = try? event.shareableEventCoordinates(relayURLStrings: relays.map { $0.absoluteString })
 
                         if appState.keypair != nil && appState.publicKey?.hex == event.pubkey {

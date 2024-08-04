@@ -32,8 +32,6 @@ class AppState: ObservableObject, Hashable {
 
     @Published var activeTab: HomeTabs = .following
 
-    @Published var persistentNostrEvents: [String: PersistentNostrEvent] = [:]
-
     @Published var followListEvents: [String: FollowListEvent] = [:]
     @Published var metadataEvents: [String: MetadataEvent] = [:]
     @Published var timeBasedCalendarEvents: [String: TimeBasedCalendarEvent] = [:]
@@ -216,6 +214,13 @@ class AppState: ObservableObject, Hashable {
         newWriteRelays.forEach {
             relayWritePool.add(relay: $0)
         }
+    }
+
+    func persistentNostrEvent(_ eventId: String) -> PersistentNostrEvent? {
+        let descriptor = FetchDescriptor<PersistentNostrEvent>(
+            predicate: #Predicate { $0.eventId == eventId }
+        )
+        return try? modelContext.fetch(descriptor).first
     }
 }
 
@@ -416,7 +421,6 @@ extension AppState: EventVerifying, RelayDelegate {
                 if let timeBasedCalendarEvent = timeBasedCalendarEvents[deletedEventCoordinate.tag.value], timeBasedCalendarEvent.createdAt <= deletionEvent.createdAt {
                     timeBasedCalendarEvents.removeValue(forKey: deletedEventCoordinate.tag.value)
                     calendarEventsToRsvps.removeValue(forKey: deletedEventCoordinate.tag.value)
-                    persistentNostrEvents.removeValue(forKey: timeBasedCalendarEvent.id)
                 }
             case .calendarEventRSVP:
                 if let rsvp = rsvps[deletedEventCoordinate.tag.value], rsvp.createdAt <= deletionEvent.createdAt {
@@ -424,7 +428,6 @@ extension AppState: EventVerifying, RelayDelegate {
                     if let calendarEventCoordinates = rsvp.calendarEventCoordinates?.tag.value {
                         calendarEventsToRsvps[calendarEventCoordinates]?.removeAll(where: { $0 == rsvp })
                     }
-                    persistentNostrEvents.removeValue(forKey: rsvp.id)
                 }
             default:
                 continue
@@ -434,7 +437,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
     private func deleteFromEventIds(_ deletionEvent: DeletionEvent) {
         for deletedEventId in deletionEvent.deletedEventIds {
-            if let persistentNostrEvent = persistentNostrEvents[deletedEventId] {
+            if let persistentNostrEvent = persistentNostrEvent(deletedEventId) {
                 let nostrEvent = persistentNostrEvent.nostrEvent
 
                 guard nostrEvent.pubkey == deletionEvent.pubkey else {
@@ -465,7 +468,6 @@ extension AppState: EventVerifying, RelayDelegate {
                     continue
                 }
 
-                persistentNostrEvents.removeValue(forKey: deletedEventId)
                 modelContext.delete(persistentNostrEvent)
                 do {
                     try modelContext.save()
@@ -489,13 +491,12 @@ extension AppState: EventVerifying, RelayDelegate {
             // If the verification throws an error, that means they are invalid and we should ignore the event.
             try? self.verifyEvent(nostrEvent)
 
-            if let existingEvent = self.persistentNostrEvents[nostrEvent.id] {
+            if let existingEvent = self.persistentNostrEvent(nostrEvent.id) {
                 if !existingEvent.relays.contains(where: { $0 == relay.url }) {
                     existingEvent.relays.append(relay.url)
                 }
             } else {
                 let persistentNostrEvent = PersistentNostrEvent(nostrEvent: nostrEvent, relays: [relay.url])
-                self.persistentNostrEvents[persistentNostrEvent.nostrEvent.id] = persistentNostrEvent
                 self.modelContext.insert(persistentNostrEvent)
                 do {
                     try self.modelContext.save()
@@ -523,26 +524,19 @@ extension AppState: EventVerifying, RelayDelegate {
 
     func loadPersistentNostrEvents(_ persistentNostrEvents: [PersistentNostrEvent]) {
         for persistentNostrEvent in persistentNostrEvents {
-            if let existingEvent = self.persistentNostrEvents[persistentNostrEvent.nostrEvent.id] {
-                let missingRelays = Set(persistentNostrEvent.relays).subtracting(Set(existingEvent.relays))
-                existingEvent.relays.append(contentsOf: missingRelays)
-            } else {
-                self.persistentNostrEvents[persistentNostrEvent.nostrEvent.id] = persistentNostrEvent
-
-                switch persistentNostrEvent.nostrEvent {
-                case let followListEvent as FollowListEvent:
-                    self.didReceiveFollowListEvent(followListEvent)
-                case let metadataEvent as MetadataEvent:
-                    self.didReceiveMetadataEvent(metadataEvent)
-                case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
-                    self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
-                case let rsvpEvent as CalendarEventRSVP:
-                    self.didReceiveCalendarEventRSVP(rsvpEvent)
-                case let deletionEvent as DeletionEvent:
-                    self.didReceiveDeletionEvent(deletionEvent)
-                default:
-                    break
-                }
+            switch persistentNostrEvent.nostrEvent {
+            case let followListEvent as FollowListEvent:
+                self.didReceiveFollowListEvent(followListEvent)
+            case let metadataEvent as MetadataEvent:
+                self.didReceiveMetadataEvent(metadataEvent)
+            case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
+                self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
+            case let rsvpEvent as CalendarEventRSVP:
+                self.didReceiveCalendarEventRSVP(rsvpEvent)
+            case let deletionEvent as DeletionEvent:
+                self.didReceiveDeletionEvent(deletionEvent)
+            default:
+                break
             }
         }
 
@@ -559,7 +553,7 @@ extension AppState: EventVerifying, RelayDelegate {
             try? relay.closeSubscription(with: subscriptionId)
         case let .ok(eventId, success, message):
             if success {
-                if let persistentNostrEvent = persistentNostrEvents[eventId], !persistentNostrEvent.relays.contains(relay.url) {
+                if let persistentNostrEvent = persistentNostrEvent(eventId), !persistentNostrEvent.relays.contains(relay.url) {
                     persistentNostrEvent.relays.append(relay.url)
                 }
             } else if message.prefix == .rateLimited {

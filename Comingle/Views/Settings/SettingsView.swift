@@ -130,14 +130,22 @@ struct SettingsView: View {
     var aboutSection: some View {
         Section(
             content: {
-                LabeledContent("Version", value: viewModel.appVersion)
+                LabeledContent(String(localized: .localizable.version), value: viewModel.appVersion)
 
                 NavigationLink(destination: AcknowledgementsView()) {
                     Text(.localizable.acknowledgements)
                 }
+
+                if let url = URL(string: "https://github.com/comingle-co/comingle-ios/issues") {
+                    Button(action: {
+                        UIApplication.shared.open(url)
+                    }, label: {
+                        Text(.localizable.reportIssue)
+                    })
+                }
             },
             header: {
-                Text("About")
+                Text(.localizable.settingsAbout)
             }
         )
     }
