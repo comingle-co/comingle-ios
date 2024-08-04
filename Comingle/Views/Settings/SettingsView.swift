@@ -136,6 +136,14 @@ struct SettingsView: View {
                     Text(.localizable.acknowledgements)
                 }
 
+                if let comingleProfileURL = Utilities.shared.externalNostrProfileURL(npub: "npub1c0nfstrlj0jy8kvl953v84hudwnpgad0zx709z0ey7nmjp0llegslzg243") {
+                    Button(action: {
+                        UIApplication.shared.open(comingleProfileURL)
+                    }, label: {
+                        Text(.localizable.comingleProfile)
+                    })
+                }
+
                 if let url = URL(string: "https://github.com/comingle-co/comingle-ios/issues") {
                     Button(action: {
                         UIApplication.shared.open(url)

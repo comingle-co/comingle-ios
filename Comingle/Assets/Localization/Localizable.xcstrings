@@ -145,6 +145,18 @@
         }
       }
     },
+    "comingleProfile" : {
+      "comment" : "Button to open the Nostr profile of the Comingle account.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comingle Profile"
+          }
+        }
+      }
+    },
     "copyCoordinates" : {
       "comment" : "Button to copy the location coordinates of a calendar event.",
       "extractionState" : "manual",
