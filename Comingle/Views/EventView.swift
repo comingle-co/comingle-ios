@@ -237,13 +237,15 @@ struct EventView: View, EventCreating {
     }
 
     var contentView: some View {
-        VStack(alignment: .leading) {
+        VStack {
             if let summary {
                 Text(.localizable.eventSummary)
                     .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 Text(.init(summary))
                     .padding(.vertical, 2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 Divider()
             }
@@ -251,14 +253,17 @@ struct EventView: View, EventCreating {
             if contentTranslationReplaced {
                 Text(.localizable.aboutTranslated)
                     .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 Text(.localizable.about)
                     .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             if #available(iOS 17.4, macOS 14.4, *), contentTranslationReplaced || shouldAllowTranslation(contentText) {
                 Text(.init(contentText))
                     .padding(.vertical, 2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .translationPresentation(isPresented: $isContentTranslationPresented, text: contentText) { translatedString in
                         contentTextTranslation = translatedString
                         contentTranslationReplaced = true
@@ -280,6 +285,7 @@ struct EventView: View, EventCreating {
             } else {
                 Text(.init(contentText))
                     .padding(.vertical, 2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
@@ -407,6 +413,16 @@ struct EventView: View, EventCreating {
         }
     }
 
+    var calendar: Calendar {
+        if let startTimeZone = event?.startTimeZone, timeZonePreference == .event {
+            var calendar = Calendar(identifier: .iso8601)
+            calendar.timeZone = startTimeZone
+            return calendar
+        } else {
+            return Calendar.autoupdatingCurrent
+        }
+    }
+
     var body: some View {
         ScrollView {
             VStack {
@@ -428,8 +444,7 @@ struct EventView: View, EventCreating {
                         Divider()
 
                         if let endTimestamp = event.endTimestamp {
-                            let startTimeZone = event.startTimeZone
-                            if (timeZonePreference == .system || startTimeZone == nil) && Calendar.autoupdatingCurrent.isDate(startTimestamp, inSameDayAs: endTimestamp) {
+                            if calendar.isDate(startTimestamp, inSameDayAs: endTimestamp) {
                                 Text(dateIntervalFormatter.string(from: startTimestamp, to: endTimestamp))
                             } else {
                                 let dateFormatter = dateFormatter
