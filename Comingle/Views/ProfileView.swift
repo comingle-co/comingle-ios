@@ -20,13 +20,8 @@ struct ProfileView: View {
             return nil
         }
 
-        if let nostrURL = URL(string: "nostr:\(publicKey.npub)"), UIApplication.shared.canOpenURL(nostrURL) {
-            return nostrURL
-        }
-        if let njumpURL = URL(string: "https://njump.me/\(publicKey.npub)"), UIApplication.shared.canOpenURL(njumpURL) {
-            return njumpURL
-        }
-        return nil
+        return Utilities.shared.externalNostrProfileURL(npub: publicKey.npub)
+
     }
 
     var body: some View {

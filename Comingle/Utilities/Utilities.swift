@@ -5,7 +5,9 @@
 //  Created by Terry Yiu on 7/9/24.
 //
 
+import Foundation
 import NostrSDK
+import SwiftUI
 
 class Utilities {
     static let shared = Utilities()
@@ -28,5 +30,15 @@ class Utilities {
         } else {
             return publicKeyHex
         }
+    }
+
+    func externalNostrProfileURL(npub: String) -> URL? {
+        if let nostrURL = URL(string: "nostr:\(npub)"), UIApplication.shared.canOpenURL(nostrURL) {
+            return nostrURL
+        }
+        if let njumpURL = URL(string: "https://njump.me/\(npub)"), UIApplication.shared.canOpenURL(njumpURL) {
+            return njumpURL
+        }
+        return nil
     }
 }

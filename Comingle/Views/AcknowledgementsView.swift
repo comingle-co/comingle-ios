@@ -14,7 +14,7 @@ struct AcknowledgementsView: View {
         List(dependenciesManager.dependencies) { dependency in
             VStack(alignment: .leading) {
                 Button(action: {
-                    if let url = URL(string: dependency.url) {
+                    if let urlString = dependency.url, let url = URL(string: urlString) {
                         UIApplication.shared.open(url)
                     }
                 }, label: {
@@ -30,7 +30,7 @@ struct Dependency: Identifiable {
     let id = UUID()
     let name: String
     let version: String
-    let url: String
+    let url: String?
 }
 
 @Observable class DependenciesManager {
@@ -43,6 +43,7 @@ struct Dependency: Identifiable {
     func loadDependencies() {
         // Add your dependencies here
         dependencies = [
+            Dependency(name: "Comingle Logo", version: "The: Daniel⚡️", url: Utilities.shared.externalNostrProfileURL(npub: "npub1aeh2zw4elewy5682lxc6xnlqzjnxksq303gwu2npfaxd49vmde6qcq4nwx")?.absoluteString),
             Dependency(name: "CryptoSwift", version: "1.8.2", url: "https://github.com/krzyzanowskim/CryptoSwift"),
             Dependency(name: "GeohashKit", version: "3.0.0", url: "https://github.com/ualch9/GeohashKit"),
             Dependency(name: "Kingfisher", version: "7.12.0", url: "https://github.com/onevcat/Kingfisher"),
