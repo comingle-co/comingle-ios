@@ -257,7 +257,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    func pullMissingMetadata(_ pubkeys: [String]) {
+    func pullMissingEventsFromFollows(_ pubkeys: [String]) {
         // There has to be at least one connected relay to be able to pull metadata.
         guard !relayReadPool.relays.isEmpty && relayReadPool.relays.contains(where: { $0.state == .connected }) else {
             return
@@ -266,8 +266,8 @@ extension AppState: EventVerifying, RelayDelegate {
         let relaySubscriptionMetadata = relaySubscriptionMetadata
 
         let since: Int?
-        if let lastPulledMetadataEvents = relaySubscriptionMetadata?.lastPulledMetadataEvents {
-            since = Int(lastPulledMetadataEvents.timeIntervalSince1970) + 1
+        if let lastPulledEventsFromFollows = relaySubscriptionMetadata?.lastPulledEventsFromFollows {
+            since = Int(lastPulledEventsFromFollows.timeIntervalSince1970) + 1
         } else {
             since = nil
         }
@@ -278,7 +278,7 @@ extension AppState: EventVerifying, RelayDelegate {
         if !pubkeysToFetchMetadata.isEmpty {
             guard let missingMetadataFilter = Filter(
                 authors: Array(pubkeysToFetchMetadata),
-                kinds: [EventKind.metadata.rawValue]
+                kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue]
             ) else {
                 print("Unable to create missing metadata filter for \(pubkeysToFetchMetadata).")
                 return
@@ -295,14 +295,14 @@ extension AppState: EventVerifying, RelayDelegate {
         let pubkeysToRefresh = allPubkeysSet.subtracting(pubkeysToFetchMetadata)
         guard let metadataRefreshFilter = Filter(
             authors: Array(pubkeysToRefresh),
-            kinds: [EventKind.metadata.rawValue],
+            kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue],
             since: since
         ) else {
             print("Unable to create refresh metadata filter for \(pubkeysToRefresh).")
             return
         }
 
-        relaySubscriptionMetadata?.lastPulledMetadataEvents = until
+        relaySubscriptionMetadata?.lastPulledEventsFromFollows = until
         _ = relayReadPool.subscribe(with: metadataRefreshFilter)
 
     }
@@ -392,21 +392,21 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingMetadata: Bool = false) {
+    private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromFollows: Bool = false) {
         if let existingFollowList = self.followListEvents[followListEvent.pubkey] {
             if existingFollowList.createdAt < followListEvent.createdAt {
-                cache(followListEvent, shouldPullMissingMetadata: shouldPullMissingMetadata)
+                cache(followListEvent, shouldPullMissingEventsFromFollows: shouldPullMissingEventsFromFollows)
             }
         } else {
-            cache(followListEvent, shouldPullMissingMetadata: shouldPullMissingMetadata)
+            cache(followListEvent, shouldPullMissingEventsFromFollows: shouldPullMissingEventsFromFollows)
         }
     }
 
-    private func cache(_ followListEvent: FollowListEvent, shouldPullMissingMetadata: Bool) {
+    private func cache(_ followListEvent: FollowListEvent, shouldPullMissingEventsFromFollows: Bool) {
         self.followListEvents[followListEvent.pubkey] = followListEvent
 
-        if shouldPullMissingMetadata {
-            pullMissingMetadata(followListEvent.followedPubkeys)
+        if shouldPullMissingEventsFromFollows {
+            pullMissingEventsFromFollows(followListEvent.followedPubkeys)
         }
 
         // TODO Here or elsewhere. Query for calendar events that follows who have RSVP'd.
@@ -489,7 +489,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
         // Optimization: do not pull metadata of people who RSVP until we actually need to look at it. Lazy load.
         // Perhaps reconsider if UX suffers because of this decision..
-        // pullMissingMetadata([rsvp.pubkey])
+        // shouldPullMissingEventsFromFollows([rsvp.pubkey])
     }
 
     private func deleteFromEventCoordinates(_ deletionEvent: DeletionEvent) {
@@ -589,7 +589,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
             switch nostrEvent {
             case let followListEvent as FollowListEvent:
-                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingMetadata: true)
+                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingEventsFromFollows: true)
             case let metadataEvent as MetadataEvent:
                 self.didReceiveMetadataEvent(metadataEvent)
             case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
@@ -623,7 +623,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
 
         if let publicKey, let followListEvent = followListEvents[publicKey.hex] {
-            pullMissingMetadata(followListEvent.followedPubkeys)
+            pullMissingEventsFromFollows(followListEvent.followedPubkeys)
         }
     }
 
@@ -672,7 +672,7 @@ extension AppState: EventVerifying, RelayDelegate {
                 timeBasedCalendarEventSubscriptionCounts.removeValue(forKey: closedSubscriptionId)
 
                 // Wait until we have fetched all the time-based calendar events before fetching metadata in bulk.
-                pullMissingMetadata(timeBasedCalendarEvents.values.map { $0.pubkey })
+                pullMissingEventsFromFollows(timeBasedCalendarEvents.values.map { $0.pubkey })
             } else {
                 timeBasedCalendarEventSubscriptionCounts[closedSubscriptionId] = timeBasedCalendarEventSubscriptionCount - 1
             }
@@ -683,10 +683,10 @@ extension AppState: EventVerifying, RelayDelegate {
         let relaySubscriptionMetadata = relaySubscriptionMetadata
 
         if let relaySubscriptionMetadata,
-           let lastPulledMetadataEvents = relaySubscriptionMetadata.lastPulledMetadataEvents,
+           let lastPulledEventsFromFollows = relaySubscriptionMetadata.lastPulledEventsFromFollows,
            let metadataSubscriptionDate = metadataSubscriptionDates[subscriptionId] {
-            if lastPulledMetadataEvents < metadataSubscriptionDate {
-                relaySubscriptionMetadata.lastPulledMetadataEvents = metadataSubscriptionDate
+            if lastPulledEventsFromFollows < metadataSubscriptionDate {
+                relaySubscriptionMetadata.lastPulledEventsFromFollows = metadataSubscriptionDate
             }
             metadataSubscriptionDates.removeValue(forKey: subscriptionId)
         }
@@ -695,7 +695,7 @@ extension AppState: EventVerifying, RelayDelegate {
            let lastBootstrapped = relaySubscriptionMetadata.lastBootstrapped,
            let bootstrapSubscriptionDate = bootstrapSubscriptionDates[subscriptionId] {
             if lastBootstrapped < bootstrapSubscriptionDate {
-                relaySubscriptionMetadata.lastPulledMetadataEvents = bootstrapSubscriptionDate
+                relaySubscriptionMetadata.lastBootstrapped = bootstrapSubscriptionDate
             }
             bootstrapSubscriptionDates.removeValue(forKey: subscriptionId)
         }

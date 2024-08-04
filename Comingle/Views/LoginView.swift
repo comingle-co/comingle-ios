@@ -180,7 +180,7 @@ extension LoginView {
             }
 
             appState.refreshFollowedPubkeys()
-            appState.pullMissingMetadata([publicKey.hex])
+            appState.pullMissingEventsFromFollows([publicKey.hex])
             appState.updateRelayPool()
             appState.refresh()
         }

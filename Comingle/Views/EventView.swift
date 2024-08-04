@@ -723,7 +723,7 @@ struct EventView: View, EventCreating {
                let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
                 pubkeysToPullMetadata += rsvps.map { $0.pubkey }
             }
-            appState.pullMissingMetadata(pubkeysToPullMetadata)
+            appState.pullMissingEventsFromFollows(pubkeysToPullMetadata)
 
             guard let rsvpFilter = Filter(
                 kinds: [EventKind.calendarEventRSVP.rawValue],

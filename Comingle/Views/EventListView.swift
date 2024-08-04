@@ -98,7 +98,7 @@ struct EventListView: View {
                                        let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
                                         pubkeysToPullMetadata += rsvps.map { $0.pubkey }
                                     }
-                                    appState.pullMissingMetadata(pubkeysToPullMetadata)
+                                    appState.pullMissingEventsFromFollows(pubkeysToPullMetadata)
                                 }
                             }
                         }

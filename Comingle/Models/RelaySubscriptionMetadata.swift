@@ -12,7 +12,7 @@ import SwiftData
 final class RelaySubscriptionMetadata {
     var lastBootstrapped: Date?
     var lastPulledAllTimeBasedCalendarEvents: Date?
-    var lastPulledMetadataEvents: Date?
+    var lastPulledEventsFromFollows: Date?
 
     init() {
 
