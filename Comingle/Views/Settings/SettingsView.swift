@@ -114,7 +114,7 @@ struct SettingsView: View {
                         Label(.localizable.settingsKeys, systemImage: "key")
                     }
                 }
-                NavigationLink(destination: RelaysSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
+                NavigationLink(destination: RelaysSettingsView()) {
                     Label(.localizable.settingsRelays, systemImage: "server.rack")
                 }
                 NavigationLink(destination: AppearanceSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {

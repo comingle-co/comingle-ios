@@ -15,6 +15,7 @@ final class RelayPoolSettings {
     var relaySettingsList: [RelaySettings]
 
     init(publicKeyHex: String?) {
+        self.publicKeyHex = publicKeyHex
         self.relaySettingsList = []
     }
 }

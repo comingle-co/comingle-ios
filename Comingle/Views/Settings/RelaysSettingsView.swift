@@ -16,18 +16,11 @@ struct RelaysSettingsView: View, RelayURLValidating {
     @State private var validatedRelayURL: URL?
     @State private var newRelay: String = ""
 
-    @State private var viewModel: ViewModel
-
-    init(modelContext: ModelContext, publicKeyHex: String?) {
-        let viewModel = ViewModel(modelContext: modelContext, publicKeyHex: publicKeyHex)
-        _viewModel = State(initialValue: viewModel)
-    }
-
     var body: some View {
         List {
             Section(
                 content: {
-                    if let relayPoolSettings = viewModel.relayPoolSettings {
+                    if let relayPoolSettings = appState.relayPoolSettings {
                         ForEach(relayPoolSettings.relaySettingsList, id: \.self) { relaySettings in
                             HStack {
                                 let relayMarkerBinding = Binding<RelayOption>(
@@ -65,7 +58,7 @@ struct RelaysSettingsView: View, RelayURLValidating {
                                 .pickerStyle(.navigationLink)
                                 .swipeActions {
                                     Button(role: .destructive) {
-                                        viewModel.removeRelaySettings(relaySettings: relaySettings)
+                                        appState.removeRelaySettings(relaySettings: relaySettings)
                                     } label: {
                                         Label(.localizable.delete, systemImage: "trash")
                                     }
@@ -92,7 +85,7 @@ struct RelaysSettingsView: View, RelayURLValidating {
                             Button(
                                 action: {
                                     if let validatedRelayURL, canAddRelay {
-                                        viewModel.addRelay(relayURL: validatedRelayURL)
+                                        appState.addRelay(relayURL: validatedRelayURL)
                                         newRelay = ""
                                     }
                                 },
@@ -135,45 +128,6 @@ enum RelayOption: CaseIterable {
                 .localizable.relayWrite
         case .readAndWrite:
                 .localizable.relayReadAndWrite
-        }
-    }
-}
-
-extension RelaysSettingsView {
-    @Observable class ViewModel {
-        let publicKeyHex: String?
-        let modelContext: ModelContext
-        var relayPoolSettings: RelayPoolSettings?
-
-        init(modelContext: ModelContext, publicKeyHex: String?) {
-            self.modelContext = modelContext
-            self.publicKeyHex = publicKeyHex
-            fetchData()
-        }
-
-        func addRelay(relayURL: URL) {
-            guard let relayPoolSettings, relayPoolSettings.relaySettingsList.allSatisfy({ $0.relayURLString != relayURL.absoluteString }) else {
-                return
-            }
-
-            relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: relayURL.absoluteString))
-        }
-
-        func removeRelaySettings(relaySettings: RelaySettings) {
-            relayPoolSettings?.relaySettingsList.removeAll(where: { $0 == relaySettings })
-        }
-
-        func fetchData() {
-            var descriptor = FetchDescriptor<RelayPoolSettings>(
-                predicate: #Predicate { $0.publicKeyHex == publicKeyHex }
-            )
-            descriptor.fetchLimit = 1
-
-            do {
-                relayPoolSettings = try modelContext.fetch(descriptor).first
-            } catch {
-                print("Relay settings fetch failed for publicKeyHex=\(publicKeyHex ?? "nil")")
-            }
         }
     }
 }

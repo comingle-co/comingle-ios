@@ -235,17 +235,25 @@ class AppState: ObservableObject, Hashable {
         return try? modelContext.fetch(descriptor).first
     }
 
-    func addProfile(_ profile: Profile) {
-        guard !profiles.contains(profile) else {
+    var relayPoolSettings: RelayPoolSettings? {
+        let publicKeyHex = publicKey?.hex
+        var descriptor = FetchDescriptor<RelayPoolSettings>(
+            predicate: #Predicate { $0.publicKeyHex == publicKeyHex }
+        )
+        descriptor.fetchLimit = 1
+        return try? modelContext.fetch(descriptor).first
+    }
+
+    func addRelay(relayURL: URL) {
+        guard let relayPoolSettings, relayPoolSettings.relaySettingsList.allSatisfy({ $0.relayURLString != relayURL.absoluteString }) else {
             return
         }
 
-        modelContext.insert(profile)
-        do {
-            try modelContext.save()
-        } catch {
-            fatalError("Unable to add profile publicKey=\(profile.publicKeyHex ?? "")")
-        }
+        relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: relayURL.absoluteString))
+    }
+
+    func removeRelaySettings(relaySettings: RelaySettings) {
+        relayPoolSettings?.relaySettingsList.removeAll(where: { $0 == relaySettings })
     }
 
     func deleteProfile(_ profile: Profile) {

@@ -33,7 +33,7 @@ struct LoginView: View, RelayURLValidating {
         var footer = AttributedString(localized: .localizable.tryDefaultRelay(AppState.defaultRelayURLString))
         if let range = footer.range(of: AppState.defaultRelayURLString) {
             footer[range].underlineStyle = .single
-            footer[range].foregroundColor = .blue
+            footer[range].foregroundColor = .accent
         }
 
         return footer
@@ -171,17 +171,15 @@ extension LoginView {
                 } catch {
                     print("Unable to save new profile \(publicKey.npub)")
                 }
-                appState.addProfile(profile)
-                if let relayPoolSettings = profile.profileSettings?.relayPoolSettings,
-                   !relayPoolSettings.relaySettingsList.contains(where: { URL(string: $0.relayURLString) == validatedRelayURL }) {
-                    relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: validatedRelayURL.absoluteString))
+                if let relayPoolSettings = profile.profileSettings?.relayPoolSettings {
+                   relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: validatedRelayURL.absoluteString))
                 }
                 appSettings.activeProfile = profile
             }
 
             appState.refreshFollowedPubkeys()
-            appState.pullMissingEventsFromPubkeysAndFollows([publicKey.hex])
             appState.updateRelayPool()
+            appState.pullMissingEventsFromPubkeysAndFollows([publicKey.hex])
             appState.refresh()
         }
     }
