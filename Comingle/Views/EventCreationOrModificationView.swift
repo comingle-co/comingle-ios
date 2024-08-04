@@ -293,7 +293,7 @@ extension EventCreationOrModificationView {
                 isSettingTimeZone = true
             }
 
-            location = ""
+            location = existingEvent?.locations.first ?? ""
             isShowingLocationSelector = false
             geohash = existingEvent?.geohash ?? ""
             hashtags = OrderedSet(existingEvent?.hashtags ?? [])
