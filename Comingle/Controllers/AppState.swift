@@ -552,10 +552,21 @@ extension AppState: EventVerifying, RelayDelegate {
     }
 
     func relay(_ relay: Relay, didReceive response: RelayResponse) {
-        if case let .eose(subscriptionId) = response {
+        switch response {
+        case let .eose(subscriptionId):
             // Live new events are not strictly needed for this app for now.
             // In the future, we could keep subscriptions open for updates.
             try? relay.closeSubscription(with: subscriptionId)
+        case let .ok(eventId, success, message):
+            if success {
+                if let persistentNostrEvent = persistentNostrEvents[eventId], !persistentNostrEvent.relays.contains(relay.url) {
+                    persistentNostrEvent.relays.append(relay.url)
+                }
+            } else if message.prefix == .rateLimited {
+                // TODO retry with exponential backoff.
+            }
+        default:
+            break
         }
     }
 

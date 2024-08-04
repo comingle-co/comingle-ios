@@ -434,7 +434,7 @@
       }
     },
     "invited" : {
-      "comment" : "Picker option to show list of invited people and the number of invited in parentheses.",
+      "comment" : "Text for section for invited participants to a calendar event and the number of invited in parentheses.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -897,6 +897,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Read and Write"
+          }
+        }
+      }
+    },
+    "relaysCount" : {
+      "comment" : "Text for section for relays a calendar event was found on and the number of relays in parentheses.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relays (%d)"
           }
         }
       }

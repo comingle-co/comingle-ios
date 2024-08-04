@@ -446,6 +446,19 @@ struct EventView: View, EventCreating {
                             showLocationAlert = true
                         }
                     }
+
+                    if let persistentNostrEvent = appState.persistentNostrEvents[event.id] {
+                        Divider()
+
+                        VStack {
+                            Text(.localizable.relaysCount(persistentNostrEvent.relays.count))
+                                .padding(.vertical, 2)
+                                .font(.headline)
+                            ForEach(persistentNostrEvent.relays, id: \.self) { relayURL in
+                                Text(relayURL.absoluteString)
+                            }
+                        }
+                    }
                 }
             }
             .padding()
