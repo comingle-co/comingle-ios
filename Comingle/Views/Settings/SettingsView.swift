@@ -221,11 +221,11 @@ extension SettingsView {
         }
 
         var publicKeyHex: String? {
-            appState.appSettings.activeProfile?.publicKeyHex
+            appState.appSettings?.activeProfile?.publicKeyHex
         }
 
         var activeProfile: Profile? {
-            appState.appSettings.activeProfile
+            appState.appSettings?.activeProfile
         }
 
         var activeProfileName: String {
@@ -244,7 +244,7 @@ extension SettingsView {
         }
 
         var isActiveProfileSignedInWithPrivateKey: Bool {
-            guard let activeProfile = appState.appSettings.activeProfile else {
+            guard let activeProfile = appState.appSettings?.activeProfile else {
                 return false
             }
             return isSignedInWithPrivateKey(activeProfile)
@@ -262,12 +262,11 @@ extension SettingsView {
         }
 
         func isActiveProfile(_ profile: Profile) -> Bool {
-            return appState.appSettings.activeProfile == profile
+            return appState.appSettings?.activeProfile == profile
         }
 
         func updateActiveProfile(_ profile: Profile) {
-            let appSettings = appState.appSettings
-            guard appSettings.activeProfile != profile else {
+            guard let appSettings = appState.appSettings, appSettings.activeProfile != profile else {
                 return
             }
 

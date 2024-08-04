@@ -115,7 +115,7 @@ struct RelaysSettingsView: View, RelayURLValidating {
     }
 
     var canAddRelay: Bool {
-        guard let validatedRelayURL, let relaySettingsList = appState.appSettings.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList, !relaySettingsList.contains(where: { $0.relayURLString == validatedRelayURL.absoluteString }) else {
+        guard let validatedRelayURL, let relaySettingsList = appState.appSettings?.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList, !relaySettingsList.contains(where: { $0.relayURLString == validatedRelayURL.absoluteString }) else {
             return false
         }
         return true

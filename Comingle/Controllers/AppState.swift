@@ -55,7 +55,7 @@ class AppState: ObservableObject, Hashable {
     }
 
     var publicKey: PublicKey? {
-        if let publicKeyHex = appSettings.activeProfile?.publicKeyHex {
+        if let publicKeyHex = appSettings?.activeProfile?.publicKeyHex {
             PublicKey(hex: publicKeyHex)
         } else {
             nil
@@ -179,7 +179,7 @@ class AppState: ObservableObject, Hashable {
     }
 
     func updateRelayPool() {
-        let profile = appSettings.activeProfile
+        let profile = appSettings?.activeProfile
 
         let relaySettings = profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? []
 
@@ -255,7 +255,7 @@ class AppState: ObservableObject, Hashable {
         if let publicKeyHex = profile.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
             privateKeySecureStorage.delete(for: publicKey)
         }
-        if appSettings.activeProfile == profile {
+        if let appSettings, appSettings.activeProfile == profile {
             appSettings.activeProfile = profiles.first(where: { $0 != profile })
             refreshFollowedPubkeys()
         }
@@ -267,22 +267,16 @@ class AppState: ObservableObject, Hashable {
         return (try? modelContext.fetch(profileDescriptor)) ?? []
     }
 
-    var appSettings: AppSettings {
-        let request = FetchDescriptor<AppSettings>()
-        let data = try? modelContext.fetch(request)
-        if let existingAppSettings = data?.first {
-            return existingAppSettings
-        } else {
-            let newAppSettings = AppSettings()
-            modelContext.insert(newAppSettings)
-            do {
-                try modelContext.save()
-                newAppSettings.activeProfile?.profileSettings?.relayPoolSettings?.relaySettingsList.append(RelaySettings(relayURLString: AppState.defaultRelayURLString))
-                return newAppSettings
-            } catch {
-                fatalError("Unable to save initial AppSettings.")
-            }
-        }
+    var appSettings: AppSettings? {
+        var descriptor = FetchDescriptor<AppSettings>()
+        descriptor.fetchLimit = 1
+        return (try? modelContext.fetch(descriptor))?.first
+    }
+
+    var appearanceSettings: AppearanceSettings? {
+        var descriptor = FetchDescriptor<AppearanceSettings>()
+        descriptor.fetchLimit = 1
+        return (try? modelContext.fetch(descriptor))?.first
     }
 }
 

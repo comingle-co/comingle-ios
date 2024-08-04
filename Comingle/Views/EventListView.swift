@@ -36,7 +36,7 @@ struct EventListView: View {
                             ForEach(filteredEvents, id: \.self) { event in
                                 Section(
                                     content: {
-                                        NavigationLink(destination: EventView(appState: appState, event: event, calendar: Calendar.autoupdatingCurrent).environmentObject(appState)) {
+                                        NavigationLink(destination: EventView(appState: appState, event: event).environmentObject(appState)) {
                                             HStack {
                                                 VStack(alignment: .leading) {
                                                     Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
@@ -92,16 +92,16 @@ struct EventListView: View {
                                     }
                                 )
                                 .padding(.vertical, 10)
-                                .onAppear {
-                                    DispatchQueue.global(qos: .userInitiated).async {
-                                        var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
-                                        if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
-                                           let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
-                                            pubkeysToPullMetadata += rsvps.map { $0.pubkey }
-                                        }
-                                        appState.pullMissingEventsFromPubkeysAndFollows(pubkeysToPullMetadata)
-                                    }
-                                }
+//                                .onAppear {
+//                                    DispatchQueue.global(qos: .userInitiated).async {
+//                                        var pubkeysToPullMetadata = [event.pubkey] + event.participants.compactMap { $0.pubkey?.hex }
+//                                        if let calendarEventCoordinates = event.replaceableEventCoordinates()?.tag.value,
+//                                           let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
+//                                            pubkeysToPullMetadata += rsvps.map { $0.pubkey }
+//                                        }
+//                                        appState.pullMissingEventsFromPubkeysAndFollows(pubkeysToPullMetadata)
+//                                    }
+//                                }
                             }
                         }
                     }
@@ -118,7 +118,7 @@ struct EventListView: View {
             return Calendar.autoupdatingCurrent.timeZone
         }
 
-        switch appState.appSettings.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+        switch appState.appearanceSettings?.timeZonePreference {
         case .event:
             return timeZone
         case .system, .none:
@@ -130,7 +130,7 @@ struct EventListView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = resolveTimeZone(timeZone)
 
-        if date.isInCurrentYear {
+        if Calendar.autoupdatingCurrent.isDate(date, equalTo: Date.now, toGranularity: .year) {
             dateFormatter.setLocalizedDateFormatFromTemplate("EdMMMhmmz")
             return dateFormatter.string(from: date)
         } else {

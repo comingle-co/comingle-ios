@@ -19,8 +19,6 @@ struct EventView: View, EventCreating {
     @EnvironmentObject var appState: AppState
     let eventCoordinates: EventCoordinates
 
-    let calendar: Calendar
-
     @State var showLocationAlert: Bool = false
     @State var selectedGeohash: Bool = false
     @State var selectedLocation: String = ""
@@ -36,9 +34,8 @@ struct EventView: View, EventCreating {
     let rsvpSortComparator: RSVPSortComparator
     let calendarEventParticipantSortComparator: CalendarEventParticipantSortComparator
 
-    init(appState: AppState, event: TimeBasedCalendarEvent, calendar: Calendar) {
+    init(appState: AppState, event: TimeBasedCalendarEvent) {
         eventCoordinates = event.replaceableEventCoordinates()!
-        self.calendar = calendar
         rsvpSortComparator = RSVPSortComparator(order: .forward, appState: appState)
         calendarEventParticipantSortComparator = CalendarEventParticipantSortComparator(order: .forward, appState: appState)
     }
@@ -98,13 +95,18 @@ struct EventView: View, EventCreating {
         return Locale.LanguageCode(stringLiteral: locale).identifier(.alpha2)
     }
 
+    var timeZonePreference: TimeZonePreference {
+        appState.appearanceSettings?.timeZonePreference ?? .event
+    }
+
     var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.setLocalizedDateFormatFromTemplate("EdMMMyyyyhmmz")
-        switch appState.appSettings.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+        let calendar = Calendar.autoupdatingCurrent
+        switch timeZonePreference {
         case .event:
             dateFormatter.timeZone = event?.startTimeZone ?? calendar.timeZone
-        case .system, .none:
+        case .system:
             dateFormatter.timeZone = calendar.timeZone
         }
         return dateFormatter
@@ -113,10 +115,11 @@ struct EventView: View, EventCreating {
     var dateIntervalFormatter: DateIntervalFormatter {
         let dateIntervalFormatter = DateIntervalFormatter()
         dateIntervalFormatter.dateTemplate = "EdMMMyyyyhmmz"
-        switch appState.appSettings.activeProfile?.profileSettings?.appearanceSettings?.timeZonePreference {
+        let calendar = Calendar.autoupdatingCurrent
+        switch timeZonePreference {
         case .event:
             dateIntervalFormatter.timeZone = event?.startTimeZone ?? calendar.timeZone
-        case .system, .none:
+        case .system:
             dateIntervalFormatter.timeZone = calendar.timeZone
         }
         return dateIntervalFormatter
@@ -425,7 +428,14 @@ struct EventView: View, EventCreating {
                         Divider()
 
                         if let endTimestamp = event.endTimestamp {
-                            Text(dateIntervalFormatter.string(from: startTimestamp, to: endTimestamp))
+                            let startTimeZone = event.startTimeZone
+                            if (timeZonePreference == .system || startTimeZone == nil) && Calendar.autoupdatingCurrent.isDate(startTimestamp, inSameDayAs: endTimestamp) {
+                                Text(dateIntervalFormatter.string(from: startTimestamp, to: endTimestamp))
+                            } else {
+                                let dateFormatter = dateFormatter
+                                Text(dateFormatter.string(from: startTimestamp))
+                                Text(dateFormatter.string(from: endTimestamp))
+                            }
                         } else {
                             Text(dateFormatter.string(from: startTimestamp))
                         }
