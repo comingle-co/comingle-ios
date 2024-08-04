@@ -268,7 +268,6 @@ extension EventCreationOrModificationView {
 
         var isSettingTimeZone: Bool = false
         var startTimeZone: TimeZone?
-        var endTimeZone: TimeZone?
         var isShowingTimeZoneSelector: Bool = false
         var isShowingParticipantSelector: Bool = false
 
@@ -287,7 +286,6 @@ extension EventCreationOrModificationView {
             start = existingEvent?.startTimestamp ?? now
             end = existingEvent?.endTimestamp ?? existingEvent?.startTimestamp ?? now
             startTimeZone = existingEvent?.startTimeZone
-            endTimeZone = existingEvent?.endTimeZone
 
             if existingEvent?.startTimeZone != nil {
                 isSettingTimeZone = true
@@ -302,7 +300,6 @@ extension EventCreationOrModificationView {
             referenceToAdd = ""
 
             startTimeZone = existingEvent?.startTimeZone
-            endTimeZone = existingEvent?.endTimeZone
 
             existingEvent?.participants.forEach {
                 if let pubkey = $0.pubkey {
@@ -375,13 +372,6 @@ extension EventCreationOrModificationView {
                     startTimeZoneOrNil = startTimeZone
                 }
 
-                let endTimeZoneOrNil: TimeZone?
-                if !isSettingTimeZone || endTimeZone == startTimeZone {
-                    endTimeZoneOrNil = nil
-                } else {
-                    endTimeZoneOrNil = endTimeZone
-                }
-
                 let locationsOrNil: [String]?
                 let trimmedLocation = location.trimmingCharacters(in: .whitespacesAndNewlines)
                 if trimmedLocation.isEmpty {
@@ -418,7 +408,6 @@ extension EventCreationOrModificationView {
                     startTimestamp: start,
                     endTimestamp: endOrNil,
                     startTimeZone: startTimeZoneOrNil,
-                    endTimeZone: endTimeZoneOrNil,
                     locations: locationsOrNil,
                     geohash: geohashOrNil,
                     participants: calendarEventParticipants,
