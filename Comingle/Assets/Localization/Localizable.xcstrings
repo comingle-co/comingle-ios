@@ -349,6 +349,18 @@
         }
       }
     },
+    "exampleImage" : {
+      "comment" : "Example image URL of a calendar event image.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://example.com/image.png"
+          }
+        }
+      }
+    },
     "exampleRelay" : {
       "comment" : "Example URL of a Nostr relay address.",
       "extractionState" : "manual",

@@ -45,7 +45,7 @@ struct EventCreationOrModificationView: View {
                 }
 
                 Section {
-                    TextField(localized: .localizable.image, text: $viewModel.imageString)
+                    TextField(localized: .localizable.exampleImage, text: $viewModel.imageString)
 
                     if let validatedImageURL = viewModel.validatedImageURL {
                         KFImage.url(viewModel.validatedImageURL)
