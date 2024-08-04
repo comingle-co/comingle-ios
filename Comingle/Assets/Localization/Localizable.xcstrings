@@ -1105,6 +1105,18 @@
         }
       }
     },
+    "save" : {
+      "comment" : "Button to save a form.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        }
+      }
+    },
     "saved" : {
       "comment" : "Label for view of saved events.",
       "extractionState" : "manual",

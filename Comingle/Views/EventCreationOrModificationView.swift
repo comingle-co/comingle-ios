@@ -203,7 +203,7 @@ struct EventCreationOrModificationView: View {
                             dismiss()
                         }
                     }, label: {
-                        Text("Save")
+                        Text(.localizable.save)
                     })
                     .disabled(!viewModel.canSave)
                 }
