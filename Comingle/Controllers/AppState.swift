@@ -409,7 +409,9 @@ extension AppState: EventVerifying, RelayDelegate {
             pullMissingEventsFromFollows(followListEvent.followedPubkeys)
         }
 
-        // TODO Here or elsewhere. Query for calendar events that follows who have RSVP'd.
+        if followListEvent.pubkey == publicKey?.hex {
+            refreshFollowedPubkeys()
+        }
     }
 
     private func didReceiveMetadataEvent(_ metadataEvent: MetadataEvent) {
