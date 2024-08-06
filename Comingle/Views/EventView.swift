@@ -15,7 +15,6 @@ import SwiftUI
 import Translation
 
 struct EventView: View, EventCreating {
-    @Environment(\.dismiss) private var dismiss
 
     @EnvironmentObject var appState: AppState
     let eventCoordinates: EventCoordinates
@@ -301,12 +300,12 @@ struct EventView: View, EventCreating {
     var profileView: some View {
         NavigationLink(
             destination: {
-                if let event = event {
+                if let event {
                     ProfileView(publicKeyHex: event.pubkey)
                 }
             },
             label: {
-                if let event = event {
+                if let event {
                     ProfilePictureAndNameView(publicKeyHex: event.pubkey)
                 }
             }
@@ -315,7 +314,7 @@ struct EventView: View, EventCreating {
 
     var participantsView: some View {
         VStack(alignment: .leading) {
-            if let event = event {
+            if let event {
                 Text(.localizable.invited(event.participants.count))
                     .padding(.vertical, 2)
                     .font(.headline)
@@ -399,64 +398,97 @@ struct EventView: View, EventCreating {
         }
     }
 
-    func changeRSVPConfirmationDialogActions() -> some View {
-        VStack {
-            if let event = event {
-                Button(action: {
-                    createOrUpdateRSVP(.accepted)
-                }, label: {
-                    if event.isUpcoming {
-                        Text(.localizable.rsvpStatusGoing)
-                    } else {
-                        Text(.localizable.attended)
-                    }
-                })
-
-                Button(action: {
-                    createOrUpdateRSVP(.tentative)
-                }, label: {
-                    if event.isUpcoming {
-                        Text(.localizable.rsvpStatusMaybeGoing)
-                    } else {
-                        Text(.localizable.maybeAttended)
-                    }
-                })
-
-                Button(action: {
-                    createOrUpdateRSVP(.declined)
-                }, label: {
-                    if event.isUpcoming {
-                        Text(.localizable.rsvpStatusNotGoing)
-                    } else {
-                        Text(.localizable.didNotAttend)
-                    }
-                })
-
-                if let keypair = appState.keypair,
-                   let rsvps = appState.calendarEventsToRsvps[eventCoordinates.tag.value],
-                   rsvps.contains(where: { $0.pubkey == keypair.publicKey.hex }) {
-                    Button(
-                        role: .destructive,
-                        action: {
-                            removeRSVP()
-                        },
-                        label: {
-                            Text(.localizable.removeRSVP)
-                        }
-                    )
+    @ViewBuilder func changeRSVPConfirmationDialogActions() -> some View {
+        if let event {
+            Button(action: {
+                createOrUpdateRSVP(.accepted)
+            }, label: {
+                if event.isUpcoming {
+                    Text(.localizable.rsvpStatusGoing)
+                } else {
+                    Text(.localizable.attended)
                 }
+            })
+
+            Button(action: {
+                createOrUpdateRSVP(.tentative)
+            }, label: {
+                if event.isUpcoming {
+                    Text(.localizable.rsvpStatusMaybeGoing)
+                } else {
+                    Text(.localizable.maybeAttended)
+                }
+            })
+
+            Button(action: {
+                createOrUpdateRSVP(.declined)
+            }, label: {
+                if event.isUpcoming {
+                    Text(.localizable.rsvpStatusNotGoing)
+                } else {
+                    Text(.localizable.didNotAttend)
+                }
+            })
+
+            if let keypair = appState.keypair,
+               let rsvps = appState.calendarEventsToRsvps[eventCoordinates.tag.value],
+               rsvps.contains(where: { $0.pubkey == keypair.publicKey.hex }) {
+                Button(
+                    role: .destructive,
+                    action: {
+                        removeRSVP()
+                    },
+                    label: {
+                        Text(.localizable.removeRSVP)
+                    }
+                )
             }
         }
     }
 
-    func locationConfirmationDialogActions() -> some View {
-        VStack {
-            if selectedGeohash, let geohash = geohash {
-                let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
-                let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
+    @ViewBuilder func locationConfirmationDialogActions() -> some View {
+        if selectedGeohash, let geohash = geohash {
+            let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
+            let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
+            Button(action: {
+                let encodedTitle = eventTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? eventTitle
+                if let url = URL(string: "https://maps.apple.com/?ll=\(encodedLocation)&q=\(encodedTitle)") {
+                    UIApplication.shared.open(url)
+                }
+                selectedGeohash = false
+                selectedLocation = ""
+            }, label: {
+                Text(.localizable.openInAppleMaps)
+            })
+            Button(action: {
+                if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
+                    UIApplication.shared.open(url)
+                }
+                selectedGeohash = false
+                selectedLocation = ""
+            }, label: {
+                Text(.localizable.openInGoogleMaps)
+            })
+            Button(action: {
+                UIPasteboard.general.string = coordinatesString
+                selectedGeohash = false
+                selectedLocation = ""
+            }, label: {
+                Text(.localizable.copyCoordinates)
+            })
+        } else if !selectedLocation.isEmpty {
+            if let selectedLocationURL = URL(string: selectedLocation), selectedLocation.hasPrefix("https://") || selectedLocation.hasPrefix("http://") {
                 Button(action: {
-                    let encodedTitle = eventTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? eventTitle
-                    if let url = URL(string: "https://maps.apple.com/?ll=\(encodedLocation)&q=\(encodedTitle)") {
+                    UIApplication.shared.open(selectedLocationURL)
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.openLink)
+                })
+            } else {
+                let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
+                Button(action: {
+                    if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
                         UIApplication.shared.open(url)
                     }
                     selectedGeohash = false
@@ -473,75 +505,35 @@ struct EventView: View, EventCreating {
                 }, label: {
                     Text(.localizable.openInGoogleMaps)
                 })
-                Button(action: {
-                    UIPasteboard.general.string = coordinatesString
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.copyCoordinates)
-                })
-            } else if !selectedLocation.isEmpty {
-                if let selectedLocationURL = URL(string: selectedLocation), selectedLocation.hasPrefix("https://") || selectedLocation.hasPrefix("http://") {
-                    Button(action: {
-                        UIApplication.shared.open(selectedLocationURL)
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openLink)
-                    })
-                } else {
-                    let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
-                    Button(action: {
-                        if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInAppleMaps)
-                    })
-                    Button(action: {
-                        if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInGoogleMaps)
-                    })
-                }
-                Button(action: {
-                    UIPasteboard.general.string = selectedLocation
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.copyLocation)
-                })
             }
+            Button(action: {
+                UIPasteboard.general.string = selectedLocation
+                selectedGeohash = false
+                selectedLocation = ""
+            }, label: {
+                Text(.localizable.copyLocation)
+            })
         }
     }
 
-    func eventDeletionConfirmationDialogActions() -> some View {
-        VStack {
-            if let event, appState.keypair?.publicKey.hex == event.pubkey {
-                Button(
-                    role: .destructive,
-                    action: {
-                        appState.delete(events: [event])
-                        dismiss()
-                    },
-                    label: {
-                        Text(.localizable.deleteEvent)
-                    }
-                )
-            }
+    @ViewBuilder func eventDeletionConfirmationDialogActions() -> some View {
+        if let event, appState.keypair?.publicKey.hex == event.pubkey {
+            Button(
+                role: .destructive,
+                action: {
+                    appState.delete(events: [event])
+                },
+                label: {
+                    Text(.localizable.deleteEvent)
+                }
+            )
         }
     }
 
     var body: some View {
-        ScrollView {
-            VStack {
-                if let event = event {
+        if let event {
+            ScrollView {
+                VStack {
                     if let calendarEventImageURL = event.imageURL,
                        calendarEventImageURL.isImage {
                         KFImage.url(calendarEventImageURL)
@@ -616,26 +608,24 @@ struct EventView: View, EventCreating {
                         }
                     }
                 }
+                .padding()
             }
-            .padding()
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .confirmationDialog(.localizable.rsvp, isPresented: $isChangingRSVP) {
-            changeRSVPConfirmationDialogActions()
-        }
-        .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
-            locationConfirmationDialogActions()
-        }
-        .confirmationDialog(
-            .localizable.deleteEvent,
-            isPresented: $isShowingEventDeletionConfirmation
-        ) {
-            eventDeletionConfirmationDialogActions()
-        }
-        .toolbar {
-            ToolbarItem {
-                Menu {
-                    if let event {
+            .navigationBarTitleDisplayMode(.inline)
+            .confirmationDialog(.localizable.rsvp, isPresented: $isChangingRSVP) {
+                changeRSVPConfirmationDialogActions()
+            }
+            .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
+                locationConfirmationDialogActions()
+            }
+            .confirmationDialog(
+                .localizable.deleteEvent,
+                isPresented: $isShowingEventDeletionConfirmation
+            ) {
+                eventDeletionConfirmationDialogActions()
+            }
+            .toolbar {
+                ToolbarItem {
+                    Menu {
                         let relays = appState.persistentNostrEvent(event.id)?.relays ?? []
                         let shareableEventCoordinates = try? event.shareableEventCoordinates(relayURLStrings: relays.map { $0.absoluteString })
 
@@ -684,70 +674,66 @@ struct EventView: View, EventCreating {
                                 }
                             )
                         }
-                    } else {
-                        Text(verbatim: "")
+                    } label: {
+                        Label(.localizable.menu, systemImage: "ellipsis.circle")
                     }
-                } label: {
-                    Label(.localizable.menu, systemImage: "ellipsis.circle")
                 }
-            }
 
-            ToolbarItem(placement: .bottomBar) {
-                if appState.keypair == nil {
-                    NavigationLink(
-                        destination: SettingsView(appState: appState),
-                        label: {
-                            Text(.localizable.signInToRSVP)
-                        }
-                    )
-                } else {
-                    Button(action: {
-                        isChangingRSVP = true
-                    }, label: {
-                        if let event = event, let rsvp = currentUserRSVP {
-                            if event.isUpcoming {
-                                switch rsvp.status {
-                                case .accepted:
-                                    Text(.localizable.rsvpStatusGoing)
-                                case .declined:
-                                    Text(.localizable.rsvpStatusNotGoing)
-                                case .tentative:
-                                    Text(.localizable.rsvpStatusMaybeGoing)
-                                case .unknown(let value):
-                                    Text(value)
-                                case .none:
-                                    Text(.localizable.rsvp)
+                ToolbarItem(placement: .bottomBar) {
+                    if appState.keypair == nil {
+                        NavigationLink(
+                            destination: SettingsView(appState: appState),
+                            label: {
+                                Text(.localizable.signInToRSVP)
+                            }
+                        )
+                    } else {
+                        Button(action: {
+                            isChangingRSVP = true
+                        }, label: {
+                            if let currentUserRSVP {
+                                if event.isUpcoming {
+                                    switch currentUserRSVP.status {
+                                    case .accepted:
+                                        Text(.localizable.rsvpStatusGoing)
+                                    case .declined:
+                                        Text(.localizable.rsvpStatusNotGoing)
+                                    case .tentative:
+                                        Text(.localizable.rsvpStatusMaybeGoing)
+                                    case .unknown(let value):
+                                        Text(value)
+                                    case .none:
+                                        Text(.localizable.rsvp)
+                                    }
+                                } else {
+                                    switch currentUserRSVP.status {
+                                    case .accepted:
+                                        Text(.localizable.attended)
+                                    case .declined:
+                                        Text(.localizable.didNotAttend)
+                                    case .tentative:
+                                        Text(.localizable.maybeAttended)
+                                    case .unknown(let value):
+                                        Text(value)
+                                    case .none:
+                                        Text(.localizable.didNotAttend)
+                                    }
                                 }
                             } else {
-                                switch rsvp.status {
-                                case .accepted:
-                                    Text(.localizable.attended)
-                                case .declined:
-                                    Text(.localizable.didNotAttend)
-                                case .tentative:
-                                    Text(.localizable.maybeAttended)
-                                case .unknown(let value):
-                                    Text(value)
-                                case .none:
-                                    Text(.localizable.didNotAttend)
-                                }
+                                Text(.localizable.rsvp)
                             }
-                        } else {
-                            Text(.localizable.rsvp)
-                        }
-                    })
+                        })
+                    }
                 }
             }
-        }
-        .task {
-            if event != nil {
+            .task {
                 refresh()
-            } else {
-                dismiss()
             }
-        }
-        .refreshable {
-            refresh()
+            .refreshable {
+                refresh()
+            }
+        } else {
+            Text(.localizable.eventNotFound)
         }
     }
 

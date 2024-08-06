@@ -385,6 +385,18 @@
         }
       }
     },
+    "eventNotFound" : {
+      "comment" : "Text indicating that the event could not be found.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event not found. Go back to the previous screen."
+          }
+        }
+      }
+    },
     "eventStart" : {
       "comment" : "Text indicating that the form field is for setting the event start date and time.",
       "extractionState" : "manual",
