@@ -602,8 +602,10 @@ struct EventView: View, EventCreating {
                             Text(.localizable.relaysCount(persistentNostrEvent.relays.count))
                                 .padding(.vertical, 2)
                                 .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             ForEach(persistentNostrEvent.relays, id: \.self) { relayURL in
                                 Text(relayURL.absoluteString)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                     }

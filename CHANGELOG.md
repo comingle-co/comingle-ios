@@ -15,6 +15,7 @@
 - Sign out bug where active tab is not switched
 - Event creation image URL validation
 - Bug where updating relay pool settings do not get reflected in the active relay pool
+- Alignment of event relay list
 
 ## 0.1.0-beta.1 - 2024-08-04
 
