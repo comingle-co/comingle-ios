@@ -9,7 +9,7 @@ import NostrSDK
 
 extension MetadataEvent {
     var resolvedName: String {
-        guard let userMetadata, let bestName = userMetadata.name ?? userMetadata.displayName else {
+        guard let userMetadata, let bestName = userMetadata.displayName ?? userMetadata.name else {
             return PublicKey(hex: pubkey)?.npub ?? pubkey
         }
 

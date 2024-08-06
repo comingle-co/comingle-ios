@@ -36,7 +36,7 @@ struct EventListView: View {
                             ForEach(filteredEvents, id: \.self) { event in
                                 Section(
                                     content: {
-                                        NavigationLink(destination: EventView(appState: appState, event: event).environmentObject(appState)) {
+                                        NavigationLink(destination: EventView(appState: appState, event: event)) {
                                             HStack {
                                                 VStack(alignment: .leading) {
                                                     Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")

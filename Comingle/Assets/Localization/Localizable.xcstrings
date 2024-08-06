@@ -217,6 +217,18 @@
         }
       }
     },
+    "createDisplayNameFooter" : {
+      "comment" : "Footer text to explain what is the display name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An alternative, bigger name with richer characters than username."
+          }
+        }
+      }
+    },
     "createEvent" : {
       "comment" : "Navigation title for the view to create an event.",
       "extractionState" : "manual",
@@ -225,6 +237,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Create an Event"
+          }
+        }
+      }
+    },
+    "createPrivateKeyFooter" : {
+      "comment" : "Footer text to explain what is the created private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This private key should not be shared with anyone. You can use it to sign into any Nostr app. Keep it secure in a password manager. You will not be able to recover it after you leave this screen."
+          }
+        }
+      }
+    },
+    "createProfile" : {
+      "comment" : "Button to create a profile.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Profile"
+          }
+        }
+      }
+    },
+    "createPublicKeyFooter" : {
+      "comment" : "Footer text to explain what is the created public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This public key is your unique identifier. You can share it with other people to identify you across any Nostr app. Save it in a place you will remember to look."
+          }
+        }
+      }
+    },
+    "createUsernameFooter" : {
+      "comment" : "Footer text to explain usernames.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usernames are not unique and not used for signing into an account. More than one person can have the same username."
           }
         }
       }
@@ -261,6 +321,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Did Not Attend"
+          }
+        }
+      }
+    },
+    "displayName" : {
+      "comment" : "Section title for display name entry.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display Name (Optional)"
           }
         }
       }
@@ -446,7 +518,7 @@
       }
     },
     "guest" : {
-      "comment" : "Name of Guest account that is not logged in.",
+      "comment" : "Name of Guest account that is not signed in.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -913,6 +985,18 @@
         }
       }
     },
+    "profilePicture" : {
+      "comment" : "Section title for profile picture entry.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile Picture (Optional)"
+          }
+        }
+      }
+    },
     "profiles" : {
       "comment" : "Section title for Profiles in settings.",
       "extractionState" : "manual",
@@ -1034,7 +1118,7 @@
       }
     },
     "role" : {
-      "comment" : "Text to indicate the view is showing the user's login role.",
+      "comment" : "Placeholder text for entry of a role of a participant to an event.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1393,6 +1477,18 @@
         }
       }
     },
+    "signIntoExistingProfile" : {
+      "comment" : "Button to sign into existing profile.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Into Existing Profile"
+          }
+        }
+      }
+    },
     "signInToRSVP" : {
       "comment" : "Button to prompt user to sign in so that they can RSVP to an event.",
       "extractionState" : "manual",
@@ -1557,6 +1653,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "URL"
+          }
+        }
+      }
+    },
+    "username" : {
+      "comment" : "Section title for username entry.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Username"
           }
         }
       }

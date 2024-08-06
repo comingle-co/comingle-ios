@@ -331,11 +331,11 @@ extension EventCreationOrModificationView {
         }
 
         var validatedImageURL: URL? {
-            if let url = URL(string: trimmedImageString), url.isImage {
-                url
-            } else {
-                nil
+            guard let url = URL(string: trimmedImageString), url.isImage else {
+                return nil
             }
+
+            return nil
         }
 
         var validatedReferenceURL: URL? {

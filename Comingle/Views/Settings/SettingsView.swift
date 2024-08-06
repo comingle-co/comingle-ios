@@ -17,6 +17,7 @@ struct SettingsView: View {
 
     @State private var profileToSignOut: Profile?
     @State private var isShowingSignOutConfirmation: Bool = false
+    @State private var isShowingAddProfileConfirmation: Bool = false
 
     init(appState: AppState) {
         let viewModel = ViewModel(appState: appState)
@@ -63,7 +64,7 @@ struct SettingsView: View {
                         }
 
                         Button(action: {
-                            viewModel.isLoginViewPresented = true
+                            isShowingAddProfileConfirmation = true
                         }, label: {
                             HStack {
                                 Image(systemName: "plus.circle")
@@ -185,12 +186,26 @@ struct SettingsView: View {
             }
         }
         .navigationTitle(.localizable.settings)
-        .sheet(isPresented: $viewModel.isLoginViewPresented) {
+        .sheet(isPresented: $viewModel.isSignInViewPresented) {
             NavigationStack {
-                LoginView(appState: viewModel.appState)
+                SignInView()
             }
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
+        }
+        .confirmationDialog(
+            Text(.localizable.addProfile),
+            isPresented: $isShowingAddProfileConfirmation
+        ) {
+            NavigationLink(destination: CreateProfileView(appState: viewModel.appState)) {
+                Text(.localizable.createProfile)
+            }
+
+            Button(action: {
+                viewModel.isSignInViewPresented = true
+            }, label: {
+                Text(.localizable.signIntoExistingProfile)
+            })
         }
         .confirmationDialog(
             Text(.localizable.signOutFromDevice),
@@ -222,7 +237,7 @@ extension SettingsView {
     @Observable class ViewModel {
         let appState: AppState
         var profilePickerExpanded: Bool = false
-        var isLoginViewPresented: Bool = false
+        var isSignInViewPresented: Bool = false
 
         init(appState: AppState) {
             self.appState = appState

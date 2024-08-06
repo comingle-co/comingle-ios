@@ -7,10 +7,11 @@
 
 import Foundation
 import NostrSDK
+import OrderedCollections
 import SwiftData
 import SwiftTrie
 
-class AppState: ObservableObject, Hashable {
+class AppState: ObservableObject, Hashable, RelayURLValidating {
     static func == (lhs: AppState, rhs: AppState) -> Bool {
         return lhs.id == rhs.id
     }
@@ -267,8 +268,51 @@ class AppState: ObservableObject, Hashable {
         modelContext.delete(profile)
     }
 
+    func signIn(keypair: Keypair, relayURLs: [URL]) {
+        privateKeySecureStorage.store(for: keypair)
+        signIn(publicKey: keypair.publicKey, relayURLs: relayURLs)
+    }
+
+    func signIn(publicKey: PublicKey, relayURLs: [URL]) {
+        guard let appSettings, appSettings.activeProfile?.publicKeyHex != publicKey.hex else {
+            return
+        }
+
+        let validatedRelayURLStrings = OrderedSet<String>(relayURLs.compactMap { try? validateRelayURL($0).absoluteString })
+
+        if let profile = profiles.first(where: { $0.publicKeyHex == publicKey.hex }) {
+            print("Found existing profile settings for \(publicKey.npub)")
+            if let relayPoolSettings = profile.profileSettings?.relayPoolSettings {
+                let existingRelayURLStrings = Set(relayPoolSettings.relaySettingsList.map { $0.relayURLString })
+                let newRelayURLStrings = validatedRelayURLStrings.subtracting(existingRelayURLStrings)
+                if !newRelayURLStrings.isEmpty {
+                    relayPoolSettings.relaySettingsList += newRelayURLStrings.map { RelaySettings(relayURLString: $0) }
+                }
+            }
+            appSettings.activeProfile = profile
+        } else {
+            print("Creating new profile settings for \(publicKey.npub)")
+            let profile = Profile(publicKeyHex: publicKey.hex)
+            modelContext.insert(profile)
+            do {
+                try modelContext.save()
+            } catch {
+                print("Unable to save new profile \(publicKey.npub)")
+            }
+            if let relayPoolSettings = profile.profileSettings?.relayPoolSettings {
+                relayPoolSettings.relaySettingsList += validatedRelayURLStrings.map { RelaySettings(relayURLString: $0) }
+            }
+            appSettings.activeProfile = profile
+        }
+
+        refreshFollowedPubkeys()
+        updateRelayPool()
+        pullMissingEventsFromPubkeysAndFollows([publicKey.hex])
+        refresh()
+    }
+
     var profiles: [Profile] {
-        let profileDescriptor = FetchDescriptor<Profile>()
+        let profileDescriptor = FetchDescriptor<Profile>(sortBy: [SortDescriptor(\.publicKeyHex)])
         return (try? modelContext.fetch(profileDescriptor)) ?? []
     }
 

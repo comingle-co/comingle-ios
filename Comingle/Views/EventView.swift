@@ -29,8 +29,6 @@ struct EventView: View, EventCreating {
 
     @State var isChangingRSVP: Bool = false
 
-    @State var isLoginViewPresented: Bool = false
-
     let rsvpSortComparator: RSVPSortComparator
     let calendarEventParticipantSortComparator: CalendarEventParticipantSortComparator
 
@@ -670,11 +668,12 @@ struct EventView: View, EventCreating {
 
             ToolbarItem(placement: .bottomBar) {
                 if appState.keypair == nil {
-                    Button(action: {
-                        isLoginViewPresented = true
-                    }, label: {
-                        Text(.localizable.signInToRSVP)
-                    })
+                    NavigationLink(
+                        destination: SettingsView(appState: appState),
+                        label: {
+                            Text(.localizable.signInToRSVP)
+                        }
+                    )
                 } else {
                     Button(action: {
                         isChangingRSVP = true
@@ -713,13 +712,6 @@ struct EventView: View, EventCreating {
                     })
                 }
             }
-        }
-        .sheet(isPresented: $isLoginViewPresented) {
-            NavigationStack {
-                LoginView(appState: appState)
-            }
-            .presentationDetents([.medium])
-            .presentationDragIndicator(.visible)
         }
         .task {
             refresh()

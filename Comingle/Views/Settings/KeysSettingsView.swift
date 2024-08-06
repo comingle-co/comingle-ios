@@ -21,14 +21,31 @@ struct KeysSettingsView: View {
 
     @State private var incorrectPrivateKeyAlertPresented: Bool = false
 
+    @State private var hasCopiedPublicKey: Bool = false
+
     var body: some View {
         List {
             Section(
                 content: {
                     HStack {
-                        Text(publicKey.npub)
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.1)
+                        Button(action: {
+                            UIPasteboard.general.string = publicKey.npub
+                            hasCopiedPublicKey = true
+                        }, label: {
+                            HStack {
+                                Text(publicKey.npub)
+                                    .textContentType(.username)
+                                    .lineLimit(2)
+                                    .minimumScaleFactor(0.1)
+
+                                if hasCopiedPublicKey {
+                                    Image(systemName: "doc.on.doc.fill")
+                                } else {
+                                    Image(systemName: "doc.on.doc")
+                                }
+                            }
+                        })
+                        .foregroundStyle(.primary)
                     }
                 },
                 header: {
