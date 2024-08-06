@@ -9,16 +9,18 @@ import NostrSDK
 
 extension MetadataEvent {
     var resolvedName: String {
-        guard let userMetadata, let bestName = userMetadata.displayName ?? userMetadata.name else {
+        guard let userMetadata else {
             return PublicKey(hex: pubkey)?.npub ?? pubkey
         }
 
-        let trimmedName = bestName.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        guard !trimmedName.isEmpty else {
-            return PublicKey(hex: pubkey)?.npub ?? pubkey
+        if let trimmedDisplayName = userMetadata.displayName?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmedDisplayName.isEmpty {
+            return trimmedDisplayName
         }
 
-        return trimmedName
+        if let trimmedName = userMetadata.name?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmedName.isEmpty {
+            return trimmedName
+        }
+
+        return PublicKey(hex: pubkey)?.npub ?? pubkey
     }
 }
