@@ -11,7 +11,7 @@ import OrderedCollections
 import SwiftData
 import SwiftTrie
 
-class AppState: ObservableObject, Hashable, RelayURLValidating {
+class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
     static func == (lhs: AppState, rhs: AppState) -> Bool {
         return lhs.id == rhs.id
     }
@@ -680,6 +680,25 @@ extension AppState: EventVerifying, RelayDelegate {
                     print("Unable to delete PersistentNostrEvent with id \(deletedEventId)")
                 }
             }
+        }
+    }
+
+    func delete(event: NostrEvent) {
+        guard let keypair else {
+            return
+        }
+
+        do {
+            let deletionEvent: DeletionEvent
+            if let replaceableEvent = event as? ReplaceableEvent {
+                deletionEvent = try delete(events: [replaceableEvent], replaceableEvents: [replaceableEvent], signedBy: keypair)
+            } else {
+                deletionEvent = try delete(events: [event], signedBy: keypair)
+            }
+            relayWritePool.publishEvent(deletionEvent)
+            didReceiveDeletionEvent(deletionEvent)
+        } catch {
+            print("Unable to delete NostrEvent. kind=\(event.kind) \(event.id)")
         }
     }
 

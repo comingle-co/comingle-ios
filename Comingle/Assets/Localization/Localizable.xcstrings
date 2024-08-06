@@ -313,6 +313,18 @@
         }
       }
     },
+    "deleteEvent" : {
+      "comment" : "Button to delete an event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Event"
+          }
+        }
+      }
+    },
     "didNotAttend" : {
       "comment" : "Label indicating that the user did not attend the event.",
       "extractionState" : "manual",

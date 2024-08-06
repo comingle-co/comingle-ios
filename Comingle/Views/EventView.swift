@@ -15,6 +15,7 @@ import SwiftUI
 import Translation
 
 struct EventView: View, EventCreating {
+    @Environment(\.dismiss) private var dismiss
 
     @EnvironmentObject var appState: AppState
     let eventCoordinates: EventCoordinates
@@ -28,6 +29,8 @@ struct EventView: View, EventCreating {
     @State var contentTextTranslation: String = ""
 
     @State var isChangingRSVP: Bool = false
+
+    @State var isShowingEventDeletionConfirmation: Bool = false
 
     let rsvpSortComparator: RSVPSortComparator
     let calendarEventParticipantSortComparator: CalendarEventParticipantSortComparator
@@ -619,10 +622,27 @@ struct EventView: View, EventCreating {
                 })
             }
         }
+        .confirmationDialog(
+            .localizable.deleteEvent,
+            isPresented: $isShowingEventDeletionConfirmation
+        ) {
+            if appState.keypair != nil, let event {
+                Button(
+                    role: .destructive,
+                    action: {
+                        appState.delete(event: event)
+                        dismiss()
+                    },
+                    label: {
+                        Text(.localizable.deleteEvent)
+                    }
+                )
+            }
+        }
         .toolbar {
             ToolbarItem {
                 Menu {
-                    if let event = event {
+                    if let event {
                         let relays = appState.persistentNostrEvent(event.id)?.relays ?? []
                         let shareableEventCoordinates = try? event.shareableEventCoordinates(relayURLStrings: relays.map { $0.absoluteString })
 
@@ -651,12 +671,25 @@ struct EventView: View, EventCreating {
                         }, label: {
                             Text(.localizable.copyEventDetails)
                         })
+
                         if let shareableEventCoordinates {
                             Button(action: {
                                 UIPasteboard.general.string = shareableEventCoordinates
                             }, label: {
                                 Text(.localizable.copyEventID)
                             })
+                        }
+
+                        if appState.keypair != nil {
+                            Button(
+                                role: .destructive,
+                                action: {
+                                    isShowingEventDeletionConfirmation = true
+                                },
+                                label: {
+                                    Text(.localizable.deleteEvent)
+                                }
+                            )
                         }
                     } else {
                         Text(verbatim: "")
@@ -714,7 +747,11 @@ struct EventView: View, EventCreating {
             }
         }
         .task {
-            refresh()
+            if event != nil {
+                refresh()
+            } else {
+                dismiss()
+            }
         }
         .refreshable {
             refresh()
