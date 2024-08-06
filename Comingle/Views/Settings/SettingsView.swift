@@ -289,13 +289,15 @@ extension SettingsView {
         }
 
         var appVersion: String {
-            guard let shortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"],
-                  let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"]
-            else {
+            guard let shortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] else {
                 return String(localized: .localizable.appVersionUnknown)
             }
 
-            return String(localized: .localizable.appVersion(String(describing: shortVersion), String(describing: bundleVersion)))
+            guard let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"], !String(describing: bundleVersion).isEmpty else {
+                return String(describing: shortVersion)
+            }
+
+            return "\(String(describing: shortVersion))-\(String(describing: bundleVersion))"
         }
     }
 }
