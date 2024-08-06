@@ -177,34 +177,9 @@ struct EventView: View, EventCreating {
         let publicKeyHex = keypair.publicKey.hex
 
         if let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates]?.filter({ $0.pubkey == publicKeyHex }),
-           !rsvps.isEmpty,
-           let deletionEvent = try? delete(events: rsvps, replaceableEvents: rsvps, signedBy: keypair) {
-
-            appState.calendarEventsToRsvps[calendarEventCoordinates]?.removeAll(where: { $0.pubkey == publicKeyHex })
-            rsvps.forEach { rsvp in
-                let rsvpId = rsvp.id
-                do {
-                    try appState.modelContext.delete(
-                        model: PersistentNostrEvent.self,
-                        where: #Predicate { persistentNostrEvent in persistentNostrEvent.eventId == rsvpId }
-                    )
-                } catch {
-                    print("Unable to delete PersistentNostrEvent for calendar event RSVP. id=\(rsvpId) coordinates=\(calendarEventCoordinates) \(error)")
-                }
-            }
-
-            let persistentNostrEvent = PersistentNostrEvent(nostrEvent: deletionEvent)
-            appState.modelContext.insert(persistentNostrEvent)
-
-            do {
-                try appState.modelContext.save()
-            } catch {
-                print("Unable to save RSVP to SwiftData. \(error)")
-            }
-
-            appState.relayWritePool.publishEvent(deletionEvent)
+           !rsvps.isEmpty {
+            appState.delete(events: rsvps)
         }
-
     }
 
     func rsvpStatusColor(_ rsvpStatus: CalendarEventRSVPStatus?) -> Color {
@@ -424,6 +399,145 @@ struct EventView: View, EventCreating {
         }
     }
 
+    func changeRSVPConfirmationDialogActions() -> some View {
+        VStack {
+            if let event = event {
+                Button(action: {
+                    createOrUpdateRSVP(.accepted)
+                }, label: {
+                    if event.isUpcoming {
+                        Text(.localizable.rsvpStatusGoing)
+                    } else {
+                        Text(.localizable.attended)
+                    }
+                })
+
+                Button(action: {
+                    createOrUpdateRSVP(.tentative)
+                }, label: {
+                    if event.isUpcoming {
+                        Text(.localizable.rsvpStatusMaybeGoing)
+                    } else {
+                        Text(.localizable.maybeAttended)
+                    }
+                })
+
+                Button(action: {
+                    createOrUpdateRSVP(.declined)
+                }, label: {
+                    if event.isUpcoming {
+                        Text(.localizable.rsvpStatusNotGoing)
+                    } else {
+                        Text(.localizable.didNotAttend)
+                    }
+                })
+
+                if let keypair = appState.keypair,
+                   let rsvps = appState.calendarEventsToRsvps[eventCoordinates.tag.value],
+                   rsvps.contains(where: { $0.pubkey == keypair.publicKey.hex }) {
+                    Button(
+                        role: .destructive,
+                        action: {
+                            removeRSVP()
+                        },
+                        label: {
+                            Text(.localizable.removeRSVP)
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    func locationConfirmationDialogActions() -> some View {
+        VStack {
+            if selectedGeohash, let geohash = geohash {
+                let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
+                let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
+                Button(action: {
+                    let encodedTitle = eventTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? eventTitle
+                    if let url = URL(string: "https://maps.apple.com/?ll=\(encodedLocation)&q=\(encodedTitle)") {
+                        UIApplication.shared.open(url)
+                    }
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.openInAppleMaps)
+                })
+                Button(action: {
+                    if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
+                        UIApplication.shared.open(url)
+                    }
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.openInGoogleMaps)
+                })
+                Button(action: {
+                    UIPasteboard.general.string = coordinatesString
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.copyCoordinates)
+                })
+            } else if !selectedLocation.isEmpty {
+                if let selectedLocationURL = URL(string: selectedLocation), selectedLocation.hasPrefix("https://") || selectedLocation.hasPrefix("http://") {
+                    Button(action: {
+                        UIApplication.shared.open(selectedLocationURL)
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openLink)
+                    })
+                } else {
+                    let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
+                    Button(action: {
+                        if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
+                            UIApplication.shared.open(url)
+                        }
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openInAppleMaps)
+                    })
+                    Button(action: {
+                        if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
+                            UIApplication.shared.open(url)
+                        }
+                        selectedGeohash = false
+                        selectedLocation = ""
+                    }, label: {
+                        Text(.localizable.openInGoogleMaps)
+                    })
+                }
+                Button(action: {
+                    UIPasteboard.general.string = selectedLocation
+                    selectedGeohash = false
+                    selectedLocation = ""
+                }, label: {
+                    Text(.localizable.copyLocation)
+                })
+            }
+        }
+    }
+
+    func eventDeletionConfirmationDialogActions() -> some View {
+        VStack {
+            if let event, appState.keypair?.publicKey.hex == event.pubkey {
+                Button(
+                    role: .destructive,
+                    action: {
+                        appState.delete(events: [event])
+                        dismiss()
+                    },
+                    label: {
+                        Text(.localizable.deleteEvent)
+                    }
+                )
+            }
+        }
+    }
+
     var body: some View {
         ScrollView {
             VStack {
@@ -507,137 +621,16 @@ struct EventView: View, EventCreating {
         }
         .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog(.localizable.rsvp, isPresented: $isChangingRSVP) {
-            if let event = event {
-                Button(action: {
-                    createOrUpdateRSVP(.accepted)
-                }, label: {
-                    if event.isUpcoming {
-                        Text(.localizable.rsvpStatusGoing)
-                    } else {
-                        Text(.localizable.attended)
-                    }
-                })
-
-                Button(action: {
-                    createOrUpdateRSVP(.tentative)
-                }, label: {
-                    if event.isUpcoming {
-                        Text(.localizable.rsvpStatusMaybeGoing)
-                    } else {
-                        Text(.localizable.maybeAttended)
-                    }
-                })
-
-                Button(action: {
-                    createOrUpdateRSVP(.declined)
-                }, label: {
-                    if event.isUpcoming {
-                        Text(.localizable.rsvpStatusNotGoing)
-                    } else {
-                        Text(.localizable.didNotAttend)
-                    }
-                })
-
-                if let keypair = appState.keypair,
-                   let rsvps = appState.calendarEventsToRsvps[eventCoordinates.tag.value],
-                   rsvps.contains(where: { $0.pubkey == keypair.publicKey.hex }) {
-                    Button(
-                        role: .destructive,
-                        action: {
-                            removeRSVP()
-                        },
-                        label: {
-                            Text(.localizable.removeRSVP)
-                        }
-                    )
-                }
-            }
+            changeRSVPConfirmationDialogActions()
         }
         .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
-            if selectedGeohash, let geohash = geohash {
-                let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
-                let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
-                Button(action: {
-                    let encodedTitle = eventTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? eventTitle
-                    if let url = URL(string: "https://maps.apple.com/?ll=\(encodedLocation)&q=\(encodedTitle)") {
-                        UIApplication.shared.open(url)
-                    }
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.openInAppleMaps)
-                })
-                Button(action: {
-                    if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
-                        UIApplication.shared.open(url)
-                    }
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.openInGoogleMaps)
-                })
-                Button(action: {
-                    UIPasteboard.general.string = coordinatesString
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.copyCoordinates)
-                })
-            } else if !selectedLocation.isEmpty {
-                if let selectedLocationURL = URL(string: selectedLocation), selectedLocation.hasPrefix("https://") || selectedLocation.hasPrefix("http://") {
-                    Button(action: {
-                        UIApplication.shared.open(selectedLocationURL)
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openLink)
-                    })
-                } else {
-                    let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
-                    Button(action: {
-                        if let url = URL(string: "https://maps.apple.com/?q=\(encodedLocation)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInAppleMaps)
-                    })
-                    Button(action: {
-                        if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
-                            UIApplication.shared.open(url)
-                        }
-                        selectedGeohash = false
-                        selectedLocation = ""
-                    }, label: {
-                        Text(.localizable.openInGoogleMaps)
-                    })
-                }
-                Button(action: {
-                    UIPasteboard.general.string = selectedLocation
-                    selectedGeohash = false
-                    selectedLocation = ""
-                }, label: {
-                    Text(.localizable.copyLocation)
-                })
-            }
+            locationConfirmationDialogActions()
         }
         .confirmationDialog(
             .localizable.deleteEvent,
             isPresented: $isShowingEventDeletionConfirmation
         ) {
-            if appState.keypair != nil, let event {
-                Button(
-                    role: .destructive,
-                    action: {
-                        appState.delete(event: event)
-                        dismiss()
-                    },
-                    label: {
-                        Text(.localizable.deleteEvent)
-                    }
-                )
-            }
+            eventDeletionConfirmationDialogActions()
         }
         .toolbar {
             ToolbarItem {
@@ -680,7 +673,7 @@ struct EventView: View, EventCreating {
                             })
                         }
 
-                        if appState.keypair != nil {
+                        if let keypair = appState.keypair, keypair.publicKey.hex == event.pubkey {
                             Button(
                                 role: .destructive,
                                 action: {

@@ -683,22 +683,24 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
-    func delete(event: NostrEvent) {
+    func delete(events: [NostrEvent]) {
         guard let keypair else {
             return
         }
 
+        let deletableEvents = events.filter { $0.pubkey == keypair.publicKey.hex }
+        guard !deletableEvents.isEmpty else {
+            return
+        }
+
+        let replaceableEvents = deletableEvents.compactMap { $0 as? ReplaceableEvent }
+
         do {
-            let deletionEvent: DeletionEvent
-            if let replaceableEvent = event as? ReplaceableEvent {
-                deletionEvent = try delete(events: [replaceableEvent], replaceableEvents: [replaceableEvent], signedBy: keypair)
-            } else {
-                deletionEvent = try delete(events: [event], signedBy: keypair)
-            }
+            let deletionEvent = try delete(events: deletableEvents, replaceableEvents: replaceableEvents, signedBy: keypair)
             relayWritePool.publishEvent(deletionEvent)
-            didReceiveDeletionEvent(deletionEvent)
+            _ = didReceive(nostrEvent: deletionEvent)
         } catch {
-            print("Unable to delete NostrEvent. kind=\(event.kind) \(event.id)")
+            print("Unable to delete NostrEvents. [\(events.map { "{ id=\($0.id), kind=\($0.kind)}" }.joined(separator: ", "))]")
         }
     }
 
@@ -715,35 +717,47 @@ extension AppState: EventVerifying, RelayDelegate {
             // If the verification throws an error, that means they are invalid and we should ignore the event.
             try? self.verifyEvent(nostrEvent)
 
-            if let existingEvent = self.persistentNostrEvent(nostrEvent.id) {
-                if !existingEvent.relays.contains(where: { $0 == relay.url }) {
-                    existingEvent.relays.append(relay.url)
-                }
-            } else {
-                let persistentNostrEvent = PersistentNostrEvent(nostrEvent: nostrEvent, relays: [relay.url])
-                self.modelContext.insert(persistentNostrEvent)
-                do {
-                    try self.modelContext.save()
-                } catch {
-                    print("Failed to save PersistentNostrEvent. id=\(nostrEvent.id)")
-                }
-            }
+            _ = self.didReceive(nostrEvent: nostrEvent, relay: relay)
+        }
+    }
 
-            switch nostrEvent {
-            case let followListEvent as FollowListEvent:
-                self.didReceiveFollowListEvent(followListEvent, shouldPullMissingEvents: true)
-            case let metadataEvent as MetadataEvent:
-                self.didReceiveMetadataEvent(metadataEvent)
-            case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
-                self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
-            case let rsvpEvent as CalendarEventRSVP:
-                self.didReceiveCalendarEventRSVP(rsvpEvent)
-            case let deletionEvent as DeletionEvent:
-                self.didReceiveDeletionEvent(deletionEvent)
-            default:
-                break
+    func didReceive(nostrEvent: NostrEvent, relay: Relay? = nil) -> PersistentNostrEvent? {
+        switch nostrEvent {
+        case let followListEvent as FollowListEvent:
+            self.didReceiveFollowListEvent(followListEvent, shouldPullMissingEvents: true)
+        case let metadataEvent as MetadataEvent:
+            self.didReceiveMetadataEvent(metadataEvent)
+        case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
+            self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
+        case let rsvpEvent as CalendarEventRSVP:
+            self.didReceiveCalendarEventRSVP(rsvpEvent)
+        case let deletionEvent as DeletionEvent:
+            self.didReceiveDeletionEvent(deletionEvent)
+        default:
+            return nil
+        }
+
+        let persistentNostrEvent: PersistentNostrEvent
+        if let existingEvent = self.persistentNostrEvent(nostrEvent.id) {
+            if let relay, !existingEvent.relays.contains(where: { $0 == relay.url }) {
+                existingEvent.relays.append(relay.url)
+            }
+            persistentNostrEvent = existingEvent
+        } else {
+            if let relay {
+                persistentNostrEvent = PersistentNostrEvent(nostrEvent: nostrEvent, relays: [relay.url])
+            } else {
+                persistentNostrEvent = PersistentNostrEvent(nostrEvent: nostrEvent)
+            }
+            self.modelContext.insert(persistentNostrEvent)
+            do {
+                try self.modelContext.save()
+            } catch {
+                print("Failed to save PersistentNostrEvent. id=\(nostrEvent.id)")
             }
         }
+
+        return persistentNostrEvent
     }
 
     func loadPersistentNostrEvents(_ persistentNostrEvents: [PersistentNostrEvent]) {
