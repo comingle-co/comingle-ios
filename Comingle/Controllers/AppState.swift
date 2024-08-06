@@ -258,14 +258,37 @@ class AppState: ObservableObject, Hashable, RelayURLValidating {
     }
 
     func deleteProfile(_ profile: Profile) {
-        if let publicKeyHex = profile.publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
+        guard let publicKeyHex = profile.publicKeyHex, let newProfile = profiles.first(where: { $0 != profile }) else {
+            return
+        }
+
+        if let publicKey = PublicKey(hex: publicKeyHex) {
             privateKeySecureStorage.delete(for: publicKey)
         }
         if let appSettings, appSettings.activeProfile == profile {
-            appSettings.activeProfile = profiles.first(where: { $0 != profile })
+            updateActiveProfile(newProfile)
             refreshFollowedPubkeys()
         }
         modelContext.delete(profile)
+    }
+
+    func updateActiveProfile(_ profile: Profile) {
+        guard let appSettings, appSettings.activeProfile != profile else {
+            return
+        }
+
+        appSettings.activeProfile = profile
+
+        followedPubkeys.removeAll()
+
+        if profile.publicKeyHex == nil {
+            activeTab = .explore
+        } else if publicKey != nil {
+            refreshFollowedPubkeys()
+        }
+
+        updateRelayPool()
+        refresh(hardRefresh: true)
     }
 
     func signIn(keypair: Keypair, relayURLs: [URL]) {

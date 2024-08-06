@@ -48,7 +48,7 @@ struct SettingsView: View {
                             }
                             .tag(profile.publicKeyHex)
                             .onTapGesture {
-                                viewModel.updateActiveProfile(profile)
+                                viewModel.appState.updateActiveProfile(profile)
                                 profilePickerExpanded = false
                             }
                             .swipeActions {
@@ -286,25 +286,6 @@ extension SettingsView {
 
         func isActiveProfile(_ profile: Profile) -> Bool {
             return appState.appSettings?.activeProfile == profile
-        }
-
-        func updateActiveProfile(_ profile: Profile) {
-            guard let appSettings = appState.appSettings, appSettings.activeProfile != profile else {
-                return
-            }
-
-            appSettings.activeProfile = profile
-
-            appState.followedPubkeys.removeAll()
-
-            if profile.publicKeyHex == nil {
-                appState.activeTab = .explore
-            } else if appState.publicKey != nil {
-                appState.refreshFollowedPubkeys()
-            }
-
-            appState.updateRelayPool()
-            appState.refresh(hardRefresh: true)
         }
 
         var appVersion: String {
