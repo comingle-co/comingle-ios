@@ -177,9 +177,7 @@ class AppState: ObservableObject, Hashable, RelayURLValidating {
     }
 
     func updateRelayPool() {
-        let profile = appSettings?.activeProfile
-
-        let relaySettings = profile?.profileSettings?.relayPoolSettings?.relaySettingsList ?? []
+        let relaySettings = relayPoolSettings?.relaySettingsList ?? []
 
         let readRelays = relaySettings
             .filter { $0.read }
@@ -251,10 +249,13 @@ class AppState: ObservableObject, Hashable, RelayURLValidating {
         }
 
         relayPoolSettings.relaySettingsList.append(RelaySettings(relayURLString: relayURL.absoluteString))
+
+        updateRelayPool()
     }
 
     func removeRelaySettings(relaySettings: RelaySettings) {
         relayPoolSettings?.relaySettingsList.removeAll(where: { $0 == relaySettings })
+        updateRelayPool()
     }
 
     func deleteProfile(_ profile: Profile) {
