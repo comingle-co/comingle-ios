@@ -635,6 +635,20 @@ struct EventView: View, EventCreating {
                             }
                         }
 
+                        if let shareableEventCoordinates {
+                            Button(action: {
+                                UIPasteboard.general.string = shareableEventCoordinates
+                            }, label: {
+                                Text(.localizable.copyEventID)
+                            })
+
+                            Button(action: {
+                                UIPasteboard.general.string = "https://njump.me/\(shareableEventCoordinates)"
+                            }, label: {
+                                Text(.localizable.copyEventURL)
+                            })
+                        }
+
                         Button(action: {
                             var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(contentText)\n\n"
 
@@ -654,14 +668,6 @@ struct EventView: View, EventCreating {
                         }, label: {
                             Text(.localizable.copyEventDetails)
                         })
-
-                        if let shareableEventCoordinates {
-                            Button(action: {
-                                UIPasteboard.general.string = shareableEventCoordinates
-                            }, label: {
-                                Text(.localizable.copyEventID)
-                            })
-                        }
 
                         if let keypair = appState.keypair, keypair.publicKey.hex == event.pubkey {
                             Button(

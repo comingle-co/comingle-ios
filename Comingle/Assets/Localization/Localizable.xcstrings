@@ -193,6 +193,18 @@
         }
       }
     },
+    "copyEventURL" : {
+      "comment" : "Button to copy a calendar event URL.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Event URL"
+          }
+        }
+      }
+    },
     "copyLocation" : {
       "comment" : "Button to copy location of calendar event.",
       "extractionState" : "manual",
