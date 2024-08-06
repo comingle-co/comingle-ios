@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.1.0-beta.2 - 2024-08-06
+## 0.1.0 (2) - 2024-08-06
 
 ### Added 
 - Profile creation
@@ -9,7 +9,6 @@
 
 ### Changed
 - Profile name resolution now prefers display name over name
-- Version number scheme is now major.minor.patch-build
 
 ### Fixed
 - Sign out bug where active tab is not switched
@@ -17,6 +16,6 @@
 - Bug where updating relay pool settings do not get reflected in the active relay pool
 - Alignment of event relay list
 
-## 0.1.0-beta.1 - 2024-08-04
+## 0.1.0 (1) - 2024-08-04
 
 Initial release of Comingle!
