@@ -335,7 +335,7 @@ extension EventCreationOrModificationView {
                 return nil
             }
 
-            return nil
+            return url
         }
 
         var validatedReferenceURL: URL? {
