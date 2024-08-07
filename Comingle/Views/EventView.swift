@@ -67,7 +67,7 @@ struct EventView: View, EventCreating {
     }
 
     var geohash: Geohash? {
-        if let geohashString = event?.geohash {
+        if let geohashString = event?.geohash?.trimmedOrNilIfEmpty, !geohashString.isEmpty {
             return Geohash(geohash: geohashString)
         } else {
             return nil
