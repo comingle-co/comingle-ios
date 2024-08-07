@@ -99,7 +99,7 @@ struct CustomTabBar: View {
             if showFollowingTab {
                 CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.following, selectedTab: $selectedTab, onTapAction: onTapAction)
             }
-            CustomTabBarItem(iconName: "magnifyingglass", title: .localizable.explore, tab: HomeTabs.explore, selectedTab: $selectedTab, onTapAction: onTapAction)
+            CustomTabBarItem(iconName: "globe", title: .localizable.explore, tab: HomeTabs.explore, selectedTab: $selectedTab, onTapAction: onTapAction)
         }
         .frame(height: 50)
         .background(Color.gray.opacity(0.2))
