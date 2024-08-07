@@ -73,18 +73,6 @@
         }
       }
     },
-    "appDescription" : {
-      "comment" : "Description of the app.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your go-to conference app powered by Nostr."
-          }
-        }
-      }
-    },
     "appVersion" : {
       "comment" : "Text indicating the version of the app that is running. The first argument is the version number, and the second argument is the build number.",
       "extractionState" : "manual",
@@ -117,18 +105,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attended"
-          }
-        }
-      }
-    },
-    "calendars" : {
-      "comment" : "Navigation title for the view showing the list of conferences.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendars"
           }
         }
       }
@@ -297,18 +273,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usernames are not unique and not used for signing into an account. More than one person can have the same username."
-          }
-        }
-      }
-    },
-    "currentCalendars" : {
-      "comment" : "Section header for list of current conferences.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendars with Upcoming Events"
           }
         }
       }
@@ -505,18 +469,6 @@
         }
       }
     },
-    "exploreEvents" : {
-      "comment" : "Button to explore calendar events.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Explore Events"
-          }
-        }
-      }
-    },
     "findMeOnNostr" : {
       "comment" : "Button to query data using the private or public key on Nostr relays.",
       "extractionState" : "manual",
@@ -529,30 +481,6 @@
         }
       }
     },
-    "following" : {
-      "comment" : "Section header for listing calendar events from accounts that the user follows.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Following"
-          }
-        }
-      }
-    },
-    "going" : {
-      "comment" : "Picker label to filter down upcoming events down to only those that the user is going to.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Going"
-          }
-        }
-      }
-    },
     "guest" : {
       "comment" : "Name of Guest account that is not signed in.",
       "extractionState" : "manual",
@@ -561,18 +489,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Guest"
-          }
-        }
-      }
-    },
-    "hashtag" : {
-      "comment" : "Placeholder text for hashtag.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hashtag"
           }
         }
       }
@@ -733,18 +649,6 @@
         }
       }
     },
-    "nostrProfile" : {
-      "comment" : "Button to navigate to a person's Nostr profile.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nostr Profile"
-          }
-        }
-      }
-    },
     "nostrPublicKeyFooter" : {
       "comment" : "Footer text indicating what it means to use a public key.",
       "extractionState" : "manual",
@@ -853,18 +757,6 @@
         }
       }
     },
-    "organizers" : {
-      "comment" : "Picker option to show list of conference organizers.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Organizers"
-          }
-        }
-      }
-    },
     "participants" : {
       "comment" : "Section title for participants in event creation view.",
       "extractionState" : "manual",
@@ -921,42 +813,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Past"
-          }
-        }
-      }
-    },
-    "pastConferences" : {
-      "comment" : "Section header for list of past conferences.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Past Conferences"
-          }
-        }
-      }
-    },
-    "people" : {
-      "comment" : "Label for view that shows people involved with the conference.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "People"
-          }
-        }
-      }
-    },
-    "peopleGroupPickerLabel" : {
-      "comment" : "Label for group picker on people view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Group"
           }
         }
       }
@@ -1237,42 +1093,6 @@
         }
       }
     },
-    "saved" : {
-      "comment" : "Label for view of saved events.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Saved"
-          }
-        }
-      }
-    },
-    "schedule" : {
-      "comment" : "Label for conference schedule view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schedule"
-          }
-        }
-      }
-    },
-    "scheduleDatePickerLabel" : {
-      "comment" : "Label for date picker on conference schedule view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Date"
-          }
-        }
-      }
-    },
     "searchForLocation" : {
       "comment" : "Placeholder text to prompt user to search for a location for the event.",
       "extractionState" : "manual",
@@ -1381,90 +1201,6 @@
         }
       }
     },
-    "settingsPrivateKeyHeader" : {
-      "comment" : "Section header in settings view for private key configurations.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Private Key"
-          }
-        }
-      }
-    },
-    "settingsPublicKey" : {
-      "comment" : "Header text in settings view to indicate the text next to it is the user's public key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Public Key"
-          }
-        }
-      }
-    },
-    "settingsRelayConnected" : {
-      "comment" : "Relay connection status indicating that it is connected.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connected"
-          }
-        }
-      }
-    },
-    "settingsRelayConnecting" : {
-      "comment" : "Relay connection status indicating that it is connecting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connecting..."
-          }
-        }
-      }
-    },
-    "settingsRelayConnectionError" : {
-      "comment" : "Relay connection status indicating that there was an error.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error: %@"
-          }
-        }
-      }
-    },
-    "settingsRelayConnectionHeader" : {
-      "comment" : "Header text in settings view for section that displays relay connection.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Relay Connection"
-          }
-        }
-      }
-    },
-    "settingsRelayConnectionStatus" : {
-      "comment" : "Text indicating that the relay connection status is beside this text.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connection Status:"
-          }
-        }
-      }
-    },
     "settingsRelayFooter" : {
       "comment" : "Relay settings footer text explaining where relay settings are stored and the limitations of relay connections.",
       "extractionState" : "manual",
@@ -1473,30 +1209,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relay settings are saved locally to this device. Authenticated relays and publishing relay lists are not yet supported."
-          }
-        }
-      }
-    },
-    "settingsRelayLabel" : {
-      "comment" : "Text indicating that the relay URL is next to it.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Relay:"
-          }
-        }
-      }
-    },
-    "settingsRelayNotConnected" : {
-      "comment" : "Relay connection status indicating that it is not connected.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not connected"
           }
         }
       }
@@ -1657,30 +1369,6 @@
         }
       }
     },
-    "upcomingConferences" : {
-      "comment" : "Section header for list of upcoming conferences.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upcoming Conferences"
-          }
-        }
-      }
-    },
-    "upcomingEvents" : {
-      "comment" : "Section header for upcoming events",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upcoming Events"
-          }
-        }
-      }
-    },
     "url" : {
       "comment" : "Placeholder text for text field for entering event URL.",
       "extractionState" : "manual",
@@ -1725,42 +1413,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "View Profile"
-          }
-        }
-      }
-    },
-    "welcome" : {
-      "comment" : "Text welcoming the user to the app.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Welcome to Comingle!"
-          }
-        }
-      }
-    },
-    "yourNetwork" : {
-      "comment" : "Title text for view that shows events from your network.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your Network"
-          }
-        }
-      }
-    },
-    "zapWithCommentOrQuestion" : {
-      "comment" : "Button to zap a speaker with a comment or question.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⚡️ Zap with comment or question"
           }
         }
       }
