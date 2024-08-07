@@ -26,10 +26,14 @@ class Utilities {
 
     func abbreviatedPublicKey(_ publicKeyHex: String) -> String {
         if let publicKey = PublicKey(hex: publicKeyHex) {
-            return "\(publicKey.npub.prefix(12)):\(publicKey.npub.suffix(12))"
+            return abbreviatedPublicKey(publicKey)
         } else {
             return publicKeyHex
         }
+    }
+
+    func abbreviatedPublicKey(_ publicKey: PublicKey) -> String {
+        return "\(publicKey.npub.prefix(12)):\(publicKey.npub.suffix(12))"
     }
 
     func externalNostrProfileURL(npub: String) -> URL? {

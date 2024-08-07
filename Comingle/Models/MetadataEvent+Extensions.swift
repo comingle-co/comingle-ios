@@ -10,7 +10,7 @@ import NostrSDK
 extension MetadataEvent {
     var resolvedName: String {
         guard let userMetadata else {
-            return PublicKey(hex: pubkey)?.npub ?? pubkey
+            return Utilities.shared.abbreviatedPublicKey(pubkey)
         }
 
         if let trimmedDisplayName = userMetadata.displayName?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmedDisplayName.isEmpty {
@@ -21,6 +21,6 @@ extension MetadataEvent {
             return trimmedName
         }
 
-        return PublicKey(hex: pubkey)?.npub ?? pubkey
+        return Utilities.shared.abbreviatedPublicKey(pubkey)
     }
 }
