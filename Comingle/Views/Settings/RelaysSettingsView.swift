@@ -50,6 +50,20 @@ struct RelaysSettingsView: View, RelayURLValidating {
                                         }
                                     }
                                 )
+                                switch appState.relayState(relayURLString: relaySettings.relayURLString) {
+                                case .connected:
+                                    Image(systemName: "checkmark.circle")
+                                        .foregroundStyle(.green)
+                                case .connecting:
+                                    Image(systemName: "hourglass.circle")
+                                        .foregroundStyle(.yellow)
+                                case .error:
+                                    Image(systemName: "x.circle.fill")
+                                        .foregroundStyle(.red)
+                                case .notConnected, .none:
+                                    Image(systemName: "pause.circle")
+                                        .foregroundStyle(.red)
+                                }
                                 Picker(relaySettings.relayURLString, selection: relayMarkerBinding) {
                                     ForEach(RelayOption.allCases, id: \.self) { option in
                                         Text(option.localizedStringResource)

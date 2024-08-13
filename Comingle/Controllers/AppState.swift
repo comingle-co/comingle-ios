@@ -351,13 +351,40 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
         descriptor.fetchLimit = 1
         return (try? modelContext.fetch(descriptor))?.first
     }
+
+    func relayState(relayURLString: String) -> Relay.State? {
+        let readRelay = relayReadPool.relays.first(where: { $0.url.absoluteString == relayURLString })
+        let writeRelay = relayWritePool.relays.first(where: { $0.url.absoluteString == relayURLString })
+
+        switch (readRelay?.state, writeRelay?.state) {
+        case (nil, nil):
+            return nil
+        case (_, .error), (_, .notConnected), (_, .connecting):
+            return writeRelay?.state
+        case (.error, _), (.notConnected, _), (.connecting, _):
+            return readRelay?.state
+        case (_, .connected), (.connected, _):
+            return .connected
+        }
+    }
 }
 
 extension AppState: EventVerifying, RelayDelegate {
 
     func relayStateDidChange(_ relay: Relay, state: Relay.State) {
-        if state == .connected {
+        guard relayReadPool.relays.contains(relay) || relayWritePool.relays.contains(relay) else {
+            print("Relay \(relay.url.absoluteString) changed state to \(state) but it is not in the read or write relay pool. Doing nothing.")
+            return
+        }
+
+        print("Relay \(relay.url.absoluteString) changed state to \(state)")
+        switch state {
+        case .connected:
             refresh(relay: relay)
+        case .notConnected, .error:
+            relay.connect()
+        default:
+            break
         }
     }
 

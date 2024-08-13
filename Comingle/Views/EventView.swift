@@ -358,30 +358,41 @@ struct EventView: View, EventCreating {
                         .font(.headline)
 
                     ForEach(rsvps.sorted(using: rsvpSortComparator), id: \.self) { rsvp in
-                        NavigationLink(
-                            destination: {
-                                ProfileView(publicKeyHex: rsvp.pubkey)
-                            },
-                            label: {
-                                HStack {
-                                    ImageOverlayView(
-                                        imageSystemName: rsvpStatusSystemImage(rsvp.status),
-                                        overlayBackgroundColor: rsvpStatusColor(rsvp.status)
-                                    ) {
-                                        ProfilePictureView(publicKeyHex: rsvp.pubkey)
-                                    }
+                        HStack {
+                            NavigationLink(
+                                destination: {
+                                    ProfileView(publicKeyHex: rsvp.pubkey)
+                                },
+                                label: {
+                                    HStack {
+                                        ImageOverlayView(
+                                            imageSystemName: rsvpStatusSystemImage(rsvp.status),
+                                            overlayBackgroundColor: rsvpStatusColor(rsvp.status)
+                                        ) {
+                                            ProfilePictureView(publicKeyHex: rsvp.pubkey)
+                                        }
 
-                                    VStack(alignment: .leading) {
-                                        ProfileNameView(publicKeyHex: rsvp.pubkey)
+                                        VStack(alignment: .leading) {
+                                            ProfileNameView(publicKeyHex: rsvp.pubkey)
 
-                                        if appState.followedPubkeys.contains(rsvp.pubkey) {
-                                            Image(systemName: "figure.stand.line.dotted.figure.stand")
-                                                .font(.footnote)
+                                            if appState.followedPubkeys.contains(rsvp.pubkey) {
+                                                Image(systemName: "figure.stand.line.dotted.figure.stand")
+                                                    .font(.footnote)
+                                            }
                                         }
                                     }
                                 }
+                            )
+
+                            let persistentRSVP = appState.persistentNostrEvent(rsvp.id)
+                            if ((persistentRSVP?.relays.isEmpty) != false) {
+                                Button(action: {
+                                    appState.relayWritePool.publishEvent(rsvp)
+                                }, label: {
+                                    Image(systemName: "exclamationmark.arrow.circlepath")
+                                })
                             }
-                        )
+                        }
                     }
                 }
             }
@@ -608,6 +619,18 @@ struct EventView: View, EventCreating {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
+                    }
+
+                    Divider()
+
+                    VStack {
+                        Text(.localizable.lastUpdated)
+                            .padding(.vertical, 2)
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Text(dateFormatter.string(from: event.createdDate))
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .padding()

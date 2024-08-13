@@ -67,6 +67,7 @@
 		3ABD0C152C5F2508004A15C7 /* RelaySubscriptionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C142C5F2508004A15C7 /* RelaySubscriptionMetadata.swift */; };
 		3ABD0C1D2C60834C004A15C7 /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C1C2C60834C004A15C7 /* CreateProfileView.swift */; };
 		3ABD0C212C610063004A15C7 /* CredentialHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C202C610063004A15C7 /* CredentialHandler.swift */; };
+		3ABD0C262C65BDFD004A15C7 /* RelayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C252C65BDFD004A15C7 /* RelayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +149,7 @@
 		3ABD0C142C5F2508004A15C7 /* RelaySubscriptionMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaySubscriptionMetadata.swift; sourceTree = "<group>"; };
 		3ABD0C1C2C60834C004A15C7 /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		3ABD0C202C610063004A15C7 /* CredentialHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialHandler.swift; sourceTree = "<group>"; };
+		3ABD0C252C65BDFD004A15C7 /* RelayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,6 +331,7 @@
 				3A4A89A62C3E3F7400238043 /* AppearanceSettingsView.swift */,
 				3A4A89A12C3E3F6000238043 /* KeysSettingsView.swift */,
 				3A4A89A42C3E3F6800238043 /* RelaysSettingsView.swift */,
+				3ABD0C252C65BDFD004A15C7 /* RelayView.swift */,
 				3A2FF9812A3FD68B009E1067 /* SettingsView.swift */,
 			);
 			path = Settings;
@@ -530,6 +533,7 @@
 				3A4A89872C3B49EF00238043 /* ProfileView.swift in Sources */,
 				3A317C0C2C58A282004DA56B /* ParticipantSearchView.swift in Sources */,
 				3A453E242A0C614900897303 /* EventView.swift in Sources */,
+				3ABD0C262C65BDFD004A15C7 /* RelayView.swift in Sources */,
 				3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */,
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
 				3A317BF62C5750B3004DA56B /* EventCreationOrModificationView.swift in Sources */,
