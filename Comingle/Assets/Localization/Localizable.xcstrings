@@ -289,18 +289,6 @@
         }
       }
     },
-    "deleteEvent" : {
-      "comment" : "Button to delete an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete Event"
-          }
-        }
-      }
-    },
     "didNotAttend" : {
       "comment" : "Label indicating that the user did not attend the event.",
       "extractionState" : "manual",
@@ -973,18 +961,6 @@
         }
       }
     },
-    "removeRSVP" : {
-      "comment" : "Button to remove the user's existing RSVP.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove RSVP"
-          }
-        }
-      }
-    },
     "reportIssue" : {
       "comment" : "Button to report an issue about the app.",
       "extractionState" : "manual",
@@ -1017,6 +993,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restore Original Event"
+          }
+        }
+      }
+    },
+    "retractEvent" : {
+      "comment" : "Button to retract an event by requesting to delete it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retract Event"
+          }
+        }
+      }
+    },
+    "retractRSVP" : {
+      "comment" : "Button to retract the user's existing RSVP.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retract RSVP"
           }
         }
       }

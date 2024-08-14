@@ -29,7 +29,7 @@ struct EventView: View, EventCreating {
 
     @State var isChangingRSVP: Bool = false
 
-    @State var isShowingEventDeletionConfirmation: Bool = false
+    @State var isShowingEventRetractionConfirmation: Bool = false
 
     let rsvpSortComparator: RSVPSortComparator
     let calendarEventParticipantSortComparator: CalendarEventParticipantSortComparator
@@ -167,7 +167,7 @@ struct EventView: View, EventCreating {
         }
     }
 
-    func removeRSVP() {
+    func retractRSVP() {
         guard let keypair = appState.keypair else {
             return
         }
@@ -447,10 +447,10 @@ struct EventView: View, EventCreating {
                 Button(
                     role: .destructive,
                     action: {
-                        removeRSVP()
+                        retractRSVP()
                     },
                     label: {
-                        Text(.localizable.removeRSVP)
+                        Text(.localizable.retractRSVP)
                     }
                 )
             }
@@ -527,7 +527,7 @@ struct EventView: View, EventCreating {
         }
     }
 
-    @ViewBuilder func eventDeletionConfirmationDialogActions() -> some View {
+    @ViewBuilder func eventRetractionConfirmationDialogActions() -> some View {
         if let event, appState.keypair?.publicKey.hex == event.pubkey {
             Button(
                 role: .destructive,
@@ -535,7 +535,7 @@ struct EventView: View, EventCreating {
                     appState.delete(events: [event])
                 },
                 label: {
-                    Text(.localizable.deleteEvent)
+                    Text(.localizable.retractEvent)
                 }
             )
         }
@@ -643,10 +643,10 @@ struct EventView: View, EventCreating {
                 locationConfirmationDialogActions()
             }
             .confirmationDialog(
-                .localizable.deleteEvent,
-                isPresented: $isShowingEventDeletionConfirmation
+                .localizable.retractEvent,
+                isPresented: $isShowingEventRetractionConfirmation
             ) {
-                eventDeletionConfirmationDialogActions()
+                eventRetractionConfirmationDialogActions()
             }
             .toolbar {
                 ToolbarItem {
@@ -698,10 +698,10 @@ struct EventView: View, EventCreating {
                             Button(
                                 role: .destructive,
                                 action: {
-                                    isShowingEventDeletionConfirmation = true
+                                    isShowingEventRetractionConfirmation = true
                                 },
                                 label: {
-                                    Text(.localizable.deleteEvent)
+                                    Text(.localizable.retractEvent)
                                 }
                             )
                         }
