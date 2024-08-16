@@ -91,6 +91,7 @@ struct EventCreationOrModificationView: View {
                         displayedComponents: [.date, .hourAndMinute]
                     )
                     .datePickerStyle(.compact)
+                    .environment(\.timeZone, viewModel.startTimeZoneOrCurrent)
 
                     DatePicker(
                         String(localized: .localizable.eventEnd),
@@ -98,15 +99,15 @@ struct EventCreationOrModificationView: View {
                         displayedComponents: [.date, .hourAndMinute]
                     )
                     .datePickerStyle(.compact)
+                    .environment(\.timeZone, viewModel.startTimeZoneOrCurrent)
 
                     Toggle(.localizable.setTimeZone, isOn: $viewModel.isSettingTimeZone)
 
                     if viewModel.isSettingTimeZone {
-                        let timeZone = viewModel.startTimeZone ?? TimeZone.autoupdatingCurrent
                         Button(action: {
                             viewModel.isShowingTimeZoneSelector = true
                         }, label: {
-                            Text(timeZone.displayName(for: viewModel.start))
+                            Text(viewModel.startTimeZoneOrCurrent.displayName(for: viewModel.start))
                         })
                     }
                 } header: {
@@ -221,12 +222,11 @@ struct EventCreationOrModificationView: View {
 
 class EventCreationParticipant: Equatable, Hashable {
     static func == (lhs: EventCreationParticipant, rhs: EventCreationParticipant) -> Bool {
-        lhs.publicKeyHex == rhs.publicKeyHex && lhs.role == rhs.role
+        lhs.publicKeyHex == rhs.publicKeyHex
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(publicKeyHex)
-        hasher.combine(role)
     }
 
     let publicKeyHex: String
