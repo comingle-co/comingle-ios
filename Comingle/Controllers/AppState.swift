@@ -842,24 +842,26 @@ extension AppState: EventVerifying, RelayDelegate {
     }
 
     func relay(_ relay: Relay, didReceive response: RelayResponse) {
-        switch response {
-        case let .eose(subscriptionId):
-            // Live new events are not strictly needed for this app for now.
-            // In the future, we could keep subscriptions open for updates.
-            try? relay.closeSubscription(with: subscriptionId)
-            updateRelaySubscriptionCounts(closedSubscriptionId: subscriptionId)
-        case let .closed(subscriptionId, _):
-            updateRelaySubscriptionCounts(closedSubscriptionId: subscriptionId)
-        case let .ok(eventId, success, message):
-            if success {
-                if let persistentNostrEvent = persistentNostrEvent(eventId), !persistentNostrEvent.relays.contains(relay.url) {
-                    persistentNostrEvent.relays.append(relay.url)
+        DispatchQueue.main.async {
+            switch response {
+            case let .eose(subscriptionId):
+                // Live new events are not strictly needed for this app for now.
+                // In the future, we could keep subscriptions open for updates.
+                try? relay.closeSubscription(with: subscriptionId)
+                self.updateRelaySubscriptionCounts(closedSubscriptionId: subscriptionId)
+            case let .closed(subscriptionId, _):
+                self.updateRelaySubscriptionCounts(closedSubscriptionId: subscriptionId)
+            case let .ok(eventId, success, message):
+                if success {
+                    if let persistentNostrEvent = self.persistentNostrEvent(eventId), !persistentNostrEvent.relays.contains(relay.url) {
+                        persistentNostrEvent.relays.append(relay.url)
+                    }
+                } else if message.prefix == .rateLimited {
+                    // TODO retry with exponential backoff.
                 }
-            } else if message.prefix == .rateLimited {
-                // TODO retry with exponential backoff.
+            default:
+                break
             }
-        default:
-            break
         }
     }
 
