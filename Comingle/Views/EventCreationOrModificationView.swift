@@ -306,6 +306,10 @@ extension EventCreationOrModificationView {
             isShowingParticipantSelector = false
         }
 
+        var startTimeZoneOrCurrent: TimeZone {
+            startTimeZone ?? TimeZone.autoupdatingCurrent
+        }
+
         var trimmedTitle: String {
             title.trimmingCharacters(in: .whitespacesAndNewlines)
         }

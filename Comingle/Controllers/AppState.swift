@@ -38,6 +38,8 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
     @Published var timeBasedCalendarEvents: [String: TimeBasedCalendarEvent] = [:]
     @Published var rsvps: [String: CalendarEventRSVP] = [:]
     @Published var calendarEventsToRsvps: [String: [CalendarEventRSVP]] = [:]
+    @Published var deletedEventIds = Set<String>()
+    @Published var deletedEventCoordinates = [String: Date]()
 
     @Published var followedPubkeys = Set<String>()
 
@@ -225,6 +227,13 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
         return try? modelContext.fetch(descriptor).first
     }
 
+    var unpublishedPersistentNostrEvents: [PersistentNostrEvent] {
+        let descriptor = FetchDescriptor<PersistentNostrEvent>(
+            predicate: #Predicate { $0.relays == [] }
+        )
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
+
     var relaySubscriptionMetadata: RelaySubscriptionMetadata? {
         let publicKeyHex = publicKey?.hex
         var descriptor = FetchDescriptor<RelaySubscriptionMetadata>(
@@ -359,10 +368,14 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
         switch (readRelay?.state, writeRelay?.state) {
         case (nil, nil):
             return nil
-        case (_, .error), (_, .notConnected), (_, .connecting):
+        case (_, .error):
             return writeRelay?.state
-        case (.error, _), (.notConnected, _), (.connecting, _):
+        case (.error, _):
             return readRelay?.state
+        case (_, .notConnected), (.notConnected, _):
+            return .notConnected
+        case (_, .connecting), (.connecting, _):
+            return .connecting
         case (_, .connected), (.connected, _):
             return .connected
         }
@@ -401,7 +414,7 @@ extension AppState: EventVerifying, RelayDelegate {
         if !pubkeysToFetchMetadata.isEmpty {
             guard let missingMetadataFilter = Filter(
                 authors: Array(pubkeysToFetchMetadata),
-                kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue],
+                kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.deletion.rawValue],
                 until: Int(until.timeIntervalSince1970)
             ) else {
                 print("Unable to create missing metadata filter for \(pubkeysToFetchMetadata).")
@@ -426,7 +439,7 @@ extension AppState: EventVerifying, RelayDelegate {
         let pubkeysToRefresh = allPubkeysSet.subtracting(pubkeysToFetchMetadata)
         guard let metadataRefreshFilter = Filter(
             authors: Array(pubkeysToRefresh),
-            kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue],
+            kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.deletion.rawValue],
             since: since,
             until: Int(until.timeIntervalSince1970)
         ) else {
@@ -538,6 +551,14 @@ extension AppState: EventVerifying, RelayDelegate {
                 print("Could not subscribe to relay with the time-based calendar event filter.")
             }
         }
+
+        publishUnpublishedEvents()
+    }
+
+    private func publishUnpublishedEvents() {
+        for persistentNostrEvent in unpublishedPersistentNostrEvents {
+            relayWritePool.publishEvent(persistentNostrEvent.nostrEvent)
+        }
     }
 
     private func didReceiveFollowListEvent(_ followListEvent: FollowListEvent, shouldPullMissingEvents: Bool = false) {
@@ -648,6 +669,16 @@ extension AppState: EventVerifying, RelayDelegate {
         }
 
         for deletedEventCoordinate in deletedEventCoordinates {
+            if let existingDeletedEventCoordinateDate = self.deletedEventCoordinates[deletedEventCoordinate.tag.value] {
+                if existingDeletedEventCoordinateDate < deletionEvent.createdDate {
+                    self.deletedEventCoordinates[deletedEventCoordinate.tag.value] = deletionEvent.createdDate
+                } else {
+                    continue
+                }
+            } else {
+                self.deletedEventCoordinates[deletedEventCoordinate.tag.value] = deletionEvent.createdDate
+            }
+
             switch deletedEventCoordinate.kind {
             case .timeBasedCalendarEvent:
                 if let timeBasedCalendarEvent = timeBasedCalendarEvents[deletedEventCoordinate.tag.value], timeBasedCalendarEvent.createdAt <= deletionEvent.createdAt {
