@@ -235,6 +235,8 @@ class EventCreationParticipant: Equatable, Hashable {
 
     init(publicKeyHex: String, relayURL: URL? = nil, role: String = "") {
         self.publicKeyHex = publicKeyHex
+        self.relayURL = relayURL
+        self.role = role
     }
 }
 
