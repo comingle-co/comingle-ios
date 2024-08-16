@@ -309,7 +309,11 @@ extension EventCreationOrModificationView {
         }
 
         var startTimeZoneOrCurrent: TimeZone {
-            startTimeZone ?? TimeZone.autoupdatingCurrent
+            if isSettingTimeZone {
+                startTimeZone ?? TimeZone.autoupdatingCurrent
+            } else {
+                TimeZone.autoupdatingCurrent
+            }
         }
 
         var trimmedTitle: String {
