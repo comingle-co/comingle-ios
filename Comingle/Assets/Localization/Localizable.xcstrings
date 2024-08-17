@@ -121,6 +121,18 @@
         }
       }
     },
+    "calendars" : {
+      "comment" : "Label for Calendars tab in the tab bar.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendars"
+          }
+        }
+      }
+    },
     "calendarTitle" : {
       "comment" : "Text indicating that the field is for entering a calendar title.",
       "extractionState" : "manual",

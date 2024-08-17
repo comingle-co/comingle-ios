@@ -32,6 +32,8 @@
 		3A34194D2C50B2680039620B /* NostrEventValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */; };
 		3A34AAA32B48FE1F00C5F910 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */; };
 		3A34AAAA2B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34AAA92B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift */; };
+		3A39FB642C70458400954AD5 /* CalendarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A39FB632C70458400954AD5 /* CalendarsView.swift */; };
+		3A39FB682C704A8000954AD5 /* CalendarListEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A39FB672C704A7F00954AD5 /* CalendarListEventView.swift */; };
 		3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDB2A0B348100897303 /* ComingleApp.swift */; };
 		3A453DDE2A0B348100897303 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A453DDD2A0B348100897303 /* ContentView.swift */; };
 		3A453DE02A0B348200897303 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A453DDF2A0B348200897303 /* Assets.xcassets */; };
@@ -112,6 +114,8 @@
 		3A34194C2C50B2680039620B /* NostrEventValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NostrEventValueTransformer.swift; sourceTree = "<group>"; };
 		3A34AAA22B48FE1F00C5F910 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		3A34AAA92B491DE900C5F910 /* SwiftUI+LocalizedStringResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI+LocalizedStringResource.swift"; sourceTree = "<group>"; };
+		3A39FB632C70458400954AD5 /* CalendarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarsView.swift; sourceTree = "<group>"; };
+		3A39FB672C704A7F00954AD5 /* CalendarListEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarListEventView.swift; sourceTree = "<group>"; };
 		3A453DD82A0B348100897303 /* Comingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A453DDB2A0B348100897303 /* ComingleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingleApp.swift; sourceTree = "<group>"; };
 		3A453DDD2A0B348100897303 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -298,6 +302,7 @@
 			children = (
 				3A34AAA82B491D9700C5F910 /* Extensions */,
 				3A464FED2C3A273000AD4B09 /* Settings */,
+				3A39FB632C70458400954AD5 /* CalendarsView.swift */,
 				3A453DDD2A0B348100897303 /* ContentView.swift */,
 				3A51252F2C6FA48200614034 /* CreateOrModifyCalendarView.swift */,
 				3ABD0C1C2C60834C004A15C7 /* CreateProfileView.swift */,
@@ -315,6 +320,7 @@
 				3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */,
 				3A4A89862C3B49EF00238043 /* ProfileView.swift */,
 				3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */,
+				3A39FB672C704A7F00954AD5 /* CalendarListEventView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -534,6 +540,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A4A89872C3B49EF00238043 /* ProfileView.swift in Sources */,
+				3A39FB682C704A8000954AD5 /* CalendarListEventView.swift in Sources */,
 				3A317C0C2C58A282004DA56B /* ParticipantSearchView.swift in Sources */,
 				3A453E242A0C614900897303 /* EventView.swift in Sources */,
 				3ABD0C262C65BDFD004A15C7 /* RelayView.swift in Sources */,
@@ -579,6 +586,7 @@
 				3A6451852C44C879000DC75B /* RelaySettings.swift in Sources */,
 				3A4A89982C3CF24800238043 /* ProfileNameView.swift in Sources */,
 				3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */,
+				3A39FB642C70458400954AD5 /* CalendarsView.swift in Sources */,
 				3A4A899B2C3CF38D00238043 /* Utilities.swift in Sources */,
 				3ABD0C0D2C5EF6A9004A15C7 /* String+Extensions.swift in Sources */,
 				3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */,

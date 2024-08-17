@@ -25,9 +25,17 @@ struct ContentView: View {
         ScrollViewReader { scrollViewProxy in
             NavigationStack {
                 VStack {
-                    if appState.publicKey != nil && appState.activeTab == .following {
-                        NavigationStack {
-                            HomeView(appState: appState)
+                    if appState.publicKey != nil {
+                        if appState.activeTab == .following {
+                            NavigationStack {
+                                HomeView(appState: appState)
+                            }
+                        }
+
+                        if appState.activeTab == .calendars {
+                            NavigationStack {
+                                CalendarsView()
+                            }
                         }
                     }
 
@@ -37,7 +45,7 @@ struct ContentView: View {
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     }
-                    CustomTabBar(selectedTab: $appState.activeTab, showFollowingTab: appState.publicKey != nil) {
+                    CustomTabBar(selectedTab: $appState.activeTab, isSignedIn: appState.publicKey != nil) {
                         withAnimation {
                             scrollViewProxy.scrollTo("event-list-view-top")
                         }
@@ -114,13 +122,15 @@ struct ContentView: View {
 struct CustomTabBar: View {
     @Binding var selectedTab: HomeTabs
 
-    let showFollowingTab: Bool
+    let isSignedIn: Bool
     let onTapAction: () -> Void
 
     var body: some View {
         HStack {
-            if showFollowingTab {
+            if isSignedIn {
                 CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.following, selectedTab: $selectedTab, onTapAction: onTapAction)
+
+                CustomTabBarItem(iconName: "calendar", title: .localizable.calendars, tab: HomeTabs.calendars, selectedTab: $selectedTab, onTapAction: onTapAction)
             }
             CustomTabBarItem(iconName: "globe", title: .localizable.explore, tab: HomeTabs.explore, selectedTab: $selectedTab, onTapAction: onTapAction)
         }

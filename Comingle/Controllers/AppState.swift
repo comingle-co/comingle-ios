@@ -169,6 +169,22 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
         pastEvents(profileEvents(publicKeyHex))
     }
 
+    private func eventsOnCalendarList(_ calendarCoordinates: String) -> [TimeBasedCalendarEvent] {
+        guard let calendarListEvent = calendarListEvents[calendarCoordinates] else {
+            return []
+        }
+
+        return calendarListEvent.calendarEventCoordinateList.compactMap { timeBasedCalendarEvents[$0.tag.value] }
+    }
+
+    func upcomingEventsOnCalendarList(_ calendarCoordinates: String) -> [TimeBasedCalendarEvent] {
+        upcomingEvents(eventsOnCalendarList(calendarCoordinates))
+    }
+
+    func pastEventsOnCalendarList(_ calendarCoordinates: String) -> [TimeBasedCalendarEvent] {
+        pastEvents(eventsOnCalendarList(calendarCoordinates))
+    }
+
     private func upcomingEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
         events.filter { $0.isUpcoming }
             .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
@@ -921,5 +937,6 @@ extension AppState: EventVerifying, RelayDelegate {
 
 enum HomeTabs {
     case following
+    case calendars
     case explore
 }

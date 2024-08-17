@@ -32,7 +32,7 @@ struct CreateProfileView: View, EventCreating {
     }
 
     var validatedPictureURL: URL? {
-        guard let url = URL(string: picture.trimmingCharacters(in: .whitespacesAndNewlines)), url.isImage else {
+        guard let url = URL(string: picture.trimmingCharacters(in: .whitespacesAndNewlines)) else {
             return nil
         }
 

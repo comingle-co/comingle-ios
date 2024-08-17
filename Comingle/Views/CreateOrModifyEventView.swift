@@ -213,7 +213,7 @@ struct CreateOrModifyEventView: View {
                 }
             }
         } else {
-            // This view should not be used unless the user is logged in with a private key.
+            // This view should not be used unless the user is signed in with a private key.
             // Therefore, this EmptyView technically should never be shown.
             EmptyView()
         }
@@ -341,7 +341,7 @@ extension CreateOrModifyEventView {
         }
 
         var validatedImageURL: URL? {
-            guard let url = URL(string: trimmedImageString), url.isImage else {
+            guard let url = URL(string: trimmedImageString) else {
                 return nil
             }
 

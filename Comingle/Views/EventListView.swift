@@ -76,7 +76,7 @@ struct EventListView: View {
                                                     }
                                                 }
 
-                                                if let calendarEventImageURL = event.imageURL, calendarEventImageURL.isImage {
+                                                if let calendarEventImageURL = event.imageURL {
                                                     KFImage.url(calendarEventImageURL)
                                                         .resizable()
                                                         .placeholder { ProgressView() }
@@ -152,6 +152,13 @@ struct EventListView: View {
             case .past:
                 appState.pastProfileEvents(publicKeyHex)
             }
+        case .calendar(let calendarCoordinates):
+            switch timeTabFilter {
+            case .upcoming:
+                appState.upcomingEventsOnCalendarList(calendarCoordinates)
+            case .past:
+                appState.pastEventsOnCalendarList(calendarCoordinates)
+            }
         }
     }
 }
@@ -195,25 +202,6 @@ struct CustomSegmentedPickerItem: View {
     }
 }
 
-extension URL {
-    private static var imageExtensions = Set([
-        "bmp",
-        "gif",
-        "heic",
-        "heif",
-        "jpeg",
-        "jpg",
-        "png",
-        "tif",
-        "tiff",
-        "webp"
-    ])
-
-    var isImage: Bool {
-        URL.imageExtensions.contains(self.pathExtension.lowercased())
-    }
-}
-
 extension Date {
     var isInCurrentYear: Bool {
         let calendar = Calendar.autoupdatingCurrent
@@ -225,6 +213,7 @@ enum EventListType: Equatable {
     case all
     case followed
     case profile(String)
+    case calendar(String)
 }
 
 enum TimeTabs: CaseIterable {

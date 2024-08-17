@@ -545,8 +545,7 @@ struct EventView: View, EventCreating {
         if let event {
             ScrollView {
                 VStack {
-                    if let calendarEventImageURL = event.imageURL,
-                       calendarEventImageURL.isImage {
+                    if let calendarEventImageURL = event.imageURL {
                         KFImage.url(calendarEventImageURL)
                             .resizable()
                             .placeholder { ProgressView() }
