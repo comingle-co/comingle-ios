@@ -655,7 +655,7 @@ struct EventView: View, EventCreating {
                         let shareableEventCoordinates = try? event.shareableEventCoordinates(relayURLStrings: relays.map { $0.absoluteString })
 
                         if appState.keypair != nil && appState.publicKey?.hex == event.pubkey {
-                            NavigationLink(destination: EventCreationOrModificationView(appState: appState, existingEvent: event)) {
+                            NavigationLink(destination: CreateOrModifyEventView(appState: appState, existingEvent: event)) {
                                 Text(.localizable.modifyEvent)
                             }
                         }

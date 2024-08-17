@@ -109,6 +109,30 @@
         }
       }
     },
+    "calendarDescription" : {
+      "comment" : "Section title for calendar description.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Description"
+          }
+        }
+      }
+    },
+    "calendarTitle" : {
+      "comment" : "Text indicating that the field is for entering a calendar title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        }
+      }
+    },
     "cancel" : {
       "comment" : "Button to cancel out of dialog.",
       "extractionState" : "manual",
@@ -201,6 +225,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copy Public Key"
+          }
+        }
+      }
+    },
+    "createCalendar" : {
+      "comment" : "Navigation title for the view to create a calendar.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create a Calendar"
           }
         }
       }
@@ -573,6 +609,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu"
+          }
+        }
+      }
+    },
+    "modifyCalendar" : {
+      "comment" : "Button to modify calendar.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modify Calendar"
           }
         }
       }

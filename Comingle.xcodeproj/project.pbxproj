@@ -13,7 +13,7 @@
 		3A2FF9782A3F6DFD009E1067 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9772A3F6DFD009E1067 /* SignInView.swift */; };
 		3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9812A3FD68B009E1067 /* SettingsView.swift */; };
 		3A2FF9842A40025B009E1067 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9832A40025B009E1067 /* AppState.swift */; };
-		3A317BF62C5750B3004DA56B /* EventCreationOrModificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BF52C5750B3004DA56B /* EventCreationOrModificationView.swift */; };
+		3A317BF62C5750B3004DA56B /* CreateOrModifyEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BF52C5750B3004DA56B /* CreateOrModifyEventView.swift */; };
 		3A317BF92C57F507004DA56B /* TimeZoneSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */; };
 		3A317BFD2C57FC2B004DA56B /* SwiftTrie in Frameworks */ = {isa = PBXBuildFile; productRef = 3A317BFC2C57FC2B004DA56B /* SwiftTrie */; };
 		3A317C002C57FDAC004DA56B /* TimeZoneSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */; };
@@ -61,6 +61,7 @@
 		3A4FCB462C34FD98007AE9A4 /* GeohashKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A4FCB452C34FD98007AE9A4 /* GeohashKit */; };
 		3A4FCB502C36333A007AE9A4 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */; };
 		3A4FCB542C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */; };
+		3A5125302C6FA48200614034 /* CreateOrModifyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A51252F2C6FA48200614034 /* CreateOrModifyCalendarView.swift */; };
 		3A6451852C44C879000DC75B /* RelaySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6451842C44C879000DC75B /* RelaySettings.swift */; };
 		3A7D25DE2C5D12AE001C1714 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A7D25DD2C5D12AE001C1714 /* Launch Screen.storyboard */; };
 		3ABD0C0D2C5EF6A9004A15C7 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD0C0C2C5EF6A9004A15C7 /* String+Extensions.swift */; };
@@ -93,7 +94,7 @@
 		3A2FF9772A3F6DFD009E1067 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		3A2FF9812A3FD68B009E1067 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A2FF9832A40025B009E1067 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		3A317BF52C5750B3004DA56B /* EventCreationOrModificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationOrModificationView.swift; sourceTree = "<group>"; };
+		3A317BF52C5750B3004DA56B /* CreateOrModifyEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOrModifyEventView.swift; sourceTree = "<group>"; };
 		3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneSelectionView.swift; sourceTree = "<group>"; };
 		3A317BFF2C57FDAC004DA56B /* TimeZoneSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneSortComparator.swift; sourceTree = "<group>"; };
 		3A317C022C58002E004DA56B /* TimeZone+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Extensions.swift"; sourceTree = "<group>"; };
@@ -142,6 +143,7 @@
 		3A4B466E2C52094600307F23 /* ImageOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageOverlayView.swift; sourceTree = "<group>"; };
 		3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
 		3A4FCB532C365C62007AE9A4 /* TimeBasedCalendarEventSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBasedCalendarEventSortComparator.swift; sourceTree = "<group>"; };
+		3A51252F2C6FA48200614034 /* CreateOrModifyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOrModifyCalendarView.swift; sourceTree = "<group>"; };
 		3A6451842C44C879000DC75B /* RelaySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaySettings.swift; sourceTree = "<group>"; };
 		3A7D25D12C5D0CAA001C1714 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A7D25DD2C5D12AE001C1714 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -297,8 +299,9 @@
 				3A34AAA82B491D9700C5F910 /* Extensions */,
 				3A464FED2C3A273000AD4B09 /* Settings */,
 				3A453DDD2A0B348100897303 /* ContentView.swift */,
+				3A51252F2C6FA48200614034 /* CreateOrModifyCalendarView.swift */,
 				3ABD0C1C2C60834C004A15C7 /* CreateProfileView.swift */,
-				3A317BF52C5750B3004DA56B /* EventCreationOrModificationView.swift */,
+				3A317BF52C5750B3004DA56B /* CreateOrModifyEventView.swift */,
 				3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */,
 				3A453E1D2A0C614800897303 /* EventView.swift */,
 				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
@@ -536,7 +539,7 @@
 				3ABD0C262C65BDFD004A15C7 /* RelayView.swift in Sources */,
 				3A464FF42C3A2A0800AD4B09 /* AppearanceSettings.swift in Sources */,
 				3A2FF9842A40025B009E1067 /* AppState.swift in Sources */,
-				3A317BF62C5750B3004DA56B /* EventCreationOrModificationView.swift in Sources */,
+				3A317BF62C5750B3004DA56B /* CreateOrModifyEventView.swift in Sources */,
 				3A317BF92C57F507004DA56B /* TimeZoneSelectionView.swift in Sources */,
 				3A317C072C588D04004DA56B /* AcknowledgementsView.swift in Sources */,
 				3A4A89A22C3E3F6000238043 /* KeysSettingsView.swift in Sources */,
@@ -560,6 +563,7 @@
 				3A453DDC2A0B348100897303 /* ComingleApp.swift in Sources */,
 				3A2FF9782A3F6DFD009E1067 /* SignInView.swift in Sources */,
 				3A4A89A52C3E3F6800238043 /* RelaysSettingsView.swift in Sources */,
+				3A5125302C6FA48200614034 /* CreateOrModifyCalendarView.swift in Sources */,
 				3A4B466F2C52094600307F23 /* ImageOverlayView.swift in Sources */,
 				3A317C002C57FDAC004DA56B /* TimeZoneSortComparator.swift in Sources */,
 				3A34194A2C50A36B0039620B /* PersistentNostrEvent.swift in Sources */,
@@ -969,7 +973,7 @@
 			repositoryURL = "https://github.com/nostr-sdk/nostr-sdk-ios.git";
 			requirement = {
 				kind = revision;
-				revision = ad382664ba61113f41965f22e1e5b45aed35805e;
+				revision = 9ec53aa94e56c956a379f6770efa49b271e92de5;
 			};
 		};
 		3A317BFB2C57FC2B004DA56B /* XCRemoteSwiftPackageReference "swift-trie" */ = {

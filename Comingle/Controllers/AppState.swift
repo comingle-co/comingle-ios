@@ -36,6 +36,7 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
     @Published var followListEvents: [String: FollowListEvent] = [:]
     @Published var metadataEvents: [String: MetadataEvent] = [:]
     @Published var timeBasedCalendarEvents: [String: TimeBasedCalendarEvent] = [:]
+    @Published var calendarListEvents: [String: CalendarListEvent] = [:]
     @Published var rsvps: [String: CalendarEventRSVP] = [:]
     @Published var calendarEventsToRsvps: [String: [CalendarEventRSVP]] = [:]
     @Published var deletedEventIds = Set<String>()
@@ -414,7 +415,7 @@ extension AppState: EventVerifying, RelayDelegate {
         if !pubkeysToFetchMetadata.isEmpty {
             guard let missingMetadataFilter = Filter(
                 authors: Array(pubkeysToFetchMetadata),
-                kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.deletion.rawValue],
+                kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue, EventKind.deletion.rawValue],
                 until: Int(until.timeIntervalSince1970)
             ) else {
                 print("Unable to create missing metadata filter for \(pubkeysToFetchMetadata).")
@@ -439,7 +440,7 @@ extension AppState: EventVerifying, RelayDelegate {
         let pubkeysToRefresh = allPubkeysSet.subtracting(pubkeysToFetchMetadata)
         guard let metadataRefreshFilter = Filter(
             authors: Array(pubkeysToRefresh),
-            kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.deletion.rawValue],
+            kinds: [EventKind.metadata.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue, EventKind.deletion.rawValue],
             since: since,
             until: Int(until.timeIntervalSince1970)
         ) else {
@@ -494,7 +495,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
                 guard let bootstrapFilter = Filter(
                     authors: authors,
-                    kinds: [EventKind.metadata.rawValue, EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.deletion.rawValue],
+                    kinds: [EventKind.metadata.rawValue, EventKind.followList.rawValue, EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendarEventRSVP.rawValue, EventKind.calendar.rawValue, EventKind.deletion.rawValue],
                     since: since,
                     until: Int(until.timeIntervalSince1970)
                 ) else {
@@ -531,7 +532,7 @@ extension AppState: EventVerifying, RelayDelegate {
             }
 
             guard let timeBasedCalendarEventFilter = Filter(
-                kinds: [EventKind.timeBasedCalendarEvent.rawValue],
+                kinds: [EventKind.timeBasedCalendarEvent.rawValue, EventKind.calendar.rawValue],
                 since: since,
                 until: Int(until.timeIntervalSince1970)
             ) else {
@@ -627,6 +628,20 @@ extension AppState: EventVerifying, RelayDelegate {
         }
     }
 
+    private func didReceiveCalendarListEvent(_ calendarListEvent: CalendarListEvent) {
+        guard let eventCoordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value else {
+            return
+        }
+
+        if let existingCalendarListEvent = self.calendarListEvents[eventCoordinates] {
+            if existingCalendarListEvent.createdAt < calendarListEvent.createdAt {
+                calendarListEvents[eventCoordinates] = calendarListEvent
+            }
+        } else {
+            calendarListEvents[eventCoordinates] = calendarListEvent
+        }
+    }
+
     func updateCalendarEventRSVP(_ rsvp: CalendarEventRSVP, rsvpEventCoordinates: String) {
         rsvps[rsvpEventCoordinates] = rsvp
 
@@ -717,6 +732,10 @@ extension AppState: EventVerifying, RelayDelegate {
                         timeBasedCalendarEvents.removeValue(forKey: eventCoordinates)
                         calendarEventsToRsvps.removeValue(forKey: eventCoordinates)
                     }
+                case let calendarListEvent as CalendarListEvent:
+                    if let eventCoordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value, calendarListEvents[eventCoordinates]?.id == calendarListEvent.id {
+                        calendarListEvents.removeValue(forKey: eventCoordinates)
+                    }
                 case let rsvp as CalendarEventRSVP:
                     if let eventCoordinates = rsvp.replaceableEventCoordinates()?.tag.value, rsvps[eventCoordinates]?.id == rsvp.id {
                         rsvps.removeValue(forKey: eventCoordinates)
@@ -787,6 +806,8 @@ extension AppState: EventVerifying, RelayDelegate {
             self.didReceiveMetadataEvent(metadataEvent)
         case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
             self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
+        case let calendarListEvent as CalendarListEvent:
+            self.didReceiveCalendarListEvent(calendarListEvent)
         case let rsvpEvent as CalendarEventRSVP:
             self.didReceiveCalendarEventRSVP(rsvpEvent)
         case let deletionEvent as DeletionEvent:
@@ -827,6 +848,8 @@ extension AppState: EventVerifying, RelayDelegate {
                 self.didReceiveMetadataEvent(metadataEvent)
             case let timeBasedCalendarEvent as TimeBasedCalendarEvent:
                 self.didReceiveTimeBasedCalendarEvent(timeBasedCalendarEvent)
+            case let calendarListEvent as CalendarListEvent:
+                self.didReceiveCalendarListEvent(calendarListEvent)
             case let rsvpEvent as CalendarEventRSVP:
                 self.didReceiveCalendarEventRSVP(rsvpEvent)
             case let deletionEvent as DeletionEvent:

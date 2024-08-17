@@ -15,6 +15,8 @@ struct ContentView: View {
     let modelContext: ModelContext
     @EnvironmentObject var appState: AppState
 
+    @State var isShowingCreationConfirmation: Bool = false
+
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
@@ -41,17 +43,18 @@ struct ContentView: View {
                         }
                     }
                 }
+                .confirmationDialog(String(localized: "Create a ..."), isPresented: $isShowingCreationConfirmation) {
+                    addEventConfirmationDialogAction()
+                }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        NavigationLink(
-                            destination: {
-                                EventCreationOrModificationView(appState: appState)
-                            },
-                            label: {
-                                Image(systemName: "plus.circle")
-                                    .opacity(appState.keypair != nil ? 1 : 0)
-                            }
-                        )
+                        Button(action: {
+                            isShowingCreationConfirmation = true
+                        }, label: {
+                            Image(systemName: "plus.circle")
+                                .opacity(appState.keypair != nil ? 1 : 0)
+                        })
+                        .disabled(appState.keypair == nil)
                     }
 
                     ToolbarItem(placement: .principal) {
@@ -85,6 +88,26 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder func addEventConfirmationDialogAction() -> some View {
+        NavigationLink(
+            destination: {
+                CreateOrModifyEventView(appState: appState)
+            },
+            label: {
+                Text("Create Event")
+            }
+        )
+
+        NavigationLink(
+            destination: {
+                CreateOrModifyCalendarView(appState: appState)
+            },
+            label: {
+                Text("Create Calendar")
+            }
+        )
     }
 }
 

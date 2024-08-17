@@ -1,5 +1,5 @@
 //
-//  EventCreationOrModificationView.swift
+//  CreateOrModifyEventView.swift
 //  Comingle
 //
 //  Created by Terry Yiu on 7/29/24.
@@ -13,7 +13,7 @@ import OrderedCollections
 import SwiftData
 import SwiftUI
 
-struct EventCreationOrModificationView: View {
+struct CreateOrModifyEventView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: ViewModel
@@ -240,7 +240,7 @@ class EventCreationParticipant: Equatable, Hashable {
     }
 }
 
-extension EventCreationOrModificationView {
+extension CreateOrModifyEventView {
     @Observable class ViewModel: EventCreating {
         let appState: AppState
 
