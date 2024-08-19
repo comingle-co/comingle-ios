@@ -108,14 +108,15 @@ struct ContentView: View {
             }
         )
 
-        NavigationLink(
-            destination: {
-                CreateOrModifyCalendarView(appState: appState)
-            },
-            label: {
-                Text("Create Calendar")
-            }
-        )
+        // Comment out calendar creation for now while it's not ready yet.
+//        NavigationLink(
+//            destination: {
+//                CreateOrModifyCalendarView(appState: appState)
+//            },
+//            label: {
+//                Text("Create Calendar")
+//            }
+//        )
     }
 }
 
