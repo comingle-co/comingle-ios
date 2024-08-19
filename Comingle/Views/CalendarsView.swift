@@ -13,30 +13,46 @@ struct CalendarsView: View {
 
     @EnvironmentObject var appState: AppState
 
+    private var calendarListEvents: [CalendarListEvent] {
+        let comparator = CalendarListEventSortComparator(order: .forward, appState: appState)
+        return appState.calendarListEvents.values
+            .filter { !$0.calendarEventCoordinateList.isEmpty }
+            .sorted(using: comparator)
+    }
+
+    func imageView(_ imageURL: URL) -> some View {
+        KFImage.url(imageURL)
+            .resizable()
+            .placeholder { ProgressView() }
+            .scaledToFit()
+            .frame(maxWidth: 100, maxHeight: 200)
+    }
+
+    func titleAndProfileView(_ calendarListEvent: CalendarListEvent) -> some View {
+        VStack(alignment: .leading) {
+            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: .localizable.noCalendarTitle))
+                .font(.headline)
+
+            Divider()
+
+            ProfilePictureAndNameView(publicKeyHex: calendarListEvent.pubkey)
+        }
+    }
+
     var body: some View {
         List {
-            let calendarListEvents = Array(appState.calendarListEvents.filter { !$0.value.calendarEventCoordinateList.isEmpty })
-            ForEach(calendarListEvents, id: \.key) { coordinates, calendarListEvent in
+            ForEach(calendarListEvents, id: \.self) { calendarListEvent in
                 Section(
                     content: {
                         NavigationLink(destination: {
-                            CalendarListEventView(calendarListEventCoordinates: coordinates)
+                            if let coordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value {
+                                CalendarListEventView(calendarListEventCoordinates: coordinates)
+                            }
                         }, label: {
                             HStack {
-                                VStack(alignment: .leading) {
-                                    Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? "No Title")
-                                        .font(.headline)
-
-                                    Divider()
-
-                                    ProfilePictureAndNameView(publicKeyHex: calendarListEvent.pubkey)
-                                }
+                                titleAndProfileView(calendarListEvent)
                                 if let imageURL = calendarListEvent.imageURL {
-                                    KFImage.url(imageURL)
-                                        .resizable()
-                                        .placeholder { ProgressView() }
-                                        .scaledToFit()
-                                        .frame(maxWidth: 100, maxHeight: 200)
+                                    imageView(imageURL)
                                 }
                             }
                         })
