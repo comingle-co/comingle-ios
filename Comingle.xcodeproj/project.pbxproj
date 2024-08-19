@@ -47,6 +47,7 @@
 		3A464FF82C3A2C2000AD4B09 /* ProfileSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */; };
 		3A464FFC2C3A312200AD4B09 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FFB2C3A312200AD4B09 /* Profile.swift */; };
 		3A464FFE2C3A34BE00AD4B09 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */; };
+		3A49F39C2C72D89900C28FCE /* CalendarListEventSortComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A49F39B2C72D89900C28FCE /* CalendarListEventSortComparator.swift */; };
 		3A4A89872C3B49EF00238043 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89862C3B49EF00238043 /* ProfileView.swift */; };
 		3A4A898A2C3C240C00238043 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A89892C3C240B00238043 /* ProfilePictureAndNameView.swift */; };
 		3A4A89902C3CD88500238043 /* ProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */; };
@@ -133,6 +134,7 @@
 		3A464FF72C3A2C2000AD4B09 /* ProfileSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettings.swift; sourceTree = "<group>"; };
 		3A464FFB2C3A312200AD4B09 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		3A464FFD2C3A34BE00AD4B09 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		3A49F39B2C72D89900C28FCE /* CalendarListEventSortComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarListEventSortComparator.swift; sourceTree = "<group>"; };
 		3A4A89862C3B49EF00238043 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3A4A89892C3C240B00238043 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
 		3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureView.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 			children = (
 				3A464FF22C3A296400AD4B09 /* Settings */,
 				3A317C162C59BFAE004DA56B /* CalendarEventParticipantSortComparator.swift */,
+				3A49F39B2C72D89900C28FCE /* CalendarListEventSortComparator.swift */,
 				3A317C0E2C58ABD8004DA56B /* EventCreationParticipantSortComparator.swift */,
 				3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */,
 				3A317C232C5A71E9004DA56B /* MKAutocompleteManager.swift */,
@@ -541,6 +544,7 @@
 			files = (
 				3A4A89872C3B49EF00238043 /* ProfileView.swift in Sources */,
 				3A39FB682C704A8000954AD5 /* CalendarListEventView.swift in Sources */,
+				3A49F39C2C72D89900C28FCE /* CalendarListEventSortComparator.swift in Sources */,
 				3A317C0C2C58A282004DA56B /* ParticipantSearchView.swift in Sources */,
 				3A453E242A0C614900897303 /* EventView.swift in Sources */,
 				3ABD0C262C65BDFD004A15C7 /* RelayView.swift in Sources */,
@@ -755,7 +759,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Comingle/Comingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Comingle/Preview Content\"";
 				DEVELOPMENT_TEAM = S99A5B637C;
@@ -803,7 +807,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Comingle/Comingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Comingle/Preview Content\"";
 				DEVELOPMENT_TEAM = S99A5B637C;
