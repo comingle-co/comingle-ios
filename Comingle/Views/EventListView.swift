@@ -51,6 +51,17 @@ struct EventListView: View, MetadataCoding {
             }
 
             List {
+                // Search by npub.
+                if eventListType == .all,
+                   let searchText = searchViewModel.debouncedSearchText.trimmedOrNilIfEmpty,
+                   let authorPublicKey = PublicKey(npub: searchText) {
+                    Section(
+                        content: {
+                            ProfilePictureAndNameView(publicKeyHex: authorPublicKey.hex)
+                        }
+                    )
+                }
+
                 let filteredEvents = events(timeTabFilter)
                 if filteredEvents.isEmpty {
                     Text(.localizable.noEvents)
