@@ -696,17 +696,17 @@ extension AppState: EventVerifying, RelayDelegate {
         }
         timeBasedCalendarEvent.locations.forEach { location in
             if let trimmedLocation = location.trimmedOrNilIfEmpty {
-                _ = searchTrie.insert(key: trimmedLocation, value: timeBasedCalendarEvent, options: [.includeDiacriticsInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+                _ = searchTrie.insert(key: trimmedLocation, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
             }
         }
         timeBasedCalendarEvent.references.forEach { reference in
             if let trimmedReference = reference.absoluteString.trimmedOrNilIfEmpty {
-                _ = searchTrie.insert(key: trimmedReference, value: timeBasedCalendarEvent, options: [.includeDiacriticsInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+                _ = searchTrie.insert(key: trimmedReference, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
             }
         }
         timeBasedCalendarEvent.hashtags.forEach { hashtag in
             if let trimmedHashtag = hashtag.trimmedOrNilIfEmpty {
-                _ = searchTrie.insert(key: trimmedHashtag, value: timeBasedCalendarEvent, options: [.includeDiacriticsInsensitiveMatches, .includeDiacriticsInsensitiveMatches])
+                _ = searchTrie.insert(key: trimmedHashtag, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches])
             }
         }
     }
