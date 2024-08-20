@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.1.0 (4) - 2024-08-20
+
+### Added
+- Search by event details, naddr, nevent, npub
+
+### Changed
+- Consolidated Home and Explore tabs
+
+### Fixed
+- Signing in with public key would use private key if it used to exist in the keychain
+
 ## 0.1.0 (3) - 2024-08-18
 
 ### Added
