@@ -31,94 +31,91 @@ struct EventListView: View, MetadataCoding {
 
     private func listView(scrollViewProxy: ScrollViewProxy) -> some View {
         VStack {
-            HStack {
-                CustomSegmentedPicker(selectedTimeTab: $timeTabFilter) {
-                    withAnimation {
-                        scrollViewProxy.scrollTo("event-list-view-top")
-                    }
-                }
-
-                if eventListType == .all && appState.keypair != nil {
-                    Button(action: {
-                        showAllEvents.toggle()
-                    }, label: {
-                        Image(systemName: "figure.stand.line.dotted.figure.stand")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40)
-                            .foregroundStyle(showAllEvents ? .secondary : .primary)
-                    })
+            CustomSegmentedPicker(selectedTimeTab: $timeTabFilter) {
+                withAnimation {
+                    scrollViewProxy.scrollTo("event-list-view-top")
                 }
             }
 
-            ZStack {
-                List {
-                    let filteredEvents = events(timeTabFilter)
-                    if filteredEvents.isEmpty {
-                        Text(.localizable.noEvents)
-                    } else {
-                        EmptyView().id("event-list-view-top")
+            if eventListType == .all && appState.publicKey != nil {
+                Button(action: {
+                    showAllEvents.toggle()
+                }, label: {
+                    Image(systemName: "figure.stand.line.dotted.figure.stand")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30)
+                        .foregroundStyle(showAllEvents ? .secondary : .primary)
+                })
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
 
-                        ForEach(filteredEvents, id: \.self) { event in
-                            Section(
-                                content: {
-                                    NavigationLink(destination: EventView(appState: appState, event: event)) {
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
-                                                    .font(.headline)
+            List {
+                let filteredEvents = events(timeTabFilter)
+                if filteredEvents.isEmpty {
+                    Text(.localizable.noEvents)
+                } else {
+                    EmptyView().id("event-list-view-top")
 
+                    ForEach(filteredEvents, id: \.self) { event in
+                        Section(
+                            content: {
+                                NavigationLink(destination: EventView(appState: appState, event: event)) {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
+                                                .font(.headline)
+
+                                            Divider()
+
+                                            ProfilePictureAndNameView(publicKeyHex: event.pubkey)
+
+                                            let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
+
+                                            if !locations.isEmpty {
                                                 Divider()
 
-                                                ProfilePictureAndNameView(publicKeyHex: event.pubkey)
+                                                Text(event.locations.joined())
+                                                    .font(.subheadline)
+                                            }
 
-                                                let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
+                                            if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
+                                                Divider()
 
-                                                if !locations.isEmpty {
-                                                    Divider()
-
-                                                    Text(event.locations.joined())
+                                                switch timeTabFilter {
+                                                case .past:
+                                                    Text(.localizable.numAttended(rsvps.count))
                                                         .font(.subheadline)
-                                                }
-
-                                                if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
-                                                    Divider()
-
-                                                    switch timeTabFilter {
-                                                    case .past:
-                                                        Text(.localizable.numAttended(rsvps.count))
-                                                            .font(.subheadline)
-                                                    case .upcoming:
-                                                        Text(.localizable.numGoing(rsvps.count))
-                                                            .font(.subheadline)
-                                                    }
-                                                }
-
-                                                if let summary = event.summary?.trimmingCharacters(in: .whitespacesAndNewlines), !summary.isEmpty {
-                                                    Divider()
-
-                                                    Text(summary)
+                                                case .upcoming:
+                                                    Text(.localizable.numGoing(rsvps.count))
                                                         .font(.subheadline)
                                                 }
                                             }
 
-                                            if let calendarEventImageURL = event.imageURL {
-                                                KFImage.url(calendarEventImageURL)
-                                                    .resizable()
-                                                    .placeholder { ProgressView() }
-                                                    .scaledToFit()
-                                                    .frame(maxWidth: 100, maxHeight: 200)
+                                            if let summary = event.summary?.trimmingCharacters(in: .whitespacesAndNewlines), !summary.isEmpty {
+                                                Divider()
+
+                                                Text(summary)
+                                                    .font(.subheadline)
                                             }
                                         }
-                                    }
-                                }, header: {
-                                    if let startTimestamp = event.startTimestamp {
-                                        Text(format(date: startTimestamp, timeZone: event.startTimeZone))
+
+                                        if let calendarEventImageURL = event.imageURL {
+                                            KFImage.url(calendarEventImageURL)
+                                                .resizable()
+                                                .placeholder { ProgressView() }
+                                                .scaledToFit()
+                                                .frame(maxWidth: 100, maxHeight: 200)
+                                        }
                                     }
                                 }
-                            )
-                            .padding(.vertical, 10)
-                        }
+                            }, header: {
+                                if let startTimestamp = event.startTimestamp {
+                                    Text(format(date: startTimestamp, timeZone: event.startTimeZone))
+                                }
+                            }
+                        )
+                        .padding(.vertical, 10)
                     }
                 }
             }
@@ -198,7 +195,7 @@ struct EventListView: View, MetadataCoding {
             }
         }
 
-        if !showAllEvents && appState.keypair != nil {
+        if !showAllEvents && appState.publicKey != nil {
             switch timeTabFilter {
             case .upcoming:
                 return appState.upcomingFollowedEvents
