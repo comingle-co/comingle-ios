@@ -253,7 +253,7 @@ struct EventListView: View, MetadataCoding {
             }
         }
 
-        if !showAllEvents && appState.publicKey != nil {
+        if !showAllEvents && eventListType == .all && appState.publicKey != nil {
             switch timeTabFilter {
             case .upcoming:
                 return appState.upcomingFollowedEvents
