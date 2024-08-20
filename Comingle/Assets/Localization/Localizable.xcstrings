@@ -517,6 +517,18 @@
         }
       }
     },
+    "generalSearch" : {
+      "comment" : "Placeholder text to prompt for searching by events or people.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for events or people"
+          }
+        }
+      }
+    },
     "guest" : {
       "comment" : "Name of Guest account that is not signed in.",
       "extractionState" : "manual",

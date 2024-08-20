@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3A052E3C2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */; };
-		3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */; };
 		3A2FF9742A3F6CE2009E1067 /* NostrSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 3A2FF9732A3F6CE2009E1067 /* NostrSDK */; };
 		3A2FF9782A3F6DFD009E1067 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9772A3F6DFD009E1067 /* SignInView.swift */; };
 		3A2FF9822A3FD68B009E1067 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2FF9812A3FD68B009E1067 /* SettingsView.swift */; };
@@ -93,7 +92,6 @@
 
 /* Begin PBXFileReference section */
 		3A052E3B2C3093F3000B5EA5 /* MetadataEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetadataEvent+Extensions.swift"; sourceTree = "<group>"; };
-		3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		3A2FF9772A3F6DFD009E1067 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		3A2FF9812A3FD68B009E1067 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A2FF9832A40025B009E1067 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -313,7 +311,6 @@
 				3A4FCB4F2C36333A007AE9A4 /* EventListView.swift */,
 				3A453E1D2A0C614800897303 /* EventView.swift */,
 				3A4A89932C3CE40900238043 /* GuestProfilePictureView.swift */,
-				3A0A30BE2C272EAD00F8C9BC /* HomeView.swift */,
 				3A4B466E2C52094600307F23 /* ImageOverlayView.swift */,
 				3A317C262C5B4260004DA56B /* LocationSearchView.swift */,
 				3A2FF9772A3F6DFD009E1067 /* SignInView.swift */,
@@ -582,7 +579,6 @@
 				3A464FFE2C3A34BE00AD4B09 /* AppSettings.swift in Sources */,
 				3A317C202C59EC45004DA56B /* TimeBasedCalendarEvent+Extensions.swift in Sources */,
 				3A317C032C58002E004DA56B /* TimeZone+Extensions.swift in Sources */,
-				3A0A30BF2C272EAD00F8C9BC /* HomeView.swift in Sources */,
 				3A4FCB502C36333A007AE9A4 /* EventListView.swift in Sources */,
 				3A4A89A72C3E3F7400238043 /* AppearanceSettingsView.swift in Sources */,
 				3A34194D2C50B2680039620B /* NostrEventValueTransformer.swift in Sources */,

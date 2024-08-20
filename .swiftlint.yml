@@ -1,3 +1,5 @@
 disabled_rules:
+  - cyclomatic_complexity
+  - file_length
   - line_length
   - type_body_length

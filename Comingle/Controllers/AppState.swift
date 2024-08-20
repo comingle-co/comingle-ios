@@ -31,7 +31,7 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
     @Published var relayReadPool: RelayPool = RelayPool(relays: [])
     @Published var relayWritePool: RelayPool = RelayPool(relays: [])
 
-    @Published var activeTab: HomeTabs = .following
+    @Published var activeTab: HomeTabs = .events
 
     @Published var followListEvents: [String: FollowListEvent] = [:]
     @Published var metadataEvents: [String: MetadataEvent] = [:]
@@ -43,6 +43,8 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
     @Published var deletedEventCoordinates = [String: Date]()
 
     @Published var followedPubkeys = Set<String>()
+
+    @Published var searchTrie = Trie<TimeBasedCalendarEvent>()
 
     @Published var metadataTrie = Trie<MetadataEvent>()
 
@@ -185,12 +187,12 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
         pastEvents(eventsOnCalendarList(calendarCoordinates))
     }
 
-    private func upcomingEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
+    func upcomingEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
         events.filter { $0.isUpcoming }
             .sorted(using: TimeBasedCalendarEventSortComparator(order: .forward))
     }
 
-    private func pastEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
+    func pastEvents(_ events: [TimeBasedCalendarEvent]) -> [TimeBasedCalendarEvent] {
         events.filter { $0.isPast }
             .sorted(using: TimeBasedCalendarEventSortComparator(order: .reverse))
     }
@@ -309,7 +311,7 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
         followedPubkeys.removeAll()
 
         if profile.publicKeyHex == nil {
-            activeTab = .explore
+            activeTab = .events
         } else if publicKey != nil {
             refreshFollowedPubkeys()
         }
@@ -637,10 +639,72 @@ extension AppState: EventVerifying, RelayDelegate {
 
         if let existingEvent = self.timeBasedCalendarEvents[eventCoordinates] {
             if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
+                searchTrie.remove(key: existingEvent.id, value: existingEvent)
+                searchTrie.remove(key: existingEvent.pubkey, value: existingEvent)
+                if let authorPublicKey = PublicKey(hex: existingEvent.pubkey) {
+                    searchTrie.remove(key: authorPublicKey.npub, value: existingEvent)
+                }
+                if let identifier = existingEvent.identifier {
+                    searchTrie.remove(key: identifier, value: existingEvent)
+                }
+                if let title = existingEvent.title?.trimmedOrNilIfEmpty {
+                    searchTrie.remove(key: title, value: existingEvent)
+                }
+                if let geohash = existingEvent.geohash?.trimmedOrNilIfEmpty {
+                    searchTrie.remove(key: geohash, value: existingEvent)
+                }
+                existingEvent.locations.forEach { location in
+                    if let trimmedLocation = location.trimmedOrNilIfEmpty {
+                        searchTrie.remove(key: trimmedLocation, value: existingEvent)
+                    }
+                }
+                existingEvent.references.forEach { reference in
+                    if let trimmedReference = reference.absoluteString.trimmedOrNilIfEmpty {
+                        searchTrie.remove(key: trimmedReference, value: existingEvent)
+                    }
+                }
+                existingEvent.hashtags.forEach { hashtag in
+                    if let trimmedHashtag = hashtag.trimmedOrNilIfEmpty {
+                        searchTrie.remove(key: trimmedHashtag, value: existingEvent)
+                    }
+                }
+
                 timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
+            } else {
+                return
             }
         } else {
             timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
+        }
+
+        _ = searchTrie.insert(key: timeBasedCalendarEvent.id, value: timeBasedCalendarEvent)
+        _ = searchTrie.insert(key: timeBasedCalendarEvent.pubkey, value: timeBasedCalendarEvent)
+        if let authorPublicKey = PublicKey(hex: timeBasedCalendarEvent.pubkey) {
+            _ = searchTrie.insert(key: authorPublicKey.npub, value: timeBasedCalendarEvent)
+        }
+        if let identifier = timeBasedCalendarEvent.identifier {
+            _ = searchTrie.insert(key: identifier, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches])
+        }
+        if let title = timeBasedCalendarEvent.title?.trimmedOrNilIfEmpty {
+            _ = searchTrie.insert(key: title, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+        }
+        if let geohash = timeBasedCalendarEvent.geohash?.trimmedOrNilIfEmpty {
+            _ = searchTrie.insert(key: geohash, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches])
+        }
+        timeBasedCalendarEvent.locations.forEach { location in
+            if let trimmedLocation = location.trimmedOrNilIfEmpty {
+                _ = searchTrie.insert(key: trimmedLocation, value: timeBasedCalendarEvent, options: [.includeDiacriticsInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+            }
+        }
+        timeBasedCalendarEvent.references.forEach { reference in
+            if let trimmedReference = reference.absoluteString.trimmedOrNilIfEmpty {
+                _ = searchTrie.insert(key: trimmedReference, value: timeBasedCalendarEvent, options: [.includeDiacriticsInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+            }
+        }
+        timeBasedCalendarEvent.hashtags.forEach { hashtag in
+            if let trimmedHashtag = hashtag.trimmedOrNilIfEmpty {
+                _ = searchTrie.insert(key: trimmedHashtag, value: timeBasedCalendarEvent, options: [.includeDiacriticsInsensitiveMatches, .includeDiacriticsInsensitiveMatches])
+            }
         }
     }
 
@@ -936,7 +1000,6 @@ extension AppState: EventVerifying, RelayDelegate {
 }
 
 enum HomeTabs {
-    case following
+    case events
     case calendars
-    case explore
 }

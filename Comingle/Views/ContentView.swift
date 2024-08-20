@@ -25,26 +25,19 @@ struct ContentView: View {
         ScrollViewReader { scrollViewProxy in
             NavigationStack {
                 VStack {
-                    if appState.publicKey != nil {
-                        if appState.activeTab == .following {
-                            NavigationStack {
-                                HomeView(appState: appState)
-                            }
-                        }
-
-                        if appState.activeTab == .calendars {
-                            NavigationStack {
-                                CalendarsView()
-                            }
-                        }
-                    }
-
-                    if appState.activeTab == .explore {
+                    if appState.activeTab == .events {
                         NavigationStack {
                             EventListView(eventListType: .all)
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     }
+
+                    if appState.activeTab == .calendars {
+                        NavigationStack {
+                            CalendarsView()
+                        }
+                    }
+
                     CustomTabBar(selectedTab: $appState.activeTab, isSignedIn: appState.publicKey != nil) {
                         withAnimation {
                             scrollViewProxy.scrollTo("event-list-view-top")
@@ -128,12 +121,9 @@ struct CustomTabBar: View {
 
     var body: some View {
         HStack {
-            if isSignedIn {
-                CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.following, selectedTab: $selectedTab, onTapAction: onTapAction)
+            CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.events, selectedTab: $selectedTab, onTapAction: onTapAction)
 
-                CustomTabBarItem(iconName: "calendar", title: .localizable.calendars, tab: HomeTabs.calendars, selectedTab: $selectedTab, onTapAction: onTapAction)
-            }
-            CustomTabBarItem(iconName: "globe", title: .localizable.explore, tab: HomeTabs.explore, selectedTab: $selectedTab, onTapAction: onTapAction)
+            CustomTabBarItem(iconName: "calendar", title: .localizable.calendars, tab: HomeTabs.calendars, selectedTab: $selectedTab, onTapAction: onTapAction)
         }
         .frame(height: 50)
         .background(Color.gray.opacity(0.2))

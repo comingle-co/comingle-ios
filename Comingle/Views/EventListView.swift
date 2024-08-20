@@ -10,96 +10,121 @@ import NostrSDK
 import SwiftData
 import SwiftUI
 
-struct EventListView: View {
+struct EventListView: View, MetadataCoding {
 
     @State var eventListType: EventListType
     @EnvironmentObject var appState: AppState
     @State private var timeTabFilter: TimeTabs = .upcoming
+    @State private var showAllEvents: Bool = false
+    @StateObject private var searchViewModel = SearchViewModel()
 
     var body: some View {
         ScrollViewReader { scrollViewProxy in
-            VStack {
+            if eventListType == .all {
+                listView(scrollViewProxy: scrollViewProxy)
+                    .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.generalSearch))
+            } else {
+                listView(scrollViewProxy: scrollViewProxy)
+            }
+        }
+    }
+
+    private func listView(scrollViewProxy: ScrollViewProxy) -> some View {
+        VStack {
+            HStack {
                 CustomSegmentedPicker(selectedTimeTab: $timeTabFilter) {
                     withAnimation {
                         scrollViewProxy.scrollTo("event-list-view-top")
                     }
                 }
 
-                ZStack {
-                    List {
-                        let filteredEvents = events(timeTabFilter)
-                        if filteredEvents.isEmpty {
-                            Text(.localizable.noEvents)
-                        } else {
-                            EmptyView().id("event-list-view-top")
+                if eventListType == .all && appState.keypair != nil {
+                    Button(action: {
+                        showAllEvents.toggle()
+                    }, label: {
+                        Image(systemName: "figure.stand.line.dotted.figure.stand")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40)
+                            .foregroundStyle(showAllEvents ? .secondary : .primary)
+                    })
+                }
+            }
 
-                            ForEach(filteredEvents, id: \.self) { event in
-                                Section(
-                                    content: {
-                                        NavigationLink(destination: EventView(appState: appState, event: event)) {
-                                            HStack {
-                                                VStack(alignment: .leading) {
-                                                    Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
-                                                        .font(.headline)
+            ZStack {
+                List {
+                    let filteredEvents = events(timeTabFilter)
+                    if filteredEvents.isEmpty {
+                        Text(.localizable.noEvents)
+                    } else {
+                        EmptyView().id("event-list-view-top")
 
+                        ForEach(filteredEvents, id: \.self) { event in
+                            Section(
+                                content: {
+                                    NavigationLink(destination: EventView(appState: appState, event: event)) {
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                                Text(verbatim: event.title ?? event.firstValueForRawTagName("name") ?? "Unnamed Event")
+                                                    .font(.headline)
+
+                                                Divider()
+
+                                                ProfilePictureAndNameView(publicKeyHex: event.pubkey)
+
+                                                let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
+
+                                                if !locations.isEmpty {
                                                     Divider()
 
-                                                    ProfilePictureAndNameView(publicKeyHex: event.pubkey)
+                                                    Text(event.locations.joined())
+                                                        .font(.subheadline)
+                                                }
 
-                                                    let locations = event.locations.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.joined()
+                                                if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
+                                                    Divider()
 
-                                                    if !locations.isEmpty {
-                                                        Divider()
-
-                                                        Text(event.locations.joined())
+                                                    switch timeTabFilter {
+                                                    case .past:
+                                                        Text(.localizable.numAttended(rsvps.count))
                                                             .font(.subheadline)
-                                                    }
-
-                                                    if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
-                                                        Divider()
-
-                                                        switch timeTabFilter {
-                                                        case .past:
-                                                            Text(.localizable.numAttended(rsvps.count))
-                                                                .font(.subheadline)
-                                                        case .upcoming:
-                                                            Text(.localizable.numGoing(rsvps.count))
-                                                                .font(.subheadline)
-                                                        }
-                                                    }
-
-                                                    if let summary = event.summary?.trimmingCharacters(in: .whitespacesAndNewlines), !summary.isEmpty {
-                                                        Divider()
-
-                                                        Text(summary)
+                                                    case .upcoming:
+                                                        Text(.localizable.numGoing(rsvps.count))
                                                             .font(.subheadline)
                                                     }
                                                 }
 
-                                                if let calendarEventImageURL = event.imageURL {
-                                                    KFImage.url(calendarEventImageURL)
-                                                        .resizable()
-                                                        .placeholder { ProgressView() }
-                                                        .scaledToFit()
-                                                        .frame(maxWidth: 100, maxHeight: 200)
+                                                if let summary = event.summary?.trimmingCharacters(in: .whitespacesAndNewlines), !summary.isEmpty {
+                                                    Divider()
+
+                                                    Text(summary)
+                                                        .font(.subheadline)
                                                 }
                                             }
-                                        }
-                                    }, header: {
-                                        if let startTimestamp = event.startTimestamp {
-                                            Text(format(date: startTimestamp, timeZone: event.startTimeZone))
+
+                                            if let calendarEventImageURL = event.imageURL {
+                                                KFImage.url(calendarEventImageURL)
+                                                    .resizable()
+                                                    .placeholder { ProgressView() }
+                                                    .scaledToFit()
+                                                    .frame(maxWidth: 100, maxHeight: 200)
+                                            }
                                         }
                                     }
-                                )
-                                .padding(.vertical, 10)
-                            }
+                                }, header: {
+                                    if let startTimestamp = event.startTimestamp {
+                                        Text(format(date: startTimestamp, timeZone: event.startTimeZone))
+                                    }
+                                }
+                            )
+                            .padding(.vertical, 10)
                         }
                     }
                 }
             }
-            .refreshable {
-                appState.refresh(hardRefresh: true)
-            }
+        }
+        .refreshable {
+            appState.refresh(hardRefresh: true)
         }
     }
 
@@ -130,20 +155,65 @@ struct EventListView: View {
     }
 
     func events(_ timeTabFilter: TimeTabs) -> [TimeBasedCalendarEvent] {
-        switch eventListType {
+        if eventListType == .all, let searchText = searchViewModel.debouncedSearchText.trimmedOrNilIfEmpty {
+            // Search by npub.
+            if let authorPublicKey = PublicKey(npub: searchText) {
+                switch timeTabFilter {
+                case .upcoming:
+                    return appState.upcomingProfileEvents(authorPublicKey.hex)
+                case .past:
+                    return appState.pastProfileEvents(authorPublicKey.hex)
+                }
+            }
+            if let metadata = try? decodedMetadata(from: searchText), let kind = metadata.kind, kind == EventKind.timeBasedCalendarEvent.rawValue, let pubkey = metadata.pubkey, let publicKey = PublicKey(hex: pubkey) {
+                // Search by naddr.
+                if let identifier = metadata.identifier,
+                   let eventCoordinates = try? EventCoordinates(kind: EventKind(rawValue: Int(kind)), pubkey: publicKey, identifier: identifier),
+                   let timeBasedCalendarEvent = appState.timeBasedCalendarEvents[eventCoordinates.tag.value] {
+                     if timeTabFilter == .upcoming && !timeBasedCalendarEvent.isUpcoming {
+                         self.timeTabFilter = .past
+                     } else if timeTabFilter == .past && !timeBasedCalendarEvent.isPast {
+                         self.timeTabFilter = .upcoming
+                     }
+                     return [timeBasedCalendarEvent]
+                // Search by nevent.
+                } else if let eventId = metadata.eventId {
+                    let results = appState.searchTrie.find(key: eventId)
+                    switch timeTabFilter {
+                    case .upcoming:
+                        return appState.upcomingEvents(results)
+                    case .past:
+                        return appState.pastEvents(results)
+                    }
+                }
+            }
+
+            // Search by event tags and content.
+            let results = appState.searchTrie.find(key: searchText.localizedLowercase)
+            switch timeTabFilter {
+            case .upcoming:
+                return appState.upcomingEvents(results)
+            case .past:
+                return appState.pastEvents(results)
+            }
+        }
+
+        if !showAllEvents && appState.keypair != nil {
+            switch timeTabFilter {
+            case .upcoming:
+                return appState.upcomingFollowedEvents
+            case .past:
+                return appState.pastFollowedEvents
+            }
+        }
+
+        let events = switch eventListType {
         case .all:
             switch timeTabFilter {
             case .upcoming:
                 appState.allUpcomingEvents
             case .past:
                 appState.allPastEvents
-            }
-        case .followed:
-            switch timeTabFilter {
-            case .upcoming:
-                appState.upcomingFollowedEvents
-            case .past:
-                appState.pastFollowedEvents
             }
         case .profile(let publicKeyHex):
             switch timeTabFilter {
@@ -160,6 +230,8 @@ struct EventListView: View {
                 appState.pastEventsOnCalendarList(calendarCoordinates)
             }
         }
+
+        return events
     }
 }
 
@@ -211,7 +283,6 @@ extension Date {
 
 enum EventListType: Equatable {
     case all
-    case followed
     case profile(String)
     case calendar(String)
 }

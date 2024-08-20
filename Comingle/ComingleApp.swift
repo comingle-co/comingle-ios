@@ -41,11 +41,7 @@ struct ComingleApp: App {
 
     @MainActor
     private func updateActiveTab() {
-        if appState.publicKey != nil {
-            appState.activeTab = .following
-        } else {
-            appState.activeTab = .explore
-        }
+        appState.activeTab = .events
     }
 
     @MainActor
