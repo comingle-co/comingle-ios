@@ -321,8 +321,8 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
     }
 
     func signIn(keypair: Keypair, relayURLs: [URL]) {
-        privateKeySecureStorage.store(for: keypair)
         signIn(publicKey: keypair.publicKey, relayURLs: relayURLs)
+        privateKeySecureStorage.store(for: keypair)
     }
 
     func signIn(publicKey: PublicKey, relayURLs: [URL]) {
@@ -355,6 +355,9 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
                 relayPoolSettings.relaySettingsList += validatedRelayURLStrings.map { RelaySettings(relayURLString: $0) }
             }
             appSettings.activeProfile = profile
+
+            // Remove private key from secure storage in case for whatever reason it was not cleaned up previously.
+            privateKeySecureStorage.delete(for: publicKey)
         }
 
         refreshFollowedPubkeys()
