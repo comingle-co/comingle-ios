@@ -30,7 +30,7 @@ struct CalendarsView: View {
 
     func titleAndProfileView(_ calendarListEvent: CalendarListEvent) -> some View {
         VStack(alignment: .leading) {
-            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: .localizable.noCalendarTitle))
+            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: .localizable.noCalendarName))
                 .font(.headline)
 
             Divider()

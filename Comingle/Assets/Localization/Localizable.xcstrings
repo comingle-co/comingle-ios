@@ -661,14 +661,14 @@
         }
       }
     },
-    "noCalendarTitle" : {
+    "noCalendarName" : {
       "comment" : "Text to indicate that there is no title for the calendar.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Title"
+            "value" : "No Name"
           }
         }
       }

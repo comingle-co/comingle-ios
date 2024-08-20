@@ -53,13 +53,33 @@ struct EventListView: View, MetadataCoding {
             List {
                 // Search by npub.
                 if eventListType == .all,
-                   let searchText = searchViewModel.debouncedSearchText.trimmedOrNilIfEmpty,
-                   let authorPublicKey = PublicKey(npub: searchText) {
-                    Section(
-                        content: {
-                            ProfilePictureAndNameView(publicKeyHex: authorPublicKey.hex)
+                   let searchText = searchViewModel.debouncedSearchText.trimmedOrNilIfEmpty {
+                    if let authorPublicKey = PublicKey(npub: searchText) {
+                        Section(
+                            content: {
+                                ProfilePictureAndNameView(publicKeyHex: authorPublicKey.hex)
+                            }
+                        )
+                    } else {
+                        if let metadata = try? decodedMetadata(from: searchText), let kind = metadata.kind, kind == EventKind.calendar.rawValue, let pubkey = metadata.pubkey, let publicKey = PublicKey(hex: pubkey) {
+                            // Search by naddr.
+                            if let identifier = metadata.identifier,
+                               let eventCoordinates = try? EventCoordinates(kind: EventKind(rawValue: Int(kind)), pubkey: publicKey, identifier: identifier),
+                               let calendarListEvent = appState.calendarListEvents[eventCoordinates.tag.value] {
+                                Section(
+                                    content: {
+                                        HStack {
+                                            calendarTitleAndProfileView(calendarListEvent)
+
+                                            if let imageURL = calendarListEvent.imageURL {
+                                                imageView(imageURL)
+                                            }
+                                        }
+                                    }
+                                )
+                            }
                         }
-                    )
+                    }
                 }
 
                 let filteredEvents = events(timeTabFilter)
@@ -112,11 +132,7 @@ struct EventListView: View, MetadataCoding {
                                         }
 
                                         if let calendarEventImageURL = event.imageURL {
-                                            KFImage.url(calendarEventImageURL)
-                                                .resizable()
-                                                .placeholder { ProgressView() }
-                                                .scaledToFit()
-                                                .frame(maxWidth: 100, maxHeight: 200)
+                                            imageView(calendarEventImageURL)
                                         }
                                     }
                                 }
@@ -134,6 +150,25 @@ struct EventListView: View, MetadataCoding {
         .refreshable {
             appState.refresh(hardRefresh: true)
         }
+    }
+
+    func calendarTitleAndProfileView(_ calendarListEvent: CalendarListEvent) -> some View {
+        VStack(alignment: .leading) {
+            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: .localizable.noCalendarName))
+                .font(.headline)
+
+            Divider()
+
+            ProfilePictureAndNameView(publicKeyHex: calendarListEvent.pubkey)
+        }
+    }
+
+    func imageView(_ imageURL: URL) -> some View {
+        KFImage.url(imageURL)
+            .resizable()
+            .placeholder { ProgressView() }
+            .scaledToFit()
+            .frame(maxWidth: 100, maxHeight: 200)
     }
 
     private func resolveTimeZone(_ timeZone: TimeZone?) -> TimeZone {
@@ -173,25 +208,37 @@ struct EventListView: View, MetadataCoding {
                     return appState.pastProfileEvents(authorPublicKey.hex)
                 }
             }
-            if let metadata = try? decodedMetadata(from: searchText), let kind = metadata.kind, kind == EventKind.timeBasedCalendarEvent.rawValue, let pubkey = metadata.pubkey, let publicKey = PublicKey(hex: pubkey) {
-                // Search by naddr.
-                if let identifier = metadata.identifier,
-                   let eventCoordinates = try? EventCoordinates(kind: EventKind(rawValue: Int(kind)), pubkey: publicKey, identifier: identifier),
-                   let timeBasedCalendarEvent = appState.timeBasedCalendarEvents[eventCoordinates.tag.value] {
-                     if timeTabFilter == .upcoming && !timeBasedCalendarEvent.isUpcoming {
-                         self.timeTabFilter = .past
-                     } else if timeTabFilter == .past && !timeBasedCalendarEvent.isPast {
-                         self.timeTabFilter = .upcoming
-                     }
-                     return [timeBasedCalendarEvent]
-                // Search by nevent.
-                } else if let eventId = metadata.eventId {
-                    let results = appState.searchTrie.find(key: eventId)
+            if let metadata = try? decodedMetadata(from: searchText), let kind = metadata.kind, let pubkey = metadata.pubkey, let publicKey = PublicKey(hex: pubkey) {
+                if kind == EventKind.timeBasedCalendarEvent.rawValue {
+                    // Search by naddr.
+                    if let identifier = metadata.identifier,
+                       let eventCoordinates = try? EventCoordinates(kind: EventKind(rawValue: Int(kind)), pubkey: publicKey, identifier: identifier),
+                       let timeBasedCalendarEvent = appState.timeBasedCalendarEvents[eventCoordinates.tag.value] {
+                        if timeTabFilter == .upcoming && !timeBasedCalendarEvent.isUpcoming {
+                            self.timeTabFilter = .past
+                        } else if timeTabFilter == .past && !timeBasedCalendarEvent.isPast {
+                            self.timeTabFilter = .upcoming
+                        }
+                        return [timeBasedCalendarEvent]
+                        // Search by nevent.
+                    } else if let eventId = metadata.eventId {
+                        let results = appState.searchTrie.find(key: eventId)
+                        switch timeTabFilter {
+                        case .upcoming:
+                            return appState.upcomingEvents(results)
+                        case .past:
+                            return appState.pastEvents(results)
+                        }
+                    }
+                } else if kind == EventKind.calendar.rawValue,
+                          let identifier = metadata.identifier,
+                          let coordinates = try? EventCoordinates(kind: EventKind(rawValue: Int(kind)), pubkey: publicKey, identifier: identifier) {
+                    let coordinatesString = coordinates.tag.value
                     switch timeTabFilter {
                     case .upcoming:
-                        return appState.upcomingEvents(results)
+                        return appState.upcomingEventsOnCalendarList(coordinatesString)
                     case .past:
-                        return appState.pastEvents(results)
+                        return appState.pastEventsOnCalendarList(coordinatesString)
                     }
                 }
             }

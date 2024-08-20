@@ -44,7 +44,7 @@ struct CalendarListEventView: View {
                         }
                     },
                     label: {
-                        Text(calendarListEvent.title ?? calendarListEvent.firstValueForRawTagName("name") ?? "No Name")
+                        Text(calendarListEvent.title ?? calendarListEvent.firstValueForRawTagName("name") ?? String(localized: .localizable.noCalendarName))
                             .font(.headline)
                     }
                 )
