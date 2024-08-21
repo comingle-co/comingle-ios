@@ -12,12 +12,22 @@ import SwiftUI
 struct CalendarsView: View {
 
     @EnvironmentObject var appState: AppState
+    @StateObject private var searchViewModel = SearchViewModel()
 
     private var calendarListEvents: [CalendarListEvent] {
-        let comparator = CalendarListEventSortComparator(order: .forward, appState: appState)
-        return appState.calendarListEvents.values
-            .filter { !$0.calendarEventCoordinateList.isEmpty }
-            .sorted(using: comparator)
+        let calendarsSearchResults: [CalendarListEvent]
+
+        if let searchText = searchViewModel.debouncedSearchText.trimmedOrNilIfEmpty {
+            calendarsSearchResults = appState.calendarsTrie.find(key: searchText.localizedLowercase)
+                .compactMap { appState.calendarListEvents[$0] }
+                .filter { !$0.calendarEventCoordinateList.isEmpty }
+        } else {
+            calendarsSearchResults = appState.calendarListEvents.values
+                .filter { !$0.calendarEventCoordinateList.isEmpty }
+        }
+
+        return calendarsSearchResults
+            .sorted(using: CalendarListEventSortComparator(order: .forward, appState: appState))
     }
 
     func imageView(_ imageURL: URL) -> some View {
@@ -61,6 +71,7 @@ struct CalendarsView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.calendarsSearch))
     }
 }
 

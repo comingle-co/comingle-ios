@@ -111,8 +111,7 @@ struct EventListView: View, MetadataCoding {
                                 }
                             }
 
-                            let calendarsSearchResults = appState.calendarsTrie
-                                .find(key: searchText.localizedLowercase)
+                            let calendarsSearchResults = appState.calendarsTrie.find(key: searchText.localizedLowercase)
                             if !calendarsSearchResults.isEmpty {
                                 Section {
                                     DisclosureGroup(
@@ -120,6 +119,7 @@ struct EventListView: View, MetadataCoding {
                                         content: {
                                             let sortedCalendars = calendarsSearchResults
                                                 .compactMap { appState.calendarListEvents[$0] }
+                                                .filter { !$0.calendarEventCoordinateList.isEmpty }
                                                 .sorted(using: CalendarListEventSortComparator(order: .forward, appState: appState))
                                             ForEach(sortedCalendars, id: \.self) { calendarListEvent in
                                                 if let coordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value {

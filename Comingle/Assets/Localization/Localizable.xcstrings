@@ -145,6 +145,18 @@
         }
       }
     },
+    "calendarsSearch" : {
+      "comment" : "Placeholder text to prompt user to search calendars",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for calendars"
+          }
+        }
+      }
+    },
     "calendarTitle" : {
       "comment" : "Text indicating that the field is for entering a calendar title.",
       "extractionState" : "manual",
