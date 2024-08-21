@@ -10,7 +10,8 @@ import SwiftUI
 
 struct ProfilePictureView: View {
 
-    var publicKeyHex: String?
+    let publicKeyHex: String?
+    var size: CGFloat = 40
 
     @EnvironmentObject var appState: AppState
 
@@ -21,10 +22,10 @@ struct ProfilePictureView: View {
                 .resizable()
                 .placeholder { ProgressView() }
                 .scaledToFit()
-                .frame(width: 40)
+                .frame(width: size)
                 .clipShape(.circle)
         } else {
-            GuestProfilePictureView()
+            GuestProfilePictureView(size: size)
         }
     }
 

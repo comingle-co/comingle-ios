@@ -173,16 +173,29 @@ struct EventListView: View, MetadataCoding {
                                                     .font(.subheadline)
                                             }
 
+                                            if !event.participants.isEmpty {
+                                                Divider()
+                                                HStack {
+                                                    CondensedProfilePicturesView(pubkeys: event.participants.sorted(using: CalendarEventParticipantSortComparator(order: .forward, appState: appState)).compactMap { $0.pubkey?.hex }, maxPictures: 5)
+                                                    Text(.localizable.numInvited(event.participants.count))
+                                                        .font(.subheadline)
+                                                }
+                                            }
+
                                             if let eventCoordinates = event.replaceableEventCoordinates()?.tag.value, let rsvps = appState.calendarEventsToRsvps[eventCoordinates] {
                                                 Divider()
 
-                                                switch timeTabFilter {
-                                                case .past:
-                                                    Text(.localizable.numAttended(rsvps.count))
-                                                        .font(.subheadline)
-                                                case .upcoming:
-                                                    Text(.localizable.numGoing(rsvps.count))
-                                                        .font(.subheadline)
+                                                HStack {
+                                                    CondensedProfilePicturesView(pubkeys: rsvps.map { $0.pubkey }.sorted(using: PublicKeySortComparator(order: .forward, appState: appState)), maxPictures: 5)
+
+                                                    switch timeTabFilter {
+                                                    case .past:
+                                                        Text(.localizable.numAttended(rsvps.count))
+                                                            .font(.subheadline)
+                                                    case .upcoming:
+                                                        Text(.localizable.numGoing(rsvps.count))
+                                                            .font(.subheadline)
+                                                    }
                                                 }
                                             }
 

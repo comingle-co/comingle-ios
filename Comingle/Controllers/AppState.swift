@@ -669,6 +669,7 @@ extension AppState: EventVerifying, RelayDelegate {
         }
 
         let newTitle = newEvent.title?.trimmedOrNilIfEmpty
+        let newSummary = newEvent.summary?.trimmedOrNilIfEmpty
         let newGeohash = newEvent.geohash?.trimmedOrNilIfEmpty
         let newLocations = OrderedSet(newEvent.locations.compactMap { $0.trimmedOrNilIfEmpty })
         let newReferences = OrderedSet(newEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty })
@@ -678,6 +679,9 @@ extension AppState: EventVerifying, RelayDelegate {
             eventsTrie.remove(key: oldEvent.id, value: eventCoordinates)
             if let title = oldEvent.title?.trimmedOrNilIfEmpty, title != newTitle {
                 eventsTrie.remove(key: title, value: eventCoordinates)
+            }
+            if let summary = oldEvent.summary?.trimmedOrNilIfEmpty, summary != newSummary {
+                eventsTrie.remove(key: summary, value: eventCoordinates)
             }
             if let geohash = oldEvent.geohash?.trimmedOrNilIfEmpty, geohash != newGeohash {
                 eventsTrie.remove(key: geohash, value: eventCoordinates)
@@ -706,6 +710,9 @@ extension AppState: EventVerifying, RelayDelegate {
         }
         if let newTitle {
             _ = eventsTrie.insert(key: newTitle, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+        }
+        if let newSummary {
+            _ = eventsTrie.insert(key: newSummary, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
         if let newGeohash {
             _ = eventsTrie.insert(key: newGeohash, value: eventCoordinates, options: [.includeCaseInsensitiveMatches])

@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct GuestProfilePictureView: View {
+    var size: CGFloat = 40
+
     var body: some View {
         Image(systemName: "person.crop.circle")
             .resizable()
             .scaledToFit()
-            .frame(width: 40)
+            .frame(width: size)
             .clipShape(.circle)
     }
 }
