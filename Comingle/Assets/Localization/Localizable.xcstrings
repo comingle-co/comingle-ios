@@ -133,6 +133,18 @@
         }
       }
     },
+    "calendarsCount" : {
+      "comment" : "Section title for Calendars in the event view with the number of calendars in parentheses.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendars (%d)"
+          }
+        }
+      }
+    },
     "calendarTitle" : {
       "comment" : "Text indicating that the field is for entering a calendar title.",
       "extractionState" : "manual",

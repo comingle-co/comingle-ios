@@ -45,6 +45,7 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
     @Published var followedPubkeys = Set<String>()
 
     @Published var eventsTrie = Trie<String>()
+    @Published var calendarsTrie = Trie<String>()
     @Published var pubkeyTrie = Trie<String>()
 
     // Keep track of relay pool active subscriptions and the until filter so that we can limit the scope of how much we query from the relay pools.
@@ -656,6 +657,7 @@ extension AppState: EventVerifying, RelayDelegate {
 
         if let existingEvent = self.timeBasedCalendarEvents[eventCoordinates] {
             if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
+                eventsTrie.remove(key: existingEvent.id, value: eventCoordinates)
                 if let title = existingEvent.title?.trimmedOrNilIfEmpty, title != newTitle {
                     eventsTrie.remove(key: title, value: eventCoordinates)
                 }
@@ -711,12 +713,35 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
+        let newTitle = calendarListEvent.title?.trimmedOrNilIfEmpty
+        let newName = calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty
+
         if let existingCalendarListEvent = self.calendarListEvents[eventCoordinates] {
             if existingCalendarListEvent.createdAt < calendarListEvent.createdAt {
-                calendarListEvents[eventCoordinates] = calendarListEvent
+                calendarsTrie.remove(key: existingCalendarListEvent.id, value: eventCoordinates)
+                if let existingTitle = existingCalendarListEvent.title?.trimmedOrNilIfEmpty, existingTitle != newTitle {
+                    calendarsTrie.remove(key: existingTitle, value: eventCoordinates)
+                }
+                if let existingName = calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty, existingName != newName {
+                    calendarsTrie.remove(key: existingName, value: eventCoordinates)
+                }
+            } else {
+                return
             }
-        } else {
-            calendarListEvents[eventCoordinates] = calendarListEvent
+        }
+
+        calendarListEvents[eventCoordinates] = calendarListEvent
+
+        _ = calendarsTrie.insert(key: calendarListEvent.id, value: eventCoordinates)
+        _ = calendarsTrie.insert(key: calendarListEvent.pubkey, value: eventCoordinates)
+        if let identifier = calendarListEvent.identifier {
+            _ = calendarsTrie.insert(key: identifier, value: eventCoordinates)
+        }
+        if let newTitle {
+            _ = calendarsTrie.insert(key: newTitle, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+        }
+        if let newName {
+            _ = calendarsTrie.insert(key: newName, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
     }
 

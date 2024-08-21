@@ -18,6 +18,7 @@ struct EventListView: View, MetadataCoding {
     @State private var showAllEvents: Bool = false
     @StateObject private var searchViewModel = SearchViewModel()
     @State private var isProfilesSectionExpanded: Bool = false
+    @State private var isCalendarsSectionExpanded: Bool = false
 
     var body: some View {
         ScrollViewReader { scrollViewProxy in
@@ -105,6 +106,35 @@ struct EventListView: View, MetadataCoding {
                                         },
                                         label: {
                                             Text(.localizable.profilesCount(metadataSearchResults.count))
+                                        }
+                                    )
+                                }
+                            }
+
+                            let calendarsSearchResults = appState.calendarsTrie
+                                .find(key: searchText.localizedLowercase)
+                                .sorted()
+                            if !calendarsSearchResults.isEmpty {
+                                Section {
+                                    DisclosureGroup(
+                                        isExpanded: $isCalendarsSectionExpanded,
+                                        content: {
+                                            ForEach(calendarsSearchResults, id: \.self) { coordinates in
+                                                if let calendarListEvent = appState.calendarListEvents[coordinates] {
+                                                    NavigationLink(destination: CalendarListEventView(calendarListEventCoordinates: coordinates)) {
+                                                        HStack {
+                                                            calendarTitleAndProfileView(calendarListEvent)
+
+                                                            if let imageURL = calendarListEvent.imageURL {
+                                                                imageView(imageURL)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        label: {
+                                            Text(.localizable.calendarsCount(calendarsSearchResults.count))
                                         }
                                     )
                                 }
