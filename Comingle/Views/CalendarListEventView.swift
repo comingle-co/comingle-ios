@@ -38,6 +38,10 @@ struct CalendarListEventView: View {
                 Text(calendarListEvent.title ?? calendarListEvent.firstValueForRawTagName("name") ?? String(localized: .localizable.noCalendarName))
                     .font(.headline)
 
+                NavigationLink(destination: ProfileView(publicKeyHex: calendarListEvent.pubkey)) {
+                    ProfilePictureAndNameView(publicKeyHex: calendarListEvent.pubkey)
+                }
+
                 if let description = calendarListEvent.content.trimmedOrNilIfEmpty {
                     VStack(alignment: .leading) {
                         if isDescriptionExpanded || description.count <= maxDescriptionLength {
