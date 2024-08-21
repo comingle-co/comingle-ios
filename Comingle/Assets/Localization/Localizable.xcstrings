@@ -1357,6 +1357,30 @@
         }
       }
     },
+    "showLess" : {
+      "comment" : "Button to hide truncated text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Less"
+          }
+        }
+      }
+    },
+    "showMore" : {
+      "comment" : "Button to reveal the rest of truncated text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show More"
+          }
+        }
+      }
+    },
     "signIntoExistingProfile" : {
       "comment" : "Button to sign into existing profile.",
       "extractionState" : "manual",
