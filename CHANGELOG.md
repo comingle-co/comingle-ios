@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 0.1.0 (5) - 2024-08-21
+
+### Added
+- Search by username, calendar name
+- Profile description
+
+### Changed
+- Change calendar description component from disclosure group to just plain text with a collapse button
+
+### Fixed
+- Case sensitivity when searching event details
+- Erroneously showing events from followed pubkeys in calendar view and profile view
+
 ## 0.1.0 (4) - 2024-08-20
 
 ### Added
