@@ -151,6 +151,8 @@ extension CreateOrModifyCalendarView {
                     appState.modelContext.insert(persistentNostrEvent)
                     try appState.modelContext.save()
 
+                    appState.updateCalendarsTrie(oldCalendar: existingCalendarListEvent, newCalendar: calendarListEvent)
+
                     appState.relayWritePool.publishEvent(calendarListEvent)
 
                     return true

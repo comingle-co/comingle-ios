@@ -649,46 +649,59 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        let newTitle = timeBasedCalendarEvent.title?.trimmedOrNilIfEmpty
-        let newGeohash = timeBasedCalendarEvent.geohash?.trimmedOrNilIfEmpty
-        let newLocations = OrderedSet(timeBasedCalendarEvent.locations.compactMap { $0.trimmedOrNilIfEmpty })
-        let newReferences = OrderedSet(timeBasedCalendarEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty })
-        let newHashtags = OrderedSet(timeBasedCalendarEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty })
-
-        if let existingEvent = self.timeBasedCalendarEvents[eventCoordinates] {
-            if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
-                eventsTrie.remove(key: existingEvent.id, value: eventCoordinates)
-                if let title = existingEvent.title?.trimmedOrNilIfEmpty, title != newTitle {
-                    eventsTrie.remove(key: title, value: eventCoordinates)
-                }
-                if let geohash = existingEvent.geohash?.trimmedOrNilIfEmpty, geohash != newGeohash {
-                    eventsTrie.remove(key: geohash, value: eventCoordinates)
-                }
-                let locationsToRemove = OrderedSet(existingEvent.locations.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newLocations)
-                locationsToRemove.forEach { location in
-                    eventsTrie.remove(key: location, value: eventCoordinates)
-                }
-                let referencesToRemove = OrderedSet(existingEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty }).subtracting(newReferences)
-                referencesToRemove.forEach { reference in
-                    eventsTrie.remove(key: reference, value: eventCoordinates)
-                }
-                let hashtagsToRemove = OrderedSet(existingEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newHashtags)
-                hashtagsToRemove.forEach { hashtag in
-                    eventsTrie.remove(key: hashtag, value: eventCoordinates)
-                }
-            } else {
-                return
-            }
+        let existingEvent = self.timeBasedCalendarEvents[eventCoordinates]
+        if let existingEvent, existingEvent.createdAt >= timeBasedCalendarEvent.createdAt {
+            return
         }
 
         timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
 
-        _ = eventsTrie.insert(key: timeBasedCalendarEvent.id, value: eventCoordinates)
-        _ = eventsTrie.insert(key: timeBasedCalendarEvent.pubkey, value: eventCoordinates)
-        if let authorPublicKey = PublicKey(hex: timeBasedCalendarEvent.pubkey) {
+        updateEventsTrie(oldEvent: existingEvent, newEvent: timeBasedCalendarEvent)
+    }
+
+    func updateEventsTrie(oldEvent: TimeBasedCalendarEvent? = nil, newEvent: TimeBasedCalendarEvent) {
+        guard let eventCoordinates = newEvent.replaceableEventCoordinates()?.tag.value else {
+            return
+        }
+
+        if let oldEvent, oldEvent.createdAt >= newEvent.createdAt {
+            return
+        }
+
+        let newTitle = newEvent.title?.trimmedOrNilIfEmpty
+        let newGeohash = newEvent.geohash?.trimmedOrNilIfEmpty
+        let newLocations = OrderedSet(newEvent.locations.compactMap { $0.trimmedOrNilIfEmpty })
+        let newReferences = OrderedSet(newEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty })
+        let newHashtags = OrderedSet(newEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty })
+
+        if let oldEvent {
+            eventsTrie.remove(key: oldEvent.id, value: eventCoordinates)
+            if let title = oldEvent.title?.trimmedOrNilIfEmpty, title != newTitle {
+                eventsTrie.remove(key: title, value: eventCoordinates)
+            }
+            if let geohash = oldEvent.geohash?.trimmedOrNilIfEmpty, geohash != newGeohash {
+                eventsTrie.remove(key: geohash, value: eventCoordinates)
+            }
+            let locationsToRemove = OrderedSet(oldEvent.locations.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newLocations)
+            locationsToRemove.forEach { location in
+                eventsTrie.remove(key: location, value: eventCoordinates)
+            }
+            let referencesToRemove = OrderedSet(oldEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty }).subtracting(newReferences)
+            referencesToRemove.forEach { reference in
+                eventsTrie.remove(key: reference, value: eventCoordinates)
+            }
+            let hashtagsToRemove = OrderedSet(oldEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newHashtags)
+            hashtagsToRemove.forEach { hashtag in
+                eventsTrie.remove(key: hashtag, value: eventCoordinates)
+            }
+        }
+
+        _ = eventsTrie.insert(key: newEvent.id, value: eventCoordinates)
+        _ = eventsTrie.insert(key: newEvent.pubkey, value: eventCoordinates)
+        if let authorPublicKey = PublicKey(hex: newEvent.pubkey) {
             _ = eventsTrie.insert(key: authorPublicKey.npub, value: eventCoordinates)
         }
-        if let identifier = timeBasedCalendarEvent.identifier {
+        if let identifier = newEvent.identifier {
             _ = eventsTrie.insert(key: identifier, value: eventCoordinates, options: [.includeCaseInsensitiveMatches])
         }
         if let newTitle {
@@ -713,28 +726,41 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
-        let newTitle = calendarListEvent.title?.trimmedOrNilIfEmpty
-        let newName = calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty
-
-        if let existingCalendarListEvent = self.calendarListEvents[eventCoordinates] {
-            if existingCalendarListEvent.createdAt < calendarListEvent.createdAt {
-                calendarsTrie.remove(key: existingCalendarListEvent.id, value: eventCoordinates)
-                if let existingTitle = existingCalendarListEvent.title?.trimmedOrNilIfEmpty, existingTitle != newTitle {
-                    calendarsTrie.remove(key: existingTitle, value: eventCoordinates)
-                }
-                if let existingName = calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty, existingName != newName {
-                    calendarsTrie.remove(key: existingName, value: eventCoordinates)
-                }
-            } else {
-                return
-            }
+        let existingCalendar = self.calendarListEvents[eventCoordinates]
+        if let existingCalendar, existingCalendar.createdAt >= calendarListEvent.createdAt {
+            return
         }
 
         calendarListEvents[eventCoordinates] = calendarListEvent
 
-        _ = calendarsTrie.insert(key: calendarListEvent.id, value: eventCoordinates)
-        _ = calendarsTrie.insert(key: calendarListEvent.pubkey, value: eventCoordinates)
-        if let identifier = calendarListEvent.identifier {
+        updateCalendarsTrie(oldCalendar: existingCalendar, newCalendar: calendarListEvent)
+    }
+
+    func updateCalendarsTrie(oldCalendar: CalendarListEvent? = nil, newCalendar: CalendarListEvent) {
+        guard let eventCoordinates = newCalendar.replaceableEventCoordinates()?.tag.value else {
+            return
+        }
+
+        if let oldCalendar, oldCalendar.createdAt >= newCalendar.createdAt {
+            return
+        }
+
+        let newTitle = newCalendar.title?.trimmedOrNilIfEmpty
+        let newName = newCalendar.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty
+
+        if let oldCalendar {
+            calendarsTrie.remove(key: newCalendar.id, value: eventCoordinates)
+            if let existingTitle = newCalendar.title?.trimmedOrNilIfEmpty, existingTitle != newTitle {
+                calendarsTrie.remove(key: existingTitle, value: eventCoordinates)
+            }
+            if let existingName = newCalendar.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty, existingName != newName {
+                calendarsTrie.remove(key: existingName, value: eventCoordinates)
+            }
+        }
+
+        _ = calendarsTrie.insert(key: newCalendar.id, value: eventCoordinates)
+        _ = calendarsTrie.insert(key: newCalendar.pubkey, value: eventCoordinates)
+        if let identifier = newCalendar.identifier {
             _ = calendarsTrie.insert(key: identifier, value: eventCoordinates)
         }
         if let newTitle {

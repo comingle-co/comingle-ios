@@ -435,6 +435,8 @@ extension CreateOrModifyEventView {
                     appState.modelContext.insert(persistentNostrEvent)
                     try appState.modelContext.save()
 
+                    appState.updateEventsTrie(oldEvent: existingEvent, newEvent: event)
+
                     appState.relayWritePool.publishEvent(event)
 
                     return true
