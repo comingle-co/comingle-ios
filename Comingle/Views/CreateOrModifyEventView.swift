@@ -386,7 +386,7 @@ extension CreateOrModifyEventView {
                 if !isSettingTimeZone {
                     startTimeZoneOrNil = nil
                 } else {
-                    startTimeZoneOrNil = startTimeZone
+                    startTimeZoneOrNil = startTimeZoneOrCurrent
                 }
 
                 let locationsOrNil: [String]?
