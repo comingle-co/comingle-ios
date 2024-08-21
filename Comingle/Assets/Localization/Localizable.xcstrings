@@ -122,7 +122,7 @@
       }
     },
     "calendars" : {
-      "comment" : "Label for Calendars tab in the tab bar.",
+      "comment" : "Label for Calendars tab in the tab bar and section header for calendars in events view.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -974,7 +974,7 @@
       }
     },
     "profiles" : {
-      "comment" : "Section title for Profiles in settings.",
+      "comment" : "Section title for Profiles in the event view and settings.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

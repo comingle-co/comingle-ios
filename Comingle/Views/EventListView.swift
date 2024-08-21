@@ -51,30 +51,55 @@ struct EventListView: View, MetadataCoding {
             }
 
             List {
-                // Search by npub.
-                if eventListType == .all,
-                   let searchText = searchViewModel.debouncedSearchText.trimmedOrNilIfEmpty {
-                    if let authorPublicKey = PublicKey(npub: searchText) {
-                        Section(
-                            content: {
-                                ProfilePictureAndNameView(publicKeyHex: authorPublicKey.hex)
-                            }
-                        )
-                    } else {
-                        if let metadata = try? decodedMetadata(from: searchText), let kind = metadata.kind, kind == EventKind.calendar.rawValue, let pubkey = metadata.pubkey, let publicKey = PublicKey(hex: pubkey) {
+                if let searchText = searchViewModel.debouncedSearchText.trimmedOrNilIfEmpty {
+                    // Search by npub.
+                    if eventListType == .all {
+                        if let authorPublicKey = PublicKey(npub: searchText) {
+                            Section(
+                                content: {
+                                    NavigationLink(destination: ProfileView(publicKeyHex: authorPublicKey.hex)) {
+                                        ProfilePictureAndNameView(publicKeyHex: authorPublicKey.hex)
+                                    }
+                                },
+                                header: {
+                                    Text(.localizable.profiles)
+                                }
+                            )
+                        } else if let metadata = try? decodedMetadata(from: searchText), let kind = metadata.kind, kind == EventKind.calendar.rawValue, let pubkey = metadata.pubkey, let publicKey = PublicKey(hex: pubkey) {
                             // Search by naddr.
                             if let identifier = metadata.identifier,
                                let eventCoordinates = try? EventCoordinates(kind: EventKind(rawValue: Int(kind)), pubkey: publicKey, identifier: identifier),
                                let calendarListEvent = appState.calendarListEvents[eventCoordinates.tag.value] {
                                 Section(
                                     content: {
-                                        HStack {
-                                            calendarTitleAndProfileView(calendarListEvent)
+                                        NavigationLink(destination: CalendarListEventView(calendarListEventCoordinates: eventCoordinates.tag.value)) {
+                                            HStack {
+                                                calendarTitleAndProfileView(calendarListEvent)
 
-                                            if let imageURL = calendarListEvent.imageURL {
-                                                imageView(imageURL)
+                                                if let imageURL = calendarListEvent.imageURL {
+                                                    imageView(imageURL)
+                                                }
                                             }
                                         }
+                                    },
+                                    header: {
+                                        Text(.localizable.calendars)
+                                    }
+                                )
+                            }
+                        } else {
+                            let metadataSearchResults = appState.metadataTrie.find(key: searchText.localizedLowercase)
+                            if !metadataSearchResults.isEmpty {
+                                Section(
+                                    content: {
+                                        ForEach(metadataSearchResults, id: \.self) { pubkey in
+                                            NavigationLink(destination: ProfileView(publicKeyHex: pubkey)) {
+                                                ProfilePictureAndNameView(publicKeyHex: pubkey)
+                                            }
+                                        }
+                                    },
+                                    header: {
+                                        Text(.localizable.profiles)
                                     }
                                 )
                             }

@@ -46,7 +46,7 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
 
     @Published var searchTrie = Trie<TimeBasedCalendarEvent>()
 
-    @Published var metadataTrie = Trie<MetadataEvent>()
+    @Published var metadataTrie = Trie<String>()
 
     // Keep track of relay pool active subscriptions and the until filter so that we can limit the scope of how much we query from the relay pools.
     var metadataSubscriptionCounts = [String: Int]()
@@ -620,15 +620,15 @@ extension AppState: EventVerifying, RelayDelegate {
 
         if let userMetadata = metadataEvent.userMetadata {
             if let name = userMetadata.name?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                _ = metadataTrie.insert(key: name, value: metadataEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+                _ = metadataTrie.insert(key: name, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
             }
             if let displayName = userMetadata.displayName?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                _ = metadataTrie.insert(key: displayName, value: metadataEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+                _ = metadataTrie.insert(key: displayName, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
             }
         }
 
         if let publicKey = PublicKey(hex: metadataEvent.pubkey) {
-            _ = metadataTrie.insert(key: publicKey.npub, value: metadataEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+            _ = metadataTrie.insert(key: publicKey.npub, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
     }
 
