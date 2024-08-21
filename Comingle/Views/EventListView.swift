@@ -113,14 +113,16 @@ struct EventListView: View, MetadataCoding {
 
                             let calendarsSearchResults = appState.calendarsTrie
                                 .find(key: searchText.localizedLowercase)
-                                .sorted()
                             if !calendarsSearchResults.isEmpty {
                                 Section {
                                     DisclosureGroup(
                                         isExpanded: $isCalendarsSectionExpanded,
                                         content: {
-                                            ForEach(calendarsSearchResults, id: \.self) { coordinates in
-                                                if let calendarListEvent = appState.calendarListEvents[coordinates] {
+                                            let sortedCalendars = calendarsSearchResults
+                                                .compactMap { appState.calendarListEvents[$0] }
+                                                .sorted(using: CalendarListEventSortComparator(order: .forward, appState: appState))
+                                            ForEach(sortedCalendars, id: \.self) { calendarListEvent in
+                                                if let coordinates = calendarListEvent.replaceableEventCoordinates()?.tag.value {
                                                     NavigationLink(destination: CalendarListEventView(calendarListEventCoordinates: coordinates)) {
                                                         HStack {
                                                             calendarTitleAndProfileView(calendarListEvent)
