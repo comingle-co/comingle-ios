@@ -17,7 +17,7 @@ struct EventListView: View, MetadataCoding {
     @State private var timeTabFilter: TimeTabs = .upcoming
     @State private var showAllEvents: Bool = false
     @StateObject private var searchViewModel = SearchViewModel()
-    @State private var isProfilesSectionExpanded: Bool = true
+    @State private var isProfilesSectionExpanded: Bool = false
 
     var body: some View {
         ScrollViewReader { scrollViewProxy in
