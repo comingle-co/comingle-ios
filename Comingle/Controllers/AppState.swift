@@ -44,9 +44,8 @@ class AppState: ObservableObject, Hashable, RelayURLValidating, EventCreating {
 
     @Published var followedPubkeys = Set<String>()
 
-    @Published var searchTrie = Trie<TimeBasedCalendarEvent>()
-
-    @Published var metadataTrie = Trie<String>()
+    @Published var eventsTrie = Trie<String>()
+    @Published var pubkeyTrie = Trie<String>()
 
     // Keep track of relay pool active subscriptions and the until filter so that we can limit the scope of how much we query from the relay pools.
     var metadataSubscriptionCounts = [String: Int]()
@@ -606,29 +605,38 @@ extension AppState: EventVerifying, RelayDelegate {
     }
 
     private func didReceiveMetadataEvent(_ metadataEvent: MetadataEvent) {
+        let newUserMetadata = metadataEvent.userMetadata
+        let newName = newUserMetadata?.name?.trimmedOrNilIfEmpty
+        let newDisplayName = newUserMetadata?.displayName?.trimmedOrNilIfEmpty
+
         if let existingMetadataEvent = self.metadataEvents[metadataEvent.pubkey] {
             if existingMetadataEvent.createdAt < metadataEvent.createdAt {
-                cache(metadataEvent)
+                if let existingUserMetadata = existingMetadataEvent.userMetadata {
+                    if let existingName = existingUserMetadata.name?.trimmedOrNilIfEmpty, existingName != newName {
+                        pubkeyTrie.remove(key: existingName, value: existingMetadataEvent.pubkey)
+                    }
+                    if let existingDisplayName = existingUserMetadata.displayName?.trimmedOrNilIfEmpty, existingDisplayName != newDisplayName {
+                        pubkeyTrie.remove(key: existingDisplayName, value: existingMetadataEvent.pubkey)
+                    }
+                }
+            } else {
+                return
             }
-        } else {
-            cache(metadataEvent)
         }
-    }
 
-    private func cache(_ metadataEvent: MetadataEvent) {
         self.metadataEvents[metadataEvent.pubkey] = metadataEvent
 
         if let userMetadata = metadataEvent.userMetadata {
             if let name = userMetadata.name?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                _ = metadataTrie.insert(key: name, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+                _ = pubkeyTrie.insert(key: name, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
             }
             if let displayName = userMetadata.displayName?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                _ = metadataTrie.insert(key: displayName, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+                _ = pubkeyTrie.insert(key: displayName, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
             }
         }
 
         if let publicKey = PublicKey(hex: metadataEvent.pubkey) {
-            _ = metadataTrie.insert(key: publicKey.npub, value: metadataEvent.pubkey, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+            _ = pubkeyTrie.insert(key: publicKey.npub, value: metadataEvent.pubkey, options: [.includeNonPrefixedMatches])
         }
     }
 
@@ -640,74 +648,61 @@ extension AppState: EventVerifying, RelayDelegate {
             return
         }
 
+        let newTitle = timeBasedCalendarEvent.title?.trimmedOrNilIfEmpty
+        let newGeohash = timeBasedCalendarEvent.geohash?.trimmedOrNilIfEmpty
+        let newLocations = OrderedSet(timeBasedCalendarEvent.locations.compactMap { $0.trimmedOrNilIfEmpty })
+        let newReferences = OrderedSet(timeBasedCalendarEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty })
+        let newHashtags = OrderedSet(timeBasedCalendarEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty })
+
         if let existingEvent = self.timeBasedCalendarEvents[eventCoordinates] {
             if existingEvent.createdAt < timeBasedCalendarEvent.createdAt {
-                searchTrie.remove(key: existingEvent.id, value: existingEvent)
-                searchTrie.remove(key: existingEvent.pubkey, value: existingEvent)
-                if let authorPublicKey = PublicKey(hex: existingEvent.pubkey) {
-                    searchTrie.remove(key: authorPublicKey.npub, value: existingEvent)
+                if let title = existingEvent.title?.trimmedOrNilIfEmpty, title != newTitle {
+                    eventsTrie.remove(key: title, value: eventCoordinates)
                 }
-                if let identifier = existingEvent.identifier {
-                    searchTrie.remove(key: identifier, value: existingEvent)
+                if let geohash = existingEvent.geohash?.trimmedOrNilIfEmpty, geohash != newGeohash {
+                    eventsTrie.remove(key: geohash, value: eventCoordinates)
                 }
-                if let title = existingEvent.title?.trimmedOrNilIfEmpty {
-                    searchTrie.remove(key: title, value: existingEvent)
+                let locationsToRemove = OrderedSet(existingEvent.locations.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newLocations)
+                locationsToRemove.forEach { location in
+                    eventsTrie.remove(key: location, value: eventCoordinates)
                 }
-                if let geohash = existingEvent.geohash?.trimmedOrNilIfEmpty {
-                    searchTrie.remove(key: geohash, value: existingEvent)
+                let referencesToRemove = OrderedSet(existingEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty }).subtracting(newReferences)
+                referencesToRemove.forEach { reference in
+                    eventsTrie.remove(key: reference, value: eventCoordinates)
                 }
-                existingEvent.locations.forEach { location in
-                    if let trimmedLocation = location.trimmedOrNilIfEmpty {
-                        searchTrie.remove(key: trimmedLocation, value: existingEvent)
-                    }
+                let hashtagsToRemove = OrderedSet(existingEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newHashtags)
+                hashtagsToRemove.forEach { hashtag in
+                    eventsTrie.remove(key: hashtag, value: eventCoordinates)
                 }
-                existingEvent.references.forEach { reference in
-                    if let trimmedReference = reference.absoluteString.trimmedOrNilIfEmpty {
-                        searchTrie.remove(key: trimmedReference, value: existingEvent)
-                    }
-                }
-                existingEvent.hashtags.forEach { hashtag in
-                    if let trimmedHashtag = hashtag.trimmedOrNilIfEmpty {
-                        searchTrie.remove(key: trimmedHashtag, value: existingEvent)
-                    }
-                }
-
-                timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
             } else {
                 return
             }
-        } else {
-            timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
         }
 
-        _ = searchTrie.insert(key: timeBasedCalendarEvent.id, value: timeBasedCalendarEvent)
-        _ = searchTrie.insert(key: timeBasedCalendarEvent.pubkey, value: timeBasedCalendarEvent)
+        timeBasedCalendarEvents[eventCoordinates] = timeBasedCalendarEvent
+
+        _ = eventsTrie.insert(key: timeBasedCalendarEvent.id, value: eventCoordinates)
+        _ = eventsTrie.insert(key: timeBasedCalendarEvent.pubkey, value: eventCoordinates)
         if let authorPublicKey = PublicKey(hex: timeBasedCalendarEvent.pubkey) {
-            _ = searchTrie.insert(key: authorPublicKey.npub, value: timeBasedCalendarEvent)
+            _ = eventsTrie.insert(key: authorPublicKey.npub, value: eventCoordinates)
         }
         if let identifier = timeBasedCalendarEvent.identifier {
-            _ = searchTrie.insert(key: identifier, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches])
+            _ = eventsTrie.insert(key: identifier, value: eventCoordinates, options: [.includeCaseInsensitiveMatches])
         }
-        if let title = timeBasedCalendarEvent.title?.trimmedOrNilIfEmpty {
-            _ = searchTrie.insert(key: title, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
+        if let newTitle {
+            _ = eventsTrie.insert(key: newTitle, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
-        if let geohash = timeBasedCalendarEvent.geohash?.trimmedOrNilIfEmpty {
-            _ = searchTrie.insert(key: geohash, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches])
+        if let newGeohash {
+            _ = eventsTrie.insert(key: newGeohash, value: eventCoordinates, options: [.includeCaseInsensitiveMatches])
         }
-        timeBasedCalendarEvent.locations.forEach { location in
-            if let trimmedLocation = location.trimmedOrNilIfEmpty {
-                _ = searchTrie.insert(key: trimmedLocation, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
-            }
+        newLocations.forEach { location in
+            _ = eventsTrie.insert(key: location, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
-        timeBasedCalendarEvent.references.forEach { reference in
-            if let trimmedReference = reference.absoluteString.trimmedOrNilIfEmpty {
-                _ = searchTrie.insert(key: trimmedReference, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
-            }
+        newReferences.forEach { reference in
+            _ = eventsTrie.insert(key: reference, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
-        timeBasedCalendarEvent.hashtags.forEach { hashtag in
-            if let trimmedHashtag = hashtag.trimmedOrNilIfEmpty {
-                _ = searchTrie.insert(key: trimmedHashtag, value: timeBasedCalendarEvent, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches])
-            }
+        newHashtags.forEach { hashtag in
+            _ = eventsTrie.insert(key: hashtag, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches])
         }
     }
 

@@ -49,7 +49,7 @@ struct ParticipantSearchView: View {
                 return sortedParticipants
             }
         } else {
-            let searchResults = appState.metadataTrie.find(key: trimmedParticipantSearch.localizedLowercase)
+            let searchResults = appState.pubkeyTrie.find(key: trimmedParticipantSearch.localizedLowercase)
                 .map { EventCreationParticipant(publicKeyHex: $0) }
                 .sorted(using: eventCreationParticipantSortComparator)
 

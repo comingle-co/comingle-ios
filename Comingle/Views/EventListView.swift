@@ -88,7 +88,7 @@ struct EventListView: View, MetadataCoding {
                                 )
                             }
                         } else {
-                            let metadataSearchResults = appState.metadataTrie.find(key: searchText.localizedLowercase)
+                            let metadataSearchResults = appState.pubkeyTrie.find(key: searchText.localizedLowercase)
                             if !metadataSearchResults.isEmpty {
                                 Section(
                                     content: {
@@ -247,12 +247,13 @@ struct EventListView: View, MetadataCoding {
                         return [timeBasedCalendarEvent]
                         // Search by nevent.
                     } else if let eventId = metadata.eventId {
-                        let results = appState.searchTrie.find(key: eventId)
+                        let results = Set(appState.eventsTrie.find(key: eventId))
+                        let events = appState.timeBasedCalendarEvents.filter { results.contains($0.key) }.map { $0.value }
                         switch timeTabFilter {
                         case .upcoming:
-                            return appState.upcomingEvents(results)
+                            return appState.upcomingEvents(events)
                         case .past:
-                            return appState.pastEvents(results)
+                            return appState.pastEvents(events)
                         }
                     }
                 } else if kind == EventKind.calendar.rawValue,
@@ -269,12 +270,13 @@ struct EventListView: View, MetadataCoding {
             }
 
             // Search by event tags and content.
-            let results = appState.searchTrie.find(key: searchText.localizedLowercase)
+            let results = appState.eventsTrie.find(key: searchText.localizedLowercase)
+            let events = appState.timeBasedCalendarEvents.filter { results.contains($0.key) }.map { $0.value }
             switch timeTabFilter {
             case .upcoming:
-                return appState.upcomingEvents(results)
+                return appState.upcomingEvents(events)
             case .past:
-                return appState.pastEvents(results)
+                return appState.pastEvents(events)
             }
         }
 
