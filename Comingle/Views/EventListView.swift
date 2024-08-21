@@ -17,6 +17,7 @@ struct EventListView: View, MetadataCoding {
     @State private var timeTabFilter: TimeTabs = .upcoming
     @State private var showAllEvents: Bool = false
     @StateObject private var searchViewModel = SearchViewModel()
+    @State private var isProfilesSectionExpanded: Bool = true
 
     var body: some View {
         ScrollViewReader { scrollViewProxy in
@@ -88,20 +89,25 @@ struct EventListView: View, MetadataCoding {
                                 )
                             }
                         } else {
-                            let metadataSearchResults = appState.pubkeyTrie.find(key: searchText.localizedLowercase)
+                            let metadataSearchResults = appState.pubkeyTrie
+                                .find(key: searchText.localizedLowercase)
+                                .sorted(using: PublicKeySortComparator(order: .forward, appState: appState))
                             if !metadataSearchResults.isEmpty {
-                                Section(
-                                    content: {
-                                        ForEach(metadataSearchResults, id: \.self) { pubkey in
-                                            NavigationLink(destination: ProfileView(publicKeyHex: pubkey)) {
-                                                ProfilePictureAndNameView(publicKeyHex: pubkey)
+                                Section {
+                                    DisclosureGroup(
+                                        isExpanded: $isProfilesSectionExpanded,
+                                        content: {
+                                            ForEach(metadataSearchResults, id: \.self) { pubkey in
+                                                NavigationLink(destination: ProfileView(publicKeyHex: pubkey)) {
+                                                    ProfilePictureAndNameView(publicKeyHex: pubkey)
+                                                }
                                             }
+                                        },
+                                        label: {
+                                            Text(.localizable.profilesCount(metadataSearchResults.count))
                                         }
-                                    },
-                                    header: {
-                                        Text(.localizable.profiles)
-                                    }
-                                )
+                                    )
+                                }
                             }
                         }
                     }

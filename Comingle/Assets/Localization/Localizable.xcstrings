@@ -974,13 +974,25 @@
       }
     },
     "profiles" : {
-      "comment" : "Section title for Profiles in the event view and settings.",
+      "comment" : "Section title for Profiles in the settings view.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profiles"
+          }
+        }
+      }
+    },
+    "profilesCount" : {
+      "comment" : "Section title for Profiles in the event view with the number of profiles in parentheses.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profiles (%d)"
           }
         }
       }
