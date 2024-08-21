@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.1.0 (6) - 2024-08-22
+
+### Added
+- Condensed profile pictures of invitees and RSVPs on event list
+
+### Fixed
+- Time zone not being set on event creation when it is the system time zone
+- Newly created events and calendars were not searchable
+- Events were not searchable by summary
+
 ## 0.1.0 (5) - 2024-08-21
 
 ### Added
