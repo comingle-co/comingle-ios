@@ -23,6 +23,21 @@ struct CalendarListEventView: View {
         appState.calendarListEvents[calendarListEventCoordinates]
     }
 
+    private var naddr: String? {
+        if let calendarListEvent {
+            let relays = appState.persistentNostrEvent(calendarListEvent.id)?.relays ?? []
+            return try? calendarListEvent.shareableEventCoordinates(relayURLStrings: relays.map { $0.absoluteString })
+        }
+        return nil
+    }
+
+    private var calendarURL: URL? {
+        if let naddr, let njumpURL = URL(string: "https://njump.me/\(naddr)"), UIApplication.shared.canOpenURL(njumpURL) {
+            return njumpURL
+        }
+        return nil
+    }
+
     var body: some View {
         if let calendarListEvent {
             VStack {
@@ -69,6 +84,28 @@ struct CalendarListEventView: View {
                 }
 
                 EventListView(eventListType: .calendar(calendarListEventCoordinates))
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem {
+                    Menu {
+                        Button(action: {
+                            UIPasteboard.general.string = naddr
+                        }, label: {
+                            Text(.localizable.copyCalendarID)
+                        })
+
+                        if let calendarURL {
+                            Button(action: {
+                                UIPasteboard.general.string = calendarURL.absoluteString
+                            }, label: {
+                                Text(.localizable.copyCalendarURL)
+                            })
+                        }
+                    } label: {
+                        Label(.localizable.menu, systemImage: "ellipsis.circle")
+                    }
+                }
             }
         } else {
             EmptyView()

@@ -193,6 +193,30 @@
         }
       }
     },
+    "copyCalendarID" : {
+      "comment" : "Button to copy the ID of the calendar.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Calendar ID"
+          }
+        }
+      }
+    },
+    "copyCalendarURL" : {
+      "comment" : "Button to copy the URL of the calendar.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Calendar URL"
+          }
+        }
+      }
+    },
     "copyCoordinates" : {
       "comment" : "Button to copy the location coordinates of a calendar event.",
       "extractionState" : "manual",
