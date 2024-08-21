@@ -756,12 +756,12 @@ extension AppState: EventVerifying, RelayDelegate {
         let newName = newCalendar.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty
 
         if let oldCalendar {
-            calendarsTrie.remove(key: newCalendar.id, value: eventCoordinates)
-            if let existingTitle = newCalendar.title?.trimmedOrNilIfEmpty, existingTitle != newTitle {
-                calendarsTrie.remove(key: existingTitle, value: eventCoordinates)
+            calendarsTrie.remove(key: oldCalendar.id, value: eventCoordinates)
+            if let oldTitle = oldCalendar.title?.trimmedOrNilIfEmpty, oldTitle != newTitle {
+                calendarsTrie.remove(key: oldTitle, value: eventCoordinates)
             }
-            if let existingName = newCalendar.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty, existingName != newName {
-                calendarsTrie.remove(key: existingName, value: eventCoordinates)
+            if let oldName = newCalendar.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty, oldName != oldName {
+                calendarsTrie.remove(key: oldName, value: eventCoordinates)
             }
         }
 
