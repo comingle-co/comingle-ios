@@ -38,6 +38,7 @@ struct EventListView: View, MetadataCoding {
                     scrollViewProxy.scrollTo("event-list-view-top")
                 }
             }
+            .padding([.leading, .trailing], 16)
 
             if eventListType == .all && appState.publicKey != nil {
                 Button(action: {
@@ -50,6 +51,7 @@ struct EventListView: View, MetadataCoding {
                         .foregroundStyle(showAllEvents ? .secondary : .primary)
                 })
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding([.leading, .trailing], 16)
             }
 
             List {
