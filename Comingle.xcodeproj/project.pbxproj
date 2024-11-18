@@ -305,7 +305,9 @@
 			children = (
 				3A34AAA82B491D9700C5F910 /* Extensions */,
 				3A464FED2C3A273000AD4B09 /* Settings */,
+				3A39FB672C704A7F00954AD5 /* CalendarListEventView.swift */,
 				3A39FB632C70458400954AD5 /* CalendarsView.swift */,
+				3A32CC642C75D6D30082FA5D /* CondensedProfilePicturesView.swift */,
 				3A453DDD2A0B348100897303 /* ContentView.swift */,
 				3A51252F2C6FA48200614034 /* CreateOrModifyCalendarView.swift */,
 				3ABD0C1C2C60834C004A15C7 /* CreateProfileView.swift */,
@@ -322,8 +324,6 @@
 				3A4A898F2C3CD88500238043 /* ProfilePictureView.swift */,
 				3A4A89862C3B49EF00238043 /* ProfileView.swift */,
 				3A317BF82C57F507004DA56B /* TimeZoneSelectionView.swift */,
-				3A39FB672C704A7F00954AD5 /* CalendarListEventView.swift */,
-				3A32CC642C75D6D30082FA5D /* CondensedProfilePicturesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -759,7 +759,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Comingle/Comingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Comingle/Preview Content\"";
 				DEVELOPMENT_TEAM = S99A5B637C;
@@ -807,7 +807,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Comingle/Comingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Comingle/Preview Content\"";
 				DEVELOPMENT_TEAM = S99A5B637C;
