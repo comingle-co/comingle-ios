@@ -27,8 +27,8 @@ class PrivateKeySecureStorage {
         var result: AnyObject?
         let status = SecItemCopyMatching(query, &result)
 
-        if status == errSecSuccess, let data = result as? Data {
-            return Keypair(hex: String(decoding: data, as: UTF8.self))
+        if status == errSecSuccess, let data = result as? Data, let privateKeyHex = String(data: data, encoding: .utf8) {
+            return Keypair(hex: privateKeyHex)
         } else {
             return nil
         }

@@ -50,7 +50,6 @@ struct CalendarListEventSortComparator: SortComparator {
             return rhs.createdDate.compare(lhs.createdDate)
         }
 
-
         let lhsTitle = lhs.title?.trimmedOrNilIfEmpty
         let rhsTitle = rhs.title?.trimmedOrNilIfEmpty
 

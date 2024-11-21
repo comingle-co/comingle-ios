@@ -66,6 +66,6 @@ struct TimeZoneSelectionView: View {
 }
 
 #Preview {
-    @State var timeZone: TimeZone? = TimeZone.autoupdatingCurrent
+    @Previewable @State var timeZone: TimeZone? = TimeZone.autoupdatingCurrent
     return TimeZoneSelectionView(date: Date.now, timeZone: $timeZone)
 }

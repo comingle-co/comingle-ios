@@ -42,7 +42,7 @@ struct CreateOrModifyCalendarView: View {
                         .textInputAutocapitalization(.never)
 
                     if let validatedImageURL = viewModel.validatedImageURL {
-                        KFImage.url(viewModel.validatedImageURL)
+                        KFImage.url(validatedImageURL)
                             .resizable()
                             .placeholder { ProgressView() }
                             .scaledToFit()
