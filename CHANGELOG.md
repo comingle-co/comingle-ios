@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.0 (7) - 2024-11-18
+
+### Fixed
+- Replacing old calendars did not update calendar search
+- Padding issues with event list
+
 ## 0.1.0 (6) - 2024-08-22
 
 ### Added
