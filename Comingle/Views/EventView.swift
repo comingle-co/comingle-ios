@@ -686,7 +686,8 @@ struct EventView: View, EventCreating {
                             } else {
                                 fallbackName = event.pubkey
                             }
-                            stringToCopy += String(localized: "Organizer: \(fallbackName)", comment: "Text that indicates who is the event organizer.")
+                            let organizerName = metadataEvent?.resolvedName ?? fallbackName
+                            stringToCopy += String(localized: "Organizer: \(organizerName)", comment: "Text that indicates who is the event organizer.")
 
                             if let shareableEventCoordinates {
                                 // TODO Change to a Comingle URL once the website is set up.
