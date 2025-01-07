@@ -40,7 +40,7 @@ struct CalendarsView: View {
 
     func titleAndProfileView(_ calendarListEvent: CalendarListEvent) -> some View {
         VStack(alignment: .leading) {
-            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: .localizable.noCalendarName))
+            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: "No Name", comment: "Text to indicate that there is no title for the calendar."))
                 .font(.headline)
 
             Divider()
@@ -71,7 +71,7 @@ struct CalendarsView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.calendarsSearch))
+        .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: "Search for calendars", comment: "Placeholder text to prompt user to search calendars"))
     }
 }
 

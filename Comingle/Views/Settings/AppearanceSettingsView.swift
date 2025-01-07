@@ -23,15 +23,15 @@ struct AppearanceSettingsView: View {
         List {
             Section(
                 content: {
-                    Picker(selection: $viewModel.timeZonePreference, label: Text(.localizable.timeZone)) {
+                    Picker(selection: $viewModel.timeZonePreference, label: Text("Time Zone", comment: "Label for time zone setting.")) {
                         ForEach(TimeZonePreference.allCases, id: \.self) { preference in
-                            Text(preference.localizedStringResource)
+                            Text(preference.localizedString)
                                 .tag(preference)
                         }
                     }
                 },
                 header: {
-                    Text(.localizable.settingsAppearance)
+                    Text("Appearance", comment: "Settings section for appearance of the app.")
                 }
             )
         }

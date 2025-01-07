@@ -22,7 +22,7 @@ struct LocationSearchView: View {
 
     var body: some View {
         VStack {
-            TextField(localized: .localizable.searchForLocation, text: $autocompleteManager.searchText)
+            TextField(String(localized: "Search for location", comment: "Placeholder text to prompt user to search for a location for the event."), text: $autocompleteManager.searchText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
@@ -64,7 +64,7 @@ struct LocationSearchView: View {
                 geohash = searchGeohash?.geohash ?? ""
                 dismiss()
             }, label: {
-                Text(.localizable.addLocation)
+                Text("Add Location", comment: "Button to add location to event.")
             })
         }
         .task {

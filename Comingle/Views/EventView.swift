@@ -50,7 +50,7 @@ struct EventView: View, EventCreating {
         } else if let eventTitle = event?.firstValueForRawTagName("name")?.trimmingCharacters(in: .whitespacesAndNewlines), !eventTitle.isEmpty {
             return eventTitle
         } else {
-            return String(localized: .localizable.unnamedEvent)
+            return String(localized: "Unnamed Event", comment: "Text to display when a calendar event does not have a name.")
         }
     }
 
@@ -214,7 +214,7 @@ struct EventView: View, EventCreating {
     var contentView: some View {
         VStack {
             if let summary {
-                Text(.localizable.eventSummary)
+                Text("Summary", comment: "Section title for summary section that summarizes the calendar event.")
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -226,11 +226,11 @@ struct EventView: View, EventCreating {
             }
 
             if contentTranslationReplaced {
-                Text(.localizable.aboutTranslated)
+                Text("About (Translated)", comment: "Section title for About section for calendar event description that has been translated from a non-preferred language to a preferred language.")
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
-                Text(.localizable.about)
+                Text("About", comment: "Section title for About section for calendar event description.")
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -268,7 +268,7 @@ struct EventView: View, EventCreating {
     var referencesView: some View {
         VStack {
             if let references = event?.references, !references.isEmpty {
-                Text(.localizable.links)
+                Text("Links", comment: "Section title for reference links on an event.")
                     .font(.headline)
                     .padding(.bottom, 2)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -315,7 +315,7 @@ struct EventView: View, EventCreating {
     var participantsView: some View {
         VStack(alignment: .leading) {
             if let event {
-                Text(.localizable.invited(event.participants.count))
+                Text("Invited (\(event.participants.count))", comment: "Text for section for invited participants to a calendar event and the number of invited in parentheses.")
                     .padding(.vertical, 2)
                     .font(.headline)
 
@@ -353,7 +353,7 @@ struct EventView: View, EventCreating {
                    let rsvps = appState.calendarEventsToRsvps[calendarEventCoordinates] {
                     Divider()
 
-                    Text(.localizable.rsvps(rsvps.count))
+                    Text("RSVPs (\(rsvps.count))", comment: "Text for section for RSVPs to a calendar event and the number of RSVPs in parentheses.")
                         .padding(.vertical, 2)
                         .font(.headline)
 
@@ -415,9 +415,9 @@ struct EventView: View, EventCreating {
                 createOrUpdateRSVP(.accepted)
             }, label: {
                 if event.isUpcoming {
-                    Text(.localizable.rsvpStatusGoing)
+                    Text("Going", comment: "Text to indicate that the current user is going to the event.")
                 } else {
-                    Text(.localizable.attended)
+                    Text("Attended", comment: "Label indicating that the user attended the event.")
                 }
             })
 
@@ -425,9 +425,9 @@ struct EventView: View, EventCreating {
                 createOrUpdateRSVP(.tentative)
             }, label: {
                 if event.isUpcoming {
-                    Text(.localizable.rsvpStatusMaybeGoing)
+                    Text("Maybe Going", comment: "Text to indicate that the current user might be going to the event.")
                 } else {
-                    Text(.localizable.maybeAttended)
+                    Text("Maybe Attended", comment: "Label indicating that the user maybe attended the event.")
                 }
             })
 
@@ -435,9 +435,9 @@ struct EventView: View, EventCreating {
                 createOrUpdateRSVP(.declined)
             }, label: {
                 if event.isUpcoming {
-                    Text(.localizable.rsvpStatusNotGoing)
+                    Text("Not Going", comment: "Text to indicate that the current user is not going to the event.")
                 } else {
-                    Text(.localizable.didNotAttend)
+                    Text("Did Not Attend", comment: "Label indicating that the user did not attend the event.")
                 }
             })
 
@@ -450,7 +450,7 @@ struct EventView: View, EventCreating {
                         retractRSVP()
                     },
                     label: {
-                        Text(.localizable.retractRSVP)
+                        Text("Retract RSVP", comment: "Button to retract the user's existing RSVP.")
                     }
                 )
             }
@@ -458,6 +458,9 @@ struct EventView: View, EventCreating {
     }
 
     @ViewBuilder func locationConfirmationDialogActions() -> some View {
+        let openInAppleMapsText = String(localized: "Open in Apple Maps", comment: "Button to open a location in Apple Maps.")
+        let openInGoogleMapsText = String(localized: "Open in Google Maps", comment: "Button to open a location in Google Maps.")
+
         if selectedGeohash, let geohash = geohash {
             let coordinatesString = "\(geohash.latitude),\(geohash.longitude)"
             let encodedLocation = coordinatesString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? coordinatesString
@@ -469,7 +472,7 @@ struct EventView: View, EventCreating {
                 selectedGeohash = false
                 selectedLocation = ""
             }, label: {
-                Text(.localizable.openInAppleMaps)
+                Text(openInAppleMapsText)
             })
             Button(action: {
                 if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
@@ -478,14 +481,14 @@ struct EventView: View, EventCreating {
                 selectedGeohash = false
                 selectedLocation = ""
             }, label: {
-                Text(.localizable.openInGoogleMaps)
+                Text(openInGoogleMapsText)
             })
             Button(action: {
                 UIPasteboard.general.string = coordinatesString
                 selectedGeohash = false
                 selectedLocation = ""
             }, label: {
-                Text(.localizable.copyCoordinates)
+                Text("Copy Coordinates", comment: "Button to copy the location coordinates of a calendar event.")
             })
         } else if !selectedLocation.isEmpty {
             if let selectedLocationURL = URL(string: selectedLocation), selectedLocation.hasPrefix("https://") || selectedLocation.hasPrefix("http://") {
@@ -494,7 +497,7 @@ struct EventView: View, EventCreating {
                     selectedGeohash = false
                     selectedLocation = ""
                 }, label: {
-                    Text(.localizable.openLink)
+                    Text("Open Link", comment: "Button to open link.")
                 })
             } else {
                 let encodedLocation = selectedLocation.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? selectedLocation
@@ -505,7 +508,7 @@ struct EventView: View, EventCreating {
                     selectedGeohash = false
                     selectedLocation = ""
                 }, label: {
-                    Text(.localizable.openInAppleMaps)
+                    Text(openInAppleMapsText)
                 })
                 Button(action: {
                     if let url = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedLocation)") {
@@ -514,7 +517,7 @@ struct EventView: View, EventCreating {
                     selectedGeohash = false
                     selectedLocation = ""
                 }, label: {
-                    Text(.localizable.openInGoogleMaps)
+                    Text(openInGoogleMapsText)
                 })
             }
             Button(action: {
@@ -522,7 +525,7 @@ struct EventView: View, EventCreating {
                 selectedGeohash = false
                 selectedLocation = ""
             }, label: {
-                Text(.localizable.copyLocation)
+                Text("Copy Location", comment: "Button to copy location of calendar event.")
             })
         }
     }
@@ -535,7 +538,7 @@ struct EventView: View, EventCreating {
                     appState.delete(events: [event])
                 },
                 label: {
-                    Text(.localizable.retractEvent)
+                    Text("Retract Event", comment: "Button to retract an event by requesting to delete it.")
                 }
             )
         }
@@ -609,7 +612,7 @@ struct EventView: View, EventCreating {
                         Divider()
 
                         VStack {
-                            Text(.localizable.relaysCount(persistentNostrEvent.relays.count))
+                            Text("Relays (\(persistentNostrEvent.relays.count))", comment: "Text for section for relays a calendar event was found on and the number of relays in parentheses.")
                                 .padding(.vertical, 2)
                                 .font(.headline)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -623,7 +626,7 @@ struct EventView: View, EventCreating {
                     Divider()
 
                     VStack {
-                        Text(.localizable.lastUpdated)
+                        Text("Last Updated", comment: "Section title for event last updated date.")
                             .padding(.vertical, 2)
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -635,14 +638,14 @@ struct EventView: View, EventCreating {
                 .padding()
             }
             .navigationBarTitleDisplayMode(.inline)
-            .confirmationDialog(.localizable.rsvp, isPresented: $isChangingRSVP) {
+            .confirmationDialog(String(localized: "RSVP", comment: "Confirmation dialog title to change RSVP to an event."), isPresented: $isChangingRSVP) {
                 changeRSVPConfirmationDialogActions()
             }
-            .confirmationDialog(.localizable.location, isPresented: $showLocationAlert) {
+            .confirmationDialog(String(localized: "Location", comment: "Confirmation dialog title for taking action on the location of a calendar event."), isPresented: $showLocationAlert) {
                 locationConfirmationDialogActions()
             }
             .confirmationDialog(
-                .localizable.retractEvent,
+                String(localized: "Retract Event", comment: "Confirmation dialog title to retract an event by requesting to delete it."),
                 isPresented: $isShowingEventRetractionConfirmation
             ) {
                 eventRetractionConfirmationDialogActions()
@@ -655,7 +658,7 @@ struct EventView: View, EventCreating {
 
                         if appState.keypair != nil && appState.publicKey?.hex == event.pubkey {
                             NavigationLink(destination: CreateOrModifyEventView(appState: appState, existingEvent: event)) {
-                                Text(.localizable.modifyEvent)
+                                Text("Modify Event", comment: "Button to modify event.")
                             }
                         }
 
@@ -663,13 +666,13 @@ struct EventView: View, EventCreating {
                             Button(action: {
                                 UIPasteboard.general.string = shareableEventCoordinates
                             }, label: {
-                                Text(.localizable.copyEventID)
+                                Text("Copy Event ID", comment: "Button to copy a calendar event ID.")
                             })
 
                             Button(action: {
                                 UIPasteboard.general.string = "https://njump.me/\(shareableEventCoordinates)"
                             }, label: {
-                                Text(.localizable.copyEventURL)
+                                Text("Copy Event URL", comment: "Button to copy a calendar event URL.")
                             })
                         }
 
@@ -677,11 +680,13 @@ struct EventView: View, EventCreating {
                             var stringToCopy = "\(eventTitle)\n\(dateIntervalFormatter.string(from: event.startTimestamp!, to: event.endTimestamp!))\n\n\(filteredLocations.joined(separator: "\n"))\n\n\(contentText)\n\n"
 
                             let metadataEvent = appState.metadataEvents[event.pubkey]
+                            let fallbackName: String
                             if let publicKey = PublicKey(hex: event.pubkey) {
-                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? publicKey.npub))
+                                fallbackName = publicKey.npub
                             } else {
-                                stringToCopy += String(localized: .localizable.organizer(metadataEvent?.resolvedName ?? event.pubkey))
+                                fallbackName = event.pubkey
                             }
+                            stringToCopy += String(localized: "Organizer: \(fallbackName)", comment: "Text that indicates who is the event organizer.")
 
                             if let shareableEventCoordinates {
                                 // TODO Change to a Comingle URL once the website is set up.
@@ -690,7 +695,7 @@ struct EventView: View, EventCreating {
 
                             UIPasteboard.general.string = stringToCopy
                         }, label: {
-                            Text(.localizable.copyEventDetails)
+                            Text("Copy Event Details", comment: "Button to copy the details of a calendar event.")
                         })
 
                         if let keypair = appState.keypair, keypair.publicKey.hex == event.pubkey {
@@ -700,12 +705,12 @@ struct EventView: View, EventCreating {
                                     isShowingEventRetractionConfirmation = true
                                 },
                                 label: {
-                                    Text(.localizable.retractEvent)
+                                    Text("Retract Event", comment: "Button to retract an event by requesting to delete it.")
                                 }
                             )
                         }
                     } label: {
-                        Label(.localizable.menu, systemImage: "ellipsis.circle")
+                        Label(String(localized: "Menu", comment: "Label for drop down menu in calendar event view."), systemImage: "ellipsis.circle")
                     }
                 }
 
@@ -714,43 +719,44 @@ struct EventView: View, EventCreating {
                         NavigationLink(
                             destination: SettingsView(appState: appState),
                             label: {
-                                Text(.localizable.signInToRSVP)
+                                Text("Sign In to RSVP", comment: "Button to prompt user to sign in so that they can RSVP to an event.")
                             }
                         )
                     } else {
                         Button(action: {
                             isChangingRSVP = true
                         }, label: {
+                            let rsvpText = String(localized: "RSVP", comment: "Button to RSVP to an event.")
                             if let currentUserRSVP {
                                 if event.isUpcoming {
                                     switch currentUserRSVP.status {
                                     case .accepted:
-                                        Text(.localizable.rsvpStatusGoing)
+                                        Text("Sign In to RSVP", comment: "Button to prompt user to sign in so that they can RSVP to an event.")
                                     case .declined:
-                                        Text(.localizable.rsvpStatusNotGoing)
+                                        Text("Not Going", comment: "Text to indicate that the current user is not going to the event.")
                                     case .tentative:
-                                        Text(.localizable.rsvpStatusMaybeGoing)
+                                        Text("Maybe Going", comment: "Text to indicate that the current user might be going to the event.")
                                     case .unknown(let value):
                                         Text(value)
                                     case .none:
-                                        Text(.localizable.rsvp)
+                                        Text(rsvpText)
                                     }
                                 } else {
                                     switch currentUserRSVP.status {
                                     case .accepted:
-                                        Text(.localizable.attended)
+                                        Text("Attended", comment: "Label indicating that the user attended the event.")
                                     case .declined:
-                                        Text(.localizable.didNotAttend)
+                                        Text("Did Not Attend", comment: "Label indicating that the user did not attend the event.")
                                     case .tentative:
-                                        Text(.localizable.maybeAttended)
+                                        Text("Maybe Attended", comment: "Label indicating that the user maybe attended the event.")
                                     case .unknown(let value):
                                         Text(value)
                                     case .none:
-                                        Text(.localizable.didNotAttend)
+                                        Text("Did Not Attend", comment: "Label indicating that the user did not attend the event.")
                                     }
                                 }
                             } else {
-                                Text(.localizable.rsvp)
+                                Text(rsvpText)
                             }
                         })
                     }
@@ -763,7 +769,7 @@ struct EventView: View, EventCreating {
                 refresh()
             }
         } else {
-            Text(.localizable.eventNotFound)
+            Text("Event not found. Go back to the previous screen.", comment: "Text indicating that the event could not be found.")
         }
     }
 

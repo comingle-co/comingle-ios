@@ -24,7 +24,7 @@ struct EventListView: View, MetadataCoding {
         ScrollViewReader { scrollViewProxy in
             if eventListType == .all {
                 listView(scrollViewProxy: scrollViewProxy)
-                    .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.generalSearch))
+                    .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: "Search for events or people", comment: "Placeholder text to prompt for searching by events or people."))
             } else {
                 listView(scrollViewProxy: scrollViewProxy)
             }
@@ -66,7 +66,7 @@ struct EventListView: View, MetadataCoding {
                                     }
                                 },
                                 header: {
-                                    Text(.localizable.profiles)
+                                    Text("Profiles", comment: "Section title for Profiles in the settings view.")
                                 }
                             )
                         } else if let metadata = try? decodedMetadata(from: searchText), let kind = metadata.kind, kind == EventKind.calendar.rawValue, let pubkey = metadata.pubkey, let publicKey = PublicKey(hex: pubkey) {
@@ -87,7 +87,7 @@ struct EventListView: View, MetadataCoding {
                                         }
                                     },
                                     header: {
-                                        Text(.localizable.calendars)
+                                        Text("Calendars", comment: "Calendars")
                                     }
                                 )
                             }
@@ -107,7 +107,7 @@ struct EventListView: View, MetadataCoding {
                                             }
                                         },
                                         label: {
-                                            Text(.localizable.profilesCount(metadataSearchResults.count))
+                                            Text("Profiles (\(metadataSearchResults.count))", comment: "Section title for Profiles in the event view with the number of profiles in parentheses.")
                                         }
                                     )
                                 }
@@ -138,7 +138,7 @@ struct EventListView: View, MetadataCoding {
                                             }
                                         },
                                         label: {
-                                            Text(.localizable.calendarsCount(calendarsSearchResults.count))
+                                            Text("Calendars (\(calendarsSearchResults.count))", comment: "Section title for Calendars in the event view with the number of calendars in parentheses.")
                                         }
                                     )
                                 }
@@ -149,7 +149,7 @@ struct EventListView: View, MetadataCoding {
 
                 let filteredEvents = events(timeTabFilter)
                 if filteredEvents.isEmpty {
-                    Text(.localizable.noEvents)
+                    Text("No events found", comment: "Text indicating that there are no calendar events.")
                 } else {
                     EmptyView().id("event-list-view-top")
 
@@ -179,7 +179,7 @@ struct EventListView: View, MetadataCoding {
                                                 Divider()
                                                 HStack {
                                                     CondensedProfilePicturesView(pubkeys: event.participants.sorted(using: CalendarEventParticipantSortComparator(order: .forward, appState: appState)).compactMap { $0.pubkey?.hex }, maxPictures: 5)
-                                                    Text(.localizable.numInvited(event.participants.count))
+                                                    Text("\(event.participants.count) invited")
                                                         .font(.subheadline)
                                                 }
                                             }
@@ -192,10 +192,10 @@ struct EventListView: View, MetadataCoding {
 
                                                     switch timeTabFilter {
                                                     case .past:
-                                                        Text(.localizable.numAttended(rsvps.count))
+                                                        Text("\(rsvps.count) attended", comment: "Number of people who attended the event.")
                                                             .font(.subheadline)
                                                     case .upcoming:
-                                                        Text(.localizable.numGoing(rsvps.count))
+                                                        Text("\(rsvps.count) going", comment: "Number of people who are going to the event.")
                                                             .font(.subheadline)
                                                     }
                                                 }
@@ -232,7 +232,7 @@ struct EventListView: View, MetadataCoding {
 
     func calendarTitleAndProfileView(_ calendarListEvent: CalendarListEvent) -> some View {
         VStack(alignment: .leading) {
-            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: .localizable.noCalendarName))
+            Text(calendarListEvent.title?.trimmedOrNilIfEmpty ?? calendarListEvent.firstValueForRawTagName("name")?.trimmedOrNilIfEmpty ?? String(localized: "No Name", comment: "Text to indicate that there is no title for the calendar."))
                 .font(.headline)
 
             Divider()
@@ -378,7 +378,7 @@ struct CustomSegmentedPicker: View {
     var body: some View {
         HStack {
             ForEach(TimeTabs.allCases, id: \.self) { timeTab in
-                CustomSegmentedPickerItem(title: timeTab.localizedStringResource, timeTab: timeTab, selectedTimeTab: $selectedTimeTab, onTapAction: onTapAction)
+                CustomSegmentedPickerItem(title: timeTab.localizedString, timeTab: timeTab, selectedTimeTab: $selectedTimeTab, onTapAction: onTapAction)
             }
         }
         .background(Color.gray.opacity(0.2))
@@ -387,7 +387,7 @@ struct CustomSegmentedPicker: View {
 }
 
 struct CustomSegmentedPickerItem: View {
-    let title: LocalizedStringResource
+    let title: String
     let timeTab: TimeTabs
     @Binding var selectedTimeTab: TimeTabs
 
@@ -426,12 +426,12 @@ enum TimeTabs: CaseIterable {
     case upcoming
     case past
 
-    var localizedStringResource: LocalizedStringResource {
+    var localizedString: String {
         switch self {
         case .upcoming:
-                .localizable.upcoming
+            String(localized: "Upcoming", comment: "Picker label to filter down upcoming calendar events.")
         case .past:
-                .localizable.past
+            String(localized: "Past", comment: "Picker label to filter down past calendar events.")
         }
     }
 }

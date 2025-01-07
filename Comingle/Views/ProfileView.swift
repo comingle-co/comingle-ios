@@ -52,10 +52,10 @@ struct ProfileView: View {
                             isDescriptionExpanded.toggle()
                         }, label: {
                             if isDescriptionExpanded {
-                                Text(.localizable.showLess)
+                                Text("Show Less", comment: "Button to hide truncated text.")
                                     .font(.subheadline)
                             } else {
-                                Text(.localizable.showMore)
+                                Text("Show More", comment: "Button to reveal the rest of truncated text.")
                                     .font(.subheadline)
                             }
                         })
@@ -73,19 +73,19 @@ struct ProfileView: View {
                         Button(action: {
                             UIPasteboard.general.string = publicKey.npub
                         }, label: {
-                            Label(.localizable.copyPublicKey, systemImage: "key")
+                            Label(String(localized: "Copy Public Key", comment: "Button to copy a user's public key."), systemImage: "key")
                         })
 
                         if let nostrProfileURL {
                             Button(action: {
                                 UIApplication.shared.open(nostrProfileURL)
                             }, label: {
-                                Label(.localizable.openProfileInDefaultApp, systemImage: "link")
+                                Label(String(localized: "Open Profile in Default Nostr App", comment: "Button to open profile in default Nostr app."), systemImage: "link")
                             })
                         }
                     }
                 } label: {
-                    Label(.localizable.menu, systemImage: "ellipsis.circle")
+                    Label(String(localized: "Menu", comment: "Label for drop down menu in calendar event view."), systemImage: "ellipsis.circle")
                 }
             }
         }

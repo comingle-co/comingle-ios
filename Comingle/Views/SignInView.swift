@@ -25,7 +25,7 @@ struct SignInView: View, RelayURLValidating {
     @State private var publicKey: PublicKey?
 
     private func relayFooter() -> AttributedString {
-        var footer = AttributedString(localized: .localizable.tryDefaultRelay(AppState.defaultRelayURLString))
+        var footer = AttributedString(localized: "Try \(AppState.defaultRelayURLString). Note: authenticated relays are not yet supported.", comment: "Text prompting user to try connecting to the default relay and a note mentioning that authenticated relays are not yet supported.")
         if let range = footer.range(of: AppState.defaultRelayURLString) {
             footer[range].underlineStyle = .single
             footer[range].foregroundColor = .accent
@@ -58,7 +58,7 @@ struct SignInView: View, RelayURLValidating {
             Form {
                 Section(
                     content: {
-                        TextField(localized: .localizable.exampleRelay, text: $primaryRelay)
+                        TextField(String(localized: "wss://relay.example.com", comment: "Example URL of a Nostr relay address."), text: $primaryRelay)
                             .autocorrectionDisabled(false)
                             .textContentType(.URL)
                             .textInputAutocapitalization(.never)
@@ -75,7 +75,7 @@ struct SignInView: View, RelayURLValidating {
                             }
                     },
                     header: {
-                        Text(.localizable.primaryNostrRelayRequired)
+                        Text("Primary Nostr Relay (Required)", comment: "Header text prompting required entry of the primary Nostr relay.")
                     },
                     footer: {
                         Text(relayFooter())
@@ -87,7 +87,7 @@ struct SignInView: View, RelayURLValidating {
 
                 Section(
                     content: {
-                        SecureField(.localizable.enterNostrKey, text: $nostrIdentifier)
+                        SecureField(String(localized: "Enter a Nostr public key or private key", comment: "Prompt asking user to enter in a Nostr key."), text: $nostrIdentifier)
                             .autocorrectionDisabled(false)
                             .textContentType(.password)
                             .textInputAutocapitalization(.never)
@@ -111,19 +111,19 @@ struct SignInView: View, RelayURLValidating {
                             }
                     },
                     header: {
-                        Text(.localizable.nostrKeyHeader)
+                        Text("Nostr Key", comment: "Header text prompting optional entry of the user's private or public key.")
                     },
                     footer: {
                         if keypair != nil {
-                            Text(.localizable.nostrPrivateKeyEnteredFooter)
+                            Text("You have entered a private key, which means you will be able to view, create, modify, and RSVP to events.", comment: "Footer text indicating what it means to have a private key entered.")
                         } else if publicKey != nil {
-                            Text(.localizable.nostrPublicKeyFooter)
+                            Text("You have entered a public key, which means you will be able to only view events.", comment: "Footer text indicating what it means to use a public key.")
                         }
                     }
                 )
             }
 
-            Button(.localizable.findMeOnNostr) {
+            Button(String(localized: "Find Me on Nostr", comment: "Button to query data using the private or public key on Nostr relays.")) {
                 signIn()
             }
             .buttonStyle(.borderedProminent)

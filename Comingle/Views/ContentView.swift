@@ -121,9 +121,9 @@ struct CustomTabBar: View {
 
     var body: some View {
         HStack {
-            CustomTabBarItem(iconName: "house.fill", title: .localizable.home, tab: HomeTabs.events, selectedTab: $selectedTab, onTapAction: onTapAction)
+            CustomTabBarItem(iconName: "house.fill", title: String(localized: "Home", comment: "Tab label for the home view."), tab: HomeTabs.events, selectedTab: $selectedTab, onTapAction: onTapAction)
 
-            CustomTabBarItem(iconName: "calendar", title: .localizable.calendars, tab: HomeTabs.calendars, selectedTab: $selectedTab, onTapAction: onTapAction)
+            CustomTabBarItem(iconName: "calendar", title: String(localized: "Calendars", comment: "Label for Calendars tab in the tab bar and section header for calendars in events view."), tab: HomeTabs.calendars, selectedTab: $selectedTab, onTapAction: onTapAction)
         }
         .frame(height: 50)
         .background(Color.gray.opacity(0.2))
@@ -132,7 +132,7 @@ struct CustomTabBar: View {
 
 struct CustomTabBarItem: View {
     let iconName: String
-    let title: LocalizedStringResource
+    let title: String
     let tab: HomeTabs
     @Binding var selectedTab: HomeTabs
 

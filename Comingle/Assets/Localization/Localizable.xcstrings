@@ -1,921 +1,28 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "about" : {
-      "comment" : "Section title for About section for calendar event description.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About"
-          }
-        }
-      }
-    },
-    "aboutTranslated" : {
-      "comment" : "Section title for About section for calendar event description that has been translated from a non-preferred language to a preferred language.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About (Translated)"
-          }
-        }
-      }
-    },
-    "acknowledgements" : {
-      "comment" : "View for seeing the acknowledgements of projects that this app depends on.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acknowledgements"
-          }
-        }
-      }
-    },
-    "addALocation" : {
-      "comment" : "Button to navigate to event location picker sheet.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add a location"
-          }
-        }
-      }
-    },
-    "addLocation" : {
-      "comment" : "Button to add location to event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Location"
-          }
-        }
-      }
-    },
-    "addProfile" : {
-      "comment" : "Button to add a profile.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Profile"
-          }
-        }
-      }
-    },
-    "appVersion" : {
+    "%@ %@" : {
       "comment" : "Text indicating the version of the app that is running. The first argument is the version number, and the second argument is the build number.",
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ (%@)"
+            "state" : "new",
+            "value" : "%1$@ %2$@"
           }
         }
       }
     },
-    "appVersionUnknown" : {
-      "comment" : "Text indicating that the version of the app that is running is unknown.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown"
-          }
-        }
-      }
-    },
-    "attended" : {
-      "comment" : "Label indicating that the user attended the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Attended"
-          }
-        }
-      }
-    },
-    "calendarDescription" : {
-      "comment" : "Section title for calendar description.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendar Description"
-          }
-        }
-      }
-    },
-    "calendars" : {
-      "comment" : "Label for Calendars tab in the tab bar and section header for calendars in events view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendars"
-          }
-        }
-      }
-    },
-    "calendarsCount" : {
-      "comment" : "Section title for Calendars in the event view with the number of calendars in parentheses.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendars (%d)"
-          }
-        }
-      }
-    },
-    "calendarsSearch" : {
-      "comment" : "Placeholder text to prompt user to search calendars",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search for calendars"
-          }
-        }
-      }
-    },
-    "calendarTitle" : {
-      "comment" : "Text indicating that the field is for entering a calendar title.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Title"
-          }
-        }
-      }
-    },
-    "cancel" : {
-      "comment" : "Button to cancel out of dialog.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
-          }
-        }
-      }
-    },
-    "comingleProfile" : {
-      "comment" : "Button to open the Nostr profile of the Comingle account.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comingle Profile"
-          }
-        }
-      }
-    },
-    "copyCalendarID" : {
-      "comment" : "Button to copy the ID of the calendar.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Calendar ID"
-          }
-        }
-      }
-    },
-    "copyCalendarURL" : {
-      "comment" : "Button to copy the URL of the calendar.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Calendar URL"
-          }
-        }
-      }
-    },
-    "copyCoordinates" : {
-      "comment" : "Button to copy the location coordinates of a calendar event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Coordinates"
-          }
-        }
-      }
-    },
-    "copyEventDetails" : {
-      "comment" : "Button to copy the details of a calendar event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Event Details"
-          }
-        }
-      }
-    },
-    "copyEventID" : {
-      "comment" : "Button to copy a calendar event ID.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Event ID"
-          }
-        }
-      }
-    },
-    "copyEventURL" : {
-      "comment" : "Button to copy a calendar event URL.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Event URL"
-          }
-        }
-      }
-    },
-    "copyLocation" : {
-      "comment" : "Button to copy location of calendar event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Location"
-          }
-        }
-      }
-    },
-    "copyPublicKey" : {
-      "comment" : "Button to copy a user's public key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Public Key"
-          }
-        }
-      }
-    },
-    "createCalendar" : {
-      "comment" : "Navigation title for the view to create a calendar.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Create a Calendar"
-          }
-        }
-      }
-    },
-    "createDisplayNameFooter" : {
-      "comment" : "Footer text to explain what is the display name.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An alternative, bigger name with richer characters than username."
-          }
-        }
-      }
-    },
-    "createEvent" : {
-      "comment" : "Navigation title for the view to create an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Create an Event"
-          }
-        }
-      }
-    },
-    "createPrivateKeyFooter" : {
-      "comment" : "Footer text to explain what is the created private key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This private key should not be shared with anyone. You can use it to sign into any Nostr app. Keep it secure in a password manager. You will not be able to recover it after you leave this screen."
-          }
-        }
-      }
-    },
-    "createProfile" : {
-      "comment" : "Button to create a profile.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Create Profile"
-          }
-        }
-      }
-    },
-    "createPublicKeyFooter" : {
-      "comment" : "Footer text to explain what is the created public key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This public key is your unique identifier. You can share it with other people to identify you across any Nostr app. Save it in a place you will remember to look."
-          }
-        }
-      }
-    },
-    "createUsernameFooter" : {
-      "comment" : "Footer text to explain usernames.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usernames are not unique and not used for signing into an account. More than one person can have the same username."
-          }
-        }
-      }
-    },
-    "delete" : {
-      "comment" : "Label indicating button will delete item.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        }
-      }
-    },
-    "didNotAttend" : {
-      "comment" : "Label indicating that the user did not attend the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Did Not Attend"
-          }
-        }
-      }
-    },
-    "displayName" : {
-      "comment" : "Section title for display name entry.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Display Name (Optional)"
-          }
-        }
-      }
-    },
-    "enterNostrKey" : {
-      "comment" : "Prompt asking user to enter in a Nostr key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter a Nostr public key or private key"
-          }
-        }
-      }
-    },
-    "eventDescription" : {
-      "comment" : "Section title for event description.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Event Description"
-          }
-        }
-      }
-    },
-    "eventEnd" : {
-      "comment" : "Text indicating that the form field is for setting the event end date and time.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ends"
-          }
-        }
-      }
-    },
-    "eventNotFound" : {
-      "comment" : "Text indicating that the event could not be found.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Event not found. Go back to the previous screen."
-          }
-        }
-      }
-    },
-    "eventStart" : {
-      "comment" : "Text indicating that the form field is for setting the event start date and time.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts"
-          }
-        }
-      }
-    },
-    "eventSummary" : {
-      "comment" : "Section title for summary section that summarizes the calendar event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Summary"
-          }
-        }
-      }
-    },
-    "eventTime" : {
-      "comment" : "Section title for the event time section.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time"
-          }
-        }
-      }
-    },
-    "eventTimeZonePreference" : {
-      "comment" : "Picker option settings for using the event time zone if it exists.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Event"
-          }
-        }
-      }
-    },
-    "eventTitle" : {
-      "comment" : "Text indicating that the field is for entering an event title.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Title"
-          }
-        }
-      }
-    },
-    "exampleImage" : {
-      "comment" : "Example image URL of a calendar event image.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "https://example.com/image.png"
-          }
-        }
-      }
-    },
-    "exampleRelay" : {
-      "comment" : "Example URL of a Nostr relay address.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "wss://relay.example.com"
-          }
-        }
-      }
-    },
-    "explore" : {
-      "comment" : "Tab label for view to explore view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Explore"
-          }
-        }
-      }
-    },
-    "findMeOnNostr" : {
-      "comment" : "Button to query data using the private or public key on Nostr relays.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Find Me on Nostr"
-          }
-        }
-      }
-    },
-    "generalSearch" : {
-      "comment" : "Placeholder text to prompt for searching by events or people.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search for events or people"
-          }
-        }
-      }
-    },
-    "guest" : {
-      "comment" : "Name of Guest account that is not signed in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guest"
-          }
-        }
-      }
-    },
-    "home" : {
-      "comment" : "Tab label for the home view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Home"
-          }
-        }
-      }
-    },
-    "image" : {
-      "comment" : "Section title for image of the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Image"
-          }
-        }
-      }
-    },
-    "invited" : {
-      "comment" : "Text for section for invited participants to a calendar event and the number of invited in parentheses.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invited (%d)"
-          }
-        }
-      }
-    },
-    "lastUpdated" : {
-      "comment" : "Section title for event last updated date.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last Updated"
-          }
-        }
-      }
-    },
-    "links" : {
-      "comment" : "Section title for reference links on an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Links"
-          }
-        }
-      }
-    },
-    "location" : {
-      "comment" : "Confirmation dialog for taking action on the location of a calendar event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Location"
-          }
-        }
-      }
-    },
-    "maybeAttended" : {
-      "comment" : "Label indicating that the user maybe attended the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maybe Attended"
-          }
-        }
-      }
-    },
-    "menu" : {
-      "comment" : "Label for drop down menu in calendar event view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Menu"
-          }
-        }
-      }
-    },
-    "modifyCalendar" : {
-      "comment" : "Button to modify calendar.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modify Calendar"
-          }
-        }
-      }
-    },
-    "modifyEvent" : {
-      "comment" : "Button to modify event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modify Event"
-          }
-        }
-      }
-    },
-    "noCalendarName" : {
-      "comment" : "Text to indicate that there is no title for the calendar.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Name"
-          }
-        }
-      }
-    },
-    "noEvents" : {
-      "comment" : "Text indicating that there are no calendar events.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No events found"
-          }
-        }
-      }
-    },
-    "nostrKeyHeader" : {
-      "comment" : "Header text prompting optional entry of the user's private or public key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nostr Key"
-          }
-        }
-      }
-    },
-    "nostrPrivateKeyEnteredFooter" : {
-      "comment" : "Footer text indicating what it means to have a private key entered.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have entered a private key, which means you will be able to view, create, modify, and RSVP to events."
-          }
-        }
-      }
-    },
-    "nostrPrivateKeyIncorrectFooter" : {
-      "comment" : "Footer text indicating what it means to have an incorrect private key entered.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have entered an incorrect private key, which means you will be not be able to create, modify, or RSVP to events."
-          }
-        }
-      }
-    },
-    "nostrPrivateKeyMissingFooter" : {
-      "comment" : "Footer text indicating what it means to not have a private key entered.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have not entered a private key, which means you will be not be able to create, modify, or RSVP to events."
-          }
-        }
-      }
-    },
-    "nostrPublicKeyFooter" : {
-      "comment" : "Footer text indicating what it means to use a public key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have entered a public key, which means you will be able to only view events."
-          }
-        }
-      }
-    },
-    "numAttended" : {
-      "comment" : "Number of people who attended the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d attended"
-          }
-        }
-      }
-    },
-    "numGoing" : {
-      "comment" : "Number of people who are going to the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d going"
-          }
-        }
-      }
-    },
-    "numInvited" : {
-      "comment" : "Number of people who are invited to the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d invited"
-          }
-        }
-      }
-    },
-    "ok" : {
-      "comment" : "Button to acknowledge and dismiss an alert.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OK"
-          }
-        }
-      }
-    },
-    "openInAppleMaps" : {
-      "comment" : "Button to open a location in Apple Maps.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open in Apple Maps"
-          }
-        }
-      }
-    },
-    "openInGoogleMaps" : {
-      "comment" : "Button to open a location in Google Maps.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open in Google Maps"
-          }
-        }
-      }
-    },
-    "openLink" : {
-      "comment" : "Button to open link.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Link"
-          }
-        }
-      }
-    },
-    "openProfileInDefaultApp" : {
-      "comment" : "Button to open profile in default Nostr app.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Profile in Default Nostr App"
-          }
-        }
-      }
+    "%lld attended" : {
+      "comment" : "Number of people who attended the event."
     },
-    "organizer" : {
-      "comment" : "Text that indicates who is the event organizer.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Organizer: %@"
-          }
-        }
-      }
+    "%lld going" : {
+      "comment" : "Number of people who are going to the event."
     },
-    "participants" : {
-      "comment" : "Section title for participants in event creation view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Participants"
-          }
-        }
-      }
+    "%lld invited" : {
+
     },
-    "participantsCount" : {
+    "%lld participants" : {
       "comment" : "Number of invited participants",
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -923,13 +30,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%d participant"
+                  "value" : "%lld participant"
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%d participants"
+                  "state" : "new",
+                  "value" : "%lld participants"
                 }
               }
             }
@@ -937,677 +44,389 @@
         }
       }
     },
-    "participantsFooter" : {
-      "comment" : "Footer text explaining what it means to invite a participant.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anyone who is not invited can still RSVP to public events. It is up to you to decide if you want to explicitly invite a participant or who can attend the event."
-          }
-        }
-      }
+    "About" : {
+      "comment" : "Section title for About section for calendar event description.\nSettings about section title."
     },
-    "past" : {
-      "comment" : "Picker label to filter down past calendar events.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Past"
-          }
-        }
-      }
+    "About (Translated)" : {
+      "comment" : "Section title for About section for calendar event description that has been translated from a non-preferred language to a preferred language."
     },
-    "primaryNostrRelayRequired" : {
-      "comment" : "Header text prompting required entry of the primary Nostr relay.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Primary Nostr Relay (Required)"
-          }
-        }
-      }
+    "Acknowledgements" : {
+      "comment" : "View for seeing the acknowledgements of projects that this app depends on."
     },
-    "privateKey" : {
-      "comment" : "Section header for private key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Private Key"
-          }
-        }
-      }
+    "Add a location" : {
+      "comment" : "Button to navigate to event location picker sheet."
     },
-    "privateKeyMismatch" : {
-      "comment" : "Alert message to tell user that the private key that they entered does not match the public key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Private key does not match the public key."
-          }
-        }
-      }
+    "Add Location" : {
+      "comment" : "Button to add location to event."
     },
-    "privateKeyPlaceholder" : {
-      "comment" : "Placeholder text to prompt user to enter private key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "nsec..."
-          }
-        }
-      }
+    "Add Profile" : {
+      "comment" : "Button to add a profile."
     },
-    "profile" : {
-      "comment" : "Label for Profile view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Profile"
-          }
-        }
-      }
+    "An alternative, bigger name with richer characters than username." : {
+      "comment" : "Footer text to explain what is the display name."
     },
-    "profilePicture" : {
-      "comment" : "Section title for profile picture entry.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Profile Picture (Optional)"
-          }
-        }
-      }
+    "Anyone who is not invited can still RSVP to public events. It is up to you to decide if you want to explicitly invite a participant or who can attend the event." : {
+      "comment" : "Footer text explaining what it means to invite a participant."
     },
-    "profiles" : {
-      "comment" : "Section title for Profiles in the settings view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Profiles"
-          }
-        }
-      }
+    "Appearance" : {
+      "comment" : "Settings section for appearance of the app."
     },
-    "profilesCount" : {
-      "comment" : "Section title for Profiles in the event view with the number of profiles in parentheses.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Profiles (%d)"
-          }
-        }
-      }
+    "Attended" : {
+      "comment" : "Label indicating that the user attended the event."
     },
-    "publicKey" : {
-      "comment" : "Section header for public key.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Public Key"
-          }
-        }
-      }
+    "Calendar Description" : {
+      "comment" : "Section title for calendar description."
     },
-    "relayRead" : {
-      "comment" : "Picker label to specify preference of only reading from a relay.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Read"
-          }
-        }
-      }
+    "Calendars" : {
+      "comment" : "Calendars\nLabel for Calendars tab in the tab bar and section header for calendars in events view."
     },
-    "relayReadAndWrite" : {
-      "comment" : "Picker label to specify preference of reading from and writing to a relay.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Read and Write"
-          }
-        }
-      }
+    "Calendars (%lld)" : {
+      "comment" : "Section title for Calendars in the event view with the number of calendars in parentheses."
     },
-    "relaysCount" : {
-      "comment" : "Text for section for relays a calendar event was found on and the number of relays in parentheses.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Relays (%d)"
-          }
-        }
-      }
+    "Cancel" : {
+      "comment" : "Button to cancel out of dialog."
     },
-    "relayWrite" : {
-      "comment" : "Picker label to specify preference of only writing to a relay.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Write"
-          }
-        }
-      }
+    "Comingle Profile" : {
+      "comment" : "Button to open the Nostr profile of the Comingle account."
     },
-    "reportIssue" : {
-      "comment" : "Button to report an issue about the app.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Report an Issue"
-          }
-        }
-      }
+    "Copy Calendar ID" : {
+      "comment" : "Button to copy the ID of the calendar."
     },
-    "resetAllFields" : {
-      "comment" : "Button to reset all fields to the starting point of a fresh event creation.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset All Fields"
-          }
-        }
-      }
+    "Copy Calendar URL" : {
+      "comment" : "Button to copy the URL of the calendar."
     },
-    "restoreOriginalEvent" : {
-      "comment" : "Button to restore event modification fields back to what the original event started with.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restore Original Event"
-          }
-        }
-      }
+    "Copy Coordinates" : {
+      "comment" : "Button to copy the location coordinates of a calendar event."
     },
-    "retractEvent" : {
-      "comment" : "Button to retract an event by requesting to delete it.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Retract Event"
-          }
-        }
-      }
+    "Copy Event Details" : {
+      "comment" : "Button to copy the details of a calendar event."
     },
-    "retractRSVP" : {
-      "comment" : "Button to retract the user's existing RSVP.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Retract RSVP"
-          }
-        }
-      }
+    "Copy Event ID" : {
+      "comment" : "Button to copy a calendar event ID."
     },
-    "role" : {
-      "comment" : "Placeholder text for entry of a role of a participant to an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Role"
-          }
-        }
-      }
+    "Copy Event URL" : {
+      "comment" : "Button to copy a calendar event URL."
     },
-    "rsvp" : {
-      "comment" : "Button to RSVP to an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "RSVP"
-          }
-        }
-      }
+    "Copy Location" : {
+      "comment" : "Button to copy location of calendar event."
     },
-    "rsvps" : {
-      "comment" : "Text for section for RSVPs to a calendar event and the number of RSVPs in parentheses.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "RSVPs (%d)"
-          }
-        }
-      }
+    "Copy Public Key" : {
+      "comment" : "Button to copy a user's public key."
     },
-    "rsvpStatusGoing" : {
-      "comment" : "Text to indicate that the current user is going to the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Going"
-          }
-        }
-      }
+    "Create a ..." : {
+
     },
-    "rsvpStatusMaybeGoing" : {
-      "comment" : "Text to indicate that the current user might be going to the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maybe Going"
-          }
-        }
-      }
+    "Create a Calendar" : {
+      "comment" : "Navigation title for the view to create a calendar."
     },
-    "rsvpStatusNotGoing" : {
-      "comment" : "Text to indicate that the current user is not going to the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not Going"
-          }
-        }
-      }
+    "Create an Event" : {
+      "comment" : "Navigation title for the view to create an event."
     },
-    "save" : {
-      "comment" : "Button to save a form.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save"
-          }
-        }
-      }
+    "Create Event" : {
+
     },
-    "searchForLocation" : {
-      "comment" : "Placeholder text to prompt user to search for a location for the event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search for location"
-          }
-        }
-      }
+    "Create Profile" : {
+      "comment" : "Button to create a profile."
     },
-    "searchForParticipant" : {
-      "comment" : "Placeholder text to prompt user to search for a participant to invite to an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search for participant"
-          }
-        }
-      }
+    "Delete" : {
+      "comment" : "Label indicating button will delete item."
     },
-    "searchForTimeZone" : {
-      "comment" : "Placeholder text to prompt user to search for a time zone.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search for time zone"
-          }
-        }
-      }
+    "Did Not Attend" : {
+      "comment" : "Label indicating that the user did not attend the event."
     },
-    "setTimeZone" : {
-      "comment" : "Text for toggle for setting time zone on an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Set Time Zone"
-          }
-        }
-      }
+    "Display Name (Optional)" : {
+      "comment" : "Section title for display name entry."
     },
-    "settings" : {
-      "comment" : "Navigation title for the settings view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
-          }
-        }
-      }
+    "Ends" : {
+      "comment" : "Text indicating that the form field is for setting the event end date and time."
     },
-    "settingsAbout" : {
-      "comment" : "Settings about section title.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About"
-          }
-        }
-      }
+    "Enter a Nostr public key or private key" : {
+      "comment" : "Prompt asking user to enter in a Nostr key."
     },
-    "settingsAppearance" : {
-      "comment" : "Settings section for appearance of the app.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Appearance"
-          }
-        }
-      }
+    "Enter a time zone if this is primarily an in-person event." : {
+      "comment" : "Footer text to explain when a time zone should be entered."
     },
-    "settingsForProfile" : {
-      "comment" : "Section title for settings for profile",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings for %@"
-          }
-        }
-      }
+    "Event" : {
+      "comment" : "Picker option settings for using the event time zone if it exists."
     },
-    "settingsKeys" : {
-      "comment" : "Settings section for Nostr key management.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keys"
-          }
-        }
-      }
+    "Event Description" : {
+      "comment" : "Section title for event description."
     },
-    "settingsRelayFooter" : {
-      "comment" : "Relay settings footer text explaining where relay settings are stored and the limitations of relay connections.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Relay settings are saved locally to this device. Authenticated relays and publishing relay lists are not yet supported."
-          }
-        }
-      }
+    "Event not found. Go back to the previous screen." : {
+      "comment" : "Text indicating that the event could not be found."
     },
-    "settingsRelays" : {
-      "comment" : "Settings section for relay management.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Relays"
-          }
-        }
-      }
+    "Find Me on Nostr" : {
+      "comment" : "Button to query data using the private or public key on Nostr relays."
     },
-    "showLess" : {
-      "comment" : "Button to hide truncated text.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show Less"
-          }
-        }
-      }
+    "Going" : {
+      "comment" : "Text to indicate that the current user is going to the event."
     },
-    "showMore" : {
-      "comment" : "Button to reveal the rest of truncated text.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show More"
-          }
-        }
-      }
+    "Guest" : {
+      "comment" : "Name of Guest account that is not signed in."
     },
-    "signIntoExistingProfile" : {
-      "comment" : "Button to sign into existing profile.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign Into Existing Profile"
-          }
-        }
-      }
+    "Hello, World!" : {
+
     },
-    "signInToRSVP" : {
-      "comment" : "Button to prompt user to sign in so that they can RSVP to an event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign In to RSVP"
-          }
-        }
-      }
+    "Home" : {
+      "comment" : "Tab label for the home view."
     },
-    "signOut" : {
-      "comment" : "Label indicating that the button signs out of a profile.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign Out"
-          }
-        }
-      }
+    "https://example.com/image.png" : {
+      "comment" : "Example image URL of a calendar event image."
     },
-    "signOutFromDevice" : {
-      "comment" : "Title of confirmation dialog when user initiates a profile sign out.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign out of profile?"
-          }
-        }
-      }
+    "Image" : {
+      "comment" : "Section title for image of the event."
     },
-    "signOutMessage" : {
-      "comment" : "Message to inform user about what will happen if they sign out.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your app settings will be deleted from this device. Your data on Nostr relays will not be affected."
-          }
-        }
-      }
+    "Invited (%lld)" : {
+      "comment" : "Text for section for invited participants to a calendar event and the number of invited in parentheses."
     },
-    "signOutProfile" : {
-      "comment" : "Button to sign out of a profile from the device.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign Out of %@"
-          }
-        }
-      }
+    "Keys" : {
+      "comment" : "Settings section for Nostr key management."
     },
-    "systemTimeZonePreference" : {
-      "comment" : "Picker option settings for using the system time zone.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "System"
-          }
-        }
-      }
+    "Last Updated" : {
+      "comment" : "Section title for event last updated date."
     },
-    "timeZone" : {
-      "comment" : "Label for time zone setting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time Zone"
-          }
-        }
-      }
+    "Links" : {
+      "comment" : "Section title for reference links on an event."
     },
-    "timeZoneFooter" : {
-      "comment" : "Footer text to explain when a time zone should be entered.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter a time zone if this is primarily an in-person event."
-          }
-        }
-      }
+    "Location" : {
+      "comment" : "Confirmation dialog for taking action on the location of a calendar event.\nConfirmation dialog title for taking action on the location of a calendar event."
     },
-    "tryDefaultRelay" : {
-      "comment" : "Text prompting user to try connecting to the default relay and a note mentioning that authenticated relays are not yet supported.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Try %@. Note: authenticated relays are not yet supported."
-          }
-        }
-      }
+    "Maybe Attended" : {
+      "comment" : "Label indicating that the user maybe attended the event."
     },
-    "unnamedEvent" : {
-      "comment" : "Text to display when a calendar event does not have a name.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unnamed Event"
-          }
-        }
-      }
+    "Maybe Going" : {
+      "comment" : "Text to indicate that the current user might be going to the event."
     },
-    "upcoming" : {
-      "comment" : "Picker label to filter down upcoming calendar events.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upcoming"
-          }
-        }
-      }
+    "Menu" : {
+      "comment" : "Label for drop down menu in calendar event view."
     },
-    "url" : {
-      "comment" : "Placeholder text for text field for entering event URL.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "URL"
-          }
-        }
-      }
+    "Modify Calendar" : {
+      "comment" : "Button to modify calendar."
     },
-    "username" : {
-      "comment" : "Section title for username entry.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Username"
-          }
-        }
-      }
+    "Modify Event" : {
+      "comment" : "Button to modify event."
     },
-    "version" : {
-      "comment" : "Label for the app version in the settings view.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version"
-          }
-        }
-      }
+    "No events found" : {
+      "comment" : "Text indicating that there are no calendar events."
     },
-    "viewProfile" : {
-      "comment" : "Button to view the active profile.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View Profile"
-          }
-        }
-      }
+    "No Name" : {
+      "comment" : "Text to indicate that there is no title for the calendar."
+    },
+    "Nostr Key" : {
+      "comment" : "Header text prompting optional entry of the user's private or public key."
+    },
+    "Not Going" : {
+      "comment" : "Text to indicate that the current user is not going to the event."
+    },
+    "nsec..." : {
+      "comment" : "Placeholder text to prompt user to enter private key."
+    },
+    "OK" : {
+      "comment" : "Button to acknowledge and dismiss an alert."
+    },
+    "Open in Apple Maps" : {
+      "comment" : "Button to open a location in Apple Maps."
+    },
+    "Open in Google Maps" : {
+      "comment" : "Button to open a location in Google Maps."
+    },
+    "Open Link" : {
+      "comment" : "Button to open link."
+    },
+    "Open Profile in Default Nostr App" : {
+      "comment" : "Button to open profile in default Nostr app."
+    },
+    "Organizer: %@" : {
+      "comment" : "Text that indicates who is the event organizer."
+    },
+    "Participants" : {
+      "comment" : "Section title for participants in event creation view."
+    },
+    "Past" : {
+      "comment" : "Picker label to filter down past calendar events."
+    },
+    "Primary Nostr Relay (Required)" : {
+      "comment" : "Header text prompting required entry of the primary Nostr relay."
+    },
+    "Private Key" : {
+      "comment" : "Section header for private key."
+    },
+    "Private key does not match the public key." : {
+      "comment" : "Alert message to tell user that the private key that they entered does not match the public key."
+    },
+    "Profile Picture (Optional)" : {
+      "comment" : "Section title for profile picture entry."
+    },
+    "Profiles" : {
+      "comment" : "Section title for Profiles in the settings view."
+    },
+    "Profiles (%lld)" : {
+      "comment" : "Section title for Profiles in the event view with the number of profiles in parentheses."
+    },
+    "Public Key" : {
+      "comment" : "Section header for public key."
+    },
+    "Read" : {
+      "comment" : "Picker label to specify preference of only reading from a relay."
+    },
+    "Read and Write" : {
+      "comment" : "Picker label to specify preference of reading from and writing to a relay."
+    },
+    "Relay settings are saved locally to this device. Authenticated relays and publishing relay lists are not yet supported." : {
+      "comment" : "Relay settings footer text explaining where relay settings are stored and the limitations of relay connections."
+    },
+    "Relays" : {
+      "comment" : "Settings section for relay management."
+    },
+    "Relays (%lld)" : {
+      "comment" : "Text for section for relays a calendar event was found on and the number of relays in parentheses."
+    },
+    "Report an Issue" : {
+      "comment" : "Button to report an issue about the app."
+    },
+    "Reset All Fields" : {
+      "comment" : "Button to reset all fields to the starting point of a fresh event creation."
+    },
+    "Restore Original Event" : {
+      "comment" : "Button to restore event modification fields back to what the original event started with."
+    },
+    "Retract Event" : {
+      "comment" : "Button to retract an event by requesting to delete it.\nConfirmation dialog title to retract an event by requesting to delete it."
+    },
+    "Retract RSVP" : {
+      "comment" : "Button to retract the user's existing RSVP."
+    },
+    "Role" : {
+      "comment" : "Placeholder text for entry of a role of a participant to an event."
+    },
+    "RSVP" : {
+      "comment" : "Button to RSVP to an event.\nConfirmation dialog title to change RSVP to an event."
+    },
+    "RSVPs (%lld)" : {
+      "comment" : "Text for section for RSVPs to a calendar event and the number of RSVPs in parentheses."
+    },
+    "Save" : {
+      "comment" : "Button to save a form."
+    },
+    "Search for calendars" : {
+      "comment" : "Placeholder text to prompt user to search calendars"
+    },
+    "Search for events or people" : {
+      "comment" : "Placeholder text to prompt for searching by events or people."
+    },
+    "Search for location" : {
+      "comment" : "Placeholder text to prompt user to search for a location for the event."
+    },
+    "Search for participant" : {
+      "comment" : "Placeholder text to prompt user to search for a participant to invite to an event."
+    },
+    "Search for time zone" : {
+      "comment" : "Placeholder text to prompt user to search for a time zone."
+    },
+    "Set Time Zone" : {
+      "comment" : "Text for toggle for setting time zone on an event."
+    },
+    "Settings" : {
+      "comment" : "Navigation title for the settings view."
+    },
+    "Settings for %@" : {
+      "comment" : "Section title for settings for profile"
+    },
+    "Show Less" : {
+      "comment" : "Button to hide truncated text."
+    },
+    "Show More" : {
+      "comment" : "Button to reveal the rest of truncated text."
+    },
+    "Sign In to RSVP" : {
+      "comment" : "Button to prompt user to sign in so that they can RSVP to an event."
+    },
+    "Sign Into Existing Profile" : {
+      "comment" : "Button to sign into existing profile."
+    },
+    "Sign Out" : {
+      "comment" : "Label indicating that the button signs out of a profile."
+    },
+    "Sign Out of %@" : {
+      "comment" : "Button to sign out of a profile from the device."
+    },
+    "Sign out of profile?" : {
+      "comment" : "Title of confirmation dialog when user initiates a profile sign out."
+    },
+    "Starts" : {
+      "comment" : "Text indicating that the form field is for setting the event start date and time."
+    },
+    "Summary" : {
+      "comment" : "Section title for summary section that summarizes the calendar event."
+    },
+    "System" : {
+      "comment" : "Picker option settings for using the system time zone."
+    },
+    "Text indicating that the field is for entering an event title." : {
+      "comment" : "Text indicating that the field is for entering an event title."
+    },
+    "This private key should not be shared with anyone. You can use it to sign into any Nostr app. Keep it secure in a password manager. You will not be able to recover it after you leave this screen." : {
+      "comment" : "Footer text to explain what is the created private key."
+    },
+    "This public key is your unique identifier. You can share it with other people to identify you across any Nostr app. Save it in a place you will remember to look." : {
+      "comment" : "Footer text to explain what is the created public key."
+    },
+    "Time" : {
+      "comment" : "Section title for the event time section."
+    },
+    "Time Zone" : {
+      "comment" : "Label for time zone setting."
+    },
+    "Title" : {
+      "comment" : "Text indicating that the field is for entering a calendar title."
+    },
+    "Try %@. Note: authenticated relays are not yet supported." : {
+      "comment" : "Text prompting user to try connecting to the default relay and a note mentioning that authenticated relays are not yet supported."
+    },
+    "Unknown" : {
+      "comment" : "Text indicating that the version of the app that is running is unknown."
+    },
+    "Unnamed Event" : {
+      "comment" : "Text to display when a calendar event does not have a name."
+    },
+    "Upcoming" : {
+      "comment" : "Picker label to filter down upcoming calendar events."
+    },
+    "URL" : {
+      "comment" : "Placeholder text for text field for entering event URL."
+    },
+    "Username" : {
+      "comment" : "Section title for username entry."
+    },
+    "Usernames are not unique and not used for signing into an account. More than one person can have the same username." : {
+      "comment" : "Footer text to explain usernames."
+    },
+    "Version" : {
+      "comment" : "Label for the app version in the settings view."
+    },
+    "View Profile" : {
+      "comment" : "Button to view the active profile."
+    },
+    "Write" : {
+      "comment" : "Picker label to specify preference of only writing to a relay."
+    },
+    "wss://relay.example.com" : {
+      "comment" : "Example URL of a Nostr relay address."
+    },
+    "You have entered a private key, which means you will be able to view, create, modify, and RSVP to events." : {
+      "comment" : "Footer text indicating what it means to have a private key entered."
+    },
+    "You have entered a public key, which means you will be able to only view events." : {
+      "comment" : "Footer text indicating what it means to use a public key."
+    },
+    "You have entered an incorrect private key, which means you will be not be able to create, modify, or RSVP to events." : {
+      "comment" : "Footer text indicating what it means to have an incorrect private key entered."
+    },
+    "You have not entered a private key, which means you will be not be able to create, modify, or RSVP to events." : {
+      "comment" : "Footer text indicating what it means to not have a private key entered."
+    },
+    "Your app settings will be deleted from this device. Your data on Nostr relays will not be affected." : {
+      "comment" : "Message to inform user about what will happen if they sign out."
     }
   },
   "version" : "1.0"

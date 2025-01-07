@@ -20,7 +20,7 @@ class Utilities {
                 return abbreviatedPublicKey(publicKeyHex)
             }
         } else {
-            return String(localized: .localizable.guest)
+            return String(localized: "Guest", comment: "Name of Guest account that is not signed in.")
         }
     }
 

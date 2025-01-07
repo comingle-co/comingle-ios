@@ -66,7 +66,7 @@ struct RelaysSettingsView: View, RelayURLValidating {
                                 }
                                 Picker(relaySettings.relayURLString, selection: relayMarkerBinding) {
                                     ForEach(RelayOption.allCases, id: \.self) { option in
-                                        Text(option.localizedStringResource)
+                                        Text(option.localizedString)
                                     }
                                 }
                                 .pickerStyle(.navigationLink)
@@ -74,14 +74,14 @@ struct RelaysSettingsView: View, RelayURLValidating {
                                     Button(role: .destructive) {
                                         appState.removeRelaySettings(relaySettings: relaySettings)
                                     } label: {
-                                        Label(.localizable.delete, systemImage: "trash")
+                                        Label(String(localized: "Delete", comment: "Label indicating button will delete item."), systemImage: "trash")
                                     }
                                 }
                             }
                         }
 
                         HStack {
-                            TextField(localized: .localizable.exampleRelay, text: $newRelay)
+                            TextField(String(localized: "wss://relay.example.com", comment: "Example URL of a Nostr relay address."), text: $newRelay)
                                 .textContentType(.URL)
                                 .textInputAutocapitalization(.never)
                                 .autocorrectionDisabled()
@@ -112,10 +112,10 @@ struct RelaysSettingsView: View, RelayURLValidating {
                     }
                 },
                 header: {
-                    Text(.localizable.settingsRelays)
+                    Text("Relays", comment: "Settings section for relay management.")
                 },
                 footer: {
-                    Text(.localizable.settingsRelayFooter)
+                    Text("Relay settings are saved locally to this device. Authenticated relays and publishing relay lists are not yet supported.", comment: "Relay settings footer text explaining where relay settings are stored and the limitations of relay connections.")
                 }
             )
         }
@@ -134,14 +134,14 @@ enum RelayOption: CaseIterable {
     case write
     case readAndWrite
 
-    var localizedStringResource: LocalizedStringResource {
+    var localizedString: String {
         switch self {
         case .read:
-                .localizable.relayRead
+            String(localized: "Read", comment: "Picker label to specify preference of only reading from a relay.")
         case .write:
-                .localizable.relayWrite
+            String(localized: "Write", comment: "Picker label to specify preference of only writing to a relay.")
         case .readAndWrite:
-                .localizable.relayReadAndWrite
+            String(localized: "Read and Write", comment: "Picker label to specify preference of reading from and writing to a relay.")
         }
     }
 }

@@ -22,7 +22,7 @@ struct AcknowledgementsView: View {
                 })
             }
         }
-        .navigationTitle(.localizable.acknowledgements)
+        .navigationTitle(String(localized: "Acknowledgements", comment: "View for seeing the acknowledgements of projects that this app depends on."))
     }
 }
 
@@ -51,8 +51,7 @@ struct Dependency: Identifiable {
             Dependency(name: "Robohash", version: "Cats - David Revoy", url: "https://robohash.org/"),
             Dependency(name: "secp256k1", version: "0.12.2", url: "https://github.com/21-DOT-DEV/swift-secp256k1"),
             Dependency(name: "swift-collections", version: "1.1.2", url: "https://github.com/apple/swift-collections"),
-            Dependency(name: "SwiftTrie", version: "0.1.2", url: "https://github.com/tyiu/swift-trie"),
-            Dependency(name: "XCStringsToolPlugin", version: "0.1.1", url: "https://github.com/liamnichols/xcstrings-tool-plugin")
+            Dependency(name: "SwiftTrie", version: "0.1.2", url: "https://github.com/tyiu/swift-trie")
         ]
     }
 }

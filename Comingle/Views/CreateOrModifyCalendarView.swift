@@ -23,20 +23,21 @@ struct CreateOrModifyCalendarView: View {
     var body: some View {
         if viewModel.appState.keypair != nil && (viewModel.existingCalendarListEvent == nil || viewModel.appState.publicKey?.hex == viewModel.existingCalendarListEvent?.pubkey) {
             Form {
+                let title = String(localized: "Title", comment: "Text indicating that the field is for entering a calendar title.")
                 Section {
-                    TextField(localized: .localizable.calendarTitle, text: $viewModel.title)
+                    TextField(title, text: $viewModel.title)
                 } header: {
-                    Text(.localizable.calendarTitle)
+                    Text(title)
                 }
 
                 Section {
                     TextEditor(text: $viewModel.description)
                 } header: {
-                    Text(.localizable.calendarDescription)
+                    Text("Calendar Description", comment: "Section title for calendar description.")
                 }
 
                 Section {
-                    TextField(localized: .localizable.exampleImage, text: $viewModel.imageString)
+                    TextField(String(localized: "https://example.com/image.png", comment: "Example image URL of a calendar event image."), text: $viewModel.imageString)
                         .textContentType(.URL)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
@@ -49,7 +50,7 @@ struct CreateOrModifyCalendarView: View {
                             .frame(maxWidth: 100, maxHeight: 200)
                     }
                 } header: {
-                    Text(.localizable.image)
+                    Text("Image", comment: "Section title for image of the event.")
                 }
             }
             .navigationTitle(viewModel.navigationTitle)
@@ -60,7 +61,7 @@ struct CreateOrModifyCalendarView: View {
                             dismiss()
                         }
                     }, label: {
-                        Text(.localizable.save)
+                        Text("Save", comment: "Button to save a form.")
                     })
                     .disabled(!viewModel.canSave)
                 }
@@ -117,11 +118,11 @@ extension CreateOrModifyCalendarView {
             return url
         }
 
-        var navigationTitle: LocalizedStringResource {
+        var navigationTitle: String {
             if existingCalendarListEvent != nil {
-                .localizable.modifyCalendar
+                String(localized: "Modify Calendar", comment: "Button to modify calendar.")
             } else {
-                .localizable.createCalendar
+                String(localized: "Create a Calendar", comment: "Navigation title for the view to create a calendar.")
             }
         }
 
