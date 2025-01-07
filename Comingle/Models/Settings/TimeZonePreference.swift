@@ -15,12 +15,12 @@ enum TimeZonePreference: CaseIterable, Codable {
     /// Always use the system time zone.
     case system
 
-    var localizedStringResource: LocalizedStringResource {
+    var localizedString: String {
         switch self {
         case .event:
-                .localizable.eventTimeZonePreference
+            String(localized: "Event", comment: "Picker option settings for using the event time zone if it exists.")
         case .system:
-                .localizable.systemTimeZonePreference
+            String(localized: "System", comment: "Picker option settings for using the system time zone.")
         }
     }
 }

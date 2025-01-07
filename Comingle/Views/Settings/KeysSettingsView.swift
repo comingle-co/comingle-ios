@@ -49,14 +49,14 @@ struct KeysSettingsView: View {
                     }
                 },
                 header: {
-                    Text(.localizable.publicKey)
+                    Text("Public Key", comment: "Section header for public key.")
                 }
             )
 
             Section(
                 content: {
                     HStack {
-                        SecureField(.localizable.privateKeyPlaceholder, text: $privateKeyNsec)
+                        SecureField(String(localized: "nsec...", comment: "Placeholder text to prompt user to enter private key."), text: $privateKeyNsec)
                             .disabled(validPrivateKey)
                             .autocorrectionDisabled(false)
                             .textContentType(.password)
@@ -81,24 +81,24 @@ struct KeysSettingsView: View {
                     }
                 },
                 header: {
-                    Text(.localizable.privateKey)
+                    Text("Private Key", comment: "Section header for private key.")
                 },
                 footer: {
                     if validPrivateKey {
-                        Text(.localizable.nostrPrivateKeyEnteredFooter)
+                        Text("You have entered a private key, which means you will be able to view, create, modify, and RSVP to events.", comment: "Footer text indicating what it means to have a private key entered.")
                     } else if privateKeyNsec.isEmpty {
-                        Text(.localizable.nostrPrivateKeyMissingFooter)
+                        Text("You have not entered a private key, which means you will be not be able to create, modify, or RSVP to events.", comment: "Footer text indicating what it means to not have a private key entered.")
                     } else {
-                        Text(.localizable.nostrPrivateKeyIncorrectFooter)
+                        Text("You have entered an incorrect private key, which means you will be not be able to create, modify, or RSVP to events.", comment: "Footer text indicating what it means to have an incorrect private key entered.")
                     }
                 }
             )
         }
         .alert(
-            Text(.localizable.privateKeyMismatch),
+            Text("Private key does not match the public key.", comment: "Alert message to tell user that the private key that they entered does not match the public key."),
             isPresented: $incorrectPrivateKeyAlertPresented
         ) {
-            Button(.localizable.ok) {
+            Button(String(localized: "OK", comment: "Button to acknowledge and dismiss an alert.")) {
                 privateKeyNsec = ""
             }
         }

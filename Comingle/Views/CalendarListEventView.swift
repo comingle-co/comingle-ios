@@ -50,7 +50,7 @@ struct CalendarListEventView: View {
                         .clipShape(.circle)
                 }
 
-                Text(calendarListEvent.title ?? calendarListEvent.firstValueForRawTagName("name") ?? String(localized: .localizable.noCalendarName))
+                Text(calendarListEvent.title ?? calendarListEvent.firstValueForRawTagName("name") ?? String(localized: "No Name", comment: "Text to indicate that there is no title for the calendar."))
                     .font(.headline)
 
                 NavigationLink(destination: ProfileView(publicKeyHex: calendarListEvent.pubkey)) {
@@ -72,10 +72,10 @@ struct CalendarListEventView: View {
                                 isDescriptionExpanded.toggle()
                             }, label: {
                                 if isDescriptionExpanded {
-                                    Text(.localizable.showLess)
+                                    Text("Show Less", comment: "Button to hide truncated text.")
                                         .font(.subheadline)
                                 } else {
-                                    Text(.localizable.showMore)
+                                    Text("Show More", comment: "Button to reveal the rest of truncated text.")
                                         .font(.subheadline)
                                 }
                             })
@@ -92,18 +92,18 @@ struct CalendarListEventView: View {
                         Button(action: {
                             UIPasteboard.general.string = naddr
                         }, label: {
-                            Text(.localizable.copyCalendarID)
+                            Text("Copy Calendar ID", comment: "Button to copy the ID of the calendar.")
                         })
 
                         if let calendarURL {
                             Button(action: {
                                 UIPasteboard.general.string = calendarURL.absoluteString
                             }, label: {
-                                Text(.localizable.copyCalendarURL)
+                                Text("Copy Calendar URL", comment: "Button to copy the URL of the calendar.")
                             })
                         }
                     } label: {
-                        Label(.localizable.menu, systemImage: "ellipsis.circle")
+                        Label(String(localized: "Menu", comment: "Label for drop down menu in calendar event view."), systemImage: "ellipsis.circle")
                     }
                 }
             }

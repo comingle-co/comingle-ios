@@ -56,7 +56,7 @@ struct TimeZoneSelectionView: View {
             .searchable(
                 text: $search,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: String(localized: .localizable.searchForTimeZone)
+                prompt: String(localized: "Search for time zone", comment: "Placeholder text to prompt user to search for a time zone.")
             )
             .onChange(of: timeZone) {
                 dismiss()

@@ -98,12 +98,12 @@ struct ParticipantSearchView: View {
                                 participant.role = $0
                             }
                         )
-                        TextField(localized: .localizable.role, text: roleBinding)
+                        TextField(String(localized: "Role", comment: "Placeholder text for entry of a role of a participant to an event."), text: roleBinding)
                     }
                 }
             }
         }
-        .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: .localizable.searchForParticipant))
+        .searchable(text: $searchViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: String(localized: "Search for participant", comment: "Placeholder text to prompt user to search for a participant to invite to an event."))
     }
 }
 

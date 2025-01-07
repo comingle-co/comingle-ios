@@ -57,7 +57,7 @@ struct SettingsView: View {
                                         profileToSignOut = profile
                                         isShowingSignOutConfirmation = true
                                     } label: {
-                                        Label(.localizable.signOut, systemImage: "door.left.hand.open")
+                                        Label(String(localized: "Sign Out", comment: "Label indicating that the button signs out of a profile."), systemImage: "door.left.hand.open")
                                     }
                                 }
                             }
@@ -71,7 +71,7 @@ struct SettingsView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 40)
-                                Text(.localizable.addProfile)
+                                Text("Add Profile", comment: "Button to add a profile.")
                             }
                         })
                     },
@@ -96,12 +96,12 @@ struct SettingsView: View {
 
                 if let publicKeyHex = viewModel.publicKeyHex, PublicKey(hex: publicKeyHex) != nil {
                     NavigationLink(destination: ProfileView(publicKeyHex: publicKeyHex)) {
-                        Text(.localizable.viewProfile)
+                        Text("View Profile", comment: "Button to view the active profile.")
                     }
                 }
             },
             header: {
-                Text(.localizable.profiles)
+                Text("Profiles", comment: "Section title for Profiles in the settings view.")
             }
         )
     }
@@ -112,18 +112,18 @@ struct SettingsView: View {
                 let publicKeyHex = viewModel.publicKeyHex
                 if let publicKeyHex, let publicKey = PublicKey(hex: publicKeyHex) {
                     NavigationLink(destination: KeysSettingsView(publicKey: publicKey)) {
-                        Label(.localizable.settingsKeys, systemImage: "key")
+                        Label(String(localized: "Keys", comment: "Settings section for Nostr key management."), systemImage: "key")
                     }
                 }
                 NavigationLink(destination: RelaysSettingsView()) {
-                    Label(.localizable.settingsRelays, systemImage: "server.rack")
+                    Label(String(localized: "Relays", comment: "Settings section for relay management."), systemImage: "server.rack")
                 }
                 NavigationLink(destination: AppearanceSettingsView(modelContext: viewModel.appState.modelContext, publicKeyHex: viewModel.publicKeyHex)) {
-                    Label(.localizable.settingsAppearance, systemImage: "eye")
+                    Label(String(localized: "Appearance", comment: "Settings section for appearance of the app."), systemImage: "eye")
                 }
             },
             header: {
-                Text(.localizable.settingsForProfile(viewModel.activeProfileName))
+                Text("Settings for \(viewModel.activeProfileName)", comment: "Section title for settings for profile")
             }
         )
     }
@@ -131,17 +131,17 @@ struct SettingsView: View {
     var aboutSection: some View {
         Section(
             content: {
-                LabeledContent(String(localized: .localizable.version), value: viewModel.appVersion)
+                LabeledContent(String(format: String(localized: "Version", comment: "Label for the app version in the settings view.")), value: viewModel.appVersion)
 
                 NavigationLink(destination: AcknowledgementsView()) {
-                    Text(.localizable.acknowledgements)
+                    Text("Acknowledgements", comment: "View for seeing the acknowledgements of projects that this app depends on.")
                 }
 
                 if let comingleProfileURL = Utilities.shared.externalNostrProfileURL(npub: "npub1c0nfstrlj0jy8kvl953v84hudwnpgad0zx709z0ey7nmjp0llegslzg243") {
                     Button(action: {
                         UIApplication.shared.open(comingleProfileURL)
                     }, label: {
-                        Text(.localizable.comingleProfile)
+                        Text("Comingle Profile", comment: "Button to open the Nostr profile of the Comingle account.")
                     })
                 }
 
@@ -149,12 +149,12 @@ struct SettingsView: View {
                     Button(action: {
                         UIApplication.shared.open(url)
                     }, label: {
-                        Text(.localizable.reportIssue)
+                        Text("Report an Issue", comment: "Button to report an issue about the app.")
                     })
                 }
             },
             header: {
-                Text(.localizable.settingsAbout)
+                Text("About", comment: "Settings about section title.")
             }
         )
     }
@@ -176,16 +176,17 @@ struct SettingsView: View {
                                 isShowingSignOutConfirmation = true
                             },
                             label: {
-                                Label(.localizable.signOutProfile(
-                                    viewModel.activeProfileName
-                                ), systemImage: "door.left.hand.open")
+                                Label(
+                                    String(localized: "Sign Out of \(viewModel.activeProfileName)", comment: "Button to sign out of a profile from the device."),
+                                    systemImage: "door.left.hand.open"
+                                )
                             }
                         )
                     }
                 }
             }
         }
-        .navigationTitle(.localizable.settings)
+        .navigationTitle(String(localized: "Settings", comment: "Navigation title for the settings view."))
         .sheet(isPresented: $viewModel.isSignInViewPresented) {
             NavigationStack {
                 SignInView()
@@ -194,21 +195,21 @@ struct SettingsView: View {
             .presentationDragIndicator(.visible)
         }
         .confirmationDialog(
-            Text(.localizable.addProfile),
+            Text("Add Profile", comment: "Button to add a profile."),
             isPresented: $isShowingAddProfileConfirmation
         ) {
             NavigationLink(destination: CreateProfileView(appState: viewModel.appState)) {
-                Text(.localizable.createProfile)
+                Text("Create Profile", comment: "Button to create a profile.")
             }
 
             Button(action: {
                 viewModel.isSignInViewPresented = true
             }, label: {
-                Text(.localizable.signIntoExistingProfile)
+                Text("Sign Into Existing Profile", comment: "Button to sign into existing profile.")
             })
         }
         .confirmationDialog(
-            Text(.localizable.signOutFromDevice),
+            Text("Sign out of profile?", comment: "Title of confirmation dialog when user initiates a profile sign out."),
             isPresented: $isShowingSignOutConfirmation
         ) {
             if let profileToSignOut, let publicKeyHex = profileToSignOut.publicKeyHex {
@@ -216,19 +217,17 @@ struct SettingsView: View {
                     viewModel.signOut(profileToSignOut)
                     self.profileToSignOut = nil
                 } label: {
-                    Text(.localizable.signOutProfile(
-                        viewModel.profileName(publicKeyHex: publicKeyHex)
-                    ))
+                    Text("Sign Out of \(viewModel.profileName(publicKeyHex: publicKeyHex))", comment: "Button to sign out of a profile from the device.")
                 }
             }
 
             Button(role: .cancel) {
                 profileToSignOut = nil
             } label: {
-                Text(.localizable.cancel)
+                Text("Cancel", comment: "Button to cancel out of dialog.")
             }
         } message: {
-            Text(.localizable.signOutMessage)
+            Text("Your app settings will be deleted from this device. Your data on Nostr relays will not be affected.", comment: "Message to inform user about what will happen if they sign out.")
         }
     }
 }
@@ -292,10 +291,10 @@ extension SettingsView {
             guard let shortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"],
                   let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"]
             else {
-                return String(localized: .localizable.appVersionUnknown)
+                return String(localized: "Unknown", comment: "Text indicating that the version of the app that is running is unknown.")
             }
 
-            return String(localized: .localizable.appVersion(String(describing: shortVersion), String(describing: bundleVersion)))
+            return String(localized: "\(String(describing: shortVersion)) \(String(describing: bundleVersion))", comment: "Text indicating the version of the app that is running. The first argument is the version number, and the second argument is the build number.")
         }
     }
 }

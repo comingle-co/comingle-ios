@@ -26,26 +26,28 @@ struct CreateOrModifyEventView: View {
     var body: some View {
         if viewModel.appState.keypair != nil && (viewModel.existingEvent == nil || viewModel.appState.publicKey?.hex == viewModel.existingEvent?.pubkey) {
             Form {
+                let eventTitle = String(localized: "Text indicating that the field is for entering an event title.", comment: "Text indicating that the field is for entering an event title.")
                 Section {
-                    TextField(localized: .localizable.eventTitle, text: $viewModel.title)
+                    TextField(eventTitle, text: $viewModel.title)
                 } header: {
-                    Text(.localizable.eventTitle)
+                    Text(eventTitle)
                 }
 
+                let eventSummary = String(localized: "Summary", comment: "Section title for summary section that summarizes the calendar event.")
                 Section {
-                    TextField(localized: .localizable.eventSummary, text: $viewModel.summary)
+                    TextField(eventSummary, text: $viewModel.summary)
                 } header: {
-                    Text(.localizable.eventSummary)
+                    Text(eventSummary)
                 }
 
                 Section {
                     TextEditor(text: $viewModel.description)
                 } header: {
-                    Text(.localizable.eventDescription)
+                    Text("Event Description", comment: "Section title for event description.")
                 }
 
                 Section {
-                    TextField(localized: .localizable.exampleImage, text: $viewModel.imageString)
+                    TextField(String(localized: "https://example.com/image.png", comment: "Example image URL of a calendar event image."), text: $viewModel.imageString)
                         .textContentType(.URL)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
@@ -58,7 +60,7 @@ struct CreateOrModifyEventView: View {
                             .frame(maxWidth: 100, maxHeight: 200)
                     }
                 } header: {
-                    Text(.localizable.image)
+                    Text("Image", comment: "Section title for image of the event.")
                 }
 
                 Section {
@@ -67,7 +69,7 @@ struct CreateOrModifyEventView: View {
                     }, label: {
                         let trimmedLocation = viewModel.location.trimmingCharacters(in: .whitespacesAndNewlines)
                         if trimmedLocation.isEmpty {
-                            Text(.localizable.addALocation)
+                            Text("Add a location", comment: "Button to navigate to event location picker sheet.")
                         } else {
                             Text(trimmedLocation)
                         }
@@ -81,12 +83,12 @@ struct CreateOrModifyEventView: View {
                         .frame(height: 250)
                     }
                 } header: {
-                    Text(.localizable.location)
+                    Text("Location", comment: "Confirmation dialog for taking action on the location of a calendar event.")
                 }
 
                 Section {
                     DatePicker(
-                        String(localized: .localizable.eventStart),
+                        String(localized: "Starts", comment: "Text indicating that the form field is for setting the event start date and time."),
                         selection: $viewModel.start,
                         displayedComponents: [.date, .hourAndMinute]
                     )
@@ -94,14 +96,14 @@ struct CreateOrModifyEventView: View {
                     .environment(\.timeZone, viewModel.startTimeZoneOrCurrent)
 
                     DatePicker(
-                        String(localized: .localizable.eventEnd),
+                        String(localized: "Ends", comment: "Text indicating that the form field is for setting the event end date and time."),
                         selection: $viewModel.end,
                         displayedComponents: [.date, .hourAndMinute]
                     )
                     .datePickerStyle(.compact)
                     .environment(\.timeZone, viewModel.startTimeZoneOrCurrent)
 
-                    Toggle(.localizable.setTimeZone, isOn: $viewModel.isSettingTimeZone)
+                    Toggle(String(localized: "Set Time Zone", comment: "Text for toggle for setting time zone on an event."), isOn: $viewModel.isSettingTimeZone)
 
                     if viewModel.isSettingTimeZone {
                         Button(action: {
@@ -111,21 +113,21 @@ struct CreateOrModifyEventView: View {
                         })
                     }
                 } header: {
-                    Text(.localizable.eventTime)
+                    Text("Time", comment: "Section title for the event time section.")
                 } footer: {
-                    Text(.localizable.timeZoneFooter)
+                    Text("Enter a time zone if this is primarily an in-person event.", comment: "Footer text to explain when a time zone should be entered.")
                 }
 
                 Section {
                     Button(action: {
                         viewModel.isShowingParticipantSelector = true
                     }, label: {
-                        Text(.localizable.participantsCount(viewModel.participants.count))
+                        Text("\(viewModel.participants.count) participants", comment: "Number of invited participants")
                     })
                 } header: {
-                    Text(.localizable.participants)
+                    Text("Participants", comment: "Section title for participants in event creation view.")
                 } footer: {
-                    Text(.localizable.participantsFooter)
+                    Text("Anyone who is not invited can still RSVP to public events. It is up to you to decide if you want to explicitly invite a participant or who can attend the event.", comment: "Footer text explaining what it means to invite a participant.")
                 }
 
                 Section {
@@ -141,7 +143,7 @@ struct CreateOrModifyEventView: View {
                     }
 
                     HStack {
-                        TextField(localized: .localizable.url, text: $viewModel.referenceToAdd)
+                        TextField(String(localized: "URL", comment: "Placeholder text for text field for entering event URL."), text: $viewModel.referenceToAdd)
                             .textContentType(.URL)
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
@@ -162,7 +164,7 @@ struct CreateOrModifyEventView: View {
                         .disabled(viewModel.validatedReferenceURL == nil)
                     }
                 } header: {
-                    Text(.localizable.links)
+                    Text("Links", comment: "Section title for reference links on an event.")
                 }
 
                 Section {
@@ -173,9 +175,9 @@ struct CreateOrModifyEventView: View {
                         },
                         label: {
                             if viewModel.existingEvent != nil {
-                                Text(.localizable.restoreOriginalEvent)
+                                Text("Restore Original Event", comment: "Button to restore event modification fields back to what the original event started with.")
                             } else {
-                                Text(.localizable.resetAllFields)
+                                Text("Reset All Fields", comment: "Button to reset all fields to the starting point of a fresh event creation.")
                             }
                         }
                     )
@@ -207,7 +209,7 @@ struct CreateOrModifyEventView: View {
                             dismiss()
                         }
                     }, label: {
-                        Text(.localizable.save)
+                        Text("Save", comment: "Button to save a form.")
                     })
                     .disabled(!viewModel.canSave)
                 }
@@ -332,11 +334,11 @@ extension CreateOrModifyEventView {
             geohash.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
-        var navigationTitle: LocalizedStringResource {
+        var navigationTitle: String {
             if existingEvent != nil {
-                .localizable.modifyEvent
+                String(localized: "Modify Event", comment: "Button to modify event.")
             } else {
-                .localizable.createEvent
+                String(localized: "Create an Event", comment: "Navigation title for the view to create an event.")
             }
         }
 

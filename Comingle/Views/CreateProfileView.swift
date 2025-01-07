@@ -65,9 +65,9 @@ struct CreateProfileView: View, EventCreating {
                     }
                 })
             } header: {
-                Text(.localizable.publicKey)
+                Text("Public Key", comment: "Section header for public key.")
             } footer: {
-                Text(.localizable.createPublicKeyFooter)
+                Text("This public key is your unique identifier. You can share it with other people to identify you across any Nostr app. Save it in a place you will remember to look.", comment: "Footer text to explain what is the created public key.")
             }
 
             Section {
@@ -90,33 +90,35 @@ struct CreateProfileView: View, EventCreating {
                     }
                 })
             } header: {
-                Text(.localizable.privateKey)
+                Text("Private Key", comment: "Section header for private key.")
             } footer: {
-                Text(.localizable.createPrivateKeyFooter)
+                Text("This private key should not be shared with anyone. You can use it to sign into any Nostr app. Keep it secure in a password manager. You will not be able to recover it after you leave this screen.", comment: "Footer text to explain what is the created private key.")
             }
 
+            let usernameTitle = String(localized: "Username", comment: "Section title for username entry.")
             Section {
-                TextField(localized: .localizable.username, text: $username)
+                TextField(usernameTitle, text: $username)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
             } header: {
-                Text(.localizable.username)
+                Text(usernameTitle)
             } footer: {
-                Text(.localizable.createUsernameFooter)
+                Text("Usernames are not unique and not used for signing into an account. More than one person can have the same username.", comment: "Footer text to explain usernames.")
             }
 
+            let displayNameTitle = String(localized: "Display Name (Optional)", comment: "Section title for display name entry.")
             Section {
-                TextField(localized: .localizable.displayName, text: $displayName)
+                TextField(displayNameTitle, text: $displayName)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
             } header: {
-                Text(.localizable.displayName)
+                Text(displayNameTitle)
             } footer: {
-                Text(.localizable.createDisplayNameFooter)
+                Text("An alternative, bigger name with richer characters than username.", comment: "Footer text to explain what is the display name.")
             }
 
             Section {
-                TextField(localized: .localizable.exampleImage, text: $picture)
+                TextField(String(localized: "https://example.com/image.png", comment: "Example image URL of a calendar event image."), text: $picture)
                     .textContentType(.URL)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
@@ -129,7 +131,7 @@ struct CreateProfileView: View, EventCreating {
                         .frame(maxWidth: 100, maxHeight: 200)
                 }
             } header: {
-                Text(.localizable.profilePicture)
+                Text("Profile Picture (Optional)", comment: "Section title for profile picture entry.")
             }
         }
         .toolbar {
@@ -167,7 +169,7 @@ struct CreateProfileView: View, EventCreating {
 
                     dismiss()
                 }, label: {
-                    Text(.localizable.createProfile)
+                    Text("Create Profile", comment: "Button to create a profile.")
                 })
                 .disabled(!canSave)
             }
