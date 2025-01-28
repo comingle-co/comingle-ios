@@ -294,7 +294,7 @@ extension SettingsView {
                 return String(localized: "Unknown", comment: "Text indicating that the version of the app that is running is unknown.")
             }
 
-            return String(localized: "\(String(describing: shortVersion)) \(String(describing: bundleVersion))", comment: "Text indicating the version of the app that is running. The first argument is the version number, and the second argument is the build number.")
+            return String(localized: "\(String(describing: shortVersion)) (\(String(describing: bundleVersion)))", comment: "Text indicating the version of the app that is running. The first argument is the version number, and the second argument is the build number.")
         }
     }
 }

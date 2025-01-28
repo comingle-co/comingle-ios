@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.0 (8) - 2024-01-27
+
+### Fixed
+- Removed xcstrings-tool-plugin to improve performance
+- Improved memory usage by removing unnecessary fields from what is cached in the tries
+
 ## 0.1.0 (7) - 2024-11-18
 
 ### Fixed
