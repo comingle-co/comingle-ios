@@ -670,29 +670,17 @@ extension AppState: EventVerifying, RelayDelegate {
 
         let newTitle = newEvent.title?.trimmedOrNilIfEmpty
         let newSummary = newEvent.summary?.trimmedOrNilIfEmpty
-        let newGeohash = newEvent.geohash?.trimmedOrNilIfEmpty
         let newLocations = OrderedSet(newEvent.locations.compactMap { $0.trimmedOrNilIfEmpty })
-        let newReferences = OrderedSet(newEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty })
         let newHashtags = OrderedSet(newEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty })
 
         if let oldEvent {
-            eventsTrie.remove(key: oldEvent.id, value: eventCoordinates)
+//            eventsTrie.remove(key: oldEvent.id, value: eventCoordinates)
             if let title = oldEvent.title?.trimmedOrNilIfEmpty, title != newTitle {
                 eventsTrie.remove(key: title, value: eventCoordinates)
-            }
-            if let summary = oldEvent.summary?.trimmedOrNilIfEmpty, summary != newSummary {
-                eventsTrie.remove(key: summary, value: eventCoordinates)
-            }
-            if let geohash = oldEvent.geohash?.trimmedOrNilIfEmpty, geohash != newGeohash {
-                eventsTrie.remove(key: geohash, value: eventCoordinates)
             }
             let locationsToRemove = OrderedSet(oldEvent.locations.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newLocations)
             locationsToRemove.forEach { location in
                 eventsTrie.remove(key: location, value: eventCoordinates)
-            }
-            let referencesToRemove = OrderedSet(oldEvent.references.compactMap { $0.absoluteString.trimmedOrNilIfEmpty }).subtracting(newReferences)
-            referencesToRemove.forEach { reference in
-                eventsTrie.remove(key: reference, value: eventCoordinates)
             }
             let hashtagsToRemove = OrderedSet(oldEvent.hashtags.compactMap { $0.trimmedOrNilIfEmpty }).subtracting(newHashtags)
             hashtagsToRemove.forEach { hashtag in
@@ -711,17 +699,8 @@ extension AppState: EventVerifying, RelayDelegate {
         if let newTitle {
             _ = eventsTrie.insert(key: newTitle, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
-        if let newSummary {
-            _ = eventsTrie.insert(key: newSummary, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
-        }
-        if let newGeohash {
-            _ = eventsTrie.insert(key: newGeohash, value: eventCoordinates, options: [.includeCaseInsensitiveMatches])
-        }
         newLocations.forEach { location in
             _ = eventsTrie.insert(key: location, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
-        }
-        newReferences.forEach { reference in
-            _ = eventsTrie.insert(key: reference, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches, .includeNonPrefixedMatches])
         }
         newHashtags.forEach { hashtag in
             _ = eventsTrie.insert(key: hashtag, value: eventCoordinates, options: [.includeCaseInsensitiveMatches, .includeDiacriticsInsensitiveMatches])
